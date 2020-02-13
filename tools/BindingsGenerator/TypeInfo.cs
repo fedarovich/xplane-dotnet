@@ -13,11 +13,13 @@ namespace BindingsGenerator
         {
             Name = name;
             CppType = cppType;
+            TypeSyntax = typeSyntax;
         }
 
         public string Name { get; }
 
         public CppType CppType { get; }
+        public TypeSyntax TypeSyntax { get; }
 
         public bool IsPrimitive => CppType is CppPrimitiveType;
 

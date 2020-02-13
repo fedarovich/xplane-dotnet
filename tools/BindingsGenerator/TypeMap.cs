@@ -35,6 +35,13 @@ namespace BindingsGenerator
             return typeInfo;
         }
 
+        public TypeInfo RegisterHandleType(string name, CppTypedef typedef, string handleName)
+        {
+            var typeInfo = new TypeInfo(name, typedef, IdentifierName(handleName));
+            _map.Add(name, typeInfo);
+            return typeInfo;
+        }
+
         private void RegisterPrimitiveType(CppPrimitiveType primitive, SyntaxKind syntax)
         {
             var name = primitive.GetDisplayName();
@@ -42,9 +49,8 @@ namespace BindingsGenerator
             _map.Add(name, typeInfo);
         }
 
-        public bool TryGetType(string name, out TypeInfo typeInfo)
-        {
-            return _map.TryGetValue(name, out typeInfo);
-        }
+        public TypeInfo GetType(string name) => _map[name];
+
+        public bool TryGetType(string name, out TypeInfo typeInfo) => _map.TryGetValue(name, out typeInfo);
     }
 }

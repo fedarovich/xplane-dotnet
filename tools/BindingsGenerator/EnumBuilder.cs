@@ -101,7 +101,7 @@ namespace BindingsGenerator
             {
                 @enum = @enum.AddAttributeLists(
                     AttributeList(SingletonSeparatedList(
-                        Attribute(IdentifierName("System.Flags")))));
+                        Attribute(QualifiedName(IdentifierName("System"), IdentifierName("FlagsAttribute"))))));
             }
 
             static bool IsPowerOf2(long value) => ((value - 1) & value) == 0;
