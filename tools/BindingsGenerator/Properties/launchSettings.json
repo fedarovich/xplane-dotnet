@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BindingsGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "-s r:\\XPSDK301\\SDK\\ -o ..\\..\\..\\..\\..\\src\\XP.SDK"
+    }
+  }
+}
