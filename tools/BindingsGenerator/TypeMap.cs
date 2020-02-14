@@ -29,26 +29,18 @@ namespace BindingsGenerator
             RegisterPrimitiveType(CppPrimitiveType.Bool, SyntaxKind.BoolKeyword);
         }
 
-        public TypeInfo RegisterEnumType(string name, CppEnum @enum, string enumName)
+        public TypeInfo RegisterType(CppType cppType, string nativeName, string managedName)
         {
-            var typeInfo = new TypeInfo(name, @enum, IdentifierName(enumName));
-            _nativeMap.Add(name, typeInfo);
-            _managedMap.Add(enumName, typeInfo);
-            return typeInfo;
-        }
-
-        public TypeInfo RegisterHandleType(string name, CppTypedef typedef, string handleName)
-        {
-            var typeInfo = new TypeInfo(name, typedef, IdentifierName(handleName));
-            _nativeMap.Add(name, typeInfo);
-            _managedMap.Add(handleName, typeInfo);
+            var typeInfo = new TypeInfo(nativeName, cppType, IdentifierName(managedName));
+            _nativeMap.Add(nativeName, typeInfo);
+            _managedMap.Add(managedName, typeInfo);
             return typeInfo;
         }
 
         private void RegisterPrimitiveType(CppPrimitiveType primitive, SyntaxKind syntax)
         {
             var name = primitive.GetDisplayName();
-            var typeInfo = new TypeInfo(name, primitive, PredefinedType(Token(SyntaxKind.IntKeyword)));
+            var typeInfo = new TypeInfo(name, primitive, PredefinedType(Token(syntax)));
             _nativeMap.Add(name, typeInfo);
         }
 

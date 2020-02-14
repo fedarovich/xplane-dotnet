@@ -85,8 +85,9 @@ namespace BindingsGenerator
 
             var unit = CompilationUnit()
                 .AddUsings(
-                    UsingDirective(SyntaxExtensions.System),
-                    UsingDirective(SyntaxExtensions.CompilerServices))
+                    UsingDirective(SyntaxExtensions.SystemNamespace),
+                    UsingDirective(SyntaxExtensions.CompilerServices),
+                    UsingDirective(SyntaxExtensions.InteropServices))
                 .AddMembers(ns)
                 .NormalizeWhitespace();
 

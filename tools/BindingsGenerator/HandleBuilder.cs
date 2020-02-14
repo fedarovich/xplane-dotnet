@@ -141,7 +141,7 @@ namespace BindingsGenerator
                         );
 
 
-            TypeMap.RegisterHandleType(nativeName, cppType, managedName);
+            TypeMap.RegisterType(cppType, nativeName, managedName);
 
             return @struct;
         }

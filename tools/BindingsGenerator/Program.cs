@@ -67,6 +67,8 @@ namespace BindingsGenerator
             var typeMap = new TypeMap();
             var enumBuilder = new EnumBuilder(workspace, projectId, outputDir, typeMap);
             var handleBuilder = new HandleBuilder(workspace, projectId, outputDir, typeMap);
+            var structBuilder = new StructBuilder(workspace, projectId, outputDir, typeMap);
+            var delegateBuilder = new DelegateBuilder(workspace, projectId, outputDir, typeMap);
 
             foreach (var (@namespace, headers) in nsHeaders)
             {
@@ -76,6 +78,8 @@ namespace BindingsGenerator
                     var compilation = CppParser.ParseFile(header, parserOptions);
                     enumBuilder.Build(compilation.Enums, @namespace);
                     handleBuilder.Build(compilation.Typedefs, @namespace);
+                    structBuilder.Build(compilation.Classes, @namespace);
+                    delegateBuilder.Build(compilation.Typedefs, @namespace);
                 }
             }
 
