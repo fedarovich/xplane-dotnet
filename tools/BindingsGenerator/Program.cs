@@ -38,7 +38,8 @@ namespace BindingsGenerator
 
             var workspace = new AdhocWorkspace();
             var projectId = ProjectId.CreateNewId();
-            var projectInfo = ProjectInfo.Create(projectId, VersionStamp.Create(), "XP.SDK", "XP.SDK", LanguageNames.CSharp);
+            var projectInfo = ProjectInfo.Create(projectId, VersionStamp.Create(), "XP.SDK", "XP.SDK", LanguageNames.CSharp)
+                .WithDefaultNamespace("XP.SDK");
             var project = workspace.AddProject(projectInfo);
            
             var xplmHeadersPath = Path.Combine(SdkRoot, "CHeaders", "XPLM");
@@ -50,6 +51,7 @@ namespace BindingsGenerator
             if (!Directory.Exists(xpWidgetsHeadersPath))
                 throw new DirectoryNotFoundException($"Directory '{xpWidgetsHeadersPath}' does not exist.");
             var xpWidgetsHeaders = Directory.EnumerateFiles(xpWidgetsHeadersPath, "*.h");
+            var headers = xmplHeaders.Concat(xpWidgetsHeaders);
 
             var parserOptions = new CppParserOptions
             {
@@ -58,29 +60,20 @@ namespace BindingsGenerator
                 TargetCpu = CppTargetCpu.X86_64
             };
 
-            var nsHeaders = new[]
-            {
-                (@namespace: "XP.SDK.XPLM", headers: xmplHeaders),
-                (@namespace: "XP.SDK.Widgets", headers: xpWidgetsHeaders),
-            };
-
             var typeMap = new TypeMap();
             var enumBuilder = new EnumBuilder(workspace, projectId, outputDir, typeMap);
             var handleBuilder = new HandleBuilder(workspace, projectId, outputDir, typeMap);
             var structBuilder = new StructBuilder(workspace, projectId, outputDir, typeMap);
             var delegateBuilder = new DelegateBuilder(workspace, projectId, outputDir, typeMap);
 
-            foreach (var (@namespace, headers) in nsHeaders)
+            foreach (var header in headers)
             {
-                foreach (var header in headers)
-                {
-                    Console.WriteLine("Parsing header {0}", Path.GetFileName(header));
-                    var compilation = CppParser.ParseFile(header, parserOptions);
-                    enumBuilder.Build(compilation.Enums, @namespace);
-                    handleBuilder.Build(compilation.Typedefs, @namespace);
-                    structBuilder.Build(compilation.Classes, @namespace);
-                    delegateBuilder.Build(compilation.Typedefs, @namespace);
-                }
+                Console.WriteLine("Parsing header {0}", Path.GetFileName(header));
+                var compilation = CppParser.ParseFile(header, parserOptions);
+                enumBuilder.Build(compilation.Enums);
+                handleBuilder.Build(compilation.Typedefs);
+                structBuilder.Build(compilation.Classes);
+                delegateBuilder.Build(compilation.Typedefs);
             }
 
             foreach (var document in workspace.CurrentSolution.Projects.SelectMany(p => p.Documents))

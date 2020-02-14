@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using CppAst;
 using Microsoft.CodeAnalysis;
@@ -25,7 +26,7 @@ namespace BindingsGenerator
             TypeMap = typeMap;
         }
 
-        public virtual void Build(CppContainerList<T> cppTypes, string @namespace)
+        public virtual void Build(CppContainerList<T> cppTypes)
         {
             foreach (var cppType in cppTypes)
             {
@@ -55,7 +56,7 @@ namespace BindingsGenerator
                     continue;
                 }
                 
-                BuildDocument(@namespace, type, managedName);
+                BuildDocument(GetRelativeNamespace(cppType), type, managedName);
             }
         }
 
@@ -64,6 +65,15 @@ namespace BindingsGenerator
         protected abstract string GetNativeName(T type);
 
         protected virtual bool CanProcess(T cppType) => true;
+
+        protected string DefaultNamespace => Workspace.CurrentSolution.Projects.Single(p => p.Id == ProjectId).DefaultNamespace;
+
+        protected virtual string GetRelativeNamespace(T cppType)
+        {
+            var file = cppType.Span.Start.File;
+            var ns = Path.GetFileName(Path.GetDirectoryName(file));
+            return ns;
+        }
 
         protected virtual string GetManagedName(string nativeName)
         {
@@ -78,9 +88,9 @@ namespace BindingsGenerator
 
         protected virtual bool IsSameType(TypeInfo typeInfo, T cppType) => typeInfo.IsSame(cppType);
 
-        protected virtual void BuildDocument(string @namespace, MemberDeclarationSyntax type, string managedName)
+        protected virtual void BuildDocument(string relativeNamespace, MemberDeclarationSyntax type, string managedName)
         {
-            var ns = NamespaceDeclaration(IdentifierName(@namespace))
+            var ns = NamespaceDeclaration(BuildNamespaceNameSyntax())
                 .WithMembers(SingletonList(type));
 
             var unit = CompilationUnit()
@@ -91,8 +101,12 @@ namespace BindingsGenerator
                 .AddMembers(ns)
                 .NormalizeWhitespace();
 
+            var directoryParts = new List<string>(4) {Directory};
+            directoryParts.AddRange(relativeNamespace.Split(".", StringSplitOptions.RemoveEmptyEntries));
+            var directory = Path.Combine(directoryParts.ToArray());
+            System.IO.Directory.CreateDirectory(directory);
             var filename = $"{managedName}.cs";
-            var path = Path.Combine(Directory, filename);
+            var path = Path.Combine(directory, filename);
 
             var documentInfo = DocumentInfo.Create(
                 DocumentId.CreateNewId(ProjectId, filename),
@@ -102,6 +116,19 @@ namespace BindingsGenerator
                 filePath: path);
 
             var doc = Workspace.AddDocument(documentInfo);
+
+            NameSyntax BuildNamespaceNameSyntax()
+            {
+                var parts = new List<string>(DefaultNamespace.Split(".", StringSplitOptions.RemoveEmptyEntries));
+                parts.AddRange(relativeNamespace.Split(".", StringSplitOptions.RemoveEmptyEntries));
+                var queue = new Queue<string>(parts);
+                NameSyntax name = IdentifierName(queue.Dequeue());
+                while (queue.TryDequeue(out var part))
+                {
+                    name = QualifiedName(name, IdentifierName(part));
+                }
+                return name;
+            }
         }
 
         protected void WriteLineColored(string text, ConsoleColor color)
