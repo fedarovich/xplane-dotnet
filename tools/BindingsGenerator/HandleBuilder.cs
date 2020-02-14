@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using CppAst;
 using Microsoft.CodeAnalysis;
@@ -11,86 +12,86 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace BindingsGenerator
 {
-    public class HandleBuilder
+    public class HandleBuilder : BuilderBase<CppTypedef>
     {
-        private readonly AdhocWorkspace _workspace;
-        private readonly ProjectId _projectId;
-        private readonly string _directory;
-        private readonly TypeMap _typeMap;
-
-        public HandleBuilder(AdhocWorkspace workspace, ProjectId projectId, string directory, TypeMap typeMap)
+        public HandleBuilder(AdhocWorkspace workspace, ProjectId projectId, string directory, TypeMap typeMap) 
+            : base(workspace, projectId, directory, typeMap)
         {
-            _workspace = workspace;
-            _projectId = projectId;
-            _directory = directory;
-            _typeMap = typeMap;
         }
 
-        public void Build(CppContainerList<CppTypedef> typedefs, string @namespace)
+        protected override MemberDeclarationSyntax BuildType(CppTypedef cppType, string nativeName, string managedName)
         {
-            foreach (var cppTypedef in typedefs)
+            TypeSyntax baseManagedType = null;
+
+            if (cppType.ElementType is CppPrimitiveType primitiveType)
             {
-                if (_typeMap.TryGetType(cppTypedef.Name, out var typeInfo))
-                {
-                    if (typeInfo.IsSame(cppTypedef) || typeInfo.IsEnum)
-                        continue;
+                baseManagedType = TypeMap.GetType(primitiveType.GetDisplayName()).TypeSyntax;
+            }
+            else if (cppType.ElementType is CppPointerType pointerType &&
+                     pointerType.ElementType is CppPrimitiveType p && p.Kind == CppPrimitiveKind.Void)
+            {
+                baseManagedType = QualifiedName(IdentifierName("System"), IdentifierName("IntPtr"));
+            }
 
-                    throw new ArgumentException("Duplicate type " + cppTypedef.Name);
-                }
+            if (baseManagedType == null)
+                return null;
 
-                TypeSyntax managedType = null;
+            var managedType = IdentifierName(managedName);
+            var field = IdentifierName("_value");
+            var param = IdentifierName("value");
 
-                if (cppTypedef.ElementType is CppPrimitiveType primitiveType)
-                {
-                    managedType = _typeMap.GetType(primitiveType.GetDisplayName()).TypeSyntax;
-                }
-                else if (cppTypedef.ElementType is CppPointerType pointerType &&
-                         pointerType.ElementType is CppPrimitiveType p && p.Kind == CppPrimitiveKind.Void)
-                {
-                    managedType = QualifiedName(IdentifierName("System"), IdentifierName("IntPtr"));
-                }
-                
-                if (managedType == null)
-                    continue;
-
-                var managedName = cppTypedef.Name;
-
-                var field = IdentifierName("_value");
-                var param = IdentifierName("value");
-
-                var @struct = StructDeclaration(managedName)
+            var @struct = StructDeclaration(managedName)
                     .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.ReadOnlyKeyword))
+                    .AddBaseListTypes(SimpleBaseType(
+                        QualifiedName(IdentifierName("System"), GenericName("IEquatable").AddTypeArgumentListArguments(managedType))))
                     .AddMembers(
-                        FieldDeclaration(VariableDeclaration(managedType).AddVariables(VariableDeclarator("_value")))
+                        FieldDeclaration(VariableDeclaration(baseManagedType).AddVariables(VariableDeclarator("_value")))
                             .AddModifiers(Token(SyntaxKind.PrivateKeyword), Token(SyntaxKind.ReadOnlyKeyword)),
 
                         ConstructorDeclaration(managedName)
                             .AddModifiers(Token(SyntaxKind.PublicKeyword))
-                            .AddParameterListParameters(Parameter(Identifier("value")).WithType(managedType))
+                            .AddParameterListParameters(Parameter(Identifier("value")).WithType(baseManagedType))
+                            .AddAggressiveInlining()
                             .WithExpressionBody(
                                 ArrowExpressionClause(
                                     AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, field, param)))
                             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken)),
 
-                        ConversionOperatorDeclaration(Token(SyntaxKind.ImplicitKeyword), IdentifierName(managedName))
+                        ConversionOperatorDeclaration(Token(SyntaxKind.ImplicitKeyword), managedType)
                             .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword))
-                            .AddParameterListParameters(Parameter(Identifier("value")).WithType(managedType))
+                            .AddParameterListParameters(Parameter(Identifier("value")).WithType(baseManagedType))
+                            .AddAggressiveInlining()
                             .WithExpressionBody(
                                 ArrowExpressionClause(
-                                    ObjectCreationExpression(IdentifierName(managedName))
+                                    ObjectCreationExpression(managedType)
                                         .AddArgumentListArguments(Argument(param))))
                             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken)),
 
-                        ConversionOperatorDeclaration(Token(SyntaxKind.ExplicitKeyword), managedType)
+                        ConversionOperatorDeclaration(Token(SyntaxKind.ExplicitKeyword), baseManagedType)
                             .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword))
-                            .AddParameterListParameters(Parameter(Identifier("value")).WithType(IdentifierName(managedName)))
+                            .AddParameterListParameters(Parameter(Identifier("value")).WithType(managedType))
+                            .AddAggressiveInlining()
                             .WithExpressionBody(ArrowExpressionClause(field))
                             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken)),
 
-                        // TODO: Override Equals and add IEquatable interface
+                        MethodDeclaration(PredefinedType(Token(SyntaxKind.BoolKeyword)), "Equals")
+                            .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword))
+                            .AddParameterListParameters(Parameter(Identifier("obj")).WithType(PredefinedType(Token(SyntaxKind.ObjectKeyword))))
+                            .AddAggressiveInlining()
+                            .WithExpressionBody(ArrowExpressionClause(
+                                BinaryExpression(SyntaxKind.LogicalAndExpression,
+                                    IsPatternExpression(
+                                        IdentifierName("obj"),
+                                        DeclarationPattern(
+                                            managedType,
+                                            SingleVariableDesignation(Identifier("other")))),
+                                    InvocationExpression(
+                                        IdentifierName("Equals")).AddArgumentListArguments(Argument(IdentifierName("other"))))))
+                            .WithSemicolonToken(Token(SyntaxKind.SemicolonToken)),
 
                         MethodDeclaration(PredefinedType(Token(SyntaxKind.IntKeyword)), "GetHashCode")
                             .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword))
+                            .AddAggressiveInlining()
                             .WithExpressionBody(ArrowExpressionClause(
                                 InvocationExpression(
                                     MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, field, IdentifierName("GetHashCode")))))
@@ -98,37 +99,71 @@ namespace BindingsGenerator
 
                         MethodDeclaration(PredefinedType(Token(SyntaxKind.BoolKeyword)), "Equals")
                             .AddModifiers(Token(SyntaxKind.PublicKeyword))
-                            .AddParameterListParameters(Parameter(Identifier("other")).WithType(IdentifierName(managedName)))
+                            .AddParameterListParameters(Parameter(Identifier("other")).WithType(managedType))
+                            .AddAggressiveInlining()
                             .WithExpressionBody(ArrowExpressionClause(
-                                BinaryExpression(SyntaxKind.EqualsExpression, 
+                                BinaryExpression(SyntaxKind.EqualsExpression,
                                     field,
                                     MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, IdentifierName("other"), field))))
-                            .WithSemicolonToken(Token(SyntaxKind.SemicolonToken))
+                            .WithSemicolonToken(Token(SyntaxKind.SemicolonToken)),
 
+                        OperatorDeclaration(PredefinedType(Token(SyntaxKind.BoolKeyword)), Token(SyntaxKind.EqualsEqualsToken))
+                            .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword))
+                            .AddParameterListParameters(
+                                Parameter(Identifier("left")).WithType(managedType),
+                                Parameter(Identifier("right")).WithType(managedType))
+                            .AddAggressiveInlining()
+                            .WithExpressionBody(ArrowExpressionClause(
+                                InvocationExpression(
+                                    MemberAccessExpression(
+                                        SyntaxKind.SimpleMemberAccessExpression,
+                                        IdentifierName("left"),
+                                        IdentifierName("Equals")))
+                                    .AddArgumentListArguments(Argument(IdentifierName("right")))))
+                            .WithSemicolonToken(Token(SyntaxKind.SemicolonToken)),
+
+                        OperatorDeclaration(PredefinedType(Token(SyntaxKind.BoolKeyword)), Token(SyntaxKind.ExclamationEqualsToken))
+                            .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword))
+                            .AddParameterListParameters(
+                                Parameter(Identifier("left")).WithType(managedType),
+                                Parameter(Identifier("right")).WithType(managedType))
+                            .AddAggressiveInlining()
+                            .WithExpressionBody(ArrowExpressionClause(
+                                PrefixUnaryExpression(
+                                    SyntaxKind.LogicalNotExpression,
+                                    InvocationExpression(
+                                            MemberAccessExpression(
+                                                SyntaxKind.SimpleMemberAccessExpression,
+                                                IdentifierName("left"),
+                                                IdentifierName("Equals")))
+                                        .AddArgumentListArguments(Argument(IdentifierName("right"))))))
+                            .WithSemicolonToken(Token(SyntaxKind.SemicolonToken))
                         );
 
-                BuildDocument(@namespace, @struct, managedName);
 
-                _typeMap.RegisterHandleType(cppTypedef.Name, cppTypedef, managedName);
-            }
+            TypeMap.RegisterHandleType(nativeName, cppType, managedName);
+
+            return @struct;
         }
 
-        private void BuildDocument(string @namespace, StructDeclarationSyntax @struct, string managedName)
+        protected override string GetNativeName(CppTypedef type) => type.Name;
+
+        protected override bool IsSameType(TypeInfo typeInfo, CppTypedef cppType)
         {
-            var ns = NamespaceDeclaration(IdentifierName(@namespace))
-                .WithMembers(SingletonList<MemberDeclarationSyntax>(@struct))
-                .NormalizeWhitespace();
+            return base.IsSameType(typeInfo, cppType) || typeInfo.IsEnum;
+        }
 
-            var filename = $"{managedName}.cs";
-            var path = Path.Combine(_directory, filename);
+        protected override bool CanProcess(CppTypedef cppType)
+        {
+            if (cppType.ElementType is CppPrimitiveType primitiveType)
+                return true;
 
-            var documentInfo = DocumentInfo.Create(
-                DocumentId.CreateNewId(_projectId, filename),
-                filename,
-                loader: TextLoader.From(TextAndVersion.Create(
-                    SourceText.From(ns.ToFullString()), VersionStamp.Create(), path)),
-                filePath: path);
-            var doc = _workspace.AddDocument(documentInfo);
+            if (cppType.ElementType is CppPointerType pointerType &&
+                pointerType.ElementType is CppPrimitiveType p && 
+                p.Kind == CppPrimitiveKind.Void)
+                return true;
+
+            return false;
         }
     }
 }

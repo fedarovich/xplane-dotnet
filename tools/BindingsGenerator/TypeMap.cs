@@ -9,7 +9,8 @@ namespace BindingsGenerator
 {
     public class TypeMap
     {
-        private readonly Dictionary<string, TypeInfo> _map = new Dictionary<string, TypeInfo>();
+        private readonly Dictionary<string, TypeInfo> _nativeMap = new Dictionary<string, TypeInfo>();
+        private readonly Dictionary<string, TypeInfo> _managedMap = new Dictionary<string, TypeInfo>();
 
         public TypeMap()
         {
@@ -31,14 +32,16 @@ namespace BindingsGenerator
         public TypeInfo RegisterEnumType(string name, CppEnum @enum, string enumName)
         {
             var typeInfo = new TypeInfo(name, @enum, IdentifierName(enumName));
-            _map.Add(name, typeInfo);
+            _nativeMap.Add(name, typeInfo);
+            _managedMap.Add(enumName, typeInfo);
             return typeInfo;
         }
 
         public TypeInfo RegisterHandleType(string name, CppTypedef typedef, string handleName)
         {
             var typeInfo = new TypeInfo(name, typedef, IdentifierName(handleName));
-            _map.Add(name, typeInfo);
+            _nativeMap.Add(name, typeInfo);
+            _managedMap.Add(handleName, typeInfo);
             return typeInfo;
         }
 
@@ -46,11 +49,11 @@ namespace BindingsGenerator
         {
             var name = primitive.GetDisplayName();
             var typeInfo = new TypeInfo(name, primitive, PredefinedType(Token(SyntaxKind.IntKeyword)));
-            _map.Add(name, typeInfo);
+            _nativeMap.Add(name, typeInfo);
         }
 
-        public TypeInfo GetType(string name) => _map[name];
+        public TypeInfo GetType(string name) => _nativeMap[name];
 
-        public bool TryGetType(string name, out TypeInfo typeInfo) => _map.TryGetValue(name, out typeInfo);
+        public bool TryGetType(string name, out TypeInfo typeInfo) => _nativeMap.TryGetValue(name, out typeInfo);
     }
 }

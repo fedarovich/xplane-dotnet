@@ -13,49 +13,23 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace BindingsGenerator
 {
-    public class EnumBuilder
+    public class EnumBuilder : BuilderBase<CppEnum>
     {
-        private readonly AdhocWorkspace _workspace;
-        private readonly ProjectId _projectId;
-        private readonly string _directory;
-        private readonly TypeMap _typeMap;
-
-        public EnumBuilder(AdhocWorkspace workspace, ProjectId projectId, string directory, TypeMap typeMap)
+        public EnumBuilder(AdhocWorkspace workspace, ProjectId projectId, string directory, TypeMap typeMap) : base(workspace, projectId, directory, typeMap)
         {
-            _workspace = workspace;
-            _projectId = projectId;
-            _directory = directory;
-            _typeMap = typeMap;
         }
 
-        public void Build(CppContainerList<CppEnum> enums, string @namespace)
+        protected override MemberDeclarationSyntax BuildType(CppEnum cppType, string nativeName, string managedName)
         {
-            foreach (var cppEnum in enums)
-            {
-                var nativeName = GetNativeName(cppEnum);
-                if (_typeMap.TryGetType(nativeName, out var typeInfo))
-                {
-                    if (typeInfo.IsSame(cppEnum))
-                        continue;
+            var prefixLength = GetItemsPrefixLength(cppType);
 
-                    throw new ArgumentException("Duplicate type " + nativeName);
-                }
+            var @enum = EnumDeclaration(managedName)
+                .AddModifiers(Token(SyntaxKind.PublicKeyword))
+                .AddMembers(cppType.Items.Select(cppEnumItem => BuildEnumMember(cppEnumItem, prefixLength)).ToArray());
 
-                var managedName = GetManagedName(nativeName);
-
-                var prefixLength = GetItemsPrefixLength(cppEnum);
-
-                var @enum = EnumDeclaration(managedName)
-                    .AddModifiers(Token(SyntaxKind.PublicKeyword))
-                    .AddMembers(cppEnum.Items.Select(cppEnumItem => BuildEnumMember(cppEnumItem, prefixLength)).ToArray());
-
-                ApplyFlagsHeuristic(cppEnum, ref @enum);
-                AddComments(cppEnum, ref @enum);
-
-                BuildDocument(@namespace, @enum, managedName);
-
-                _typeMap.RegisterEnumType(nativeName, cppEnum, managedName);
-            }
+            ApplyFlagsHeuristic(cppType, ref @enum);
+            TypeMap.RegisterEnumType(nativeName, cppType, managedName);
+            return @enum;
         }
 
         private static EnumMemberDeclarationSyntax BuildEnumMember(CppEnumItem cppEnumItem, int prefixLength)
@@ -71,7 +45,7 @@ namespace BindingsGenerator
             }
         }
 
-        private static string GetNativeName(CppEnum cppEnum)
+        protected override string GetNativeName(CppEnum cppEnum)
         {
             if (!string.IsNullOrEmpty(cppEnum.Name))
                 return cppEnum.Name;
@@ -84,17 +58,6 @@ namespace BindingsGenerator
             return match.Value;
         }
 
-        private static string GetManagedName(string nativeName)
-        {
-            if (nativeName.StartsWith("XPLM"))
-                return nativeName[4..];
-            
-            if (nativeName.StartsWith("XP"))
-                return nativeName[2..];
-
-            return nativeName;
-        }
-
         private static void ApplyFlagsHeuristic(CppEnum cppEnum, ref EnumDeclarationSyntax @enum)
         {
             if (cppEnum.Items.All(i => IsPowerOf2(i.Value)))
@@ -105,11 +68,6 @@ namespace BindingsGenerator
             }
 
             static bool IsPowerOf2(long value) => ((value - 1) & value) == 0;
-        }
-
-        private void AddComments(CppEnum cppEnum, ref EnumDeclarationSyntax @enum)
-        {
-            // TODO:
         }
 
         private int GetItemsPrefixLength(CppEnum cppEnum)
@@ -137,24 +95,6 @@ namespace BindingsGenerator
             }
 
             return 0;
-        }
-
-        private void BuildDocument(string @namespace, EnumDeclarationSyntax @enum, string managedName)
-        {
-            var ns = NamespaceDeclaration(IdentifierName(@namespace))
-                .WithMembers(SingletonList<MemberDeclarationSyntax>(@enum))
-                .NormalizeWhitespace();
-
-            var filename = $"{managedName}.cs";
-            var path = Path.Combine(_directory, filename);
-
-            var documentInfo = DocumentInfo.Create(
-                DocumentId.CreateNewId(_projectId, filename),
-                filename,
-                loader: TextLoader.From(TextAndVersion.Create(
-                    SourceText.From(ns.ToFullString()), VersionStamp.Create(), path)),
-                filePath: path);
-            var doc = _workspace.AddDocument(documentInfo);
         }
     }
 }
