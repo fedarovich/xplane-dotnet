@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using CppAst;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace BindingsGenerator
@@ -27,6 +28,21 @@ namespace BindingsGenerator
             RegisterPrimitiveType(CppPrimitiveType.Double, SyntaxKind.DoubleKeyword);
             RegisterPrimitiveType(CppPrimitiveType.WChar, SyntaxKind.CharKeyword);
             RegisterPrimitiveType(CppPrimitiveType.Bool, SyntaxKind.BoolKeyword);
+
+            RegisterStandardTypedef("int8_t", CppPrimitiveType.Char, SyntaxKind.SByteKeyword);
+            RegisterStandardTypedef("int16_t", CppPrimitiveType.Short, SyntaxKind.ShortKeyword);
+            RegisterStandardTypedef("int32_t", CppPrimitiveType.Int, SyntaxKind.IntKeyword);
+            RegisterStandardTypedef("int64_t", CppPrimitiveType.LongLong, SyntaxKind.LongKeyword);
+            RegisterStandardTypedef("intptr_t", CppPrimitiveType.LongLong, "IntPtr");
+
+            RegisterStandardTypedef("uint8_t", CppPrimitiveType.UnsignedChar, SyntaxKind.ByteKeyword);
+            RegisterStandardTypedef("uint16_t", CppPrimitiveType.UnsignedShort, SyntaxKind.UShortKeyword);
+            RegisterStandardTypedef("uint32_t", CppPrimitiveType.UnsignedInt, SyntaxKind.UIntKeyword);
+            RegisterStandardTypedef("uint64_t", CppPrimitiveType.UnsignedLongLong, SyntaxKind.ULongKeyword);
+            RegisterStandardTypedef("uintptr_t", CppPrimitiveType.UnsignedLongLong, "UIntPtr");
+
+            RegisterStandardTypedef("ptrdiff_t", CppPrimitiveType.LongLong, "IntPtr");
+            RegisterStandardTypedef("size_t", CppPrimitiveType.UnsignedLongLong, "UIntPtr");
         }
 
         public TypeInfo RegisterType(CppType cppType, string nativeName, string managedName)
@@ -42,6 +58,18 @@ namespace BindingsGenerator
             var name = primitive.GetDisplayName();
             var typeInfo = new TypeInfo(name, primitive, PredefinedType(Token(syntax)));
             _nativeMap.Add(name, typeInfo);
+        }
+
+        private void RegisterStandardTypedef(string nativeName, CppPrimitiveType primitive, string managedName)
+        {
+            var typeInfo = new TypeInfo(nativeName, new CppTypedef(nativeName, primitive), IdentifierName(managedName), true);
+            _nativeMap.Add(nativeName, typeInfo);
+        }
+
+        private void RegisterStandardTypedef(string nativeName, CppPrimitiveType primitive, SyntaxKind syntax)
+        {
+            var typeInfo = new TypeInfo(nativeName, new CppTypedef(nativeName, primitive), PredefinedType(Token(syntax)), true);
+            _nativeMap.Add(nativeName, typeInfo);
         }
 
         public TypeInfo GetType(string name) => _nativeMap[name];

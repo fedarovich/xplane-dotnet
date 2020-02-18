@@ -9,17 +9,21 @@ namespace BindingsGenerator
 {
     public class TypeInfo
     {
-        public TypeInfo(string name, CppType cppType, TypeSyntax typeSyntax)
+        public TypeInfo(string name, CppType cppType, TypeSyntax typeSyntax, bool isStandard = false)
         {
             Name = name;
             CppType = cppType;
             TypeSyntax = typeSyntax;
+            IsStandard = isStandard;
         }
 
         public string Name { get; }
 
         public CppType CppType { get; }
+        
         public TypeSyntax TypeSyntax { get; }
+
+        public bool IsStandard { get; }
 
         public bool IsPrimitive => CppType is CppPrimitiveType;
 
@@ -27,6 +31,9 @@ namespace BindingsGenerator
 
         public bool IsSame(CppType type)
         {
+            if (IsStandard && type.GetDisplayName() == Name)
+                return true;
+
             return Path.GetFullPath(CppType.Span.Start.File) == Path.GetFullPath(type.Span.Start.File)
                    && CppType.Span.Start.Offset == type.Span.Start.Offset;
         }

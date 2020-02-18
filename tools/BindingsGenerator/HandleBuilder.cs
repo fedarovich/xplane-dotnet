@@ -12,7 +12,7 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace BindingsGenerator
 {
-    public class HandleBuilder : BuilderBase<CppTypedef>
+    public class HandleBuilder : TypeBuilderBase<CppTypedef>
     {
         public HandleBuilder(AdhocWorkspace workspace, ProjectId projectId, string directory, TypeMap typeMap) 
             : base(workspace, projectId, directory, typeMap)
@@ -153,12 +153,12 @@ namespace BindingsGenerator
             return base.IsSameType(typeInfo, cppType) || typeInfo.IsEnum;
         }
 
-        protected override bool CanProcess(CppTypedef cppType)
+        protected override bool CanProcess(CppTypedef cppElement)
         {
-            if (cppType.ElementType is CppPrimitiveType primitiveType)
+            if (cppElement.ElementType is CppPrimitiveType primitiveType)
                 return true;
 
-            if (cppType.ElementType is CppPointerType pointerType &&
+            if (cppElement.ElementType is CppPointerType pointerType &&
                 pointerType.ElementType is CppPrimitiveType p && 
                 p.Kind == CppPrimitiveKind.Void)
                 return true;

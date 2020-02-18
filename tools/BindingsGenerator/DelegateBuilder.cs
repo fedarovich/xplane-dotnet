@@ -11,7 +11,7 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace BindingsGenerator
 {
-    public class DelegateBuilder : BuilderBase<CppTypedef>
+    public class DelegateBuilder : TypeBuilderBase<CppTypedef>
     {
         public DelegateBuilder(AdhocWorkspace workspace, ProjectId projectId, string directory, TypeMap typeMap) 
             : base(workspace, projectId, directory, typeMap)
@@ -88,9 +88,9 @@ namespace BindingsGenerator
             return managedName;
         }
 
-        protected override bool CanProcess(CppTypedef cppType)
+        protected override bool CanProcess(CppTypedef cppElement)
         {
-            return cppType.ElementType is CppPointerType cppPointerType && cppPointerType.ElementType is CppFunctionType;
+            return cppElement.ElementType is CppPointerType cppPointerType && cppPointerType.ElementType is CppFunctionType;
         }
     }
 }

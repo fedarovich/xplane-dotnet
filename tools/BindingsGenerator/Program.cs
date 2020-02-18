@@ -51,20 +51,23 @@ namespace BindingsGenerator
             if (!Directory.Exists(xpWidgetsHeadersPath))
                 throw new DirectoryNotFoundException($"Directory '{xpWidgetsHeadersPath}' does not exist.");
             var xpWidgetsHeaders = Directory.EnumerateFiles(xpWidgetsHeadersPath, "*.h");
-            var headers = xmplHeaders.Concat(xpWidgetsHeaders);
+            var headers = xmplHeaders.Concat(xpWidgetsHeaders)
+                .Where(x => Path.GetFileName(x) != "XPStandardWidgets.h");
 
             var parserOptions = new CppParserOptions
             {
-                Defines = {"IBM"},
+                Defines = {"IBM", "XPLM301", "XPLM300", "XPLM210", "XPLM200"},
                 ParseSystemIncludes = false,
-                TargetCpu = CppTargetCpu.X86_64
+                TargetCpu = CppTargetCpu.X86_64,
+                IncludeFolders = { xplmHeadersPath }
             };
 
             var typeMap = new TypeMap();
             var enumBuilder = new EnumBuilder(workspace, projectId, outputDir, typeMap);
             var handleBuilder = new HandleBuilder(workspace, projectId, outputDir, typeMap);
-            var structBuilder = new StructBuilder(workspace, projectId, outputDir, typeMap);
             var delegateBuilder = new DelegateBuilder(workspace, projectId, outputDir, typeMap);
+            var structBuilder = new StructBuilder(workspace, projectId, outputDir, typeMap);
+            var functionBuilder = new FunctionBuilder(workspace, projectId, outputDir, typeMap);
 
             foreach (var header in headers)
             {
@@ -72,8 +75,9 @@ namespace BindingsGenerator
                 var compilation = CppParser.ParseFile(header, parserOptions);
                 enumBuilder.Build(compilation.Enums);
                 handleBuilder.Build(compilation.Typedefs);
-                structBuilder.Build(compilation.Classes);
                 delegateBuilder.Build(compilation.Typedefs);
+                structBuilder.Build(compilation.Classes);
+                functionBuilder.Build(compilation.Functions);
             }
 
             foreach (var document in workspace.CurrentSolution.Projects.SelectMany(p => p.Documents))

@@ -11,7 +11,7 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace BindingsGenerator
 {
-    public class StructBuilder : BuilderBase<CppClass>
+    public class StructBuilder : TypeBuilderBase<CppClass>
     {
         public StructBuilder(AdhocWorkspace workspace, ProjectId projectId, string directory, TypeMap typeMap) 
             : base(workspace, projectId, directory, typeMap)
@@ -37,6 +37,14 @@ namespace BindingsGenerator
             {
                 return FieldDeclaration(
                     VariableDeclaration(typeInfo.TypeSyntax)
+                        .AddVariables(VariableDeclarator(cppField.Name)))
+                    .AddModifiers(Token(SyntaxKind.PublicKeyword));
+            }
+
+            if (cppField.Type is CppPointerType pointerType)
+            {
+                return FieldDeclaration(
+                    VariableDeclaration(IdentifierName(nameof(IntPtr)))
                         .AddVariables(VariableDeclarator(cppField.Name)))
                     .AddModifiers(Token(SyntaxKind.PublicKeyword));
             }

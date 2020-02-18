@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using CppAst;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -11,12 +10,12 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace BindingsGenerator
 {
-    public abstract class BuilderBase<T> where T : CppType
+    public abstract class BuilderBase<T> where T : CppElement
     {
-        protected readonly AdhocWorkspace Workspace;
-        protected readonly ProjectId ProjectId;
-        protected readonly string Directory;
-        protected readonly TypeMap TypeMap;
+        protected AdhocWorkspace Workspace;
+        protected ProjectId ProjectId;
+        protected string Directory;
+        protected TypeMap TypeMap;
 
         protected BuilderBase(AdhocWorkspace workspace, ProjectId projectId, string directory, TypeMap typeMap)
         {
@@ -26,51 +25,17 @@ namespace BindingsGenerator
             TypeMap = typeMap;
         }
 
-        public virtual void Build(CppContainerList<T> cppTypes)
-        {
-            foreach (var cppType in cppTypes)
-            {
-                if (!CanProcess(cppType))
-                    continue;
-
-                string nativeName = GetNativeName(cppType);
-                if (TypeMap.TryGetType(nativeName, out var typeInfo))
-                {
-                    if (IsSameType(typeInfo, cppType))
-                        continue;
-
-                    throw new ArgumentException($"Duplicate type: '{nativeName}'.");
-                }
-
-                var managedName = GetManagedName(nativeName);
-
-                Console.Write($"  Building type '{managedName}' from '{nativeName}'...");
-                var type = BuildType(cppType, nativeName, managedName);
-                if (type != null)
-                {
-                    WriteLineColored("  Done.", ConsoleColor.Green);
-                }
-                else
-                {
-                    WriteLineColored("  Skipped.", ConsoleColor.Yellow);
-                    continue;
-                }
-                
-                BuildDocument(GetRelativeNamespace(cppType), type, managedName);
-            }
-        }
-
-        protected abstract MemberDeclarationSyntax BuildType(T cppType, string nativeName, string managedName);
-
-        protected abstract string GetNativeName(T type);
-
-        protected virtual bool CanProcess(T cppType) => true;
+        public abstract void Build(CppContainerList<T> cppElements);
 
         protected string DefaultNamespace => Workspace.CurrentSolution.Projects.Single(p => p.Id == ProjectId).DefaultNamespace;
 
-        protected virtual string GetRelativeNamespace(T cppType)
+        protected abstract string GetNativeName(T cppElement);
+        
+        protected virtual bool CanProcess(T cppElement) => true;
+
+        protected virtual string GetRelativeNamespace(T cppElement)
         {
-            var file = cppType.Span.Start.File;
+            var file = cppElement.Span.Start.File;
             var ns = Path.GetFileName(Path.GetDirectoryName(file));
             return ns;
         }
@@ -85,8 +50,6 @@ namespace BindingsGenerator
 
             return nativeName;
         }
-
-        protected virtual bool IsSameType(TypeInfo typeInfo, T cppType) => typeInfo.IsSame(cppType);
 
         protected virtual void BuildDocument(string relativeNamespace, MemberDeclarationSyntax type, string managedName)
         {

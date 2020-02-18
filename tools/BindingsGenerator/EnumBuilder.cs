@@ -13,7 +13,7 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace BindingsGenerator
 {
-    public class EnumBuilder : BuilderBase<CppEnum>
+    public class EnumBuilder : TypeBuilderBase<CppEnum>
     {
         public EnumBuilder(AdhocWorkspace workspace, ProjectId projectId, string directory, TypeMap typeMap) : base(workspace, projectId, directory, typeMap)
         {
