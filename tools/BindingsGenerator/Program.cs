@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,10 @@ namespace BindingsGenerator
 {
     class Program
     {
+        private EnumBuilder _enumBuilder;
+        private HandleBuilder _handleBuilder;
+        private DelegateBuilder _delegateBuilder;
+        private StructBuilder _structBuilder;
         static Task<int> Main(string[] args) => CommandLineApplication.ExecuteAsync<Program>(args);
 
         [DirectoryExists]
@@ -41,7 +46,14 @@ namespace BindingsGenerator
             var projectInfo = ProjectInfo.Create(projectId, VersionStamp.Create(), "XP.SDK", "XP.SDK", LanguageNames.CSharp)
                 .WithDefaultNamespace("XP.SDK");
             var project = workspace.AddProject(projectInfo);
-           
+
+            var typeMap = new TypeMap();
+            _enumBuilder = new EnumBuilder(workspace, projectId, outputDir, typeMap);
+            _handleBuilder = new HandleBuilder(workspace, projectId, outputDir, typeMap);
+            _delegateBuilder = new DelegateBuilder(workspace, projectId, outputDir, typeMap);
+            _structBuilder = new StructBuilder(workspace, projectId, outputDir, typeMap);
+            var functionBuilder = new FunctionBuilder(workspace, projectId, outputDir, typeMap);
+
             var xplmHeadersPath = Path.Combine(SdkRoot, "CHeaders", "XPLM");
             if (!Directory.Exists(xplmHeadersPath))
                 throw new DirectoryNotFoundException($"Directory '{xplmHeadersPath}' does not exist.");
@@ -59,26 +71,20 @@ namespace BindingsGenerator
                 Defines = {"IBM", "XPLM301", "XPLM300", "XPLM210", "XPLM200"},
                 ParseSystemIncludes = false,
                 TargetCpu = CppTargetCpu.X86_64,
-                IncludeFolders = { xplmHeadersPath }
+                IncludeFolders = { xplmHeadersPath },
             };
 
-            var typeMap = new TypeMap();
-            var enumBuilder = new EnumBuilder(workspace, projectId, outputDir, typeMap);
-            var handleBuilder = new HandleBuilder(workspace, projectId, outputDir, typeMap);
-            var delegateBuilder = new DelegateBuilder(workspace, projectId, outputDir, typeMap);
-            var structBuilder = new StructBuilder(workspace, projectId, outputDir, typeMap);
-            var functionBuilder = new FunctionBuilder(workspace, projectId, outputDir, typeMap);
 
-            foreach (var header in headers)
+            var compilation = CppParser.ParseFiles(headers.ToList(), parserOptions);
+            foreach (var child in compilation.Children().OfType<CppType>().OrderBy(x => x, new FilePathComparer()))
             {
-                Console.WriteLine("Parsing header {0}", Path.GetFileName(header));
-                var compilation = CppParser.ParseFile(header, parserOptions);
-                enumBuilder.Build(compilation.Enums);
-                handleBuilder.Build(compilation.Typedefs);
-                delegateBuilder.Build(compilation.Typedefs);
-                structBuilder.Build(compilation.Classes);
-                functionBuilder.Build(compilation.Functions);
+                BuildType(child);
             }
+            //_enumBuilder.Build(compilation.Enums);
+            //_handleBuilder.Build(compilation.Typedefs);
+            //_delegateBuilder.Build(compilation.Typedefs);
+            //_structBuilder.Build(compilation.Classes);
+            //functionBuilder.Build(compilation.Functions);
 
             foreach (var document in workspace.CurrentSolution.Projects.SelectMany(p => p.Documents))
             {
@@ -90,6 +96,50 @@ namespace BindingsGenerator
             return 0;
         }
 
-        
+        private void BuildType(dynamic item)
+        {
+            Process(item);
+        }
+
+        private void Process(CppEnum item)
+        {
+            _enumBuilder.Build(new [] { item });
+        }
+
+        private void Process(CppTypedef item)
+        {
+            _handleBuilder.Build(new[] { item });
+            _delegateBuilder.Build(new[] { item });
+        }
+
+        private void Process(CppClass item)
+        {
+            _structBuilder.Build(new[] { item });
+        }
+
+        private void Process<T>(T item) where T : ICppDeclaration
+        {
+            // Fallback. Do nothing.
+        }
+
+        private class FilePathComparer : IComparer<CppType>
+        {
+            public int Compare(CppType x, CppType y)
+            {
+                var xName = Path.GetFileNameWithoutExtension(x.Span.Start.File);
+                var yName = Path.GetFileNameWithoutExtension(y.Span.Start.File);
+
+                if (xName == yName)
+                    return x.Span.Start.Line.CompareTo(y.Span.Start.Line);
+
+                if (xName == "XPLMDefs")
+                    return -1;
+
+                if (yName == "XPLMDefs")
+                    return 1;
+
+                return StringComparer.OrdinalIgnoreCase.Compare(xName, yName);
+            }
+        }
     }
 }

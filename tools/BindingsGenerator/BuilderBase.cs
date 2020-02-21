@@ -25,7 +25,7 @@ namespace BindingsGenerator
             TypeMap = typeMap;
         }
 
-        public abstract void Build(CppContainerList<T> cppElements);
+        public abstract void Build(IEnumerable<T> cppElements);
 
         protected string DefaultNamespace => Workspace.CurrentSolution.Projects.Single(p => p.Id == ProjectId).DefaultNamespace;
 

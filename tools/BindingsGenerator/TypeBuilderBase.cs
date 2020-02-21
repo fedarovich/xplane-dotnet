@@ -17,7 +17,7 @@ namespace BindingsGenerator
         {
         }
 
-        public override void Build(CppContainerList<T> cppTypes)
+        public override void Build(IEnumerable<T> cppTypes)
         {
             foreach (var cppType in cppTypes)
             {

@@ -53,20 +53,19 @@ namespace BindingsGenerator
                 if (pointerType.ElementType is CppFunctionType)
                     throw new NotSupportedException("Callbacks in callbacks are not supported at the moment.");
 
-                return Parameter(name).WithType(IdentifierName(nameof(IntPtr)));
+                if (TypeMap.TryGetType(pointerType.ElementType.GetDisplayName(), out typeInfo))
+                {
+                    return Parameter(name).WithType(PointerType(typeInfo.TypeSyntax));
+                }
 
-                //if (pointerType.ElementType is CppPrimitiveType primitiveType &&
-                //    primitiveType.Kind == CppPrimitiveKind.Void)
-                //{
-                //    return Parameter(name).WithType(IdentifierName(nameof(IntPtr)));
-                //}
-
-                //if (TypeMap.TryGetType(pointerType.ElementType.GetDisplayName(), out typeInfo))
-                //{
-                //    return Parameter(name).WithType(PointerType(typeInfo.TypeSyntax));
-                //}
+                if (pointerType.ElementType is CppQualifiedType qualifiedType &&
+                    TypeMap.TryGetType(qualifiedType.ElementType.GetDisplayName(), out typeInfo))
+                {
+                    return Parameter(name).WithType(PointerType(typeInfo.TypeSyntax));
+                }
             }
 
+            Debugger.Break();
             throw new NotSupportedException();
         }
 

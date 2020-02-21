@@ -16,7 +16,7 @@ namespace BindingsGenerator
         {
         }
 
-        public override void Build(CppContainerList<CppFunction> cppFunctions)
+        public override void Build(IEnumerable<CppFunction> cppFunctions)
         {
             var firstFunction = cppFunctions.FirstOrDefault();
             if (firstFunction == null)
