@@ -38,6 +38,15 @@ namespace BindingsGenerator
         {
             if (TypeMap.TryResolveType(cppField.Type, out var typeInfo))
             {
+                if (typeInfo.IsFunction)
+                {
+                    return FieldDeclaration(
+                            VariableDeclaration(IdentifierName(nameof(IntPtr)))
+                                .AddVariables(VariableDeclarator(cppField.Name)))
+                        .AddModifiers(Token(SyntaxKind.PublicKeyword))
+                        .AddManagedTypeAttribute(typeInfo.TypeSyntax);
+                }
+
                 return FieldDeclaration(
                     VariableDeclaration(typeInfo.TypeSyntax)
                         .AddVariables(VariableDeclarator(cppField.Name)))

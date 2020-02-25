@@ -80,7 +80,14 @@ namespace BindingsGenerator
             {
                 BuildType(child);
             }
-            functionBuilder.Build(compilation.Functions);
+
+            var functionsByHeader = compilation
+                .Functions
+                .ToLookup(x => x.Span.Start.File);
+            foreach (var functionsInHeader in functionsByHeader)
+            {
+                functionBuilder.Build(functionsInHeader);
+            }
 
             foreach (var document in workspace.CurrentSolution.Projects.SelectMany(p => p.Documents))
             {

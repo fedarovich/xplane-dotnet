@@ -27,7 +27,8 @@ namespace BindingsGenerator
             var returnType = TypeMap.GetType(function.ReturnType.GetDisplayName()).TypeSyntax;
             var @delegate = DelegateDeclaration(returnType, managedName)
                 .AddModifiers(Token(SyntaxKind.PublicKeyword))
-                .AddParameterListParameters(function.Parameters.Select(BuildParameter).ToArray());
+                .AddParameterListParameters(function.Parameters.Select(BuildParameter).ToArray())
+                .AddUnmanagedFunctionPointerAttribute();
 
             if (@delegate.DescendantNodes().OfType<PointerTypeSyntax>().Any())
             {

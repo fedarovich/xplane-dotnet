@@ -29,6 +29,25 @@ namespace BindingsGenerator
 
         public bool IsEnum => CppType is CppEnum;
 
+        public bool IsVoid => CppType is CppPrimitiveType { Kind: CppPrimitiveKind.Void };
+
+        public bool IsFunction
+        {
+            get
+            {
+                return IsFunctionRec(CppType);
+
+                static bool IsFunctionRec(CppType cppType) =>
+                    cppType switch
+                    {
+                        CppFunctionType _ => true,
+                        CppPointerType p => IsFunctionRec(p.ElementType),
+                        CppTypedef t => IsFunctionRec(t.ElementType),
+                        _ => false
+                    };
+            }
+        }
+
         public bool IsSame(CppType type)
         {
             if (IsStandard && type.GetDisplayName() == Name)

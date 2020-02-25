@@ -35,6 +35,13 @@ namespace BindingsGenerator
 
         protected string GetFullNamespace(T cppElement) => $"{DefaultNamespace}.{GetRelativeNamespace(cppElement)}";
 
+        protected string GetNativeLibrary(T cppElement)
+        {
+            var file = cppElement.Span.Start.File;
+            var ns = Path.GetFileName(Path.GetDirectoryName(file));
+            return ns;
+        }
+
         protected virtual string GetRelativeNamespace(T cppElement)
         {
             var file = cppElement.Span.Start.File;
@@ -45,10 +52,18 @@ namespace BindingsGenerator
         protected virtual string GetManagedName(string nativeName)
         {
             if (nativeName.StartsWith("XPLM"))
-                return nativeName[4..];
+            {
+                nativeName = nativeName[4..];
+            } 
+            else if (nativeName.StartsWith("XP"))
+            {
+                nativeName = nativeName[2..];
+            }
 
-            if (nativeName.StartsWith("XP"))
-                return nativeName[2..];
+            if (nativeName.IsKeyword())
+            {
+                nativeName = "@" + nativeName;
+            }
 
             return nativeName;
         }
