@@ -39,15 +39,15 @@ namespace BindingsGenerator
                     continue;
                 
 
-                Console.Write($"  Building type '{managedName}' from '{nativeName}'...");
+                Log.WriteLine($"Building type '{managedName}' from '{nativeName}'...");
                 var type = BuildType(cppType, nativeName, managedName);
                 if (type != null)
                 {
-                    WriteLineColored("  Done.", ConsoleColor.Green);
+                    Log.WriteLine("Done.", ConsoleColor.Green);
                 }
                 else
                 {
-                    WriteLineColored("  Skipped.", ConsoleColor.Yellow);
+                    Log.WriteLine("Skipped.", ConsoleColor.Yellow);
                     continue;
                 }
                 

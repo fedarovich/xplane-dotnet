@@ -60,7 +60,8 @@ namespace BindingsGenerator
                 .AddUsings(
                     UsingDirective(SyntaxExtensions.SystemNamespace),
                     UsingDirective(SyntaxExtensions.CompilerServices),
-                    UsingDirective(SyntaxExtensions.InteropServices))
+                    UsingDirective(SyntaxExtensions.InteropServices),
+                    UsingDirective(SyntaxExtensions.BuildQualifiedName("XP.SDK.XPLM")))
                 .AddMembers(ns)
                 .NormalizeWhitespace();
 
@@ -68,7 +69,7 @@ namespace BindingsGenerator
             directoryParts.AddRange(relativeNamespace.Split(".", StringSplitOptions.RemoveEmptyEntries));
             var directory = Path.Combine(directoryParts.ToArray());
             System.IO.Directory.CreateDirectory(directory);
-            var filename = $"{managedName}.cs";
+            var filename = $"{managedName}.Generated.cs";
             var path = Path.Combine(directory, filename);
 
             var documentInfo = DocumentInfo.Create(
@@ -82,23 +83,8 @@ namespace BindingsGenerator
 
             NameSyntax BuildNamespaceNameSyntax()
             {
-                var parts = new List<string>(DefaultNamespace.Split(".", StringSplitOptions.RemoveEmptyEntries));
-                parts.AddRange(relativeNamespace.Split(".", StringSplitOptions.RemoveEmptyEntries));
-                var queue = new Queue<string>(parts);
-                NameSyntax name = IdentifierName(queue.Dequeue());
-                while (queue.TryDequeue(out var part))
-                {
-                    name = QualifiedName(name, IdentifierName(part));
-                }
-                return name;
+                return SyntaxExtensions.BuildQualifiedName(DefaultNamespace, relativeNamespace);
             }
-        }
-
-        protected void WriteLineColored(string text, ConsoleColor color)
-        {
-            Console.ForegroundColor = color;
-            Console.WriteLine(text);
-            Console.ResetColor();
         }
     }
 }

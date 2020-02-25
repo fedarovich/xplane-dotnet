@@ -59,10 +59,7 @@ namespace BindingsGenerator
             BuildDocument(GetRelativeNamespace(firstFunction), @class, className);
         }
 
-        protected override string GetRelativeNamespace(CppFunction cppElement)
-        {
-            return $"{base.GetRelativeNamespace(cppElement)}.Internal";
-        }
+        protected override string GetRelativeNamespace(CppFunction cppElement) => $"{base.GetRelativeNamespace(cppElement)}.Internal";
 
         protected override string GetNativeName(CppFunction cppFunction) => cppFunction.Name;
 

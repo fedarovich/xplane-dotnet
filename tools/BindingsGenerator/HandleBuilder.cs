@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.CompilerServices;
-using System.Text;
-using CppAst;
+﻿using CppAst;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace BindingsGenerator
@@ -41,7 +35,7 @@ namespace BindingsGenerator
             var param = IdentifierName("value");
 
             var @struct = StructDeclaration(managedName)
-                    .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.ReadOnlyKeyword))
+                    .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.ReadOnlyKeyword), Token(SyntaxKind.PartialKeyword))
                     .AddBaseListTypes(SimpleBaseType(
                         QualifiedName(IdentifierName("System"), GenericName("IEquatable").AddTypeArgumentListArguments(managedType))))
                     .AddMembers(
@@ -71,7 +65,12 @@ namespace BindingsGenerator
                             .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword))
                             .AddParameterListParameters(Parameter(Identifier("value")).WithType(managedType))
                             .AddAggressiveInlining()
-                            .WithExpressionBody(ArrowExpressionClause(field))
+                            .WithExpressionBody(
+                                ArrowExpressionClause(
+                                    MemberAccessExpression(
+                                        SyntaxKind.SimpleMemberAccessExpression,
+                                        IdentifierName("value"),
+                                        field)))
                             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken)),
 
                         MethodDeclaration(PredefinedType(Token(SyntaxKind.BoolKeyword)), "Equals")
@@ -145,6 +144,8 @@ namespace BindingsGenerator
 
             return @struct;
         }
+
+        protected override string GetRelativeNamespace(CppTypedef cppElement) => $"{base.GetRelativeNamespace(cppElement)}.Internal";
 
         protected override string GetNativeName(CppTypedef type) => type.Name;
 

@@ -60,7 +60,7 @@ namespace BindingsGenerator
 
         private static void ApplyFlagsHeuristic(CppEnum cppEnum, ref EnumDeclarationSyntax @enum)
         {
-            if (cppEnum.Items.All(i => IsPowerOf2(i.Value)))
+            if (cppEnum.Items.Count > 3 && cppEnum.Items.All(i => IsPowerOf2(i.Value)))
             {
                 @enum = @enum.AddAttributeLists(
                     AttributeList(SingletonSeparatedList(

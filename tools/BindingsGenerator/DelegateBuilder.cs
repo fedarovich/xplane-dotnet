@@ -43,38 +43,26 @@ namespace BindingsGenerator
         {
             var name = Identifier(cppParameter.Name);
 
-            if (TypeMap.TryGetType(cppParameter.Type.GetDisplayName(), out var typeInfo))
+            if (TypeMap.TryResolveType(cppParameter.Type, out var typeInfo))
             {
                 return Parameter(name).WithType(typeInfo.TypeSyntax);
             }
 
-            if (cppParameter.Type is CppPointerType pointerType)
+            if (Debugger.IsAttached)
             {
-                if (pointerType.ElementType is CppFunctionType)
-                    throw new NotSupportedException("Callbacks in callbacks are not supported at the moment.");
-
-                if (TypeMap.TryGetType(pointerType.ElementType.GetDisplayName(), out typeInfo))
-                {
-                    return Parameter(name).WithType(PointerType(typeInfo.TypeSyntax));
-                }
-
-                if (pointerType.ElementType is CppQualifiedType qualifiedType &&
-                    TypeMap.TryGetType(qualifiedType.ElementType.GetDisplayName(), out typeInfo))
-                {
-                    return Parameter(name).WithType(PointerType(typeInfo.TypeSyntax));
-                }
+                Debugger.Break();
             }
-
-            Debugger.Break();
             throw new NotSupportedException();
         }
+
+        protected override string GetRelativeNamespace(CppTypedef cppElement) => $"{base.GetRelativeNamespace(cppElement)}.Internal";
 
         protected override string GetNativeName(CppTypedef type) => type.Name;
 
         protected override string GetManagedName(string nativeName)
         {
             var managedName = base.GetManagedName(nativeName);
-            if (managedName.EndsWith("_f"))
+            if (managedName.EndsWith("_f") || managedName.EndsWith("_t"))
             {
                 managedName = managedName[..^2];
             }

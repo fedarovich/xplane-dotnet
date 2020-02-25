@@ -47,7 +47,7 @@ namespace BindingsGenerator
                 .WithDefaultNamespace("XP.SDK");
             var project = workspace.AddProject(projectInfo);
 
-            var typeMap = new TypeMap();
+            var typeMap = new TypeMap(BuildTypeCallback);
             _enumBuilder = new EnumBuilder(workspace, projectId, outputDir, typeMap);
             _handleBuilder = new HandleBuilder(workspace, projectId, outputDir, typeMap);
             _delegateBuilder = new DelegateBuilder(workspace, projectId, outputDir, typeMap);
@@ -76,15 +76,11 @@ namespace BindingsGenerator
 
 
             var compilation = CppParser.ParseFiles(headers.ToList(), parserOptions);
-            foreach (var child in compilation.Children().OfType<CppType>().OrderBy(x => x, new FilePathComparer()))
+            foreach (var child in compilation.Children().OfType<CppType>())
             {
                 BuildType(child);
             }
-            //_enumBuilder.Build(compilation.Enums);
-            //_handleBuilder.Build(compilation.Typedefs);
-            //_delegateBuilder.Build(compilation.Typedefs);
-            //_structBuilder.Build(compilation.Classes);
-            //functionBuilder.Build(compilation.Functions);
+            functionBuilder.Build(compilation.Functions);
 
             foreach (var document in workspace.CurrentSolution.Projects.SelectMany(p => p.Documents))
             {
@@ -94,6 +90,14 @@ namespace BindingsGenerator
             }
 
             return 0;
+
+            void BuildTypeCallback(dynamic item)
+            {
+                using (Log.PushIdent())
+                {
+                    BuildType(item);
+                }
+            }
         }
 
         private void BuildType(dynamic item)
@@ -117,29 +121,9 @@ namespace BindingsGenerator
             _structBuilder.Build(new[] { item });
         }
 
-        private void Process<T>(T item) where T : ICppDeclaration
+        private void Process(object item)
         {
             // Fallback. Do nothing.
-        }
-
-        private class FilePathComparer : IComparer<CppType>
-        {
-            public int Compare(CppType x, CppType y)
-            {
-                var xName = Path.GetFileNameWithoutExtension(x.Span.Start.File);
-                var yName = Path.GetFileNameWithoutExtension(y.Span.Start.File);
-
-                if (xName == yName)
-                    return x.Span.Start.Line.CompareTo(y.Span.Start.Line);
-
-                if (xName == "XPLMDefs")
-                    return -1;
-
-                if (yName == "XPLMDefs")
-                    return 1;
-
-                return StringComparer.OrdinalIgnoreCase.Compare(xName, yName);
-            }
         }
     }
 }

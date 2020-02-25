@@ -10,11 +10,13 @@ namespace BindingsGenerator
 {
     public class TypeMap
     {
+        private readonly Action<dynamic> _buildType;
         private readonly Dictionary<string, TypeInfo> _nativeMap = new Dictionary<string, TypeInfo>();
         private readonly Dictionary<string, TypeInfo> _managedMap = new Dictionary<string, TypeInfo>();
 
-        public TypeMap()
+        public TypeMap(Action<dynamic> buildType)
         {
+            _buildType = buildType;
             RegisterPrimitiveType(CppPrimitiveType.Void, SyntaxKind.VoidKeyword);
             RegisterPrimitiveType(CppPrimitiveType.Char, SyntaxKind.ByteKeyword);
             RegisterPrimitiveType(CppPrimitiveType.Short, SyntaxKind.ShortKeyword);
@@ -75,5 +77,34 @@ namespace BindingsGenerator
         public TypeInfo GetType(string name) => _nativeMap[name];
 
         public bool TryGetType(string name, out TypeInfo typeInfo) => _nativeMap.TryGetValue(name, out typeInfo);
+
+        public bool TryResolveType(CppType cppType, out TypeInfo typeInfo, bool lookForward = true)
+        {
+            if (TryGetType(cppType.GetDisplayName(), out typeInfo))
+                return true;
+
+            if (cppType is CppQualifiedType qualified)
+            {
+                return TryResolveType(qualified.ElementType, out typeInfo, lookForward);
+            }
+
+            if (cppType is CppPointerType pointer)
+            {
+                if (TryResolveType(pointer.ElementType, out var innerTypeInfo, lookForward))
+                {
+                    typeInfo = new TypeInfo(cppType.GetDisplayName(), cppType, PointerType(innerTypeInfo.TypeSyntax));
+                    _nativeMap.Add(typeInfo.Name, typeInfo);
+                    return true;
+                }
+            }
+
+            if (lookForward)
+            {
+                _buildType(cppType);
+                return TryResolveType(cppType, out typeInfo, false);
+            }
+
+            return false;
+        }
     }
 }

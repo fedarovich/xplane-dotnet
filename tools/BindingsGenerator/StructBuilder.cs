@@ -24,6 +24,12 @@ namespace BindingsGenerator
                 .AddModifiers(Token(SyntaxKind.PublicKeyword))
                 .AddMembers(cppType.Fields.Select(BuildField).ToArray());
 
+            if (@struct.DescendantNodes().OfType<PointerTypeSyntax>().Any())
+            {
+                @struct = @struct.AddModifiers(Token(SyntaxKind.UnsafeKeyword));
+            }
+
+            @struct = @struct.AddModifiers(Token(SyntaxKind.PartialKeyword));
             TypeMap.RegisterType(cppType, nativeName, managedName);
 
             return @struct;
@@ -31,9 +37,7 @@ namespace BindingsGenerator
 
         private MemberDeclarationSyntax BuildField(CppField cppField)
         {
-            var name = Identifier(cppField.Name);
-
-            if (TypeMap.TryGetType(cppField.Type.GetDisplayName(), out var typeInfo))
+            if (TypeMap.TryResolveType(cppField.Type, out var typeInfo))
             {
                 return FieldDeclaration(
                     VariableDeclaration(typeInfo.TypeSyntax)
@@ -41,17 +45,14 @@ namespace BindingsGenerator
                     .AddModifiers(Token(SyntaxKind.PublicKeyword));
             }
 
-            if (cppField.Type is CppPointerType pointerType)
+            if (Debugger.IsAttached)
             {
-                return FieldDeclaration(
-                    VariableDeclaration(IdentifierName(nameof(IntPtr)))
-                        .AddVariables(VariableDeclarator(cppField.Name)))
-                    .AddModifiers(Token(SyntaxKind.PublicKeyword));
+                Debugger.Break();
             }
-
-            Debugger.Break();
             throw new NotImplementedException();
         }
+
+        protected override string GetRelativeNamespace(CppClass cppElement) => $"{base.GetRelativeNamespace(cppElement)}.Internal";
 
         protected override string GetNativeName(CppClass type) => type.Name;
 
