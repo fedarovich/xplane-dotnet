@@ -139,9 +139,6 @@ namespace BindingsGenerator
                             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken))
                         );
 
-
-            TypeMap.RegisterType(cppType, nativeName, managedName);
-
             return @struct;
         }
 

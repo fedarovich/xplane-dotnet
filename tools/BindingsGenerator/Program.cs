@@ -121,9 +121,9 @@ namespace BindingsGenerator
             _structBuilder.Build(new[] { item });
         }
 
-        private void Process(object item)
+        private void Process<T>(T item) where T : CppElement
         {
-            // Fallback. Do nothing.
+            Log.WriteLine($"Skipped {item}.", ConsoleColor.DarkYellow);
         }
     }
 }

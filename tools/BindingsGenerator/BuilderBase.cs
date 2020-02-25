@@ -33,6 +33,8 @@ namespace BindingsGenerator
         
         protected virtual bool CanProcess(T cppElement) => true;
 
+        protected string GetFullNamespace(T cppElement) => $"{DefaultNamespace}.{GetRelativeNamespace(cppElement)}";
+
         protected virtual string GetRelativeNamespace(T cppElement)
         {
             var file = cppElement.Span.Start.File;
@@ -51,17 +53,38 @@ namespace BindingsGenerator
             return nativeName;
         }
 
+        protected virtual IEnumerable<string> GetImportsCore(MemberDeclarationSyntax type)
+        {
+            yield return nameof(System);
+
+            var namespaces =
+                from node in type.DescendantNodes()
+                from annotation in node.GetAnnotations(Annotations.Namespace)
+                select annotation.Data;
+            foreach (var ns in namespaces)
+            {
+                yield return ns;
+            }
+        }
+
+        private IEnumerable<UsingDirectiveSyntax> GetImports(MemberDeclarationSyntax type, string @namespace)
+        {
+            return GetImportsCore(type)
+                .Distinct()
+                .Where(ns => !@namespace.StartsWith(ns, StringComparison.Ordinal))
+                .OrderBy(ns => ns)
+                .Select(SyntaxExtensions.BuildQualifiedName)
+                .Select(UsingDirective);
+        }
+
         protected virtual void BuildDocument(string relativeNamespace, MemberDeclarationSyntax type, string managedName)
         {
-            var ns = NamespaceDeclaration(BuildNamespaceNameSyntax())
+            var @namespace = BuildNamespaceNameSyntax();
+            var ns = NamespaceDeclaration(@namespace)
                 .WithMembers(SingletonList(type));
 
             var unit = CompilationUnit()
-                .AddUsings(
-                    UsingDirective(SyntaxExtensions.SystemNamespace),
-                    UsingDirective(SyntaxExtensions.CompilerServices),
-                    UsingDirective(SyntaxExtensions.InteropServices),
-                    UsingDirective(SyntaxExtensions.BuildQualifiedName("XP.SDK.XPLM")))
+                .WithUsings(List(GetImports(type, @namespace.ToFullString())))
                 .AddMembers(ns)
                 .NormalizeWhitespace();
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -29,7 +30,8 @@ namespace BindingsGenerator
                             .AddArgumentListArguments(AttributeArgument(MemberAccessExpression(
                                 SyntaxKind.SimpleMemberAccessExpression,
                                 argumentType,
-                                IdentifierName(nameof(MethodImplOptions.AggressiveInlining))))))));
+                                IdentifierName(nameof(MethodImplOptions.AggressiveInlining))))))))
+                .WithAdditionalAnnotations(new SyntaxAnnotation(Annotations.Namespace, CompilerServices.ToFullString()));
         }
 
         public static NameSyntax BuildQualifiedName(params string[] partialNames)

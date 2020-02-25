@@ -34,8 +34,6 @@ namespace BindingsGenerator
                 @delegate = @delegate.AddModifiers(Token(SyntaxKind.UnsafeKeyword));
             }
 
-            TypeMap.RegisterType(cppType, nativeName, managedName);
-
             return @delegate;
         }
 

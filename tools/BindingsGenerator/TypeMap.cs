@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using CppAst;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
@@ -47,9 +48,11 @@ namespace BindingsGenerator
             RegisterStandardTypedef("size_t", CppPrimitiveType.UnsignedLongLong, "UIntPtr");
         }
 
-        public TypeInfo RegisterType(CppType cppType, string nativeName, string managedName)
+        public TypeInfo RegisterType(CppType cppType, string nativeName, string managedName, string @namespace)
         {
-            var typeInfo = new TypeInfo(nativeName, cppType, IdentifierName(managedName));
+            var typeSyntax = IdentifierName(managedName)
+                .WithAdditionalAnnotations(new SyntaxAnnotation(Annotations.Namespace, @namespace));
+            var typeInfo = new TypeInfo(nativeName, cppType, typeSyntax);
             _nativeMap.Add(nativeName, typeInfo);
             _managedMap.Add(managedName, typeInfo);
             return typeInfo;

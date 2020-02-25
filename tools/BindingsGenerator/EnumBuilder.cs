@@ -28,7 +28,7 @@ namespace BindingsGenerator
                 .AddMembers(cppType.Items.Select(cppEnumItem => BuildEnumMember(cppEnumItem, prefixLength)).ToArray());
 
             ApplyFlagsHeuristic(cppType, ref @enum);
-            TypeMap.RegisterType(cppType, nativeName, managedName);
+            
             return @enum;
         }
 

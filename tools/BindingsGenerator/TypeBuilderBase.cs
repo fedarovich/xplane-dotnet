@@ -43,6 +43,7 @@ namespace BindingsGenerator
                 var type = BuildType(cppType, nativeName, managedName);
                 if (type != null)
                 {
+                    TypeMap.RegisterType(cppType, nativeName, managedName, GetFullNamespace(cppType));
                     Log.WriteLine("Done.", ConsoleColor.Green);
                 }
                 else

@@ -30,7 +30,6 @@ namespace BindingsGenerator
             }
 
             @struct = @struct.AddModifiers(Token(SyntaxKind.PartialKeyword));
-            TypeMap.RegisterType(cppType, nativeName, managedName);
 
             return @struct;
         }
