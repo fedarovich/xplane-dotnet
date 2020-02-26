@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>$(OutputDir)XP.SDK.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

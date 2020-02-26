@@ -139,6 +139,8 @@ namespace BindingsGenerator
                             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken))
                         );
 
+            @struct = @struct.AddDocumentationComments(cppType.Comment, nativeName);
+
             return @struct;
         }
 

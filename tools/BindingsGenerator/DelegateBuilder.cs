@@ -35,6 +35,8 @@ namespace BindingsGenerator
                 @delegate = @delegate.AddModifiers(Token(SyntaxKind.UnsafeKeyword));
             }
 
+            @delegate = @delegate.AddDocumentationComments(cppType.Comment, nativeName);
+
             return @delegate;
         }
 

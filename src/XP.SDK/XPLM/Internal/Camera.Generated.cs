@@ -1,7 +1,7 @@
-using InlineIL;
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using InlineIL;
 
 namespace XP.SDK.XPLM.Internal
 {
@@ -11,6 +11,7 @@ namespace XP.SDK.XPLM.Internal
         private static IntPtr DontControlCameraPtr;
         private static IntPtr IsCameraBeingControlledPtr;
         private static IntPtr ReadCameraPositionPtr;
+
         static Camera()
         {
             const string libraryName = "XPLM";
@@ -20,8 +21,16 @@ namespace XP.SDK.XPLM.Internal
             ReadCameraPositionPtr = FunctionResolver.Resolve(libraryName, "XPLMReadCameraPosition");
         }
 
+        
+        /// <summary>
+        /// <para>
+        /// This function repositions the camera on the next drawing cycle. You must
+        /// pass a non-null control function. Specify in inHowLong how long you'd like
+        /// control (indefinitely or until a key is pressed).
+        /// </para>
+        /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void ControlCamera(CameraControlDuration inHowLong, CameraControlCallback inControlFunc, void *inRefcon)
+        public static unsafe void ControlCamera(CameraControlDuration inHowLong, CameraControlCallback inControlFunc, void* inRefcon)
         {
             IL.DeclareLocals(false);
             IntPtr inControlFuncPtr = Marshal.GetFunctionPointerForDelegate(inControlFunc);
@@ -29,10 +38,22 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inControlFuncPtr);
             IL.Push(inRefcon);
             IL.Push(ControlCameraPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CameraControlDuration), typeof(IntPtr), typeof(void *)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CameraControlDuration), typeof(IntPtr), typeof(void*)));
             GC.KeepAlive(inControlFunc);
         }
 
+        
+        /// <summary>
+        /// <para>
+        /// This function stops you from controlling the camera. If you have a camera
+        /// control function, it will not be called with an inIsLosingControl flag.
+        /// X-Plane will control the camera on the next cycle.
+        /// </para>
+        /// <para>
+        /// For maximum compatibility you should not use this routine unless you are in
+        /// posession of the camera.
+        /// </para>
+        /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static void DontControlCamera()
         {
@@ -41,8 +62,16 @@ namespace XP.SDK.XPLM.Internal
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void)));
         }
 
+        
+        /// <summary>
+        /// <para>
+        /// This routine returns 1 if the camera is being controlled, zero if it is
+        /// not. If it is and you pass in a pointer to a camera control duration, the
+        /// current control duration will be returned.
+        /// </para>
+        /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int IsCameraBeingControlled(CameraControlDuration*outCameraControlDuration)
+        public static unsafe int IsCameraBeingControlled(CameraControlDuration* outCameraControlDuration)
         {
             IL.DeclareLocals(false);
             int result;
@@ -53,8 +82,14 @@ namespace XP.SDK.XPLM.Internal
             return result;
         }
 
+        
+        /// <summary>
+        /// <para>
+        /// This function reads the current camera position.
+        /// </para>
+        /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void ReadCameraPosition(CameraPosition*outCameraPosition)
+        public static unsafe void ReadCameraPosition(CameraPosition* outCameraPosition)
         {
             IL.DeclareLocals(false);
             IL.Push(outCameraPosition);

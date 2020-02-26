@@ -2,6 +2,22 @@ using System;
 
 namespace XP.SDK.Widgets
 {
+    
+    /// <summary>
+    /// <para>
+    /// Elements are individually drawable UI things like push buttons, etc. The
+    /// style defines what kind of element you are drawing. Elements can be
+    /// stretched in one or two dimensions (depending on the element). Some
+    /// elements can be lit.
+    /// </para>
+    /// <para>
+    /// In X-Plane 6 some elements must be drawn over metal. Some are scalable and
+    /// some are not. Any element can be drawn anywhere in X-Plane 7.
+    /// </para>
+    /// <para>
+    /// Scalable Axis Required Background
+    /// </para>
+    /// </summary>
     public enum ElementStyle
     {
         TextField = 6,

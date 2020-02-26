@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using CppAst;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
 using Microsoft.CodeAnalysis.Text;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
@@ -25,7 +27,7 @@ namespace BindingsGenerator
             TypeMap = typeMap;
         }
 
-        public abstract void Build(IEnumerable<T> cppElements);
+        public abstract Task BuildAsync(IEnumerable<T> cppElements);
 
         protected string DefaultNamespace => Workspace.CurrentSolution.Projects.Single(p => p.Id == ProjectId).DefaultNamespace;
 
@@ -54,7 +56,11 @@ namespace BindingsGenerator
             if (nativeName.StartsWith("XPLM"))
             {
                 nativeName = nativeName[4..];
-            } 
+            }
+            else if (nativeName.StartsWith("XPU") && char.IsUpper(nativeName[3]) && nativeName[3] != 'I')
+            {
+                nativeName = nativeName[3..];
+            }
             else if (nativeName.StartsWith("XP"))
             {
                 nativeName = nativeName[2..];
@@ -88,11 +94,11 @@ namespace BindingsGenerator
                 .Distinct()
                 .Where(ns => !@namespace.StartsWith(ns, StringComparison.Ordinal))
                 .OrderBy(ns => ns)
-                .Select(SyntaxExtensions.BuildQualifiedName)
+                .Select(SyntaxBuilder.BuildQualifiedName)
                 .Select(UsingDirective);
         }
 
-        protected virtual void BuildDocument(string relativeNamespace, MemberDeclarationSyntax type, string managedName)
+        protected virtual async Task BuildDocumentAsync(string relativeNamespace, MemberDeclarationSyntax type, string managedName)
         {
             var @namespace = BuildNamespaceNameSyntax();
             var ns = NamespaceDeclaration(@namespace)
@@ -100,8 +106,9 @@ namespace BindingsGenerator
 
             var unit = CompilationUnit()
                 .WithUsings(List(GetImports(type, @namespace.ToFullString())))
-                .AddMembers(ns)
-                .NormalizeWhitespace();
+                .AddMembers(ns);
+
+            var formattedUnit = Formatter.Format(unit, Workspace);
 
             var directoryParts = new List<string>(4) {Directory};
             directoryParts.AddRange(relativeNamespace.Split(".", StringSplitOptions.RemoveEmptyEntries));
@@ -114,14 +121,20 @@ namespace BindingsGenerator
                 DocumentId.CreateNewId(ProjectId, filename),
                 filename,
                 loader: TextLoader.From(TextAndVersion.Create(
-                    SourceText.From(unit.ToFullString()), VersionStamp.Create(), path)),
+                    SourceText.From(formattedUnit.ToFullString()), VersionStamp.Create(), path)),
                 filePath: path);
 
             var doc = Workspace.AddDocument(documentInfo);
+            doc = await Formatter.OrganizeImportsAsync(doc);
+            var changedSolution = Workspace.CurrentSolution.WithDocumentText(
+                doc.Id,
+                TextAndVersion.Create(
+                    SourceText.From((await doc.GetSyntaxRootAsync()).ToFullString()), VersionStamp.Create(), path));
+            Workspace.TryApplyChanges(changedSolution);
 
             NameSyntax BuildNamespaceNameSyntax()
             {
-                return SyntaxExtensions.BuildQualifiedName(DefaultNamespace, relativeNamespace);
+                return SyntaxBuilder.BuildQualifiedName(DefaultNamespace, relativeNamespace);
             }
         }
     }

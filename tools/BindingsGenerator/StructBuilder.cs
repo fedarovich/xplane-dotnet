@@ -30,6 +30,7 @@ namespace BindingsGenerator
             }
 
             @struct = @struct.AddModifiers(Token(SyntaxKind.PartialKeyword));
+            @struct = @struct.AddDocumentationComments(cppType.Comment, nativeName);
 
             return @struct;
         }

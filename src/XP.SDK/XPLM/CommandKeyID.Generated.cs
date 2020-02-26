@@ -2,6 +2,14 @@ using System;
 
 namespace XP.SDK.XPLM
 {
+    
+    /// <summary>
+    /// <para>
+    /// These enums represent all the keystrokes available within X-Plane. They can
+    /// be sent to X-Plane directly. For example, you can reverse thrust using
+    /// these enumerations.
+    /// </para>
+    /// </summary>
     public enum CommandKeyID
     {
         Pause = 0,

@@ -2,6 +2,15 @@ using System;
 
 namespace XP.SDK.XPLM
 {
+    
+    /// <summary>
+    /// <para>
+    /// These are enumerations for all of the things you can do with a joystick
+    /// button in X-Plane. They currently match the buttons menu in the equipment
+    /// setup dialog, but these enums will be stable even if they change in
+    /// X-Plane.
+    /// </para>
+    /// </summary>
     public enum CommandButtonID
     {
         Nothing = 0,

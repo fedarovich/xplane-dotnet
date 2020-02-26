@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using CppAst;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -17,7 +18,7 @@ namespace BindingsGenerator
         {
         }
 
-        public override void Build(IEnumerable<T> cppTypes)
+        public override async Task BuildAsync(IEnumerable<T> cppTypes)
         {
             foreach (var cppType in cppTypes)
             {
@@ -52,7 +53,7 @@ namespace BindingsGenerator
                     continue;
                 }
                 
-                BuildDocument(ns, type, managedName);
+                await BuildDocumentAsync(ns, type, managedName);
             }
         }
 

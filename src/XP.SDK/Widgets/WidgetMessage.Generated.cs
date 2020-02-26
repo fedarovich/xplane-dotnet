@@ -2,6 +2,13 @@ using System;
 
 namespace XP.SDK.Widgets
 {
+    
+    /// <summary>
+    /// <para>
+    /// Widgets receive 32-bit messages indicating what action is to be taken or
+    /// notifications of events. The list of messages may be expanded.
+    /// </para>
+    /// </summary>
     public enum WidgetMessage
     {
         None = 0,

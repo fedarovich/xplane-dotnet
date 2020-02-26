@@ -78,7 +78,7 @@ namespace BindingsGenerator
             var compilation = CppParser.ParseFiles(headers.ToList(), parserOptions);
             foreach (var child in compilation.Children().OfType<CppType>())
             {
-                BuildType(child);
+                await BuildTypeAsync(child);
             }
 
             var functionsByHeader = compilation
@@ -86,7 +86,7 @@ namespace BindingsGenerator
                 .ToLookup(x => x.Span.Start.File);
             foreach (var functionsInHeader in functionsByHeader)
             {
-                functionBuilder.Build(functionsInHeader);
+                await functionBuilder.BuildAsync(functionsInHeader);
             }
 
             foreach (var document in workspace.CurrentSolution.Projects.SelectMany(p => p.Documents))
@@ -98,39 +98,40 @@ namespace BindingsGenerator
 
             return 0;
 
-            void BuildTypeCallback(dynamic item)
+            async Task BuildTypeCallback(dynamic item)
             {
                 using (Log.PushIdent())
                 {
-                    BuildType(item);
+                    await BuildTypeAsync(item);
                 }
             }
         }
 
-        private void BuildType(dynamic item)
+        private async Task BuildTypeAsync(dynamic item)
         {
-            Process(item);
+            await ProcessAsync(item);
         }
 
-        private void Process(CppEnum item)
+        private async Task ProcessAsync(CppEnum item)
         {
-            _enumBuilder.Build(new [] { item });
+            await _enumBuilder.BuildAsync(new [] { item });
         }
 
-        private void Process(CppTypedef item)
+        private async Task ProcessAsync(CppTypedef item)
         {
-            _handleBuilder.Build(new[] { item });
-            _delegateBuilder.Build(new[] { item });
+            await _handleBuilder.BuildAsync(new[] { item });
+            await _delegateBuilder.BuildAsync(new[] { item });
         }
 
-        private void Process(CppClass item)
+        private async Task ProcessAsync(CppClass item)
         {
-            _structBuilder.Build(new[] { item });
+            await _structBuilder.BuildAsync(new[] { item });
         }
 
-        private void Process<T>(T item) where T : CppElement
+        private Task ProcessAsync<T>(T item) where T : CppElement
         {
             Log.WriteLine($"Skipped {item}.", ConsoleColor.DarkYellow);
+            return Task.CompletedTask;
         }
     }
 }

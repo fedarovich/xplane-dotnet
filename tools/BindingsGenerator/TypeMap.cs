@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using CppAst;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -11,11 +12,11 @@ namespace BindingsGenerator
 {
     public class TypeMap
     {
-        private readonly Action<dynamic> _buildType;
+        private readonly Func<dynamic, Task> _buildType;
         private readonly Dictionary<string, TypeInfo> _nativeMap = new Dictionary<string, TypeInfo>();
         private readonly Dictionary<string, TypeInfo> _managedMap = new Dictionary<string, TypeInfo>();
 
-        public TypeMap(Action<dynamic> buildType)
+        public TypeMap(Func<dynamic, Task> buildType)
         {
             _buildType = buildType;
             RegisterPrimitiveType(CppPrimitiveType.Void, SyntaxKind.VoidKeyword);
@@ -103,7 +104,7 @@ namespace BindingsGenerator
 
             if (lookForward)
             {
-                _buildType(cppType);
+                _buildType(cppType).GetAwaiter().GetResult();
                 return TryResolveType(cppType, out typeInfo, false);
             }
 

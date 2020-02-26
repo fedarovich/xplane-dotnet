@@ -29,6 +29,7 @@ namespace BindingsGenerator
 
             ApplyFlagsHeuristic(cppType, ref @enum);
             
+            @enum = @enum.AddDocumentationComments(cppType.Comment, nativeName);
             return @enum;
         }
 

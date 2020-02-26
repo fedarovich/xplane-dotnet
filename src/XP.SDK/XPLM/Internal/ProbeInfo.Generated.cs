@@ -2,6 +2,13 @@ using System;
 
 namespace XP.SDK.XPLM.Internal
 {
+    
+    /// <summary>
+    /// <para>
+    /// XPLMProbeInfo_t contains the results of a probe call. Make sure to set
+    /// structSize to the size of the struct before using it.
+    /// </para>
+    /// </summary>
     public partial struct ProbeInfo
     {
         public int structSize;

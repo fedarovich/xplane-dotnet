@@ -2,6 +2,12 @@ using System;
 
 namespace XP.SDK.XPLM
 {
+    
+    /// <summary>
+    /// <para>
+    /// The phases of a command.
+    /// </para>
+    /// </summary>
     public enum CommandPhase
     {
         Begin = 0,

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using CppAst;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -19,20 +20,25 @@ namespace BindingsGenerator
         {
         }
 
-        public override void Build(IEnumerable<CppFunction> cppFunctions)
+        public override async Task BuildAsync(IEnumerable<CppFunction> cppFunctions)
         {
             var firstFunction = cppFunctions.FirstOrDefault();
             if (firstFunction == null)
                 return;
             
             var className = GetClassName(firstFunction);
-            var @class = ClassDeclaration(className)
-                .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.PartialKeyword))
-                .AddMembers(cppFunctions.Select(BuildFunctionPointer).ToArray())
-                .AddMembers(BuildStaticConstructor(className, cppFunctions))
-                .AddMembers(cppFunctions.Select(BuildUnsafeFunctions).ToArray());
+            Log.WriteLine($"Building type {className}...");
+            using (Log.PushIdent())
+            {
+                var @class = ClassDeclaration(className)
+                    .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.PartialKeyword))
+                    .AddMembers(cppFunctions.Select(BuildFunctionPointer).ToArray())
+                    .AddMembers(BuildStaticConstructor(className, cppFunctions))
+                    .AddMembers(cppFunctions.SelectMany(BuildFunctions).ToArray());
 
-            BuildDocument(GetRelativeNamespace(firstFunction), @class, className);
+                await BuildDocumentAsync(GetRelativeNamespace(firstFunction), @class, className);
+            }
+            Log.WriteLine("Done.", ConsoleColor.Green);
         }
 
         private MemberDeclarationSyntax BuildFunctionPointer(CppFunction cppFunction)
@@ -45,6 +51,8 @@ namespace BindingsGenerator
 
         private MemberDeclarationSyntax BuildStaticConstructor(string className, IEnumerable<CppFunction> cppFunctions)
         {
+            Log.WriteLine("Building static constructor...", ConsoleColor.DarkGray);
+            Log.WriteLine("Done.", ConsoleColor.DarkGreen);
             return ConstructorDeclaration(className)
                 .AddModifiers(Token(SyntaxKind.StaticKeyword))
                 .WithBody(Block(BuildStaticConstructorExpressions()));
@@ -76,31 +84,55 @@ namespace BindingsGenerator
             }
         }
 
-        private MemberDeclarationSyntax BuildUnsafeFunctions(CppFunction cppFunction)
+        private IEnumerable<MemberDeclarationSyntax> BuildFunctions(CppFunction cppFunction)
         {
+            Log.WriteLine($"Building function '{GetManagedName(cppFunction.Name)}' from '{cppFunction.Name}'.",
+                ConsoleColor.DarkGray);
+
             if (!TypeMap.TryResolveType(cppFunction.ReturnType, out var returnTypeInfo))
                 throw new ArgumentException();
 
             var method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
                 .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword))
-                .AddParameterListParameters(cppFunction.Parameters.Select(BuildParameter).ToArray())
+                .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, false)).ToArray())
                 .AddAggressiveInlining()
-                .WithBody(Block(BuildMethodBody(cppFunction, returnTypeInfo)));
+                .WithBody(Block(BuildBaseMethodBody(cppFunction, returnTypeInfo)));
 
             if (method.DescendantNodes().OfType<PointerTypeSyntax>().Any())
             {
                 method = method.AddModifiers(Token(SyntaxKind.UnsafeKeyword));
             }
 
-            return method;
+            method = method.AddDocumentationComments(cppFunction.Comment, cppFunction.Name);
+            yield return method;
+
+            if (cppFunction.Parameters.Any(p => p.Type.IsConstCharPtr()))
+            {
+                method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
+                    .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.UnsafeKeyword))
+                    .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, true)).ToArray())
+                    .AddAggressiveInlining()
+                    .WithBody(Block(BuildStringBody(cppFunction, returnTypeInfo)));
+                method = method.AddDocumentationComments(cppFunction.Comment, cppFunction.Name);
+                yield return method;
+            }
+
+            Log.WriteLine("Done.", ConsoleColor.DarkGreen);
         }
 
-        private ParameterSyntax BuildParameter(CppParameter cppParameter)
+        private ParameterSyntax BuildParameter(CppParameter cppParameter, bool convertConstCharPtr)
         {
             var name = Identifier(GetManagedName(cppParameter.Name));
 
             if (TypeMap.TryResolveType(cppParameter.Type, out var typeInfo))
             {
+                if (convertConstCharPtr && typeInfo.CppType.IsConstCharPtr())
+                {
+                    return Parameter(name)
+                        .WithType(SyntaxBuilder.BuildReadOnlySpanName(SyntaxKind.CharKeyword))
+                        .AddModifiers(Token(SyntaxKind.InKeyword));
+                }
+
                 return Parameter(name).WithType(typeInfo.TypeSyntax);
             }
 
@@ -111,23 +143,14 @@ namespace BindingsGenerator
             throw new NotSupportedException();
         }
 
-        private IEnumerable<StatementSyntax> BuildMethodBody(CppFunction cppFunction, TypeInfo returnTypeInfo)
+        private IEnumerable<StatementSyntax> BuildBaseMethodBody(CppFunction cppFunction, TypeInfo returnTypeInfo)
         {
-            yield return ExpressionStatement(
-                InvocationExpression(
-                    MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        IdentifierName("IL"),
-                        IdentifierName("DeclareLocals")),
-                    ArgumentList(SingletonSeparatedList(
-                        Argument(LiteralExpression(SyntaxKind.FalseLiteralExpression))))));
+            yield return SyntaxBuilder.DeclareLocals(false);
 
-            bool hasResult = !returnTypeInfo.IsVoid;
-
-            if (hasResult)
+            IdentifierNameSyntax result = null;
+            if (!returnTypeInfo.IsVoid)
             {
-                yield return LocalDeclarationStatement(
-                    VariableDeclaration(returnTypeInfo.TypeSyntax).AddVariables(VariableDeclarator("result")));
+                yield return SyntaxBuilder.DeclareResultVariable(returnTypeInfo.TypeSyntax, out result);
             }
 
             var delegates = new Dictionary<string, string>();
@@ -140,19 +163,9 @@ namespace BindingsGenerator
                     continue;
 
                 var managedParameterName = GetManagedName(cppParameter.Name);
-                delegates.Add(cppParameter.Name, managedParameterName + "Ptr");
-                yield return LocalDeclarationStatement(
-                    VariableDeclaration(IdentifierName("IntPtr"))
-                        .WithAdditionalAnnotations(new SyntaxAnnotation(Annotations.Namespace, SyntaxExtensions.InteropServices.ToFullString()))
-                        .AddVariables(VariableDeclarator(delegates[cppParameter.Name])
-                            .WithInitializer(
-                                EqualsValueClause(
-                                    InvocationExpression(
-                                        MemberAccessExpression(
-                                            SyntaxKind.SimpleMemberAccessExpression,
-                                            IdentifierName(nameof(Marshal)),
-                                            IdentifierName(nameof(Marshal.GetFunctionPointerForDelegate))),
-                                        ArgumentList(SingletonSeparatedList(Argument(IdentifierName(managedParameterName)))))))));
+                var variableName = managedParameterName + "Ptr";
+                delegates.Add(cppParameter.Name, variableName);
+                yield return SyntaxBuilder.DeclareDelegatePointerVariable(managedParameterName, variableName);
             }
 
             foreach (var cppParameter in cppFunction.Parameters)
@@ -161,94 +174,60 @@ namespace BindingsGenerator
                     ? ptrName
                     : GetManagedName(cppParameter.Name);
 
-                yield return ExpressionStatement(
-                    InvocationExpression(
-                        MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            IdentifierName("IL"),
-                            IdentifierName("Push")),
-                        ArgumentList(SingletonSeparatedList(
-                            Argument(IdentifierName(parameterName))))));
+                yield return SyntaxBuilder.EmitPush(IdentifierName(parameterName));
             }
 
-            yield return ExpressionStatement(
-                InvocationExpression(
-                    MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        IdentifierName("IL"),
-                        IdentifierName("Push")),
-                    ArgumentList(SingletonSeparatedList(
-                        Argument(IdentifierName(GetManagedName(cppFunction.Name + "Ptr")))))));
+            yield return SyntaxBuilder.EmitPush(IdentifierName(GetManagedName(cppFunction.Name + "Ptr")));
 
-            yield return ExpressionStatement(
-                InvocationExpression(
-                    MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            IdentifierName("IL"),
-                            IdentifierName("Emit")),
-                        IdentifierName("Calli")),
-                    ArgumentList(SingletonSeparatedList(Argument(
-                        ObjectCreationExpression(
-                            IdentifierName("StandAloneMethodSig"),
-                            ArgumentList(SeparatedList(GetMethodSigParameters(returnTypeInfo, cppFunction, delegates))),
-                            null))))));
+            yield return SyntaxBuilder.EmitCalli(returnTypeInfo, cppFunction, TypeMap, delegates);
 
-            if (hasResult)
+            if (result != null)
             {
-                yield return ExpressionStatement(
-                    InvocationExpression(
-                        MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            IdentifierName("IL"),
-                            IdentifierName("Pop")),
-                        ArgumentList(SingletonSeparatedList(
-                            Argument(IdentifierName("result"))
-                                .WithRefKindKeyword(Token(SyntaxKind.OutKeyword))))));
+                yield return SyntaxBuilder.EmitPop(result);
             }
 
             foreach (var cppParameter in cppFunction.Parameters.Reverse().Where(p => delegates.ContainsKey(p.Name)))
             {
                 var managedParameterName = GetManagedName(cppParameter.Name);
-                yield return ExpressionStatement(
-                    InvocationExpression(
-                        MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            IdentifierName("GC"),
-                            IdentifierName("KeepAlive")),
-                        ArgumentList(SingletonSeparatedList(Argument(IdentifierName(managedParameterName))))));
+                yield return SyntaxBuilder.CallKeepAlive(IdentifierName(managedParameterName));
             }
 
-            if (hasResult)
+            if (result != null)
             {
-                yield return ReturnStatement(IdentifierName("result"));
+                yield return ReturnStatement(result);
             }
         }
 
-        private IEnumerable<ArgumentSyntax> GetMethodSigParameters(TypeInfo returnTypeInfo, CppFunction cppFunction, Dictionary<string, string> delegates)
+        private IEnumerable<StatementSyntax> BuildStringBody(CppFunction cppFunction, TypeInfo returnTypeInfo)
         {
-            yield return Argument(
-                MemberAccessExpression(
-                    SyntaxKind.SimpleMemberAccessExpression,
-                    IdentifierName(nameof(CallingConvention)),
-                    IdentifierName(nameof(CallingConvention.Cdecl))));
+            yield return SyntaxBuilder.DeclareLocals(false);
 
-            yield return Argument(TypeOfExpression(returnTypeInfo.TypeSyntax));
-            foreach (var cppParameter in cppFunction.Parameters)
+            foreach (var cppParameter in cppFunction.Parameters.Where(p => p.Type.IsConstCharPtr()))
             {
-                if (delegates.TryGetValue(cppParameter.Name, out _))
+                var utf16Name = GetManagedName(cppParameter.Name);
+                var utf8Name = utf16Name + "Utf8";
+                var ptrName = utf16Name + "Ptr";
+                yield return SyntaxBuilder.DeclareSpanForUtf8Variable(utf8Name, utf16Name);
+                yield return SyntaxBuilder.DeclarePtrForUtf8Variable(ptrName, utf8Name, utf16Name);
+            }
+
+            var call = 
+                InvocationExpression(IdentifierName(GetManagedName(cppFunction.Name)))
+                    .AddArgumentListArguments(cppFunction.Parameters.Select(BuildArgument).ToArray());
+
+            yield return returnTypeInfo.IsVoid
+                ? (StatementSyntax) ExpressionStatement(call)
+                : (StatementSyntax) ReturnStatement(call);
+
+            ArgumentSyntax BuildArgument(CppParameter cppParameter)
+            {
+                var name = GetManagedName(cppParameter.Name);
+                if (cppParameter.Type.IsConstCharPtr())
                 {
-                    yield return Argument(TypeOfExpression(IdentifierName(nameof(IntPtr))));
+                    name += "Ptr";
                 }
-                else if (TypeMap.TryResolveType(cppParameter.Type, out var paramTypeInfo))
-                {
-                    yield return Argument(TypeOfExpression(paramTypeInfo.TypeSyntax));
-                }
-                else
-                {
-                    throw new ArgumentException();
-                }
+
+                return Argument(IdentifierName(name));
             }
         }
 
@@ -264,7 +243,7 @@ namespace BindingsGenerator
             }
 
             yield return "InlineIL";
-            yield return SyntaxExtensions.InteropServices.ToFullString();
+            yield return SyntaxBuilder.InteropServices.ToFullString();
         }
 
         private string GetClassName(CppFunction cppFunction)
