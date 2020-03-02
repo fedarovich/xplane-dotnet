@@ -1,50 +1,42 @@
 #include "platform.h"
 #include "XPLMUtilities.h"
+#include "XPLMPlugin.h"
 
-inline void log_windows_error(const char* format)
+template <typename T>
+std::string format_error(const char* format, T param)
 {
-    int err = GetLastError();
-    char err_str[64];
-    snprintf(err_str, 64, format, err);
-    XPLMDebugString(err_str);
+    char t;
+    auto len = snprintf(&t, 1, format, param);
+    auto err_str = new char[len + 1];
+    snprintf(err_str, len + 1, format, param);
+    auto result = std::string(err_str);
+    delete[] err_str;
+    return result;
 }
 
 const std::filesystem::path get_plugin_path()
 {
-    char_t path[MAX_PATH];
-
-    HMODULE hm = NULL;
-    if (GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, (LPCTSTR)&get_plugin_path, &hm) == 0)
-    {
-        log_windows_error("GetModuleHandle failed, error = %d");
-        return std::filesystem::path();
-    }
-
-    if (GetModuleFileName(hm, path, MAX_PATH) == 0)
-    {
-        log_windows_error("GetModuleFileName failed, error = %d");
-        return std::filesystem::path();
-    }
-
-    return std::filesystem::path(path).parent_path();
+    char path[MAX_PATH * 2];
+    XPLMGetPluginInfo(XPLMGetMyID(), nullptr, path, nullptr, nullptr);
+    return std::filesystem::u8path(path).parent_path();
 }
 
-const void* load_library(string_t path)
+tl::expected<void*, std::string> load_library(const string_t& path)
 {
     auto h = ::LoadLibraryW(path.c_str());
     if (h == nullptr)
     {
-        log_windows_error("LoadLibraryW failed, error = %d");
+        return tl::make_unexpected(format_error("LoadLibraryW failed, error = %d", GetLastError()));
     }
     return (void*)h;
 }
 
-const void* get_export(const void* h, const char* name)
+tl::expected<void*, std::string> get_export(void* h, const std::string& name)
 {
-    void* f = GetProcAddress((HMODULE)h, name);
+    auto f = GetProcAddress((HMODULE)h, name.c_str());
     if (f == nullptr)
     {
-        log_windows_error("GetProcAddress failed, error = %d");
+        return tl::make_unexpected(format_error("GetProcAddress failed, error = %d", GetLastError()));
     }
     return f;
 }

@@ -11,9 +11,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(XPLANE_SDK_PATH "${CMAKE_CURRENT_SOURCE_DIR}/SDK")
 
-if (WIN32)
+if (CMAKE_SYSTEM_NAME MATCHES "Windows")
 	add_compile_definitions(IBM=1 UNICODE _UNICODE)
-endif (WIN32)
+elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
+	add_compile_definitions(LIN=1)
+elseif (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+	add_compile_definitions(APL=1)
+endif ()
 
 add_compile_definitions(XPLM200 XPLM210 XPLM300 XPLM301)
 

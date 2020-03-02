@@ -8,17 +8,14 @@
 #endif
 
 #include "platform.h"
+#include "clrhost.h"
+
+#include <optional>
 
 using namespace std;
 
 #include <XPLMDefs.h>
-//#include <XPLMUtilities.h>
-
-#include <filesystem>
-#include <nethost.h>
-#include <coreclr_delegates.h>
-#include <hostfxr.h>
-
+#include <XPLMUtilities.h>
 
 #if IBM
 BOOL APIENTRY DllMain(HANDLE hModule,
@@ -37,7 +34,7 @@ BOOL APIENTRY DllMain(HANDLE hModule,
 }
 #endif
 
-
+std::optional<clr_host> host;
 
 PLUGIN_API int XPluginStart(
     char* outName,
@@ -46,9 +43,18 @@ PLUGIN_API int XPluginStart(
 {
     auto root_path = get_plugin_path();
     if (root_path.empty())
+    {
+        XPLMDebugString("Failed to get plugin path.");
         return 0;
+    }
     
-
+    auto clrhost = clr_host::create();
+    if (!clrhost)
+    {
+        XPLMDebugString(clrhost.error().c_str());
+        return 0;
+    }
+    host = *clrhost;
 
     return 0; // TODO
 }

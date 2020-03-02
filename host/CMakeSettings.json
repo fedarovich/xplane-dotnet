@@ -25,7 +25,19 @@
       "inheritEnvironments": [ "linux_x64" ],
       "wslPath": "${defaultWSLPath}",
       "addressSanitizerRuntimeFlags": "detect_leaks=0",
-      "variables": []
+      "variables": [
+        {
+          "name": "CMAKE_CXX_COMPILER",
+          "value": "g++-8",
+          "type": "STRING"
+        },
+        {
+          "name": "CMAKE_TOOLCHAIN_FILE",
+          "value": "$HOME/vcpkg/scripts/buildsystems/vcpkg.cmake",
+          "type": "UNINITIALIZED"
+        }
+      ],
+      "cmakeToolchain": "/home/pavel/vcpkg/scripts/buildsystems/vcpkg.cmake"
     }
   ]
 }

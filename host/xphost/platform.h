@@ -20,9 +20,19 @@
 
 #include <string>
 #include <filesystem>
+#include <tl/expected.hpp>
 
 using string_t = std::basic_string<char_t>;
 
-const std::filesystem::path get_plugin_path();
-const void* load_library(string_t path);
-const void* get_export(const void* handle, const char* name);
+namespace fs = std::filesystem;
+
+const fs::path get_plugin_path();
+
+tl::expected<void*, std::string> load_library(const string_t& path);
+tl::expected<void*, std::string> get_export(void* handle, const std::string& name);
+
+template <typename TFunc>
+tl::expected<TFunc, std::string> get_export(void* handle, const std::string& name)
+{
+	return get_export(handle, name).map([] (auto f) { return (TFunc)f; });
+}
