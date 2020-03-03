@@ -6,9 +6,9 @@ template <typename T>
 std::string format_error(const char* format, T param)
 {
     char t;
-    auto len = snprintf(&t, 1, format, param);
-    char err_str[len + 1];
-    snprintf(err_str, len + 1, format, param);
+    auto len = snprintf(&t, 1, format, param) + 1;
+    char err_str[len];
+    snprintf(err_str, len, format, param);
     return std::string(err_str);
 }
 

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XP.SDK", "XP.SDK\XP.SDK.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XP.Proxy", "XP.Proxy\XP.Proxy.csproj", "{7F996183-CECC-4FC1-8043-0C698E71DB8D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XP.SamplePlugin", "XP.SamplePlugin\XP.SamplePlugin.csproj", "{52C8F49E-61B8-4DDB-8748-9B0EFEB0BAF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7F996183-CECC-4FC1-8043-0C698E71DB8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F996183-CECC-4FC1-8043-0C698E71DB8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F996183-CECC-4FC1-8043-0C698E71DB8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52C8F49E-61B8-4DDB-8748-9B0EFEB0BAF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52C8F49E-61B8-4DDB-8748-9B0EFEB0BAF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52C8F49E-61B8-4DDB-8748-9B0EFEB0BAF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52C8F49E-61B8-4DDB-8748-9B0EFEB0BAF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

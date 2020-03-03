@@ -11,6 +11,8 @@ namespace XP.SDK
 
         public static IntPtr Resolve(string libraryName, string functionName)
         {
+            //NativeLibrary.Load()
+
             throw new NotImplementedException();
         }
     }

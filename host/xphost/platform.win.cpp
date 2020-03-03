@@ -6,9 +6,9 @@ template <typename T>
 std::string format_error(const char* format, T param)
 {
     char t;
-    auto len = snprintf(&t, 1, format, param);
-    auto err_str = new char[len + 1];
-    snprintf(err_str, len + 1, format, param);
+    auto len = snprintf(&t, 1, format, param) + 1;
+    auto err_str = new char[len];
+    snprintf(err_str, len, format, param);
     auto result = std::string(err_str);
     delete[] err_str;
     return result;
@@ -16,9 +16,14 @@ std::string format_error(const char* format, T param)
 
 const std::filesystem::path get_plugin_path()
 {
+    return get_plugin_full_name().parent_path();
+}
+
+const std::filesystem::path get_plugin_full_name()
+{
     char path[MAX_PATH * 2];
     XPLMGetPluginInfo(XPLMGetMyID(), nullptr, path, nullptr, nullptr);
-    return std::filesystem::u8path(path).parent_path();
+    return fs::u8path(path);
 }
 
 tl::expected<void*, std::string> load_library(const string_t& path)

@@ -60,5 +60,7 @@ tl::expected<clr_host, std::string> clr_host::create(fs::path plugin_path) {
     }
 
     (*close)(handle);
-    return clr_host((load_assembly_and_get_function_pointer_fn)load_assembly_and_get_function_pointer);
+
+    bool success;
+    return std::move(clr_host(plugin_path, (load_assembly_and_get_function_pointer_fn)load_assembly_and_get_function_pointer, success));
 }

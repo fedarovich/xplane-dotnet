@@ -29,8 +29,8 @@ namespace XP.Proxy
                 return 0;
             }
 
-            var context = new PluginContext();
             var assemblyPath = Path.ChangeExtension(pluginPath, ".dll");
+            var context = new PluginContext(assemblyPath);
             try
             {
                 var assembly = context.LoadFromAssemblyPath(pluginPath);
@@ -65,8 +65,9 @@ namespace XP.Proxy
         {
             _plugin.Stop();
             var weakRef = new WeakReference(_context, true);
-            _plugin = null;
+            _context.Unload();
             _context = null;
+            _plugin = null;
             for (int i = 0; i < 10; i++)
             {
                 GC.Collect();

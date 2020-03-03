@@ -36,6 +36,10 @@ BOOL APIENTRY DllMain(HANDLE hModule,
 
 std::optional<clr_host> host;
 
+const char* get_plugin_full_name_string() {
+    return get_plugin_full_name().u8string().c_str();
+}
+
 PLUGIN_API int XPluginStart(
     char* outName,
     char* outSig,
@@ -48,13 +52,20 @@ PLUGIN_API int XPluginStart(
         return 0;
     }
     
-    auto clrhost = clr_host::create();
+    auto clrhost = clr_host::create(root_path);
     if (!clrhost)
     {
         XPLMDebugString(clrhost.error().c_str());
         return 0;
     }
     host = *clrhost;
+
+    start_parameters params {
+        outName,
+        outSig,
+        outDesc,
+        (const void*)&XPLMDebugString,
+    };
 
     return 0; // TODO
 }

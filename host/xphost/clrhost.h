@@ -9,39 +9,40 @@
 
 struct start_parameters
 {
-
+    const char* name;
+    const char* sig;
+    const char* desc;
+    const void* debug;
+    const void* get_plugin_path;
 };
 
 class clr_host
 {
 private:
-    load_assembly_and_get_function_pointer_fn load_assembly_and_get_function_pointer_f;
-
-    clr_host(load_assembly_and_get_function_pointer_fn load_assembly_and_get_function_pointer_f)
-        : load_assembly_and_get_function_pointer_f(load_assembly_and_get_function_pointer_f)
+    clr_host(
+        fs::path plugin_path,
+        load_assembly_and_get_function_pointer_fn load_assembly_and_get_function_pointer, 
+        bool &success)
     {
+#if IBM
+        fs::path assembly = plugin_path / std::wstring(STR("xpproxy.dll"));
+        const string_t assembly_path = assembly.wstring();
+#else
+        fs::path assembly = plugin_path / std::string(STR("xpproxy.dll"));
+        const string_t assembly_path = assembly.string();
+#endif
+        const char_t* proxy_type = STR("XP.Proxy.PluginProxy, xpproxy");
+        void* delegate = nullptr;
+        auto result = load_assembly_and_get_function_pointer(
+            assembly_path.c_str(),
+            proxy_type,
+            STR("XPluginStart"),
+            STR("XP.Proxy.StartDelegate, xpproxy"),
+            nullptr,
+            &delegate);
     }
 
     
 public:
-    static tl::expected<clr_host, std::string> create(fs::path plugin_path = fs::path());
-
-    int load_assembly_and_get_function_pointer(
-        const char_t* assembly_path      /* Fully qualified path to assembly */,
-        const char_t* type_name          /* Assembly qualified type name */,
-        const char_t* method_name        /* Public static method name compatible with delegateType */,
-        const char_t* delegate_type_name /* Assembly qualified delegate type name or null */,
-        void* reserved           /* Extensibility parameter (currently unused and must be 0) */,
-        /*out*/ void** delegate          /* Pointer where to store the function pointer result */) 
-        const
-    {
-        return load_assembly_and_get_function_pointer_f(
-            assembly_path,
-            type_name,
-            method_name,
-            delegate_type_name,
-            reserved,
-            delegate
-        );
-    }
+    static tl::expected<clr_host, std::string> create(fs::path plugin_path);
 };
