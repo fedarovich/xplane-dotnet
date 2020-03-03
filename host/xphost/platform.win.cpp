@@ -45,3 +45,10 @@ tl::expected<void*, std::string> get_export(void* h, const std::string& name)
     }
     return f;
 }
+
+void* get_library_handle(const void* symbol)
+{
+    HMODULE module = nullptr;
+    GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, (LPCWSTR)symbol, &module);
+    return module;
+}

@@ -2,7 +2,7 @@
 using XP.SDK;
 using XP.SDK.XPLM.Internal;
 
-[assembly: Plugin(typeof(Plugin))]
+[assembly: Plugin(typeof(XP.SamplePlugin.Plugin))]
 
 namespace XP.SamplePlugin
 {
@@ -15,20 +15,24 @@ namespace XP.SamplePlugin
         
         protected override bool OnStart()
         {
+            Utilities.DebugString("Start sample plugin.");
             return true;
         }
 
         protected override bool OnEnable()
         {
+            Utilities.DebugString("Enable sample plugin.");
             return true;
         }
 
         protected override void OnDisable()
         {
+            Utilities.DebugString("Disable sample plugin.");
         }
 
         protected override void OnStop()
         {
+            Utilities.DebugString("Stop sample plugin.");
         }
 
         protected override void OnReceiveMessage(PluginID pluginId, int message, IntPtr param)

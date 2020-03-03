@@ -39,3 +39,5 @@ tl::expected<TFunc, std::string> get_export(void* handle, const std::string& nam
 {
 	return get_export(handle, name).map([] (auto f) { return (TFunc)f; });
 }
+
+void* get_library_handle(const void* symbol);

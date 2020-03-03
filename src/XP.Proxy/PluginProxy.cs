@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Loader;
+using System.Text;
 using System.Text.Unicode;
 using XP.SDK;
 using XP.SDK.XPLM.Internal;
@@ -12,32 +15,26 @@ namespace XP.Proxy
     {
         private static PluginContext _context;
         private static PluginBase _plugin;
-        private static DebugStringDelegate DebugString;
 
         public static int XPluginStart(ref StartParameters parameters)
         {
-            var debugString = parameters.DebugString;
-            if (debugString == null)
-                return 0;
+            FunctionResolver.Initialize(parameters.XplmHandle, parameters.WidgetsHandle);
 
-            DebugString = debugString;
-
-            var pluginPath = Marshal.PtrToStringUTF8(parameters.GetPluginPath?.Invoke() ?? default);
-            if (string.IsNullOrEmpty(pluginPath))
+            if (string.IsNullOrEmpty(parameters.PluginPath))
             {
-                DebugString($"Plugin path is null.");
+                Utilities.DebugString($"Plugin path is null.");
                 return 0;
             }
 
-            var assemblyPath = Path.ChangeExtension(pluginPath, ".dll");
+            var assemblyPath = Path.ChangeExtension(parameters.PluginPath, ".dll");
             var context = new PluginContext(assemblyPath);
             try
             {
-                var assembly = context.LoadFromAssemblyPath(pluginPath);
+                var assembly = AssemblyLoadContext.GetLoadContext(Assembly.GetExecutingAssembly()).LoadFromAssemblyPath(assemblyPath);/* context.LoadFromAssemblyPath(pluginPath); */
                 var attr = assembly.GetCustomAttribute<PluginAttribute>();
                 if (attr == null)
                 {
-                    DebugString($"Plugin assembly {assemblyPath} does not have '{typeof(PluginAttribute).FullName}' attribute defined.");
+                    Utilities.DebugString($"Plugin assembly {assemblyPath} does not have '{typeof(PluginAttribute).FullName}' attribute defined.");
                     return 0;
                 }
 
@@ -49,7 +46,7 @@ namespace XP.Proxy
             }
             catch (Exception ex)
             {
-                DebugString(ex.ToString());
+                Utilities.DebugString(ex.ToString());
                 return 0;
             }
 
@@ -61,7 +58,7 @@ namespace XP.Proxy
             }
         }
 
-        public static void XPPluginStop()
+        public static void XPluginStop()
         {
             _plugin.Stop();
             var weakRef = new WeakReference(_context, true);
@@ -78,16 +75,16 @@ namespace XP.Proxy
 
             if (weakRef.IsAlive)
             {
-                DebugString("Failed to unload plugin assembly.");
+                Utilities.DebugString("Failed to unload plugin assembly.");
             }
         }
 
-        public static int XPPluginEnable()
+        public static int XPluginEnable()
         {
             return _plugin.Enable() ? 1 : 0;
         }
 
-        public static void XPPluginDisable()
+        public static void XPluginDisable()
         {
             _plugin.Disable();
         }

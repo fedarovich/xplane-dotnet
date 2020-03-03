@@ -86,6 +86,6 @@ int main(int argc, char* argv[])
     auto plugin_start = (XPluginStart)get_export(plugin_handle, "XPluginStart");
     char name[256], sig[256], desc[256];
     plugin_start(name, sig, desc);
-    
+   
     return 0;
 }

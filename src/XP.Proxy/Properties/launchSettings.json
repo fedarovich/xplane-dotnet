@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "XP.Proxy": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\Pavel\\source\\repos\\fedarovich\\xplane-dotnet\\host\\out\\build\\x64-Debug\\sim\\sim.exe",
+      "nativeDebugging": true
+    }
+  }
+}

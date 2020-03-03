@@ -3,7 +3,7 @@
 #
 cmake_minimum_required (VERSION 3.15)
 
-set (XPHOST_SOURCES "xphost.cpp" "xphost.h" "clrhost.cpp" "clrhost.h" "platform.h")
+set (XPHOST_SOURCES "xphost.cpp" "xphost.h" "proxy.cpp" "proxy.h" "platform.h")
 
 if (WIN32)
 	set (XPHOST_SOURCES ${XPHOST_SOURCES} "platform.win.cpp")

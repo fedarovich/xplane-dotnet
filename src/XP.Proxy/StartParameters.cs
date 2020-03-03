@@ -10,11 +10,9 @@ namespace XP.Proxy
         public IntPtr Name;
         public IntPtr Sig;
         public IntPtr Desc;
-        
-        [MarshalAs(UnmanagedType.FunctionPtr)] 
-        public DebugStringDelegate DebugString;
-        
-        [MarshalAs(UnmanagedType.FunctionPtr)] 
-        public GetPluginPathDelegate GetPluginPath;
+        public IntPtr XplmHandle;
+        public IntPtr WidgetsHandle;
+        [MarshalAs(UnmanagedType.LPUTF8Str)]
+        public string PluginPath;
     }
 }

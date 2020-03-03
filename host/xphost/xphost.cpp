@@ -8,7 +8,7 @@
 #endif
 
 #include "platform.h"
-#include "clrhost.h"
+#include "proxy.h"
 
 #include <optional>
 
@@ -34,10 +34,10 @@ BOOL APIENTRY DllMain(HANDLE hModule,
 }
 #endif
 
-std::optional<clr_host> host;
+std::optional<proxy> plugin_proxy;
 
-const char* get_plugin_full_name_string() {
-    return get_plugin_full_name().u8string().c_str();
+void get_plugin_full_name_string(char* str, int n) {
+    strcpy_s(str, n, get_plugin_full_name().u8string().c_str());
 }
 
 PLUGIN_API int XPluginStart(
@@ -45,6 +45,9 @@ PLUGIN_API int XPluginStart(
     char* outSig,
     char* outDesc)
 {
+    XPLMDebugString("Loaded xphost.");
+
+    auto full_name = get_plugin_full_name().u8string();
     auto root_path = get_plugin_path();
     if (root_path.empty())
     {
@@ -52,39 +55,53 @@ PLUGIN_API int XPluginStart(
         return 0;
     }
     
-    auto clrhost = clr_host::create(root_path);
-    if (!clrhost)
+    auto proxy_result = proxy::create(root_path);
+    if (!proxy_result)
     {
-        XPLMDebugString(clrhost.error().c_str());
+        XPLMDebugString(proxy_result.error().c_str());
         return 0;
     }
-    host = *clrhost;
+    plugin_proxy = *proxy_result;
 
     start_parameters params {
         outName,
         outSig,
         outDesc,
-        (const void*)&XPLMDebugString,
+        get_library_handle(&XPLMDebugString),
+        nullptr,
+        full_name.c_str()
     };
 
-    return 0; // TODO
+    
+    auto result = plugin_proxy->start(&params);
+    return result;
 }
 
 PLUGIN_API void	XPluginStop(void)
 {
+    if (plugin_proxy.has_value())
+    {
+        plugin_proxy->stop();
+    }
 }
 
 PLUGIN_API void XPluginDisable(void) 
 {
-
+    if (plugin_proxy.has_value())
+    {
+        plugin_proxy->disable();
+    }
 }
 
 PLUGIN_API int  XPluginEnable(void)
 {
-    return 1; 
+    return plugin_proxy.has_value() ? plugin_proxy->enable() : 0;
 }
 
 PLUGIN_API void XPluginReceiveMessage(XPLMPluginID inFrom, int inMsg, void* inParam)
 {
-
+    if (plugin_proxy.has_value())
+    {
+        plugin_proxy->receive_message(inFrom, inMsg, inParam);
+    }
 }

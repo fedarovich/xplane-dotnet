@@ -10,7 +10,7 @@ namespace XP.Proxy
     public delegate void DebugStringDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] string message);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl, BestFitMapping = false, SetLastError = false)]
-    public delegate IntPtr GetPluginPathDelegate();
+    public delegate void GetPluginPathDelegate([MarshalAs(UnmanagedType.LPUTF8Str)] StringBuilder str, int n);
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl, BestFitMapping = false, SetLastError = false)]
     public delegate int StartDelegate(ref StartParameters parameters);
@@ -25,5 +25,5 @@ namespace XP.Proxy
     public delegate void StopDelegate();
 
     [UnmanagedFunctionPointer(CallingConvention.Cdecl, BestFitMapping = false, SetLastError = false)]
-    public delegate void ReceiveMessage(int pluginId, int message, IntPtr param);
+    public delegate void ReceiveMessageDelegate(int pluginId, int message, IntPtr param);
 }
