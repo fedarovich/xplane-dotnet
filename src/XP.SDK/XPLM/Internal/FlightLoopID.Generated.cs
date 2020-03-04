@@ -34,5 +34,8 @@ namespace XP.SDK.XPLM.Internal
         public static bool operator ==(FlightLoopID left, FlightLoopID right) => left.Equals(right);
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(FlightLoopID left, FlightLoopID right) => !left.Equals(right);
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public override string ToString() => _value.ToString();
     }
 }

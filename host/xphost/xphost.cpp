@@ -16,6 +16,7 @@ using namespace std;
 
 #include <XPLMDefs.h>
 #include <XPLMUtilities.h>
+#include <XPLMPlugin.h>
 
 #if IBM
 BOOL APIENTRY DllMain(HANDLE hModule,
@@ -36,17 +37,15 @@ BOOL APIENTRY DllMain(HANDLE hModule,
 
 std::optional<proxy> plugin_proxy;
 
-void get_plugin_full_name_string(char* str, int n) {
-    strcpy_s(str, n, get_plugin_full_name().u8string().c_str());
-}
-
 PLUGIN_API int XPluginStart(
     char* outName,
     char* outSig,
     char* outDesc)
 {
     XPLMDebugString("Loaded xphost.");
+    XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
 
+    auto startup_path = get_startup_path().u8string();
     auto full_name = get_plugin_full_name().u8string();
     auto root_path = get_plugin_path();
     if (root_path.empty())
@@ -67,12 +66,10 @@ PLUGIN_API int XPluginStart(
         outName,
         outSig,
         outDesc,
-        get_library_handle(&XPLMDebugString),
-        nullptr,
+        startup_path.c_str(),
         full_name.c_str()
     };
-
-    
+        
     auto result = plugin_proxy->start(&params);
     return result;
 }

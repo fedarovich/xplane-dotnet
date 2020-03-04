@@ -41,11 +41,9 @@ tl::expected<proxy, std::string> proxy::create(fs::path plugin_path) {
         hostfxr_parameters.dotnet_root
     };
     hostfxr_handle handle = nullptr;
-#if IBM
-    auto result = (*initialize_for_runtime_config)(config_path.wstring().c_str(), &init_parameters, &handle);
-#else
-    auto result = (*initialize_for_runtime_config)(config_path.string().c_str(), &init_parameters, &handle);
-#endif
+
+    auto result = (*initialize_for_runtime_config)(config_path.c_str(), &init_parameters, &handle);
+
     if (result < 0 || handle == nullptr)
     {
         (*close)(handle);

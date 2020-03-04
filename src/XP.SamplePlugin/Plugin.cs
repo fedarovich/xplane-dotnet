@@ -37,6 +37,7 @@ namespace XP.SamplePlugin
 
         protected override void OnReceiveMessage(PluginID pluginId, int message, IntPtr param)
         {
+            Utilities.DebugString($"Received message {message} from plugin {pluginId} with payload 0x{param.ToInt64():X8}.");
         }
     }
 }

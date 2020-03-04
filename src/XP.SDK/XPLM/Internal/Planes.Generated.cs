@@ -23,18 +23,18 @@ namespace XP.SDK.XPLM.Internal
         static Planes()
         {
             const string libraryName = "XPLM";
-            SetUsersAircraftPtr = FunctionResolver.Resolve(libraryName, "XPLMSetUsersAircraft");
-            PlaceUserAtAirportPtr = FunctionResolver.Resolve(libraryName, "XPLMPlaceUserAtAirport");
-            PlaceUserAtLocationPtr = FunctionResolver.Resolve(libraryName, "XPLMPlaceUserAtLocation");
-            CountAircraftPtr = FunctionResolver.Resolve(libraryName, "XPLMCountAircraft");
-            GetNthAircraftModelPtr = FunctionResolver.Resolve(libraryName, "XPLMGetNthAircraftModel");
-            AcquirePlanesPtr = FunctionResolver.Resolve(libraryName, "XPLMAcquirePlanes");
-            ReleasePlanesPtr = FunctionResolver.Resolve(libraryName, "XPLMReleasePlanes");
-            SetActiveAircraftCountPtr = FunctionResolver.Resolve(libraryName, "XPLMSetActiveAircraftCount");
-            SetAircraftModelPtr = FunctionResolver.Resolve(libraryName, "XPLMSetAircraftModel");
-            DisableAIForPlanePtr = FunctionResolver.Resolve(libraryName, "XPLMDisableAIForPlane");
-            DrawAircraftPtr = FunctionResolver.Resolve(libraryName, "XPLMDrawAircraft");
-            ReinitUsersPlanePtr = FunctionResolver.Resolve(libraryName, "XPLMReinitUsersPlane");
+            SetUsersAircraftPtr = Lib.GetExport("XPLMSetUsersAircraft");
+            PlaceUserAtAirportPtr = Lib.GetExport("XPLMPlaceUserAtAirport");
+            PlaceUserAtLocationPtr = Lib.GetExport("XPLMPlaceUserAtLocation");
+            CountAircraftPtr = Lib.GetExport("XPLMCountAircraft");
+            GetNthAircraftModelPtr = Lib.GetExport("XPLMGetNthAircraftModel");
+            AcquirePlanesPtr = Lib.GetExport("XPLMAcquirePlanes");
+            ReleasePlanesPtr = Lib.GetExport("XPLMReleasePlanes");
+            SetActiveAircraftCountPtr = Lib.GetExport("XPLMSetActiveAircraftCount");
+            SetAircraftModelPtr = Lib.GetExport("XPLMSetAircraftModel");
+            DisableAIForPlanePtr = Lib.GetExport("XPLMDisableAIForPlane");
+            DrawAircraftPtr = Lib.GetExport("XPLMDrawAircraft");
+            ReinitUsersPlanePtr = Lib.GetExport("XPLMReinitUsersPlane");
         }
 
         
@@ -49,6 +49,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void SetUsersAircraft(byte* inAircraftPath)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetUsersAircraftPtr);
             IL.Push(inAircraftPath);
             IL.Push(SetUsersAircraftPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*)));
@@ -82,6 +83,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void PlaceUserAtAirport(byte* inAirportCode)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(PlaceUserAtAirportPtr);
             IL.Push(inAirportCode);
             IL.Push(PlaceUserAtAirportPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*)));
@@ -120,6 +122,7 @@ namespace XP.SDK.XPLM.Internal
         public static void PlaceUserAtLocation(double latitudeDegrees, double longitudeDegrees, float elevationMetersMSL, float headingDegreesTrue, float speedMetersPerSecond)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(PlaceUserAtLocationPtr);
             IL.Push(latitudeDegrees);
             IL.Push(longitudeDegrees);
             IL.Push(elevationMetersMSL);
@@ -143,6 +146,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void CountAircraft(int* outTotalAircraft, int* outActiveAircraft, PluginID* outController)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CountAircraftPtr);
             IL.Push(outTotalAircraft);
             IL.Push(outActiveAircraft);
             IL.Push(outController);
@@ -163,11 +167,27 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetNthAircraftModel(int inIndex, byte* outFileName, byte* outPath)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetNthAircraftModelPtr);
             IL.Push(inIndex);
             IL.Push(outFileName);
             IL.Push(outPath);
             IL.Push(GetNthAircraftModelPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int), typeof(byte*), typeof(byte*)));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe int AcquirePlanesPrivate(byte** inAircraft, IntPtr inCallback, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(AcquirePlanesPtr);
+            int result;
+            IL.Push(inAircraft);
+            IL.Push(inCallback);
+            IL.Push(inRefcon);
+            IL.Push(AcquirePlanesPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte**), typeof(PlanesAvailableCallback), typeof(void*)));
+            IL.Pop(out result);
+            return result;
         }
 
         
@@ -188,15 +208,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int AcquirePlanes(byte** inAircraft, PlanesAvailableCallback inCallback, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            int result;
             IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
-            IL.Push(inAircraft);
-            IL.Push(inCallbackPtr);
-            IL.Push(inRefcon);
-            IL.Push(AcquirePlanesPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte**), typeof(IntPtr), typeof(void*)));
-            IL.Pop(out result);
-            GC.KeepAlive(inCallback);
+            int result = AcquirePlanesPrivate(inAircraft, inCallbackPtr, inRefcon);
+            GC.KeepAlive(inCallbackPtr);
             return result;
         }
 
@@ -211,6 +225,7 @@ namespace XP.SDK.XPLM.Internal
         public static void ReleasePlanes()
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(ReleasePlanesPtr);
             IL.Push(ReleasePlanesPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void)));
         }
@@ -227,6 +242,7 @@ namespace XP.SDK.XPLM.Internal
         public static void SetActiveAircraftCount(int inCount)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetActiveAircraftCountPtr);
             IL.Push(inCount);
             IL.Push(SetActiveAircraftCountPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int)));
@@ -245,6 +261,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void SetAircraftModel(int inIndex, byte* inAircraftPath)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetAircraftModelPtr);
             IL.Push(inIndex);
             IL.Push(inAircraftPath);
             IL.Push(SetAircraftModelPtr);
@@ -280,6 +297,7 @@ namespace XP.SDK.XPLM.Internal
         public static void DisableAIForPlane(int inPlaneIndex)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DisableAIForPlanePtr);
             IL.Push(inPlaneIndex);
             IL.Push(DisableAIForPlanePtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int)));
@@ -299,6 +317,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void DrawAircraft(int inPlaneIndex, float inX, float inY, float inZ, float inPitch, float inRoll, float inYaw, int inFullDraw, PlaneDrawState* inDrawStateInfo)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DrawAircraftPtr);
             IL.Push(inPlaneIndex);
             IL.Push(inX);
             IL.Push(inY);
@@ -332,6 +351,7 @@ namespace XP.SDK.XPLM.Internal
         public static void ReinitUsersPlane()
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(ReinitUsersPlanePtr);
             IL.Push(ReinitUsersPlanePtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void)));
         }

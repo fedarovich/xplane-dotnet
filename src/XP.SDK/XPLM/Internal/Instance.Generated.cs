@@ -14,9 +14,9 @@ namespace XP.SDK.XPLM.Internal
         static Instance()
         {
             const string libraryName = "XPLM";
-            CreateInstancePtr = FunctionResolver.Resolve(libraryName, "XPLMCreateInstance");
-            DestroyInstancePtr = FunctionResolver.Resolve(libraryName, "XPLMDestroyInstance");
-            InstanceSetPositionPtr = FunctionResolver.Resolve(libraryName, "XPLMInstanceSetPosition");
+            CreateInstancePtr = Lib.GetExport("XPLMCreateInstance");
+            DestroyInstancePtr = Lib.GetExport("XPLMDestroyInstance");
+            InstanceSetPositionPtr = Lib.GetExport("XPLMInstanceSetPosition");
         }
 
         
@@ -29,6 +29,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe InstanceRef CreateInstance(ObjectRef obj, byte** datarefs)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CreateInstancePtr);
             InstanceRef result;
             IL.Push(obj);
             IL.Push(datarefs);
@@ -48,6 +49,7 @@ namespace XP.SDK.XPLM.Internal
         public static void DestroyInstance(InstanceRef instance)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DestroyInstancePtr);
             IL.Push(instance);
             IL.Push(DestroyInstancePtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(InstanceRef)));
@@ -64,6 +66,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void InstanceSetPosition(InstanceRef instance, DrawInfo* new_position, float* data)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(InstanceSetPositionPtr);
             IL.Push(instance);
             IL.Push(new_position);
             IL.Push(data);

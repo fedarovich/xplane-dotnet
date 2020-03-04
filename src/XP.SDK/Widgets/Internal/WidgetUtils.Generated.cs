@@ -17,12 +17,12 @@ namespace XP.SDK.Widgets.Internal
         static WidgetUtils()
         {
             const string libraryName = "Widgets";
-            CreateWidgetsPtr = FunctionResolver.Resolve(libraryName, "XPUCreateWidgets");
-            MoveWidgetByPtr = FunctionResolver.Resolve(libraryName, "XPUMoveWidgetBy");
-            FixedLayoutPtr = FunctionResolver.Resolve(libraryName, "XPUFixedLayout");
-            SelectIfNeededPtr = FunctionResolver.Resolve(libraryName, "XPUSelectIfNeeded");
-            DefocusKeyboardPtr = FunctionResolver.Resolve(libraryName, "XPUDefocusKeyboard");
-            DragWidgetPtr = FunctionResolver.Resolve(libraryName, "XPUDragWidget");
+            CreateWidgetsPtr = Lib.GetExport("XPUCreateWidgets");
+            MoveWidgetByPtr = Lib.GetExport("XPUMoveWidgetBy");
+            FixedLayoutPtr = Lib.GetExport("XPUFixedLayout");
+            SelectIfNeededPtr = Lib.GetExport("XPUSelectIfNeeded");
+            DefocusKeyboardPtr = Lib.GetExport("XPUDefocusKeyboard");
+            DragWidgetPtr = Lib.GetExport("XPUDragWidget");
         }
 
         
@@ -48,6 +48,7 @@ namespace XP.SDK.Widgets.Internal
         public static unsafe void CreateWidgets(WidgetCreate* inWidgetDefs, int inCount, WidgetID inParamParent, WidgetID* ioWidgets)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CreateWidgetsPtr);
             IL.Push(inWidgetDefs);
             IL.Push(inCount);
             IL.Push(inParamParent);
@@ -67,6 +68,7 @@ namespace XP.SDK.Widgets.Internal
         public static void MoveWidgetBy(WidgetID inWidget, int inDeltaX, int inDeltaY)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(MoveWidgetByPtr);
             IL.Push(inWidget);
             IL.Push(inDeltaX);
             IL.Push(inDeltaY);
@@ -86,6 +88,7 @@ namespace XP.SDK.Widgets.Internal
         public static int FixedLayout(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(FixedLayoutPtr);
             int result;
             IL.Push(inMessage);
             IL.Push(inWidget);
@@ -109,6 +112,7 @@ namespace XP.SDK.Widgets.Internal
         public static int SelectIfNeeded(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2, int inEatClick)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SelectIfNeededPtr);
             int result;
             IL.Push(inMessage);
             IL.Push(inWidget);
@@ -132,6 +136,7 @@ namespace XP.SDK.Widgets.Internal
         public static int DefocusKeyboard(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2, int inEatClick)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DefocusKeyboardPtr);
             int result;
             IL.Push(inMessage);
             IL.Push(inWidget);
@@ -156,6 +161,7 @@ namespace XP.SDK.Widgets.Internal
         public static int DragWidget(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2, int inLeft, int inTop, int inRight, int inBottom)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DragWidgetPtr);
             int result;
             IL.Push(inMessage);
             IL.Push(inWidget);

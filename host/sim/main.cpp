@@ -8,11 +8,22 @@
 
 #include <iostream>
 #include <filesystem>
+#include <string>
 #include <assert.h>
+#include <cstdio>
 
 using namespace std;
 
+#if __has_include(<filesystem>)
+#include <filesystem>
 namespace fs = std::filesystem;
+#elif __has_include(<experimental/filesystem>)
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+#elif
+#include <boost/filesystem>
+namespace fs = boost::filesystem;
+#endif
 
 #ifdef WINDOWS
     #define STR(s) wstring(L ## s)
@@ -43,7 +54,7 @@ namespace fs = std::filesystem;
     #endif
     void* load_library(const char* path)
     {
-        void* h = dlopen(path, RTLD_LAZY | RTLD_LOCAL);
+        void* h = dlopen(path, RTLD_LAZY | RTLD_GLOBAL);
         assert(h != nullptr);
         return h;
     }
@@ -56,8 +67,11 @@ namespace fs = std::filesystem;
 #endif
 
 typedef void (*SimRegisterPlugin)(int id, const char* path);
-typedef int (*XPluginStart)(char* outName, char* outSig, char* outDesc);
-
+typedef int  (*XPluginStart)(char* outName, char* outSig, char* outDesc);
+typedef void (*XPluginStop)(void);
+typedef int  (*XPluginEnable)(void);
+typedef void (*XPluginDisable)(void);
+typedef void (*XPluginReceiveMessage)(int inFrom, int inMsg, void* inParam);
 
 
 #if defined(WINDOWS)
@@ -66,26 +80,51 @@ int __cdecl wmain(int argc, wchar_t* argv[])
 int main(int argc, char* argv[])
 #endif
 {
-	auto startup_folder = fs::path(argv[0]).parent_path();
+	auto startup_folder = fs::canonical(fs::path(argv[0]).parent_path());
     auto plugins_folder = startup_folder / STR("Resources") / STR("plugins");
     auto sample_plugin_folder = plugins_folder / STR("sample") / XP_PLATFORM;
     auto sample_plugin_path = sample_plugin_folder / STR("sample.xpl");
     assert(fs::exists(sample_plugin_path));
 #if defined(WINDOWS)
-    AddDllDirectory(plugins_folder.wstring().c_str());
-    AddDllDirectory(sample_plugin_folder.wstring().c_str());
-    auto xplm_handle = load_library((plugins_folder / STR("XPLM_64.dll")).wstring().c_str());
+    AddDllDirectory(plugins_folder.c_str());
+    AddDllDirectory(sample_plugin_folder.c_str());
+    auto xplm_path = plugins_folder / STR("XPLM_64.dll");
+    auto xplm_handle = load_library(xplm_path.c_str());
     char plugin_path_utf8[256];
-    WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, sample_plugin_path.wstring().c_str(), -1, plugin_path_utf8, 256, NULL, NULL);
+    WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, sample_plugin_path.c_str(), -1, plugin_path_utf8, 256, NULL, NULL);
     auto register_plugin = (SimRegisterPlugin)get_export(xplm_handle, "SimRegisterPlugin");
     register_plugin(1, plugin_path_utf8);
-    auto plugin_handle = load_library(sample_plugin_path.wstring().c_str());
 #else
-    auto plugin_handle = load_library(plugin_path.string().c_str());
+#if LIN
+    auto xplm_path = plugins_folder / STR("XPLM_64.so");
+#else
+    auto xplm_path = plugins_folder / STR("XPLM.framework") / STR("XPLM");
 #endif
+    auto xplm_handle = load_library(xplm_path.c_str());
+    auto register_plugin = (SimRegisterPlugin)get_export(xplm_handle, "SimRegisterPlugin");
+    register_plugin(1, sample_plugin_path.c_str());
+
+#endif
+    auto plugin_handle = load_library(sample_plugin_path.c_str());
     auto plugin_start = (XPluginStart)get_export(plugin_handle, "XPluginStart");
     char name[256], sig[256], desc[256];
-    plugin_start(name, sig, desc);
-   
+    if (!plugin_start(name, sig, desc))
+    {
+        cout << "Failed to start plugin." << endl;
+        return 1;
+    }
+    auto plugin_enable = (XPluginEnable)get_export(plugin_handle, "XPluginEnable");
+    if (!plugin_enable())
+    {
+        cout << "Failed to enable plugin." << endl;
+        return 1;
+    }
+    auto plugin_receive_message = (XPluginReceiveMessage)get_export(plugin_handle, "XPluginReceiveMessage");
+    plugin_receive_message(0, 42, (void*)0xDEADBEEFDEADBEEF);
+    auto plugin_disable = (XPluginDisable)get_export(plugin_handle, "XPluginDisable");
+    plugin_disable();
+    auto plugin_stop = (XPluginStop)get_export(plugin_handle, "XPluginStop");
+    plugin_stop();
+
     return 0;
 }

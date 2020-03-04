@@ -26,21 +26,21 @@ namespace XP.SDK.XPLM.Internal
         static Plugin()
         {
             const string libraryName = "XPLM";
-            GetMyIDPtr = FunctionResolver.Resolve(libraryName, "XPLMGetMyID");
-            CountPluginsPtr = FunctionResolver.Resolve(libraryName, "XPLMCountPlugins");
-            GetNthPluginPtr = FunctionResolver.Resolve(libraryName, "XPLMGetNthPlugin");
-            FindPluginByPathPtr = FunctionResolver.Resolve(libraryName, "XPLMFindPluginByPath");
-            FindPluginBySignaturePtr = FunctionResolver.Resolve(libraryName, "XPLMFindPluginBySignature");
-            GetPluginInfoPtr = FunctionResolver.Resolve(libraryName, "XPLMGetPluginInfo");
-            IsPluginEnabledPtr = FunctionResolver.Resolve(libraryName, "XPLMIsPluginEnabled");
-            EnablePluginPtr = FunctionResolver.Resolve(libraryName, "XPLMEnablePlugin");
-            DisablePluginPtr = FunctionResolver.Resolve(libraryName, "XPLMDisablePlugin");
-            ReloadPluginsPtr = FunctionResolver.Resolve(libraryName, "XPLMReloadPlugins");
-            SendMessageToPluginPtr = FunctionResolver.Resolve(libraryName, "XPLMSendMessageToPlugin");
-            HasFeaturePtr = FunctionResolver.Resolve(libraryName, "XPLMHasFeature");
-            IsFeatureEnabledPtr = FunctionResolver.Resolve(libraryName, "XPLMIsFeatureEnabled");
-            EnableFeaturePtr = FunctionResolver.Resolve(libraryName, "XPLMEnableFeature");
-            EnumerateFeaturesPtr = FunctionResolver.Resolve(libraryName, "XPLMEnumerateFeatures");
+            GetMyIDPtr = Lib.GetExport("XPLMGetMyID");
+            CountPluginsPtr = Lib.GetExport("XPLMCountPlugins");
+            GetNthPluginPtr = Lib.GetExport("XPLMGetNthPlugin");
+            FindPluginByPathPtr = Lib.GetExport("XPLMFindPluginByPath");
+            FindPluginBySignaturePtr = Lib.GetExport("XPLMFindPluginBySignature");
+            GetPluginInfoPtr = Lib.GetExport("XPLMGetPluginInfo");
+            IsPluginEnabledPtr = Lib.GetExport("XPLMIsPluginEnabled");
+            EnablePluginPtr = Lib.GetExport("XPLMEnablePlugin");
+            DisablePluginPtr = Lib.GetExport("XPLMDisablePlugin");
+            ReloadPluginsPtr = Lib.GetExport("XPLMReloadPlugins");
+            SendMessageToPluginPtr = Lib.GetExport("XPLMSendMessageToPlugin");
+            HasFeaturePtr = Lib.GetExport("XPLMHasFeature");
+            IsFeatureEnabledPtr = Lib.GetExport("XPLMIsFeatureEnabled");
+            EnableFeaturePtr = Lib.GetExport("XPLMEnableFeature");
+            EnumerateFeaturesPtr = Lib.GetExport("XPLMEnumerateFeatures");
         }
 
         
@@ -54,6 +54,7 @@ namespace XP.SDK.XPLM.Internal
         public static PluginID GetMyID()
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetMyIDPtr);
             PluginID result;
             IL.Push(GetMyIDPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(PluginID)));
@@ -72,6 +73,7 @@ namespace XP.SDK.XPLM.Internal
         public static int CountPlugins()
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CountPluginsPtr);
             int result;
             IL.Push(CountPluginsPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int)));
@@ -91,6 +93,7 @@ namespace XP.SDK.XPLM.Internal
         public static PluginID GetNthPlugin(int inIndex)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetNthPluginPtr);
             PluginID result;
             IL.Push(inIndex);
             IL.Push(GetNthPluginPtr);
@@ -111,6 +114,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe PluginID FindPluginByPath(byte* inPath)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(FindPluginByPathPtr);
             PluginID result;
             IL.Push(inPath);
             IL.Push(FindPluginByPathPtr);
@@ -151,6 +155,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe PluginID FindPluginBySignature(byte* inSignature)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(FindPluginBySignaturePtr);
             PluginID result;
             IL.Push(inSignature);
             IL.Push(FindPluginBySignaturePtr);
@@ -197,6 +202,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetPluginInfo(PluginID inPlugin, byte* outName, byte* outFilePath, byte* outSignature, byte* outDescription)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetPluginInfoPtr);
             IL.Push(inPlugin);
             IL.Push(outName);
             IL.Push(outFilePath);
@@ -216,6 +222,7 @@ namespace XP.SDK.XPLM.Internal
         public static int IsPluginEnabled(PluginID inPluginID)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(IsPluginEnabledPtr);
             int result;
             IL.Push(inPluginID);
             IL.Push(IsPluginEnabledPtr);
@@ -237,6 +244,7 @@ namespace XP.SDK.XPLM.Internal
         public static int EnablePlugin(PluginID inPluginID)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(EnablePluginPtr);
             int result;
             IL.Push(inPluginID);
             IL.Push(EnablePluginPtr);
@@ -255,6 +263,7 @@ namespace XP.SDK.XPLM.Internal
         public static void DisablePlugin(PluginID inPluginID)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DisablePluginPtr);
             IL.Push(inPluginID);
             IL.Push(DisablePluginPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(PluginID)));
@@ -274,6 +283,7 @@ namespace XP.SDK.XPLM.Internal
         public static void ReloadPlugins()
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(ReloadPluginsPtr);
             IL.Push(ReloadPluginsPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void)));
         }
@@ -290,6 +300,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void SendMessageToPlugin(PluginID inPlugin, int inMessage, void* inParam)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SendMessageToPluginPtr);
             IL.Push(inPlugin);
             IL.Push(inMessage);
             IL.Push(inParam);
@@ -308,6 +319,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int HasFeature(byte* inFeature)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(HasFeaturePtr);
             int result;
             IL.Push(inFeature);
             IL.Push(HasFeaturePtr);
@@ -344,6 +356,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int IsFeatureEnabled(byte* inFeature)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(IsFeatureEnabledPtr);
             int result;
             IL.Push(inFeature);
             IL.Push(IsFeatureEnabledPtr);
@@ -381,6 +394,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void EnableFeature(byte* inFeature, int inEnable)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(EnableFeaturePtr);
             IL.Push(inFeature);
             IL.Push(inEnable);
             IL.Push(EnableFeaturePtr);
@@ -404,6 +418,17 @@ namespace XP.SDK.XPLM.Internal
             EnableFeature(inFeaturePtr, inEnable);
         }
 
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe void EnumerateFeaturesPrivate(IntPtr inEnumerator, void* inRef)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(EnumerateFeaturesPtr);
+            IL.Push(inEnumerator);
+            IL.Push(inRef);
+            IL.Push(EnumerateFeaturesPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(FeatureEnumeratorCallback), typeof(void*)));
+        }
+
         
         /// <summary>
         /// <para>
@@ -417,11 +442,8 @@ namespace XP.SDK.XPLM.Internal
         {
             IL.DeclareLocals(false);
             IntPtr inEnumeratorPtr = Marshal.GetFunctionPointerForDelegate(inEnumerator);
-            IL.Push(inEnumeratorPtr);
-            IL.Push(inRef);
-            IL.Push(EnumerateFeaturesPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(void*)));
-            GC.KeepAlive(inEnumerator);
+            EnumerateFeaturesPrivate(inEnumeratorPtr, inRef);
+            GC.KeepAlive(inEnumeratorPtr);
         }
     }
 }

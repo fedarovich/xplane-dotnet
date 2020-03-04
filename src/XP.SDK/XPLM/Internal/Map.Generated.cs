@@ -21,16 +21,16 @@ namespace XP.SDK.XPLM.Internal
         static Map()
         {
             const string libraryName = "XPLM";
-            CreateMapLayerPtr = FunctionResolver.Resolve(libraryName, "XPLMCreateMapLayer");
-            DestroyMapLayerPtr = FunctionResolver.Resolve(libraryName, "XPLMDestroyMapLayer");
-            RegisterMapCreationHookPtr = FunctionResolver.Resolve(libraryName, "XPLMRegisterMapCreationHook");
-            MapExistsPtr = FunctionResolver.Resolve(libraryName, "XPLMMapExists");
-            DrawMapIconFromSheetPtr = FunctionResolver.Resolve(libraryName, "XPLMDrawMapIconFromSheet");
-            DrawMapLabelPtr = FunctionResolver.Resolve(libraryName, "XPLMDrawMapLabel");
-            MapProjectPtr = FunctionResolver.Resolve(libraryName, "XPLMMapProject");
-            MapUnprojectPtr = FunctionResolver.Resolve(libraryName, "XPLMMapUnproject");
-            MapScaleMeterPtr = FunctionResolver.Resolve(libraryName, "XPLMMapScaleMeter");
-            MapGetNorthHeadingPtr = FunctionResolver.Resolve(libraryName, "XPLMMapGetNorthHeading");
+            CreateMapLayerPtr = Lib.GetExport("XPLMCreateMapLayer");
+            DestroyMapLayerPtr = Lib.GetExport("XPLMDestroyMapLayer");
+            RegisterMapCreationHookPtr = Lib.GetExport("XPLMRegisterMapCreationHook");
+            MapExistsPtr = Lib.GetExport("XPLMMapExists");
+            DrawMapIconFromSheetPtr = Lib.GetExport("XPLMDrawMapIconFromSheet");
+            DrawMapLabelPtr = Lib.GetExport("XPLMDrawMapLabel");
+            MapProjectPtr = Lib.GetExport("XPLMMapProject");
+            MapUnprojectPtr = Lib.GetExport("XPLMMapUnproject");
+            MapScaleMeterPtr = Lib.GetExport("XPLMMapScaleMeter");
+            MapGetNorthHeadingPtr = Lib.GetExport("XPLMMapGetNorthHeading");
         }
 
         
@@ -53,6 +53,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe MapLayerID CreateMapLayer(CreateMapLayer* inParams)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CreateMapLayerPtr);
             MapLayerID result;
             IL.Push(inParams);
             IL.Push(CreateMapLayerPtr);
@@ -73,12 +74,24 @@ namespace XP.SDK.XPLM.Internal
         public static int DestroyMapLayer(MapLayerID inLayer)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DestroyMapLayerPtr);
             int result;
             IL.Push(inLayer);
             IL.Push(DestroyMapLayerPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(MapLayerID)));
             IL.Pop(out result);
             return result;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe void RegisterMapCreationHookPrivate(IntPtr callback, void* refcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(RegisterMapCreationHookPtr);
+            IL.Push(callback);
+            IL.Push(refcon);
+            IL.Push(RegisterMapCreationHookPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(MapCreatedCallback), typeof(void*)));
         }
 
         
@@ -98,11 +111,8 @@ namespace XP.SDK.XPLM.Internal
         {
             IL.DeclareLocals(false);
             IntPtr callbackPtr = Marshal.GetFunctionPointerForDelegate(callback);
-            IL.Push(callbackPtr);
-            IL.Push(refcon);
-            IL.Push(RegisterMapCreationHookPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(void*)));
-            GC.KeepAlive(callback);
+            RegisterMapCreationHookPrivate(callbackPtr, refcon);
+            GC.KeepAlive(callbackPtr);
         }
 
         
@@ -117,6 +127,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int MapExists(byte* mapIdentifier)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(MapExistsPtr);
             int result;
             IL.Push(mapIdentifier);
             IL.Push(MapExistsPtr);
@@ -184,6 +195,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void DrawMapIconFromSheet(MapLayerID layer, byte* inPngPath, int s, int t, int ds, int dt, float mapX, float mapY, MapOrientation orientation, float rotationDegrees, float mapWidth)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DrawMapIconFromSheetPtr);
             IL.Push(layer);
             IL.Push(inPngPath);
             IL.Push(s);
@@ -259,6 +271,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void DrawMapLabel(MapLayerID layer, byte* inText, float mapX, float mapY, MapOrientation orientation, float rotationDegrees)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DrawMapLabelPtr);
             IL.Push(layer);
             IL.Push(inText);
             IL.Push(mapX);
@@ -303,6 +316,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void MapProject(MapProjectionID projection, double latitude, double longitude, float* outX, float* outY)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(MapProjectPtr);
             IL.Push(projection);
             IL.Push(latitude);
             IL.Push(longitude);
@@ -328,6 +342,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void MapUnproject(MapProjectionID projection, float mapX, float mapY, double* outLatitude, double* outLongitude)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(MapUnprojectPtr);
             IL.Push(projection);
             IL.Push(mapX);
             IL.Push(mapY);
@@ -353,6 +368,7 @@ namespace XP.SDK.XPLM.Internal
         public static float MapScaleMeter(MapProjectionID projection, float mapX, float mapY)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(MapScaleMeterPtr);
             float result;
             IL.Push(projection);
             IL.Push(mapX);
@@ -386,6 +402,7 @@ namespace XP.SDK.XPLM.Internal
         public static float MapGetNorthHeading(MapProjectionID projection, float mapX, float mapY)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(MapGetNorthHeadingPtr);
             float result;
             IL.Push(projection);
             IL.Push(mapX);

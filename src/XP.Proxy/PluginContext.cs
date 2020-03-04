@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using System.Text;
 
 #nullable enable
 
@@ -10,10 +9,12 @@ namespace XP.Proxy
 {
     public class PluginContext : AssemblyLoadContext
     {
+        private readonly AssemblyLoadContext _parentContext;
         private readonly AssemblyDependencyResolver _resolver;
 
-        public PluginContext(string path) : base(nameof(PluginContext), true)
+        public PluginContext(AssemblyLoadContext parentContext, string path) : base(nameof(PluginContext), true)
         {
+            _parentContext = parentContext;
             _resolver = new AssemblyDependencyResolver(path);
         }
 
@@ -25,7 +26,7 @@ namespace XP.Proxy
                 return LoadFromAssemblyPath(path);
             }
 
-            return null;
+            return _parentContext?.Assemblies.FirstOrDefault(x => x.FullName == assemblyName.FullName);
         }
 
         protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)

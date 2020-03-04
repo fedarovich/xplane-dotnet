@@ -19,6 +19,20 @@ const fs::path get_plugin_path()
     return fs::path(path).parent_path();
 }
 
+const fs::path get_plugin_full_name()
+{
+    char path[MAX_PATH];
+    XPLMGetPluginInfo(XPLMGetMyID(), nullptr, path, nullptr, nullptr);
+    return fs::path(path);
+}
+
+const fs::path get_startup_path()
+{
+    char path[MAX_PATH];
+    XPLMGetSystemPath(path);
+    return fs::path(path);
+}
+
 tl::expected<void*, std::string> load_library(const string_t& path)
 {
     void* h = dlopen(path.c_str(), RTLD_LAZY | RTLD_LOCAL);

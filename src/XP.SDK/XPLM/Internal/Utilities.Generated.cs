@@ -38,33 +38,33 @@ namespace XP.SDK.XPLM.Internal
         static Utilities()
         {
             const string libraryName = "XPLM";
-            SimulateKeyPressPtr = FunctionResolver.Resolve(libraryName, "XPLMSimulateKeyPress");
-            SpeakStringPtr = FunctionResolver.Resolve(libraryName, "XPLMSpeakString");
-            CommandKeyStrokePtr = FunctionResolver.Resolve(libraryName, "XPLMCommandKeyStroke");
-            CommandButtonPressPtr = FunctionResolver.Resolve(libraryName, "XPLMCommandButtonPress");
-            CommandButtonReleasePtr = FunctionResolver.Resolve(libraryName, "XPLMCommandButtonRelease");
-            GetVirtualKeyDescriptionPtr = FunctionResolver.Resolve(libraryName, "XPLMGetVirtualKeyDescription");
-            ReloadSceneryPtr = FunctionResolver.Resolve(libraryName, "XPLMReloadScenery");
-            GetSystemPathPtr = FunctionResolver.Resolve(libraryName, "XPLMGetSystemPath");
-            GetPrefsPathPtr = FunctionResolver.Resolve(libraryName, "XPLMGetPrefsPath");
-            GetDirectorySeparatorPtr = FunctionResolver.Resolve(libraryName, "XPLMGetDirectorySeparator");
-            ExtractFileAndPathPtr = FunctionResolver.Resolve(libraryName, "XPLMExtractFileAndPath");
-            GetDirectoryContentsPtr = FunctionResolver.Resolve(libraryName, "XPLMGetDirectoryContents");
-            InitializedPtr = FunctionResolver.Resolve(libraryName, "XPLMInitialized");
-            GetVersionsPtr = FunctionResolver.Resolve(libraryName, "XPLMGetVersions");
-            GetLanguagePtr = FunctionResolver.Resolve(libraryName, "XPLMGetLanguage");
-            DebugStringPtr = FunctionResolver.Resolve(libraryName, "XPLMDebugString");
-            SetErrorCallbackPtr = FunctionResolver.Resolve(libraryName, "XPLMSetErrorCallback");
-            FindSymbolPtr = FunctionResolver.Resolve(libraryName, "XPLMFindSymbol");
-            LoadDataFilePtr = FunctionResolver.Resolve(libraryName, "XPLMLoadDataFile");
-            SaveDataFilePtr = FunctionResolver.Resolve(libraryName, "XPLMSaveDataFile");
-            FindCommandPtr = FunctionResolver.Resolve(libraryName, "XPLMFindCommand");
-            CommandBeginPtr = FunctionResolver.Resolve(libraryName, "XPLMCommandBegin");
-            CommandEndPtr = FunctionResolver.Resolve(libraryName, "XPLMCommandEnd");
-            CommandOncePtr = FunctionResolver.Resolve(libraryName, "XPLMCommandOnce");
-            CreateCommandPtr = FunctionResolver.Resolve(libraryName, "XPLMCreateCommand");
-            RegisterCommandHandlerPtr = FunctionResolver.Resolve(libraryName, "XPLMRegisterCommandHandler");
-            UnregisterCommandHandlerPtr = FunctionResolver.Resolve(libraryName, "XPLMUnregisterCommandHandler");
+            SimulateKeyPressPtr = Lib.GetExport("XPLMSimulateKeyPress");
+            SpeakStringPtr = Lib.GetExport("XPLMSpeakString");
+            CommandKeyStrokePtr = Lib.GetExport("XPLMCommandKeyStroke");
+            CommandButtonPressPtr = Lib.GetExport("XPLMCommandButtonPress");
+            CommandButtonReleasePtr = Lib.GetExport("XPLMCommandButtonRelease");
+            GetVirtualKeyDescriptionPtr = Lib.GetExport("XPLMGetVirtualKeyDescription");
+            ReloadSceneryPtr = Lib.GetExport("XPLMReloadScenery");
+            GetSystemPathPtr = Lib.GetExport("XPLMGetSystemPath");
+            GetPrefsPathPtr = Lib.GetExport("XPLMGetPrefsPath");
+            GetDirectorySeparatorPtr = Lib.GetExport("XPLMGetDirectorySeparator");
+            ExtractFileAndPathPtr = Lib.GetExport("XPLMExtractFileAndPath");
+            GetDirectoryContentsPtr = Lib.GetExport("XPLMGetDirectoryContents");
+            InitializedPtr = Lib.GetExport("XPLMInitialized");
+            GetVersionsPtr = Lib.GetExport("XPLMGetVersions");
+            GetLanguagePtr = Lib.GetExport("XPLMGetLanguage");
+            DebugStringPtr = Lib.GetExport("XPLMDebugString");
+            SetErrorCallbackPtr = Lib.GetExport("XPLMSetErrorCallback");
+            FindSymbolPtr = Lib.GetExport("XPLMFindSymbol");
+            LoadDataFilePtr = Lib.GetExport("XPLMLoadDataFile");
+            SaveDataFilePtr = Lib.GetExport("XPLMSaveDataFile");
+            FindCommandPtr = Lib.GetExport("XPLMFindCommand");
+            CommandBeginPtr = Lib.GetExport("XPLMCommandBegin");
+            CommandEndPtr = Lib.GetExport("XPLMCommandEnd");
+            CommandOncePtr = Lib.GetExport("XPLMCommandOnce");
+            CreateCommandPtr = Lib.GetExport("XPLMCreateCommand");
+            RegisterCommandHandlerPtr = Lib.GetExport("XPLMRegisterCommandHandler");
+            UnregisterCommandHandlerPtr = Lib.GetExport("XPLMUnregisterCommandHandler");
         }
 
         
@@ -84,6 +84,7 @@ namespace XP.SDK.XPLM.Internal
         public static void SimulateKeyPress(int inKeyType, int inKey)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SimulateKeyPressPtr);
             IL.Push(inKeyType);
             IL.Push(inKey);
             IL.Push(SimulateKeyPressPtr);
@@ -102,6 +103,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void SpeakString(byte* inString)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SpeakStringPtr);
             IL.Push(inString);
             IL.Push(SpeakStringPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*)));
@@ -137,6 +139,7 @@ namespace XP.SDK.XPLM.Internal
         public static void CommandKeyStroke(CommandKeyID inKey)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CommandKeyStrokePtr);
             IL.Push(inKey);
             IL.Push(CommandKeyStrokePtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandKeyID)));
@@ -156,6 +159,7 @@ namespace XP.SDK.XPLM.Internal
         public static void CommandButtonPress(CommandButtonID inButton)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CommandButtonPressPtr);
             IL.Push(inButton);
             IL.Push(CommandButtonPressPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandButtonID)));
@@ -172,6 +176,7 @@ namespace XP.SDK.XPLM.Internal
         public static void CommandButtonRelease(CommandButtonID inButton)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CommandButtonReleasePtr);
             IL.Push(inButton);
             IL.Push(CommandButtonReleasePtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandButtonID)));
@@ -190,6 +195,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe byte* GetVirtualKeyDescription(byte inVirtualKey)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetVirtualKeyDescriptionPtr);
             byte* result;
             IL.Push(inVirtualKey);
             IL.Push(GetVirtualKeyDescriptionPtr);
@@ -212,6 +218,7 @@ namespace XP.SDK.XPLM.Internal
         public static void ReloadScenery()
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(ReloadSceneryPtr);
             IL.Push(ReloadSceneryPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void)));
         }
@@ -228,6 +235,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetSystemPath(byte* outSystemPath)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetSystemPathPtr);
             IL.Push(outSystemPath);
             IL.Push(GetSystemPathPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*)));
@@ -246,6 +254,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetPrefsPath(byte* outPrefsPath)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetPrefsPathPtr);
             IL.Push(outPrefsPath);
             IL.Push(GetPrefsPathPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*)));
@@ -264,6 +273,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe byte* GetDirectorySeparator()
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetDirectorySeparatorPtr);
             byte* result;
             IL.Push(GetDirectorySeparatorPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(byte*)));
@@ -287,6 +297,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe byte* ExtractFileAndPath(byte* inFullPath)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(ExtractFileAndPathPtr);
             byte* result;
             IL.Push(inFullPath);
             IL.Push(ExtractFileAndPathPtr);
@@ -354,6 +365,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int GetDirectoryContents(byte* inDirectoryPath, int inFirstReturn, byte* outFileNames, int inFileNameBufSize, byte** outIndices, int inIndexCount, int* outTotalFiles, int* outReturnedFiles)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetDirectoryContentsPtr);
             int result;
             IL.Push(inDirectoryPath);
             IL.Push(inFirstReturn);
@@ -452,6 +464,7 @@ namespace XP.SDK.XPLM.Internal
         public static int Initialized()
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(InitializedPtr);
             int result;
             IL.Push(InitializedPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int)));
@@ -476,6 +489,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetVersions(int* outXPlaneVersion, int* outXPLMVersion, HostApplicationID* outHostID)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetVersionsPtr);
             IL.Push(outXPlaneVersion);
             IL.Push(outXPLMVersion);
             IL.Push(outHostID);
@@ -493,6 +507,7 @@ namespace XP.SDK.XPLM.Internal
         public static LanguageCode GetLanguage()
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetLanguagePtr);
             LanguageCode result;
             IL.Push(GetLanguagePtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(LanguageCode)));
@@ -512,6 +527,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void DebugString(byte* inString)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DebugStringPtr);
             IL.Push(inString);
             IL.Push(DebugStringPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*)));
@@ -532,6 +548,16 @@ namespace XP.SDK.XPLM.Internal
             Span<byte> inStringUtf8 = stackalloc byte[(inString.Length << 1) | 1];
             var inStringPtr = Utils.ToUtf8Unsafe(inString, inStringUtf8);
             DebugString(inStringPtr);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static void SetErrorCallbackPrivate(IntPtr inCallback)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(SetErrorCallbackPtr);
+            IL.Push(inCallback);
+            IL.Push(SetErrorCallbackPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(ErrorCallback)));
         }
 
         
@@ -559,10 +585,8 @@ namespace XP.SDK.XPLM.Internal
         {
             IL.DeclareLocals(false);
             IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
-            IL.Push(inCallbackPtr);
-            IL.Push(SetErrorCallbackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr)));
-            GC.KeepAlive(inCallback);
+            SetErrorCallbackPrivate(inCallbackPtr);
+            GC.KeepAlive(inCallbackPtr);
         }
 
         
@@ -577,6 +601,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void* FindSymbol(byte* inString)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(FindSymbolPtr);
             void* result;
             IL.Push(inString);
             IL.Push(FindSymbolPtr);
@@ -614,6 +639,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int LoadDataFile(DataFileType inFileType, byte* inFilePath)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(LoadDataFilePtr);
             int result;
             IL.Push(inFileType);
             IL.Push(inFilePath);
@@ -651,6 +677,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int SaveDataFile(DataFileType inFileType, byte* inFilePath)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SaveDataFilePtr);
             int result;
             IL.Push(inFileType);
             IL.Push(inFilePath);
@@ -687,6 +714,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe CommandRef FindCommand(byte* inName)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(FindCommandPtr);
             CommandRef result;
             IL.Push(inName);
             IL.Push(FindCommandPtr);
@@ -723,6 +751,7 @@ namespace XP.SDK.XPLM.Internal
         public static void CommandBegin(CommandRef inCommand)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CommandBeginPtr);
             IL.Push(inCommand);
             IL.Push(CommandBeginPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef)));
@@ -739,6 +768,7 @@ namespace XP.SDK.XPLM.Internal
         public static void CommandEnd(CommandRef inCommand)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CommandEndPtr);
             IL.Push(inCommand);
             IL.Push(CommandEndPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef)));
@@ -755,6 +785,7 @@ namespace XP.SDK.XPLM.Internal
         public static void CommandOnce(CommandRef inCommand)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CommandOncePtr);
             IL.Push(inCommand);
             IL.Push(CommandOncePtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef)));
@@ -773,6 +804,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe CommandRef CreateCommand(byte* inName, byte* inDescription)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CreateCommandPtr);
             CommandRef result;
             IL.Push(inName);
             IL.Push(inDescription);
@@ -802,6 +834,19 @@ namespace XP.SDK.XPLM.Internal
             return CreateCommand(inNamePtr, inDescriptionPtr);
         }
 
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe void RegisterCommandHandlerPrivate(CommandRef inComand, IntPtr inHandler, int inBefore, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(RegisterCommandHandlerPtr);
+            IL.Push(inComand);
+            IL.Push(inHandler);
+            IL.Push(inBefore);
+            IL.Push(inRefcon);
+            IL.Push(RegisterCommandHandlerPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef), typeof(CommandCallback), typeof(int), typeof(void*)));
+        }
+
         
         /// <summary>
         /// <para>
@@ -821,13 +866,21 @@ namespace XP.SDK.XPLM.Internal
         {
             IL.DeclareLocals(false);
             IntPtr inHandlerPtr = Marshal.GetFunctionPointerForDelegate(inHandler);
+            RegisterCommandHandlerPrivate(inComand, inHandlerPtr, inBefore, inRefcon);
+            GC.KeepAlive(inHandlerPtr);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe void UnregisterCommandHandlerPrivate(CommandRef inComand, IntPtr inHandler, int inBefore, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(UnregisterCommandHandlerPtr);
             IL.Push(inComand);
-            IL.Push(inHandlerPtr);
+            IL.Push(inHandler);
             IL.Push(inBefore);
             IL.Push(inRefcon);
-            IL.Push(RegisterCommandHandlerPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef), typeof(IntPtr), typeof(int), typeof(void*)));
-            GC.KeepAlive(inHandler);
+            IL.Push(UnregisterCommandHandlerPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef), typeof(CommandCallback), typeof(int), typeof(void*)));
         }
 
         
@@ -842,13 +895,8 @@ namespace XP.SDK.XPLM.Internal
         {
             IL.DeclareLocals(false);
             IntPtr inHandlerPtr = Marshal.GetFunctionPointerForDelegate(inHandler);
-            IL.Push(inComand);
-            IL.Push(inHandlerPtr);
-            IL.Push(inBefore);
-            IL.Push(inRefcon);
-            IL.Push(UnregisterCommandHandlerPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef), typeof(IntPtr), typeof(int), typeof(void*)));
-            GC.KeepAlive(inHandler);
+            UnregisterCommandHandlerPrivate(inComand, inHandlerPtr, inBefore, inRefcon);
+            GC.KeepAlive(inHandlerPtr);
         }
     }
 }

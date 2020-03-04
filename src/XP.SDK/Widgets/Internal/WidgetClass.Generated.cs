@@ -34,5 +34,8 @@ namespace XP.SDK.Widgets.Internal
         public static bool operator ==(WidgetClass left, WidgetClass right) => left.Equals(right);
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(WidgetClass left, WidgetClass right) => !left.Equals(right);
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public override string ToString() => _value.ToString();
     }
 }

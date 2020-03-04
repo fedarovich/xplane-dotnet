@@ -22,17 +22,17 @@ namespace XP.SDK.XPLM.Internal
         static Graphics()
         {
             const string libraryName = "XPLM";
-            SetGraphicsStatePtr = FunctionResolver.Resolve(libraryName, "XPLMSetGraphicsState");
-            BindTexture2dPtr = FunctionResolver.Resolve(libraryName, "XPLMBindTexture2d");
-            GenerateTextureNumbersPtr = FunctionResolver.Resolve(libraryName, "XPLMGenerateTextureNumbers");
-            GetTexturePtr = FunctionResolver.Resolve(libraryName, "XPLMGetTexture");
-            WorldToLocalPtr = FunctionResolver.Resolve(libraryName, "XPLMWorldToLocal");
-            LocalToWorldPtr = FunctionResolver.Resolve(libraryName, "XPLMLocalToWorld");
-            DrawTranslucentDarkBoxPtr = FunctionResolver.Resolve(libraryName, "XPLMDrawTranslucentDarkBox");
-            DrawStringPtr = FunctionResolver.Resolve(libraryName, "XPLMDrawString");
-            DrawNumberPtr = FunctionResolver.Resolve(libraryName, "XPLMDrawNumber");
-            GetFontDimensionsPtr = FunctionResolver.Resolve(libraryName, "XPLMGetFontDimensions");
-            MeasureStringPtr = FunctionResolver.Resolve(libraryName, "XPLMMeasureString");
+            SetGraphicsStatePtr = Lib.GetExport("XPLMSetGraphicsState");
+            BindTexture2dPtr = Lib.GetExport("XPLMBindTexture2d");
+            GenerateTextureNumbersPtr = Lib.GetExport("XPLMGenerateTextureNumbers");
+            GetTexturePtr = Lib.GetExport("XPLMGetTexture");
+            WorldToLocalPtr = Lib.GetExport("XPLMWorldToLocal");
+            LocalToWorldPtr = Lib.GetExport("XPLMLocalToWorld");
+            DrawTranslucentDarkBoxPtr = Lib.GetExport("XPLMDrawTranslucentDarkBox");
+            DrawStringPtr = Lib.GetExport("XPLMDrawString");
+            DrawNumberPtr = Lib.GetExport("XPLMDrawNumber");
+            GetFontDimensionsPtr = Lib.GetExport("XPLMGetFontDimensions");
+            MeasureStringPtr = Lib.GetExport("XPLMMeasureString");
         }
 
         
@@ -93,6 +93,7 @@ namespace XP.SDK.XPLM.Internal
         public static void SetGraphicsState(int inEnableFog, int inNumberTexUnits, int inEnableLighting, int inEnableAlphaTesting, int inEnableAlphaBlending, int inEnableDepthTesting, int inEnableDepthWriting)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetGraphicsStatePtr);
             IL.Push(inEnableFog);
             IL.Push(inNumberTexUnits);
             IL.Push(inEnableLighting);
@@ -128,6 +129,7 @@ namespace XP.SDK.XPLM.Internal
         public static void BindTexture2d(int inTextureNum, int inTextureUnit)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(BindTexture2dPtr);
             IL.Push(inTextureNum);
             IL.Push(inTextureUnit);
             IL.Push(BindTexture2dPtr);
@@ -151,6 +153,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GenerateTextureNumbers(int* outTextureIDs, int inCount)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GenerateTextureNumbersPtr);
             IL.Push(outTextureIDs);
             IL.Push(inCount);
             IL.Push(GenerateTextureNumbersPtr);
@@ -176,6 +179,7 @@ namespace XP.SDK.XPLM.Internal
         public static int GetTexture(TextureID inTexture)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetTexturePtr);
             int result;
             IL.Push(inTexture);
             IL.Push(GetTexturePtr);
@@ -197,6 +201,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void WorldToLocal(double inLatitude, double inLongitude, double inAltitude, double* outX, double* outY, double* outZ)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(WorldToLocalPtr);
             IL.Push(inLatitude);
             IL.Push(inLongitude);
             IL.Push(inAltitude);
@@ -224,6 +229,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void LocalToWorld(double inX, double inY, double inZ, double* outLatitude, double* outLongitude, double* outAltitude)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(LocalToWorldPtr);
             IL.Push(inX);
             IL.Push(inY);
             IL.Push(inZ);
@@ -246,6 +252,7 @@ namespace XP.SDK.XPLM.Internal
         public static void DrawTranslucentDarkBox(int inLeft, int inTop, int inRight, int inBottom)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DrawTranslucentDarkBoxPtr);
             IL.Push(inLeft);
             IL.Push(inTop);
             IL.Push(inRight);
@@ -269,6 +276,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void DrawString(float* inColorRGB, int inXOffset, int inYOffset, byte* inChar, int* inWordWrapWidth, FontID inFontID)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DrawStringPtr);
             IL.Push(inColorRGB);
             IL.Push(inXOffset);
             IL.Push(inYOffset);
@@ -294,6 +302,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void DrawNumber(float* inColorRGB, int inXOffset, int inYOffset, double inValue, int inDigits, int inDecimals, int inShowSign, FontID inFontID)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DrawNumberPtr);
             IL.Push(inColorRGB);
             IL.Push(inXOffset);
             IL.Push(inYOffset);
@@ -319,6 +328,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetFontDimensions(FontID inFontID, int* outCharWidth, int* outCharHeight, int* outDigitsOnly)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetFontDimensionsPtr);
             IL.Push(inFontID);
             IL.Push(outCharWidth);
             IL.Push(outCharHeight);
@@ -341,6 +351,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe float MeasureString(FontID inFontID, byte* inChar, int inNumChars)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(MeasureStringPtr);
             float result;
             IL.Push(inFontID);
             IL.Push(inChar);

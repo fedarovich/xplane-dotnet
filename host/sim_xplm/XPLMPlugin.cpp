@@ -4,16 +4,22 @@
 #include <Windows.h>
 #endif
 
+#include <cstring>
 #include <string>
 #include <map>
+#include <filesystem>
 
-static std::map<int, std::string> plugins;
+namespace fs = std::filesystem;
+
+static std::map<int, fs::path> plugins;
+
+static bool useNativePaths = false;
 
 extern "C" XPLM_API void SimRegisterPlugin(int id, const char* path);
 
 void SimRegisterPlugin(int id, const char* path)
 {
-    plugins[id] = std::string(path);
+    plugins[id] = fs::path(path);
 }
 
 XPLMPluginID XPLMGetMyID(void)
@@ -33,7 +39,29 @@ void XPLMGetPluginInfo(
         auto value = plugins.find(inPlugin);
         if (value != plugins.cend())
         {
-            strcpy_s(outFilePath, 256, value->second.c_str());
+            std::string path = useNativePaths
+                ? value->second.generic_u8string()
+                : value->second.u8string();
+
+            strcpy(outFilePath, path.c_str());
         }
     }
 }
+
+void XPLMEnableFeature(const char* inFeature, int inEnable)
+{
+    if (strcmp(inFeature, "XPLM_USE_NATIVE_PATHS") == 0)
+    {
+        useNativePaths = inEnable != 0;
+    }
+}
+
+int XPLMIsFeatureEnabled(const char* inFeature)
+{
+    if (strcmp(inFeature, "XPLM_USE_NATIVE_PATHS") == 0)
+    {
+        return useNativePaths;
+    }
+    return 0;
+}
+

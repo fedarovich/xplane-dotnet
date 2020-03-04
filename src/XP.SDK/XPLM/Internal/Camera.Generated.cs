@@ -15,10 +15,22 @@ namespace XP.SDK.XPLM.Internal
         static Camera()
         {
             const string libraryName = "XPLM";
-            ControlCameraPtr = FunctionResolver.Resolve(libraryName, "XPLMControlCamera");
-            DontControlCameraPtr = FunctionResolver.Resolve(libraryName, "XPLMDontControlCamera");
-            IsCameraBeingControlledPtr = FunctionResolver.Resolve(libraryName, "XPLMIsCameraBeingControlled");
-            ReadCameraPositionPtr = FunctionResolver.Resolve(libraryName, "XPLMReadCameraPosition");
+            ControlCameraPtr = Lib.GetExport("XPLMControlCamera");
+            DontControlCameraPtr = Lib.GetExport("XPLMDontControlCamera");
+            IsCameraBeingControlledPtr = Lib.GetExport("XPLMIsCameraBeingControlled");
+            ReadCameraPositionPtr = Lib.GetExport("XPLMReadCameraPosition");
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe void ControlCameraPrivate(CameraControlDuration inHowLong, IntPtr inControlFunc, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(ControlCameraPtr);
+            IL.Push(inHowLong);
+            IL.Push(inControlFunc);
+            IL.Push(inRefcon);
+            IL.Push(ControlCameraPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CameraControlDuration), typeof(CameraControlCallback), typeof(void*)));
         }
 
         
@@ -34,12 +46,8 @@ namespace XP.SDK.XPLM.Internal
         {
             IL.DeclareLocals(false);
             IntPtr inControlFuncPtr = Marshal.GetFunctionPointerForDelegate(inControlFunc);
-            IL.Push(inHowLong);
-            IL.Push(inControlFuncPtr);
-            IL.Push(inRefcon);
-            IL.Push(ControlCameraPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CameraControlDuration), typeof(IntPtr), typeof(void*)));
-            GC.KeepAlive(inControlFunc);
+            ControlCameraPrivate(inHowLong, inControlFuncPtr, inRefcon);
+            GC.KeepAlive(inControlFuncPtr);
         }
 
         
@@ -58,6 +66,7 @@ namespace XP.SDK.XPLM.Internal
         public static void DontControlCamera()
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DontControlCameraPtr);
             IL.Push(DontControlCameraPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void)));
         }
@@ -74,6 +83,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int IsCameraBeingControlled(CameraControlDuration* outCameraControlDuration)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(IsCameraBeingControlledPtr);
             int result;
             IL.Push(outCameraControlDuration);
             IL.Push(IsCameraBeingControlledPtr);
@@ -92,6 +102,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void ReadCameraPosition(CameraPosition* outCameraPosition)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(ReadCameraPositionPtr);
             IL.Push(outCameraPosition);
             IL.Push(ReadCameraPositionPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CameraPosition*)));

@@ -15,22 +15,31 @@ namespace XP.Proxy
     {
         private static PluginContext _context;
         private static PluginBase _plugin;
+        private static bool _resolverInitialized;
 
         public static int XPluginStart(ref StartParameters parameters)
         {
-            FunctionResolver.Initialize(parameters.XplmHandle, parameters.WidgetsHandle);
+            GlobalContext.StartupPath = Marshal.PtrToStringUTF8(parameters.StartupPath);
 
-            if (string.IsNullOrEmpty(parameters.PluginPath))
+            var pluginPath = Marshal.PtrToStringUTF8(parameters.PluginPath);
+            if (string.IsNullOrEmpty(pluginPath))
             {
                 Utilities.DebugString($"Plugin path is null.");
                 return 0;
             }
 
-            var assemblyPath = Path.ChangeExtension(parameters.PluginPath, ".dll");
-            var context = new PluginContext(assemblyPath);
+            var assemblyPath = Path.ChangeExtension(pluginPath, ".dll");
+            var currentContext = AssemblyLoadContext.GetLoadContext(Assembly.GetExecutingAssembly());
+            if (!_resolverInitialized)
+            {
+                currentContext.ResolvingUnmanagedDll += ResolveUnmanagedDll;
+                _resolverInitialized = true;
+            }
+           
+            _context = new PluginContext(currentContext, assemblyPath);
             try
             {
-                var assembly = AssemblyLoadContext.GetLoadContext(Assembly.GetExecutingAssembly()).LoadFromAssemblyPath(assemblyPath);/* context.LoadFromAssemblyPath(pluginPath); */
+                var assembly = _context.LoadFromAssemblyPath(assemblyPath);
                 var attr = assembly.GetCustomAttribute<PluginAttribute>();
                 if (attr == null)
                 {
@@ -92,6 +101,12 @@ namespace XP.Proxy
         public static void XPluginReceiveMessage(int pluginId, int message, IntPtr param)
         {
             _plugin.ReceiveMessage(pluginId, message, param);
+        }
+
+
+        private static IntPtr ResolveUnmanagedDll(Assembly assembly, string name)
+        {
+            return IntPtr.Zero;
         }
     }
 }

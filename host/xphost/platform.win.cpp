@@ -26,6 +26,13 @@ const std::filesystem::path get_plugin_full_name()
     return fs::u8path(path);
 }
 
+const std::filesystem::path get_startup_path()
+{
+    char path[MAX_PATH * 2];
+    XPLMGetSystemPath(path);
+    return fs::u8path(path);
+}
+
 tl::expected<void*, std::string> load_library(const string_t& path)
 {
     auto h = ::LoadLibraryW(path.c_str());
@@ -44,11 +51,4 @@ tl::expected<void*, std::string> get_export(void* h, const std::string& name)
         return tl::make_unexpected(format_error("GetProcAddress failed, error = %d", GetLastError()));
     }
     return f;
-}
-
-void* get_library_handle(const void* symbol)
-{
-    HMODULE module = nullptr;
-    GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, (LPCWSTR)symbol, &module);
-    return module;
 }

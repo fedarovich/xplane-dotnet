@@ -50,45 +50,61 @@ namespace XP.SDK.XPLM.Internal
         static Display()
         {
             const string libraryName = "XPLM";
-            RegisterDrawCallbackPtr = FunctionResolver.Resolve(libraryName, "XPLMRegisterDrawCallback");
-            UnregisterDrawCallbackPtr = FunctionResolver.Resolve(libraryName, "XPLMUnregisterDrawCallback");
-            CreateWindowExPtr = FunctionResolver.Resolve(libraryName, "XPLMCreateWindowEx");
-            CreateWindowPtr = FunctionResolver.Resolve(libraryName, "XPLMCreateWindow");
-            DestroyWindowPtr = FunctionResolver.Resolve(libraryName, "XPLMDestroyWindow");
-            GetScreenSizePtr = FunctionResolver.Resolve(libraryName, "XPLMGetScreenSize");
-            GetScreenBoundsGlobalPtr = FunctionResolver.Resolve(libraryName, "XPLMGetScreenBoundsGlobal");
-            GetAllMonitorBoundsGlobalPtr = FunctionResolver.Resolve(libraryName, "XPLMGetAllMonitorBoundsGlobal");
-            GetAllMonitorBoundsOSPtr = FunctionResolver.Resolve(libraryName, "XPLMGetAllMonitorBoundsOS");
-            GetMouseLocationPtr = FunctionResolver.Resolve(libraryName, "XPLMGetMouseLocation");
-            GetMouseLocationGlobalPtr = FunctionResolver.Resolve(libraryName, "XPLMGetMouseLocationGlobal");
-            GetWindowGeometryPtr = FunctionResolver.Resolve(libraryName, "XPLMGetWindowGeometry");
-            SetWindowGeometryPtr = FunctionResolver.Resolve(libraryName, "XPLMSetWindowGeometry");
-            GetWindowGeometryOSPtr = FunctionResolver.Resolve(libraryName, "XPLMGetWindowGeometryOS");
-            SetWindowGeometryOSPtr = FunctionResolver.Resolve(libraryName, "XPLMSetWindowGeometryOS");
-            GetWindowGeometryVRPtr = FunctionResolver.Resolve(libraryName, "XPLMGetWindowGeometryVR");
-            SetWindowGeometryVRPtr = FunctionResolver.Resolve(libraryName, "XPLMSetWindowGeometryVR");
-            GetWindowIsVisiblePtr = FunctionResolver.Resolve(libraryName, "XPLMGetWindowIsVisible");
-            SetWindowIsVisiblePtr = FunctionResolver.Resolve(libraryName, "XPLMSetWindowIsVisible");
-            WindowIsPoppedOutPtr = FunctionResolver.Resolve(libraryName, "XPLMWindowIsPoppedOut");
-            WindowIsInVRPtr = FunctionResolver.Resolve(libraryName, "XPLMWindowIsInVR");
-            SetWindowGravityPtr = FunctionResolver.Resolve(libraryName, "XPLMSetWindowGravity");
-            SetWindowResizingLimitsPtr = FunctionResolver.Resolve(libraryName, "XPLMSetWindowResizingLimits");
-            SetWindowPositioningModePtr = FunctionResolver.Resolve(libraryName, "XPLMSetWindowPositioningMode");
-            SetWindowTitlePtr = FunctionResolver.Resolve(libraryName, "XPLMSetWindowTitle");
-            GetWindowRefConPtr = FunctionResolver.Resolve(libraryName, "XPLMGetWindowRefCon");
-            SetWindowRefConPtr = FunctionResolver.Resolve(libraryName, "XPLMSetWindowRefCon");
-            TakeKeyboardFocusPtr = FunctionResolver.Resolve(libraryName, "XPLMTakeKeyboardFocus");
-            HasKeyboardFocusPtr = FunctionResolver.Resolve(libraryName, "XPLMHasKeyboardFocus");
-            BringWindowToFrontPtr = FunctionResolver.Resolve(libraryName, "XPLMBringWindowToFront");
-            IsWindowInFrontPtr = FunctionResolver.Resolve(libraryName, "XPLMIsWindowInFront");
-            RegisterKeySnifferPtr = FunctionResolver.Resolve(libraryName, "XPLMRegisterKeySniffer");
-            UnregisterKeySnifferPtr = FunctionResolver.Resolve(libraryName, "XPLMUnregisterKeySniffer");
-            RegisterHotKeyPtr = FunctionResolver.Resolve(libraryName, "XPLMRegisterHotKey");
-            UnregisterHotKeyPtr = FunctionResolver.Resolve(libraryName, "XPLMUnregisterHotKey");
-            CountHotKeysPtr = FunctionResolver.Resolve(libraryName, "XPLMCountHotKeys");
-            GetNthHotKeyPtr = FunctionResolver.Resolve(libraryName, "XPLMGetNthHotKey");
-            GetHotKeyInfoPtr = FunctionResolver.Resolve(libraryName, "XPLMGetHotKeyInfo");
-            SetHotKeyCombinationPtr = FunctionResolver.Resolve(libraryName, "XPLMSetHotKeyCombination");
+            RegisterDrawCallbackPtr = Lib.GetExport("XPLMRegisterDrawCallback");
+            UnregisterDrawCallbackPtr = Lib.GetExport("XPLMUnregisterDrawCallback");
+            CreateWindowExPtr = Lib.GetExport("XPLMCreateWindowEx");
+            CreateWindowPtr = Lib.GetExport("XPLMCreateWindow");
+            DestroyWindowPtr = Lib.GetExport("XPLMDestroyWindow");
+            GetScreenSizePtr = Lib.GetExport("XPLMGetScreenSize");
+            GetScreenBoundsGlobalPtr = Lib.GetExport("XPLMGetScreenBoundsGlobal");
+            GetAllMonitorBoundsGlobalPtr = Lib.GetExport("XPLMGetAllMonitorBoundsGlobal");
+            GetAllMonitorBoundsOSPtr = Lib.GetExport("XPLMGetAllMonitorBoundsOS");
+            GetMouseLocationPtr = Lib.GetExport("XPLMGetMouseLocation");
+            GetMouseLocationGlobalPtr = Lib.GetExport("XPLMGetMouseLocationGlobal");
+            GetWindowGeometryPtr = Lib.GetExport("XPLMGetWindowGeometry");
+            SetWindowGeometryPtr = Lib.GetExport("XPLMSetWindowGeometry");
+            GetWindowGeometryOSPtr = Lib.GetExport("XPLMGetWindowGeometryOS");
+            SetWindowGeometryOSPtr = Lib.GetExport("XPLMSetWindowGeometryOS");
+            GetWindowGeometryVRPtr = Lib.GetExport("XPLMGetWindowGeometryVR");
+            SetWindowGeometryVRPtr = Lib.GetExport("XPLMSetWindowGeometryVR");
+            GetWindowIsVisiblePtr = Lib.GetExport("XPLMGetWindowIsVisible");
+            SetWindowIsVisiblePtr = Lib.GetExport("XPLMSetWindowIsVisible");
+            WindowIsPoppedOutPtr = Lib.GetExport("XPLMWindowIsPoppedOut");
+            WindowIsInVRPtr = Lib.GetExport("XPLMWindowIsInVR");
+            SetWindowGravityPtr = Lib.GetExport("XPLMSetWindowGravity");
+            SetWindowResizingLimitsPtr = Lib.GetExport("XPLMSetWindowResizingLimits");
+            SetWindowPositioningModePtr = Lib.GetExport("XPLMSetWindowPositioningMode");
+            SetWindowTitlePtr = Lib.GetExport("XPLMSetWindowTitle");
+            GetWindowRefConPtr = Lib.GetExport("XPLMGetWindowRefCon");
+            SetWindowRefConPtr = Lib.GetExport("XPLMSetWindowRefCon");
+            TakeKeyboardFocusPtr = Lib.GetExport("XPLMTakeKeyboardFocus");
+            HasKeyboardFocusPtr = Lib.GetExport("XPLMHasKeyboardFocus");
+            BringWindowToFrontPtr = Lib.GetExport("XPLMBringWindowToFront");
+            IsWindowInFrontPtr = Lib.GetExport("XPLMIsWindowInFront");
+            RegisterKeySnifferPtr = Lib.GetExport("XPLMRegisterKeySniffer");
+            UnregisterKeySnifferPtr = Lib.GetExport("XPLMUnregisterKeySniffer");
+            RegisterHotKeyPtr = Lib.GetExport("XPLMRegisterHotKey");
+            UnregisterHotKeyPtr = Lib.GetExport("XPLMUnregisterHotKey");
+            CountHotKeysPtr = Lib.GetExport("XPLMCountHotKeys");
+            GetNthHotKeyPtr = Lib.GetExport("XPLMGetNthHotKey");
+            GetHotKeyInfoPtr = Lib.GetExport("XPLMGetHotKeyInfo");
+            SetHotKeyCombinationPtr = Lib.GetExport("XPLMSetHotKeyCombination");
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe int RegisterDrawCallbackPrivate(IntPtr inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(RegisterDrawCallbackPtr);
+            int result;
+            IL.Push(inCallback);
+            IL.Push(inPhase);
+            IL.Push(inWantsBefore);
+            IL.Push(inRefcon);
+            IL.Push(RegisterDrawCallbackPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(DrawCallback), typeof(DrawingPhase), typeof(int), typeof(void*)));
+            IL.Pop(out result);
+            return result;
         }
 
         
@@ -111,16 +127,25 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int RegisterDrawCallback(DrawCallback inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            int result;
             IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
-            IL.Push(inCallbackPtr);
+            int result = RegisterDrawCallbackPrivate(inCallbackPtr, inPhase, inWantsBefore, inRefcon);
+            GC.KeepAlive(inCallbackPtr);
+            return result;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe int UnregisterDrawCallbackPrivate(IntPtr inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(UnregisterDrawCallbackPtr);
+            int result;
+            IL.Push(inCallback);
             IL.Push(inPhase);
             IL.Push(inWantsBefore);
             IL.Push(inRefcon);
-            IL.Push(RegisterDrawCallbackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(IntPtr), typeof(DrawingPhase), typeof(int), typeof(void*)));
+            IL.Push(UnregisterDrawCallbackPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(DrawCallback), typeof(DrawingPhase), typeof(int), typeof(void*)));
             IL.Pop(out result);
-            GC.KeepAlive(inCallback);
             return result;
         }
 
@@ -142,16 +167,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int UnregisterDrawCallback(DrawCallback inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            int result;
             IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
-            IL.Push(inCallbackPtr);
-            IL.Push(inPhase);
-            IL.Push(inWantsBefore);
-            IL.Push(inRefcon);
-            IL.Push(UnregisterDrawCallbackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(IntPtr), typeof(DrawingPhase), typeof(int), typeof(void*)));
-            IL.Pop(out result);
-            GC.KeepAlive(inCallback);
+            int result = UnregisterDrawCallbackPrivate(inCallbackPtr, inPhase, inWantsBefore, inRefcon);
+            GC.KeepAlive(inCallbackPtr);
             return result;
         }
 
@@ -170,10 +188,32 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe WindowID CreateWindowEx(CreateWindow* inParams)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CreateWindowExPtr);
             WindowID result;
             IL.Push(inParams);
             IL.Push(CreateWindowExPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WindowID), typeof(CreateWindow*)));
+            IL.Pop(out result);
+            return result;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe WindowID CreateWindowPrivate(int inLeft, int inTop, int inRight, int inBottom, int inIsVisible, IntPtr inDrawCallback, IntPtr inKeyCallback, IntPtr inMouseCallback, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(CreateWindowPtr);
+            WindowID result;
+            IL.Push(inLeft);
+            IL.Push(inTop);
+            IL.Push(inRight);
+            IL.Push(inBottom);
+            IL.Push(inIsVisible);
+            IL.Push(inDrawCallback);
+            IL.Push(inKeyCallback);
+            IL.Push(inMouseCallback);
+            IL.Push(inRefcon);
+            IL.Push(CreateWindowPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WindowID), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(DrawWindowCallback), typeof(HandleKeyCallback), typeof(HandleMouseClickCallback), typeof(void*)));
             IL.Pop(out result);
             return result;
         }
@@ -207,25 +247,13 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe WindowID CreateWindow(int inLeft, int inTop, int inRight, int inBottom, int inIsVisible, DrawWindowCallback inDrawCallback, HandleKeyCallback inKeyCallback, HandleMouseClickCallback inMouseCallback, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            WindowID result;
             IntPtr inDrawCallbackPtr = Marshal.GetFunctionPointerForDelegate(inDrawCallback);
             IntPtr inKeyCallbackPtr = Marshal.GetFunctionPointerForDelegate(inKeyCallback);
             IntPtr inMouseCallbackPtr = Marshal.GetFunctionPointerForDelegate(inMouseCallback);
-            IL.Push(inLeft);
-            IL.Push(inTop);
-            IL.Push(inRight);
-            IL.Push(inBottom);
-            IL.Push(inIsVisible);
-            IL.Push(inDrawCallbackPtr);
-            IL.Push(inKeyCallbackPtr);
-            IL.Push(inMouseCallbackPtr);
-            IL.Push(inRefcon);
-            IL.Push(CreateWindowPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WindowID), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(void*)));
-            IL.Pop(out result);
-            GC.KeepAlive(inMouseCallback);
-            GC.KeepAlive(inKeyCallback);
-            GC.KeepAlive(inDrawCallback);
+            WindowID result = CreateWindowPrivate(inLeft, inTop, inRight, inBottom, inIsVisible, inDrawCallbackPtr, inKeyCallbackPtr, inMouseCallbackPtr, inRefcon);
+            GC.KeepAlive(inMouseCallbackPtr);
+            GC.KeepAlive(inKeyCallbackPtr);
+            GC.KeepAlive(inDrawCallbackPtr);
             return result;
         }
 
@@ -241,6 +269,7 @@ namespace XP.SDK.XPLM.Internal
         public static void DestroyWindow(WindowID inWindowID)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DestroyWindowPtr);
             IL.Push(inWindowID);
             IL.Push(DestroyWindowPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WindowID)));
@@ -258,6 +287,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetScreenSize(int* outWidth, int* outHeight)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetScreenSizePtr);
             IL.Push(outWidth);
             IL.Push(outHeight);
             IL.Push(GetScreenSizePtr);
@@ -305,12 +335,24 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetScreenBoundsGlobal(int* outLeft, int* outTop, int* outRight, int* outBottom)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetScreenBoundsGlobalPtr);
             IL.Push(outLeft);
             IL.Push(outTop);
             IL.Push(outRight);
             IL.Push(outBottom);
             IL.Push(GetScreenBoundsGlobalPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int*), typeof(int*), typeof(int*), typeof(int*)));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe void GetAllMonitorBoundsGlobalPrivate(IntPtr inMonitorBoundsCallback, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(GetAllMonitorBoundsGlobalPtr);
+            IL.Push(inMonitorBoundsCallback);
+            IL.Push(inRefcon);
+            IL.Push(GetAllMonitorBoundsGlobalPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(ReceiveMonitorBoundsGlobalCallback), typeof(void*)));
         }
 
         
@@ -344,11 +386,19 @@ namespace XP.SDK.XPLM.Internal
         {
             IL.DeclareLocals(false);
             IntPtr inMonitorBoundsCallbackPtr = Marshal.GetFunctionPointerForDelegate(inMonitorBoundsCallback);
-            IL.Push(inMonitorBoundsCallbackPtr);
+            GetAllMonitorBoundsGlobalPrivate(inMonitorBoundsCallbackPtr, inRefcon);
+            GC.KeepAlive(inMonitorBoundsCallbackPtr);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe void GetAllMonitorBoundsOSPrivate(IntPtr inMonitorBoundsCallback, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(GetAllMonitorBoundsOSPtr);
+            IL.Push(inMonitorBoundsCallback);
             IL.Push(inRefcon);
-            IL.Push(GetAllMonitorBoundsGlobalPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(void*)));
-            GC.KeepAlive(inMonitorBoundsCallback);
+            IL.Push(GetAllMonitorBoundsOSPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(ReceiveMonitorBoundsOSCallback), typeof(void*)));
         }
 
         
@@ -371,11 +421,8 @@ namespace XP.SDK.XPLM.Internal
         {
             IL.DeclareLocals(false);
             IntPtr inMonitorBoundsCallbackPtr = Marshal.GetFunctionPointerForDelegate(inMonitorBoundsCallback);
-            IL.Push(inMonitorBoundsCallbackPtr);
-            IL.Push(inRefcon);
-            IL.Push(GetAllMonitorBoundsOSPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(void*)));
-            GC.KeepAlive(inMonitorBoundsCallback);
+            GetAllMonitorBoundsOSPrivate(inMonitorBoundsCallbackPtr, inRefcon);
+            GC.KeepAlive(inMonitorBoundsCallbackPtr);
         }
 
         
@@ -405,6 +452,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetMouseLocation(int* outX, int* outY)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetMouseLocationPtr);
             IL.Push(outX);
             IL.Push(outY);
             IL.Push(GetMouseLocationPtr);
@@ -434,6 +482,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetMouseLocationGlobal(int* outX, int* outY)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetMouseLocationGlobalPtr);
             IL.Push(outX);
             IL.Push(outY);
             IL.Push(GetMouseLocationGlobalPtr);
@@ -465,6 +514,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetWindowGeometry(WindowID inWindowID, int* outLeft, int* outTop, int* outRight, int* outBottom)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetWindowGeometryPtr);
             IL.Push(inWindowID);
             IL.Push(outLeft);
             IL.Push(outTop);
@@ -496,6 +546,7 @@ namespace XP.SDK.XPLM.Internal
         public static void SetWindowGeometry(WindowID inWindowID, int inLeft, int inTop, int inRight, int inBottom)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetWindowGeometryPtr);
             IL.Push(inWindowID);
             IL.Push(inLeft);
             IL.Push(inTop);
@@ -517,6 +568,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetWindowGeometryOS(WindowID inWindowID, int* outLeft, int* outTop, int* outRight, int* outBottom)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetWindowGeometryOSPtr);
             IL.Push(inWindowID);
             IL.Push(outLeft);
             IL.Push(outTop);
@@ -544,6 +596,7 @@ namespace XP.SDK.XPLM.Internal
         public static void SetWindowGeometryOS(WindowID inWindowID, int inLeft, int inTop, int inRight, int inBottom)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetWindowGeometryOSPtr);
             IL.Push(inWindowID);
             IL.Push(inLeft);
             IL.Push(inTop);
@@ -565,6 +618,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetWindowGeometryVR(WindowID inWindowID, int* outWidthBoxels, int* outHeightBoxels)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetWindowGeometryVRPtr);
             IL.Push(inWindowID);
             IL.Push(outWidthBoxels);
             IL.Push(outHeightBoxels);
@@ -587,6 +641,7 @@ namespace XP.SDK.XPLM.Internal
         public static void SetWindowGeometryVR(WindowID inWindowID, int widthBoxels, int heightBoxels)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetWindowGeometryVRPtr);
             IL.Push(inWindowID);
             IL.Push(widthBoxels);
             IL.Push(heightBoxels);
@@ -604,6 +659,7 @@ namespace XP.SDK.XPLM.Internal
         public static int GetWindowIsVisible(WindowID inWindowID)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetWindowIsVisiblePtr);
             int result;
             IL.Push(inWindowID);
             IL.Push(GetWindowIsVisiblePtr);
@@ -622,6 +678,7 @@ namespace XP.SDK.XPLM.Internal
         public static void SetWindowIsVisible(WindowID inWindowID, int inIsVisible)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetWindowIsVisiblePtr);
             IL.Push(inWindowID);
             IL.Push(inIsVisible);
             IL.Push(SetWindowIsVisiblePtr);
@@ -645,6 +702,7 @@ namespace XP.SDK.XPLM.Internal
         public static int WindowIsPoppedOut(WindowID inWindowID)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(WindowIsPoppedOutPtr);
             int result;
             IL.Push(inWindowID);
             IL.Push(WindowIsPoppedOutPtr);
@@ -670,6 +728,7 @@ namespace XP.SDK.XPLM.Internal
         public static int WindowIsInVR(WindowID inWindowID)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(WindowIsInVRPtr);
             int result;
             IL.Push(inWindowID);
             IL.Push(WindowIsInVRPtr);
@@ -708,6 +767,7 @@ namespace XP.SDK.XPLM.Internal
         public static void SetWindowGravity(WindowID inWindowID, float inLeftGravity, float inTopGravity, float inRightGravity, float inBottomGravity)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetWindowGravityPtr);
             IL.Push(inWindowID);
             IL.Push(inLeftGravity);
             IL.Push(inTopGravity);
@@ -735,6 +795,7 @@ namespace XP.SDK.XPLM.Internal
         public static void SetWindowResizingLimits(WindowID inWindowID, int inMinWidthBoxels, int inMinHeightBoxels, int inMaxWidthBoxels, int inMaxHeightBoxels)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetWindowResizingLimitsPtr);
             IL.Push(inWindowID);
             IL.Push(inMinWidthBoxels);
             IL.Push(inMinHeightBoxels);
@@ -767,6 +828,7 @@ namespace XP.SDK.XPLM.Internal
         public static void SetWindowPositioningMode(WindowID inWindowID, WindowPositioningMode inPositioningMode, int inMonitorIndex)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetWindowPositioningModePtr);
             IL.Push(inWindowID);
             IL.Push(inPositioningMode);
             IL.Push(inMonitorIndex);
@@ -787,6 +849,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void SetWindowTitle(WindowID inWindowID, byte* inWindowTitle)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetWindowTitlePtr);
             IL.Push(inWindowID);
             IL.Push(inWindowTitle);
             IL.Push(SetWindowTitlePtr);
@@ -822,6 +885,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void* GetWindowRefCon(WindowID inWindowID)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetWindowRefConPtr);
             void* result;
             IL.Push(inWindowID);
             IL.Push(GetWindowRefConPtr);
@@ -841,6 +905,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void SetWindowRefCon(WindowID inWindowID, void* inRefcon)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetWindowRefConPtr);
             IL.Push(inWindowID);
             IL.Push(inRefcon);
             IL.Push(SetWindowRefConPtr);
@@ -860,6 +925,7 @@ namespace XP.SDK.XPLM.Internal
         public static void TakeKeyboardFocus(WindowID inWindow)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(TakeKeyboardFocusPtr);
             IL.Push(inWindow);
             IL.Push(TakeKeyboardFocusPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WindowID)));
@@ -877,6 +943,7 @@ namespace XP.SDK.XPLM.Internal
         public static int HasKeyboardFocus(WindowID inWindow)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(HasKeyboardFocusPtr);
             int result;
             IL.Push(inWindow);
             IL.Push(HasKeyboardFocusPtr);
@@ -907,6 +974,7 @@ namespace XP.SDK.XPLM.Internal
         public static void BringWindowToFront(WindowID inWindow)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(BringWindowToFrontPtr);
             IL.Push(inWindow);
             IL.Push(BringWindowToFrontPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WindowID)));
@@ -930,10 +998,26 @@ namespace XP.SDK.XPLM.Internal
         public static int IsWindowInFront(WindowID inWindow)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(IsWindowInFrontPtr);
             int result;
             IL.Push(inWindow);
             IL.Push(IsWindowInFrontPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(WindowID)));
+            IL.Pop(out result);
+            return result;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe int RegisterKeySnifferPrivate(IntPtr inCallback, int inBeforeWindows, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(RegisterKeySnifferPtr);
+            int result;
+            IL.Push(inCallback);
+            IL.Push(inBeforeWindows);
+            IL.Push(inRefcon);
+            IL.Push(RegisterKeySnifferPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(KeySnifferCallback), typeof(int), typeof(void*)));
             IL.Pop(out result);
             return result;
         }
@@ -954,15 +1038,24 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int RegisterKeySniffer(KeySnifferCallback inCallback, int inBeforeWindows, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            int result;
             IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
-            IL.Push(inCallbackPtr);
+            int result = RegisterKeySnifferPrivate(inCallbackPtr, inBeforeWindows, inRefcon);
+            GC.KeepAlive(inCallbackPtr);
+            return result;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe int UnregisterKeySnifferPrivate(IntPtr inCallback, int inBeforeWindows, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(UnregisterKeySnifferPtr);
+            int result;
+            IL.Push(inCallback);
             IL.Push(inBeforeWindows);
             IL.Push(inRefcon);
-            IL.Push(RegisterKeySnifferPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(IntPtr), typeof(int), typeof(void*)));
+            IL.Push(UnregisterKeySnifferPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(KeySnifferCallback), typeof(int), typeof(void*)));
             IL.Pop(out result);
-            GC.KeepAlive(inCallback);
             return result;
         }
 
@@ -978,15 +1071,26 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int UnregisterKeySniffer(KeySnifferCallback inCallback, int inBeforeWindows, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            int result;
             IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
-            IL.Push(inCallbackPtr);
-            IL.Push(inBeforeWindows);
+            int result = UnregisterKeySnifferPrivate(inCallbackPtr, inBeforeWindows, inRefcon);
+            GC.KeepAlive(inCallbackPtr);
+            return result;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe HotKeyID RegisterHotKeyPrivate(byte inVirtualKey, KeyFlags inFlags, byte* inDescription, IntPtr inCallback, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(RegisterHotKeyPtr);
+            HotKeyID result;
+            IL.Push(inVirtualKey);
+            IL.Push(inFlags);
+            IL.Push(inDescription);
+            IL.Push(inCallback);
             IL.Push(inRefcon);
-            IL.Push(UnregisterKeySnifferPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(IntPtr), typeof(int), typeof(void*)));
+            IL.Push(RegisterHotKeyPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(HotKeyID), typeof(byte), typeof(KeyFlags), typeof(byte*), typeof(HotKeyCallback), typeof(void*)));
             IL.Pop(out result);
-            GC.KeepAlive(inCallback);
             return result;
         }
 
@@ -1005,17 +1109,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, byte* inDescription, HotKeyCallback inCallback, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            HotKeyID result;
             IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
-            IL.Push(inVirtualKey);
-            IL.Push(inFlags);
-            IL.Push(inDescription);
-            IL.Push(inCallbackPtr);
-            IL.Push(inRefcon);
-            IL.Push(RegisterHotKeyPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(HotKeyID), typeof(byte), typeof(KeyFlags), typeof(byte*), typeof(IntPtr), typeof(void*)));
-            IL.Pop(out result);
-            GC.KeepAlive(inCallback);
+            HotKeyID result = RegisterHotKeyPrivate(inVirtualKey, inFlags, inDescription, inCallbackPtr, inRefcon);
+            GC.KeepAlive(inCallbackPtr);
             return result;
         }
 
@@ -1049,6 +1145,7 @@ namespace XP.SDK.XPLM.Internal
         public static void UnregisterHotKey(HotKeyID inHotKey)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(UnregisterHotKeyPtr);
             IL.Push(inHotKey);
             IL.Push(UnregisterHotKeyPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(HotKeyID)));
@@ -1064,6 +1161,7 @@ namespace XP.SDK.XPLM.Internal
         public static int CountHotKeys()
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CountHotKeysPtr);
             int result;
             IL.Push(CountHotKeysPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int)));
@@ -1081,6 +1179,7 @@ namespace XP.SDK.XPLM.Internal
         public static HotKeyID GetNthHotKey(int inIndex)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetNthHotKeyPtr);
             HotKeyID result;
             IL.Push(inIndex);
             IL.Push(GetNthHotKeyPtr);
@@ -1100,6 +1199,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetHotKeyInfo(HotKeyID inHotKey, byte* outVirtualKey, KeyFlags* outFlags, byte* outDescription, PluginID* outPlugin)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetHotKeyInfoPtr);
             IL.Push(inHotKey);
             IL.Push(outVirtualKey);
             IL.Push(outFlags);
@@ -1120,6 +1220,7 @@ namespace XP.SDK.XPLM.Internal
         public static void SetHotKeyCombination(HotKeyID inHotKey, byte inVirtualKey, KeyFlags inFlags)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetHotKeyCombinationPtr);
             IL.Push(inHotKey);
             IL.Push(inVirtualKey);
             IL.Push(inFlags);

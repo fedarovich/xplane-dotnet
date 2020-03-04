@@ -32,5 +32,8 @@ namespace XP.SDK.XPLM.Internal
         public static bool operator ==(HotKeyID left, HotKeyID right) => left.Equals(right);
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(HotKeyID left, HotKeyID right) => !left.Equals(right);
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public override string ToString() => _value.ToString();
     }
 }

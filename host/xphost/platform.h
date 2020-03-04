@@ -21,15 +21,24 @@
 #endif
 
 #include <string>
-#include <filesystem>
 #include <tl/expected.hpp>
 
 using string_t = std::basic_string<char_t>;
 
+#if __has_include(<filesystem>)
+#include <filesystem>
 namespace fs = std::filesystem;
+#elif __has_include(<experimental/filesystem>)
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+#elif
+#include <boost/filesystem>
+namespace fs = boost::filesystem;
+#endif
 
 const fs::path get_plugin_path();
 const fs::path get_plugin_full_name();
+const fs::path get_startup_path();
 
 tl::expected<void*, std::string> load_library(const string_t& path);
 tl::expected<void*, std::string> get_export(void* handle, const std::string& name);
@@ -39,5 +48,3 @@ tl::expected<TFunc, std::string> get_export(void* handle, const std::string& nam
 {
 	return get_export(handle, name).map([] (auto f) { return (TFunc)f; });
 }
-
-void* get_library_handle(const void* symbol);

@@ -22,17 +22,17 @@ namespace XP.SDK.XPLM.Internal
         static Scenery()
         {
             const string libraryName = "XPLM";
-            CreateProbePtr = FunctionResolver.Resolve(libraryName, "XPLMCreateProbe");
-            DestroyProbePtr = FunctionResolver.Resolve(libraryName, "XPLMDestroyProbe");
-            ProbeTerrainXYZPtr = FunctionResolver.Resolve(libraryName, "XPLMProbeTerrainXYZ");
-            GetMagneticVariationPtr = FunctionResolver.Resolve(libraryName, "XPLMGetMagneticVariation");
-            DegTrueToDegMagneticPtr = FunctionResolver.Resolve(libraryName, "XPLMDegTrueToDegMagnetic");
-            DegMagneticToDegTruePtr = FunctionResolver.Resolve(libraryName, "XPLMDegMagneticToDegTrue");
-            LoadObjectPtr = FunctionResolver.Resolve(libraryName, "XPLMLoadObject");
-            LoadObjectAsyncPtr = FunctionResolver.Resolve(libraryName, "XPLMLoadObjectAsync");
-            DrawObjectsPtr = FunctionResolver.Resolve(libraryName, "XPLMDrawObjects");
-            UnloadObjectPtr = FunctionResolver.Resolve(libraryName, "XPLMUnloadObject");
-            LookupObjectsPtr = FunctionResolver.Resolve(libraryName, "XPLMLookupObjects");
+            CreateProbePtr = Lib.GetExport("XPLMCreateProbe");
+            DestroyProbePtr = Lib.GetExport("XPLMDestroyProbe");
+            ProbeTerrainXYZPtr = Lib.GetExport("XPLMProbeTerrainXYZ");
+            GetMagneticVariationPtr = Lib.GetExport("XPLMGetMagneticVariation");
+            DegTrueToDegMagneticPtr = Lib.GetExport("XPLMDegTrueToDegMagnetic");
+            DegMagneticToDegTruePtr = Lib.GetExport("XPLMDegMagneticToDegTrue");
+            LoadObjectPtr = Lib.GetExport("XPLMLoadObject");
+            LoadObjectAsyncPtr = Lib.GetExport("XPLMLoadObjectAsync");
+            DrawObjectsPtr = Lib.GetExport("XPLMDrawObjects");
+            UnloadObjectPtr = Lib.GetExport("XPLMUnloadObject");
+            LookupObjectsPtr = Lib.GetExport("XPLMLookupObjects");
         }
 
         
@@ -45,6 +45,7 @@ namespace XP.SDK.XPLM.Internal
         public static ProbeRef CreateProbe(ProbeType inProbeType)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CreateProbePtr);
             ProbeRef result;
             IL.Push(inProbeType);
             IL.Push(CreateProbePtr);
@@ -63,6 +64,7 @@ namespace XP.SDK.XPLM.Internal
         public static void DestroyProbe(ProbeRef inProbe)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DestroyProbePtr);
             IL.Push(inProbe);
             IL.Push(DestroyProbePtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(ProbeRef)));
@@ -81,6 +83,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe ProbeResult ProbeTerrainXYZ(ProbeRef inProbe, float inX, float inY, float inZ, ProbeInfo* outInfo)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(ProbeTerrainXYZPtr);
             ProbeResult result;
             IL.Push(inProbe);
             IL.Push(inX);
@@ -104,6 +107,7 @@ namespace XP.SDK.XPLM.Internal
         public static float GetMagneticVariation(double latitude, double longitude)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetMagneticVariationPtr);
             float result;
             IL.Push(latitude);
             IL.Push(longitude);
@@ -124,6 +128,7 @@ namespace XP.SDK.XPLM.Internal
         public static float DegTrueToDegMagnetic(float headingDegreesTrue)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DegTrueToDegMagneticPtr);
             float result;
             IL.Push(headingDegreesTrue);
             IL.Push(DegTrueToDegMagneticPtr);
@@ -143,6 +148,7 @@ namespace XP.SDK.XPLM.Internal
         public static float DegMagneticToDegTrue(float headingDegreesMagnetic)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DegMagneticToDegTruePtr);
             float result;
             IL.Push(headingDegreesMagnetic);
             IL.Push(DegMagneticToDegTruePtr);
@@ -181,6 +187,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe ObjectRef LoadObject(byte* inPath)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(LoadObjectPtr);
             ObjectRef result;
             IL.Push(inPath);
             IL.Push(LoadObjectPtr);
@@ -224,6 +231,18 @@ namespace XP.SDK.XPLM.Internal
             return LoadObject(inPathPtr);
         }
 
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe void LoadObjectAsyncPrivate(byte* inPath, IntPtr inCallback, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(LoadObjectAsyncPtr);
+            IL.Push(inPath);
+            IL.Push(inCallback);
+            IL.Push(inRefcon);
+            IL.Push(LoadObjectAsyncPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*), typeof(ObjectLoadedCallback), typeof(void*)));
+        }
+
         
         /// <summary>
         /// <para>
@@ -248,12 +267,8 @@ namespace XP.SDK.XPLM.Internal
         {
             IL.DeclareLocals(false);
             IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
-            IL.Push(inPath);
-            IL.Push(inCallbackPtr);
-            IL.Push(inRefcon);
-            IL.Push(LoadObjectAsyncPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*), typeof(IntPtr), typeof(void*)));
-            GC.KeepAlive(inCallback);
+            LoadObjectAsyncPrivate(inPath, inCallbackPtr, inRefcon);
+            GC.KeepAlive(inCallbackPtr);
         }
 
         
@@ -314,6 +329,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void DrawObjects(ObjectRef inObject, int inCount, DrawInfo* inLocations, int lighting, int earth_relative)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DrawObjectsPtr);
             IL.Push(inObject);
             IL.Push(inCount);
             IL.Push(inLocations);
@@ -336,9 +352,27 @@ namespace XP.SDK.XPLM.Internal
         public static void UnloadObject(ObjectRef inObject)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(UnloadObjectPtr);
             IL.Push(inObject);
             IL.Push(UnloadObjectPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(ObjectRef)));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe int LookupObjectsPrivate(byte* inPath, float inLatitude, float inLongitude, IntPtr enumerator, void* @ref)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(LookupObjectsPtr);
+            int result;
+            IL.Push(inPath);
+            IL.Push(inLatitude);
+            IL.Push(inLongitude);
+            IL.Push(enumerator);
+            IL.Push(@ref);
+            IL.Push(LookupObjectsPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(float), typeof(float), typeof(LibraryEnumeratorCallback), typeof(void*)));
+            IL.Pop(out result);
+            return result;
         }
 
         
@@ -360,17 +394,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int LookupObjects(byte* inPath, float inLatitude, float inLongitude, LibraryEnumeratorCallback enumerator, void* @ref)
         {
             IL.DeclareLocals(false);
-            int result;
             IntPtr enumeratorPtr = Marshal.GetFunctionPointerForDelegate(enumerator);
-            IL.Push(inPath);
-            IL.Push(inLatitude);
-            IL.Push(inLongitude);
-            IL.Push(enumeratorPtr);
-            IL.Push(@ref);
-            IL.Push(LookupObjectsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(float), typeof(float), typeof(IntPtr), typeof(void*)));
-            IL.Pop(out result);
-            GC.KeepAlive(enumerator);
+            int result = LookupObjectsPrivate(inPath, inLatitude, inLongitude, enumeratorPtr, @ref);
+            GC.KeepAlive(enumeratorPtr);
             return result;
         }
 

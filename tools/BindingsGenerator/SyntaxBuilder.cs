@@ -200,6 +200,17 @@ namespace BindingsGenerator
                     ArgumentList(SingletonSeparatedList(Argument(parameter)))));
         }
 
+        public static ExpressionStatementSyntax CallGuard(IdentifierNameSyntax identifier)
+        {
+            return ExpressionStatement(
+                InvocationExpression(
+                    MemberAccessExpression(
+                        SyntaxKind.SimpleMemberAccessExpression,
+                        IdentifierName("Guard"),
+                        IdentifierName("NotNull")),
+                    ArgumentList(SingletonSeparatedList(Argument(identifier)))));
+        }
+
         public static LocalDeclarationStatementSyntax DeclareSpanForUtf8Variable(string utf8Name, string utf16Name)
         {
             return LocalDeclarationStatement(
@@ -240,6 +251,16 @@ namespace BindingsGenerator
                                     Argument(IdentifierName(utf16Name)),
                                     Argument(IdentifierName(utf8Name)))
                         ))));
+        }
+
+        public static T AddUnsafeIfNeeded<T>(this T method) where T : BaseMethodDeclarationSyntax
+        {
+            if (method.DescendantNodes().OfType<PointerTypeSyntax>().Any())
+            {
+                method = (T)method.AddModifiers(Token(SyntaxKind.UnsafeKeyword));
+            }
+
+            return method;
         }
 
         [SuppressMessage("ReSharper", "CoVariantArrayConversion")]

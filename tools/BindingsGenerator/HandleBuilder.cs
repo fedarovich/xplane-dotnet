@@ -73,7 +73,7 @@ namespace BindingsGenerator
                                         field)))
                             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken)),
 
-                        MethodDeclaration(PredefinedType(Token(SyntaxKind.BoolKeyword)), "Equals")
+                        MethodDeclaration(PredefinedType(Token(SyntaxKind.BoolKeyword)), nameof(Equals))
                             .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword))
                             .AddParameterListParameters(Parameter(Identifier("obj")).WithType(PredefinedType(Token(SyntaxKind.ObjectKeyword))))
                             .AddAggressiveInlining()
@@ -88,7 +88,7 @@ namespace BindingsGenerator
                                         IdentifierName("Equals")).AddArgumentListArguments(Argument(IdentifierName("other"))))))
                             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken)),
 
-                        MethodDeclaration(PredefinedType(Token(SyntaxKind.IntKeyword)), "GetHashCode")
+                        MethodDeclaration(PredefinedType(Token(SyntaxKind.IntKeyword)), nameof(GetHashCode))
                             .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword))
                             .AddAggressiveInlining()
                             .WithExpressionBody(ArrowExpressionClause(
@@ -136,6 +136,17 @@ namespace BindingsGenerator
                                                 IdentifierName("left"),
                                                 IdentifierName("Equals")))
                                         .AddArgumentListArguments(Argument(IdentifierName("right"))))))
+                            .WithSemicolonToken(Token(SyntaxKind.SemicolonToken)),
+
+                        MethodDeclaration(PredefinedType(Token(SyntaxKind.StringKeyword)), nameof(ToString))
+                            .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.OverrideKeyword))
+                            .AddAggressiveInlining()
+                            .WithExpressionBody(ArrowExpressionClause(
+                                InvocationExpression(
+                                    MemberAccessExpression(
+                                        SyntaxKind.SimpleMemberAccessExpression,
+                                        IdentifierName("_value"),
+                                        IdentifierName(nameof(ToString))))))
                             .WithSemicolonToken(Token(SyntaxKind.SemicolonToken))
                         );
 

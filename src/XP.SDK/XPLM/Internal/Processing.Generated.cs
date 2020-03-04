@@ -19,14 +19,14 @@ namespace XP.SDK.XPLM.Internal
         static Processing()
         {
             const string libraryName = "XPLM";
-            GetElapsedTimePtr = FunctionResolver.Resolve(libraryName, "XPLMGetElapsedTime");
-            GetCycleNumberPtr = FunctionResolver.Resolve(libraryName, "XPLMGetCycleNumber");
-            RegisterFlightLoopCallbackPtr = FunctionResolver.Resolve(libraryName, "XPLMRegisterFlightLoopCallback");
-            UnregisterFlightLoopCallbackPtr = FunctionResolver.Resolve(libraryName, "XPLMUnregisterFlightLoopCallback");
-            SetFlightLoopCallbackIntervalPtr = FunctionResolver.Resolve(libraryName, "XPLMSetFlightLoopCallbackInterval");
-            CreateFlightLoopPtr = FunctionResolver.Resolve(libraryName, "XPLMCreateFlightLoop");
-            DestroyFlightLoopPtr = FunctionResolver.Resolve(libraryName, "XPLMDestroyFlightLoop");
-            ScheduleFlightLoopPtr = FunctionResolver.Resolve(libraryName, "XPLMScheduleFlightLoop");
+            GetElapsedTimePtr = Lib.GetExport("XPLMGetElapsedTime");
+            GetCycleNumberPtr = Lib.GetExport("XPLMGetCycleNumber");
+            RegisterFlightLoopCallbackPtr = Lib.GetExport("XPLMRegisterFlightLoopCallback");
+            UnregisterFlightLoopCallbackPtr = Lib.GetExport("XPLMUnregisterFlightLoopCallback");
+            SetFlightLoopCallbackIntervalPtr = Lib.GetExport("XPLMSetFlightLoopCallbackInterval");
+            CreateFlightLoopPtr = Lib.GetExport("XPLMCreateFlightLoop");
+            DestroyFlightLoopPtr = Lib.GetExport("XPLMDestroyFlightLoop");
+            ScheduleFlightLoopPtr = Lib.GetExport("XPLMScheduleFlightLoop");
         }
 
         
@@ -40,6 +40,7 @@ namespace XP.SDK.XPLM.Internal
         public static float GetElapsedTime()
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetElapsedTimePtr);
             float result;
             IL.Push(GetElapsedTimePtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(float)));
@@ -58,11 +59,24 @@ namespace XP.SDK.XPLM.Internal
         public static int GetCycleNumber()
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetCycleNumberPtr);
             int result;
             IL.Push(GetCycleNumberPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int)));
             IL.Pop(out result);
             return result;
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe void RegisterFlightLoopCallbackPrivate(IntPtr inFlightLoop, float inInterval, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(RegisterFlightLoopCallbackPtr);
+            IL.Push(inFlightLoop);
+            IL.Push(inInterval);
+            IL.Push(inRefcon);
+            IL.Push(RegisterFlightLoopCallbackPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(FlightLoopCallback), typeof(float), typeof(void*)));
         }
 
         
@@ -81,12 +95,19 @@ namespace XP.SDK.XPLM.Internal
         {
             IL.DeclareLocals(false);
             IntPtr inFlightLoopPtr = Marshal.GetFunctionPointerForDelegate(inFlightLoop);
-            IL.Push(inFlightLoopPtr);
-            IL.Push(inInterval);
+            RegisterFlightLoopCallbackPrivate(inFlightLoopPtr, inInterval, inRefcon);
+            GC.KeepAlive(inFlightLoopPtr);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe void UnregisterFlightLoopCallbackPrivate(IntPtr inFlightLoop, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(UnregisterFlightLoopCallbackPtr);
+            IL.Push(inFlightLoop);
             IL.Push(inRefcon);
-            IL.Push(RegisterFlightLoopCallbackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(float), typeof(void*)));
-            GC.KeepAlive(inFlightLoop);
+            IL.Push(UnregisterFlightLoopCallbackPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(FlightLoopCallback), typeof(void*)));
         }
 
         
@@ -102,11 +123,21 @@ namespace XP.SDK.XPLM.Internal
         {
             IL.DeclareLocals(false);
             IntPtr inFlightLoopPtr = Marshal.GetFunctionPointerForDelegate(inFlightLoop);
-            IL.Push(inFlightLoopPtr);
+            UnregisterFlightLoopCallbackPrivate(inFlightLoopPtr, inRefcon);
+            GC.KeepAlive(inFlightLoopPtr);
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe void SetFlightLoopCallbackIntervalPrivate(IntPtr inFlightLoop, float inInterval, int inRelativeToNow, void* inRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(SetFlightLoopCallbackIntervalPtr);
+            IL.Push(inFlightLoop);
+            IL.Push(inInterval);
+            IL.Push(inRelativeToNow);
             IL.Push(inRefcon);
-            IL.Push(UnregisterFlightLoopCallbackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(void*)));
-            GC.KeepAlive(inFlightLoop);
+            IL.Push(SetFlightLoopCallbackIntervalPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(FlightLoopCallback), typeof(float), typeof(int), typeof(void*)));
         }
 
         
@@ -129,13 +160,8 @@ namespace XP.SDK.XPLM.Internal
         {
             IL.DeclareLocals(false);
             IntPtr inFlightLoopPtr = Marshal.GetFunctionPointerForDelegate(inFlightLoop);
-            IL.Push(inFlightLoopPtr);
-            IL.Push(inInterval);
-            IL.Push(inRelativeToNow);
-            IL.Push(inRefcon);
-            IL.Push(SetFlightLoopCallbackIntervalPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(float), typeof(int), typeof(void*)));
-            GC.KeepAlive(inFlightLoop);
+            SetFlightLoopCallbackIntervalPrivate(inFlightLoopPtr, inInterval, inRelativeToNow, inRefcon);
+            GC.KeepAlive(inFlightLoopPtr);
         }
 
         
@@ -150,6 +176,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe FlightLoopID CreateFlightLoop(CreateFlightLoop* inParams)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CreateFlightLoopPtr);
             FlightLoopID result;
             IL.Push(inParams);
             IL.Push(CreateFlightLoopPtr);
@@ -168,6 +195,7 @@ namespace XP.SDK.XPLM.Internal
         public static void DestroyFlightLoop(FlightLoopID inFlightLoopID)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DestroyFlightLoopPtr);
             IL.Push(inFlightLoopID);
             IL.Push(DestroyFlightLoopPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(FlightLoopID)));
@@ -217,6 +245,7 @@ namespace XP.SDK.XPLM.Internal
         public static void ScheduleFlightLoop(FlightLoopID inFlightLoopID, float inInterval, int inRelativeToNow)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(ScheduleFlightLoopPtr);
             IL.Push(inFlightLoopID);
             IL.Push(inInterval);
             IL.Push(inRelativeToNow);

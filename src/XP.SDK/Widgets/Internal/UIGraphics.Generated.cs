@@ -18,13 +18,13 @@ namespace XP.SDK.Widgets.Internal
         static UIGraphics()
         {
             const string libraryName = "Widgets";
-            DrawWindowPtr = FunctionResolver.Resolve(libraryName, "XPDrawWindow");
-            GetWindowDefaultDimensionsPtr = FunctionResolver.Resolve(libraryName, "XPGetWindowDefaultDimensions");
-            DrawElementPtr = FunctionResolver.Resolve(libraryName, "XPDrawElement");
-            GetElementDefaultDimensionsPtr = FunctionResolver.Resolve(libraryName, "XPGetElementDefaultDimensions");
-            DrawTrackPtr = FunctionResolver.Resolve(libraryName, "XPDrawTrack");
-            GetTrackDefaultDimensionsPtr = FunctionResolver.Resolve(libraryName, "XPGetTrackDefaultDimensions");
-            GetTrackMetricsPtr = FunctionResolver.Resolve(libraryName, "XPGetTrackMetrics");
+            DrawWindowPtr = Lib.GetExport("XPDrawWindow");
+            GetWindowDefaultDimensionsPtr = Lib.GetExport("XPGetWindowDefaultDimensions");
+            DrawElementPtr = Lib.GetExport("XPDrawElement");
+            GetElementDefaultDimensionsPtr = Lib.GetExport("XPGetElementDefaultDimensions");
+            DrawTrackPtr = Lib.GetExport("XPDrawTrack");
+            GetTrackDefaultDimensionsPtr = Lib.GetExport("XPGetTrackDefaultDimensions");
+            GetTrackMetricsPtr = Lib.GetExport("XPGetTrackMetrics");
         }
 
         
@@ -40,6 +40,7 @@ namespace XP.SDK.Widgets.Internal
         public static void DrawWindow(int inX1, int inY1, int inX2, int inY2, WindowStyle inStyle)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DrawWindowPtr);
             IL.Push(inX1);
             IL.Push(inY1);
             IL.Push(inX2);
@@ -60,6 +61,7 @@ namespace XP.SDK.Widgets.Internal
         public static unsafe void GetWindowDefaultDimensions(WindowStyle inStyle, int* outWidth, int* outHeight)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetWindowDefaultDimensionsPtr);
             IL.Push(inStyle);
             IL.Push(outWidth);
             IL.Push(outHeight);
@@ -81,6 +83,7 @@ namespace XP.SDK.Widgets.Internal
         public static void DrawElement(int inX1, int inY1, int inX2, int inY2, ElementStyle inStyle, int inLit)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DrawElementPtr);
             IL.Push(inX1);
             IL.Push(inY1);
             IL.Push(inX2);
@@ -103,6 +106,7 @@ namespace XP.SDK.Widgets.Internal
         public static unsafe void GetElementDefaultDimensions(ElementStyle inStyle, int* outWidth, int* outHeight, int* outCanBeLit)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetElementDefaultDimensionsPtr);
             IL.Push(inStyle);
             IL.Push(outWidth);
             IL.Push(outHeight);
@@ -125,6 +129,7 @@ namespace XP.SDK.Widgets.Internal
         public static void DrawTrack(int inX1, int inY1, int inX2, int inY2, int inMin, int inMax, int inValue, TrackStyle inTrackStyle, int inLit)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(DrawTrackPtr);
             IL.Push(inX1);
             IL.Push(inY1);
             IL.Push(inX2);
@@ -150,6 +155,7 @@ namespace XP.SDK.Widgets.Internal
         public static unsafe void GetTrackDefaultDimensions(TrackStyle inStyle, int* outWidth, int* outCanBeLit)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetTrackDefaultDimensionsPtr);
             IL.Push(inStyle);
             IL.Push(outWidth);
             IL.Push(outCanBeLit);
@@ -179,6 +185,7 @@ namespace XP.SDK.Widgets.Internal
         public static unsafe void GetTrackMetrics(int inX1, int inY1, int inX2, int inY2, int inMin, int inMax, int inValue, TrackStyle inTrackStyle, int* outIsVertical, int* outDownBtnSize, int* outDownPageSize, int* outThumbSize, int* outUpPageSize, int* outUpBtnSize)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetTrackMetricsPtr);
             IL.Push(inX1);
             IL.Push(inY1);
             IL.Push(inX2);

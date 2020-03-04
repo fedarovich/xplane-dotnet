@@ -13,8 +13,7 @@ struct start_parameters
     char* name;
     char* sig;
     char* desc;
-    const void* xplm_handle;
-    const void* widgets_handle;
+    const char* startup_path;
     const char* plugin_path;
 };
 

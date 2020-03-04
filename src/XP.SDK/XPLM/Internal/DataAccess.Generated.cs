@@ -31,26 +31,26 @@ namespace XP.SDK.XPLM.Internal
         static DataAccess()
         {
             const string libraryName = "XPLM";
-            FindDataRefPtr = FunctionResolver.Resolve(libraryName, "XPLMFindDataRef");
-            CanWriteDataRefPtr = FunctionResolver.Resolve(libraryName, "XPLMCanWriteDataRef");
-            IsDataRefGoodPtr = FunctionResolver.Resolve(libraryName, "XPLMIsDataRefGood");
-            GetDataRefTypesPtr = FunctionResolver.Resolve(libraryName, "XPLMGetDataRefTypes");
-            GetDataiPtr = FunctionResolver.Resolve(libraryName, "XPLMGetDatai");
-            SetDataiPtr = FunctionResolver.Resolve(libraryName, "XPLMSetDatai");
-            GetDatafPtr = FunctionResolver.Resolve(libraryName, "XPLMGetDataf");
-            SetDatafPtr = FunctionResolver.Resolve(libraryName, "XPLMSetDataf");
-            GetDatadPtr = FunctionResolver.Resolve(libraryName, "XPLMGetDatad");
-            SetDatadPtr = FunctionResolver.Resolve(libraryName, "XPLMSetDatad");
-            GetDataviPtr = FunctionResolver.Resolve(libraryName, "XPLMGetDatavi");
-            SetDataviPtr = FunctionResolver.Resolve(libraryName, "XPLMSetDatavi");
-            GetDatavfPtr = FunctionResolver.Resolve(libraryName, "XPLMGetDatavf");
-            SetDatavfPtr = FunctionResolver.Resolve(libraryName, "XPLMSetDatavf");
-            GetDatabPtr = FunctionResolver.Resolve(libraryName, "XPLMGetDatab");
-            SetDatabPtr = FunctionResolver.Resolve(libraryName, "XPLMSetDatab");
-            RegisterDataAccessorPtr = FunctionResolver.Resolve(libraryName, "XPLMRegisterDataAccessor");
-            UnregisterDataAccessorPtr = FunctionResolver.Resolve(libraryName, "XPLMUnregisterDataAccessor");
-            ShareDataPtr = FunctionResolver.Resolve(libraryName, "XPLMShareData");
-            UnshareDataPtr = FunctionResolver.Resolve(libraryName, "XPLMUnshareData");
+            FindDataRefPtr = Lib.GetExport("XPLMFindDataRef");
+            CanWriteDataRefPtr = Lib.GetExport("XPLMCanWriteDataRef");
+            IsDataRefGoodPtr = Lib.GetExport("XPLMIsDataRefGood");
+            GetDataRefTypesPtr = Lib.GetExport("XPLMGetDataRefTypes");
+            GetDataiPtr = Lib.GetExport("XPLMGetDatai");
+            SetDataiPtr = Lib.GetExport("XPLMSetDatai");
+            GetDatafPtr = Lib.GetExport("XPLMGetDataf");
+            SetDatafPtr = Lib.GetExport("XPLMSetDataf");
+            GetDatadPtr = Lib.GetExport("XPLMGetDatad");
+            SetDatadPtr = Lib.GetExport("XPLMSetDatad");
+            GetDataviPtr = Lib.GetExport("XPLMGetDatavi");
+            SetDataviPtr = Lib.GetExport("XPLMSetDatavi");
+            GetDatavfPtr = Lib.GetExport("XPLMGetDatavf");
+            SetDatavfPtr = Lib.GetExport("XPLMSetDatavf");
+            GetDatabPtr = Lib.GetExport("XPLMGetDatab");
+            SetDatabPtr = Lib.GetExport("XPLMSetDatab");
+            RegisterDataAccessorPtr = Lib.GetExport("XPLMRegisterDataAccessor");
+            UnregisterDataAccessorPtr = Lib.GetExport("XPLMUnregisterDataAccessor");
+            ShareDataPtr = Lib.GetExport("XPLMShareData");
+            UnshareDataPtr = Lib.GetExport("XPLMUnshareData");
         }
 
         
@@ -73,6 +73,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe DataRef FindDataRef(byte* inDataRefName)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(FindDataRefPtr);
             DataRef result;
             IL.Push(inDataRefName);
             IL.Push(FindDataRefPtr);
@@ -117,6 +118,7 @@ namespace XP.SDK.XPLM.Internal
         public static int CanWriteDataRef(DataRef inDataRef)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(CanWriteDataRefPtr);
             int result;
             IL.Push(inDataRef);
             IL.Push(CanWriteDataRefPtr);
@@ -145,6 +147,7 @@ namespace XP.SDK.XPLM.Internal
         public static int IsDataRefGood(DataRef inDataRef)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(IsDataRefGoodPtr);
             int result;
             IL.Push(inDataRef);
             IL.Push(IsDataRefGoodPtr);
@@ -164,6 +167,7 @@ namespace XP.SDK.XPLM.Internal
         public static DataTypeID GetDataRefTypes(DataRef inDataRef)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetDataRefTypesPtr);
             DataTypeID result;
             IL.Push(inDataRef);
             IL.Push(GetDataRefTypesPtr);
@@ -184,6 +188,7 @@ namespace XP.SDK.XPLM.Internal
         public static int GetDatai(DataRef inDataRef)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetDataiPtr);
             int result;
             IL.Push(inDataRef);
             IL.Push(GetDataiPtr);
@@ -204,6 +209,7 @@ namespace XP.SDK.XPLM.Internal
         public static void SetDatai(DataRef inDataRef, int inValue)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetDataiPtr);
             IL.Push(inDataRef);
             IL.Push(inValue);
             IL.Push(SetDataiPtr);
@@ -222,6 +228,7 @@ namespace XP.SDK.XPLM.Internal
         public static float GetDataf(DataRef inDataRef)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetDatafPtr);
             float result;
             IL.Push(inDataRef);
             IL.Push(GetDatafPtr);
@@ -242,6 +249,7 @@ namespace XP.SDK.XPLM.Internal
         public static void SetDataf(DataRef inDataRef, float inValue)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetDatafPtr);
             IL.Push(inDataRef);
             IL.Push(inValue);
             IL.Push(SetDatafPtr);
@@ -260,6 +268,7 @@ namespace XP.SDK.XPLM.Internal
         public static double GetDatad(DataRef inDataRef)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetDatadPtr);
             double result;
             IL.Push(inDataRef);
             IL.Push(GetDatadPtr);
@@ -280,6 +289,7 @@ namespace XP.SDK.XPLM.Internal
         public static void SetDatad(DataRef inDataRef, double inValue)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetDatadPtr);
             IL.Push(inDataRef);
             IL.Push(inValue);
             IL.Push(SetDatadPtr);
@@ -309,6 +319,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int GetDatavi(DataRef inDataRef, int* outValues, int inOffset, int inMax)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetDataviPtr);
             int result;
             IL.Push(inDataRef);
             IL.Push(outValues);
@@ -339,6 +350,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void SetDatavi(DataRef inDataRef, int* inValues, int inoffset, int inCount)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetDataviPtr);
             IL.Push(inDataRef);
             IL.Push(inValues);
             IL.Push(inoffset);
@@ -371,6 +383,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int GetDatavf(DataRef inDataRef, float* outValues, int inOffset, int inMax)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetDatavfPtr);
             int result;
             IL.Push(inDataRef);
             IL.Push(outValues);
@@ -401,6 +414,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void SetDatavf(DataRef inDataRef, float* inValues, int inoffset, int inCount)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetDatavfPtr);
             IL.Push(inDataRef);
             IL.Push(inValues);
             IL.Push(inoffset);
@@ -432,6 +446,7 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int GetDatab(DataRef inDataRef, void* outValue, int inOffset, int inMaxBytes)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(GetDatabPtr);
             int result;
             IL.Push(inDataRef);
             IL.Push(outValue);
@@ -462,12 +477,42 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void SetDatab(DataRef inDataRef, void* inValue, int inOffset, int inLength)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(SetDatabPtr);
             IL.Push(inDataRef);
             IL.Push(inValue);
             IL.Push(inOffset);
             IL.Push(inLength);
             IL.Push(SetDatabPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(DataRef), typeof(void*), typeof(int), typeof(int)));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe DataRef RegisterDataAccessorPrivate(byte* inDataName, DataTypeID inDataType, int inIsWritable, IntPtr inReadInt, IntPtr inWriteInt, IntPtr inReadFloat, IntPtr inWriteFloat, IntPtr inReadDouble, IntPtr inWriteDouble, IntPtr inReadIntArray, IntPtr inWriteIntArray, IntPtr inReadFloatArray, IntPtr inWriteFloatArray, IntPtr inReadData, IntPtr inWriteData, void* inReadRefcon, void* inWriteRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(RegisterDataAccessorPtr);
+            DataRef result;
+            IL.Push(inDataName);
+            IL.Push(inDataType);
+            IL.Push(inIsWritable);
+            IL.Push(inReadInt);
+            IL.Push(inWriteInt);
+            IL.Push(inReadFloat);
+            IL.Push(inWriteFloat);
+            IL.Push(inReadDouble);
+            IL.Push(inWriteDouble);
+            IL.Push(inReadIntArray);
+            IL.Push(inWriteIntArray);
+            IL.Push(inReadFloatArray);
+            IL.Push(inWriteFloatArray);
+            IL.Push(inReadData);
+            IL.Push(inWriteData);
+            IL.Push(inReadRefcon);
+            IL.Push(inWriteRefcon);
+            IL.Push(RegisterDataAccessorPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(DataRef), typeof(byte*), typeof(DataTypeID), typeof(int), typeof(GetDataiCallback), typeof(SetDataiCallback), typeof(GetDatafCallback), typeof(SetDatafCallback), typeof(GetDatadCallback), typeof(SetDatadCallback), typeof(GetDataviCallback), typeof(SetDataviCallback), typeof(GetDatavfCallback), typeof(SetDatavfCallback), typeof(GetDatabCallback), typeof(SetDatabCallback), typeof(void*), typeof(void*)));
+            IL.Pop(out result);
+            return result;
         }
 
         
@@ -489,7 +534,6 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe DataRef RegisterDataAccessor(byte* inDataName, DataTypeID inDataType, int inIsWritable, GetDataiCallback inReadInt, SetDataiCallback inWriteInt, GetDatafCallback inReadFloat, SetDatafCallback inWriteFloat, GetDatadCallback inReadDouble, SetDatadCallback inWriteDouble, GetDataviCallback inReadIntArray, SetDataviCallback inWriteIntArray, GetDatavfCallback inReadFloatArray, SetDatavfCallback inWriteFloatArray, GetDatabCallback inReadData, SetDatabCallback inWriteData, void* inReadRefcon, void* inWriteRefcon)
         {
             IL.DeclareLocals(false);
-            DataRef result;
             IntPtr inReadIntPtr = Marshal.GetFunctionPointerForDelegate(inReadInt);
             IntPtr inWriteIntPtr = Marshal.GetFunctionPointerForDelegate(inWriteInt);
             IntPtr inReadFloatPtr = Marshal.GetFunctionPointerForDelegate(inReadFloat);
@@ -502,38 +546,19 @@ namespace XP.SDK.XPLM.Internal
             IntPtr inWriteFloatArrayPtr = Marshal.GetFunctionPointerForDelegate(inWriteFloatArray);
             IntPtr inReadDataPtr = Marshal.GetFunctionPointerForDelegate(inReadData);
             IntPtr inWriteDataPtr = Marshal.GetFunctionPointerForDelegate(inWriteData);
-            IL.Push(inDataName);
-            IL.Push(inDataType);
-            IL.Push(inIsWritable);
-            IL.Push(inReadIntPtr);
-            IL.Push(inWriteIntPtr);
-            IL.Push(inReadFloatPtr);
-            IL.Push(inWriteFloatPtr);
-            IL.Push(inReadDoublePtr);
-            IL.Push(inWriteDoublePtr);
-            IL.Push(inReadIntArrayPtr);
-            IL.Push(inWriteIntArrayPtr);
-            IL.Push(inReadFloatArrayPtr);
-            IL.Push(inWriteFloatArrayPtr);
-            IL.Push(inReadDataPtr);
-            IL.Push(inWriteDataPtr);
-            IL.Push(inReadRefcon);
-            IL.Push(inWriteRefcon);
-            IL.Push(RegisterDataAccessorPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(DataRef), typeof(byte*), typeof(DataTypeID), typeof(int), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(void*), typeof(void*)));
-            IL.Pop(out result);
-            GC.KeepAlive(inWriteData);
-            GC.KeepAlive(inReadData);
-            GC.KeepAlive(inWriteFloatArray);
-            GC.KeepAlive(inReadFloatArray);
-            GC.KeepAlive(inWriteIntArray);
-            GC.KeepAlive(inReadIntArray);
-            GC.KeepAlive(inWriteDouble);
-            GC.KeepAlive(inReadDouble);
-            GC.KeepAlive(inWriteFloat);
-            GC.KeepAlive(inReadFloat);
-            GC.KeepAlive(inWriteInt);
-            GC.KeepAlive(inReadInt);
+            DataRef result = RegisterDataAccessorPrivate(inDataName, inDataType, inIsWritable, inReadIntPtr, inWriteIntPtr, inReadFloatPtr, inWriteFloatPtr, inReadDoublePtr, inWriteDoublePtr, inReadIntArrayPtr, inWriteIntArrayPtr, inReadFloatArrayPtr, inWriteFloatArrayPtr, inReadDataPtr, inWriteDataPtr, inReadRefcon, inWriteRefcon);
+            GC.KeepAlive(inWriteDataPtr);
+            GC.KeepAlive(inReadDataPtr);
+            GC.KeepAlive(inWriteFloatArrayPtr);
+            GC.KeepAlive(inReadFloatArrayPtr);
+            GC.KeepAlive(inWriteIntArrayPtr);
+            GC.KeepAlive(inReadIntArrayPtr);
+            GC.KeepAlive(inWriteDoublePtr);
+            GC.KeepAlive(inReadDoublePtr);
+            GC.KeepAlive(inWriteFloatPtr);
+            GC.KeepAlive(inReadFloatPtr);
+            GC.KeepAlive(inWriteIntPtr);
+            GC.KeepAlive(inReadIntPtr);
             return result;
         }
 
@@ -580,9 +605,26 @@ namespace XP.SDK.XPLM.Internal
         public static void UnregisterDataAccessor(DataRef inDataRef)
         {
             IL.DeclareLocals(false);
+            Guard.NotNull(UnregisterDataAccessorPtr);
             IL.Push(inDataRef);
             IL.Push(UnregisterDataAccessorPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(DataRef)));
+        }
+
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe int ShareDataPrivate(byte* inDataName, DataTypeID inDataType, IntPtr inNotificationFunc, void* inNotificationRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(ShareDataPtr);
+            int result;
+            IL.Push(inDataName);
+            IL.Push(inDataType);
+            IL.Push(inNotificationFunc);
+            IL.Push(inNotificationRefcon);
+            IL.Push(ShareDataPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(DataTypeID), typeof(DataChangedCallback), typeof(void*)));
+            IL.Pop(out result);
+            return result;
         }
 
         
@@ -611,16 +653,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int ShareData(byte* inDataName, DataTypeID inDataType, DataChangedCallback inNotificationFunc, void* inNotificationRefcon)
         {
             IL.DeclareLocals(false);
-            int result;
             IntPtr inNotificationFuncPtr = Marshal.GetFunctionPointerForDelegate(inNotificationFunc);
-            IL.Push(inDataName);
-            IL.Push(inDataType);
-            IL.Push(inNotificationFuncPtr);
-            IL.Push(inNotificationRefcon);
-            IL.Push(ShareDataPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(DataTypeID), typeof(IntPtr), typeof(void*)));
-            IL.Pop(out result);
-            GC.KeepAlive(inNotificationFunc);
+            int result = ShareDataPrivate(inDataName, inDataType, inNotificationFuncPtr, inNotificationRefcon);
+            GC.KeepAlive(inNotificationFuncPtr);
             return result;
         }
 
@@ -655,6 +690,22 @@ namespace XP.SDK.XPLM.Internal
             return ShareData(inDataNamePtr, inDataType, inNotificationFunc, inNotificationRefcon);
         }
 
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        private static unsafe int UnshareDataPrivate(byte* inDataName, DataTypeID inDataType, IntPtr inNotificationFunc, void* inNotificationRefcon)
+        {
+            IL.DeclareLocals(false);
+            Guard.NotNull(UnshareDataPtr);
+            int result;
+            IL.Push(inDataName);
+            IL.Push(inDataType);
+            IL.Push(inNotificationFunc);
+            IL.Push(inNotificationRefcon);
+            IL.Push(UnshareDataPtr);
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(DataTypeID), typeof(DataChangedCallback), typeof(void*)));
+            IL.Pop(out result);
+            return result;
+        }
+
         
         /// <summary>
         /// <para>
@@ -668,16 +719,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int UnshareData(byte* inDataName, DataTypeID inDataType, DataChangedCallback inNotificationFunc, void* inNotificationRefcon)
         {
             IL.DeclareLocals(false);
-            int result;
             IntPtr inNotificationFuncPtr = Marshal.GetFunctionPointerForDelegate(inNotificationFunc);
-            IL.Push(inDataName);
-            IL.Push(inDataType);
-            IL.Push(inNotificationFuncPtr);
-            IL.Push(inNotificationRefcon);
-            IL.Push(UnshareDataPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(DataTypeID), typeof(IntPtr), typeof(void*)));
-            IL.Pop(out result);
-            GC.KeepAlive(inNotificationFunc);
+            int result = UnshareDataPrivate(inDataName, inDataType, inNotificationFuncPtr, inNotificationRefcon);
+            GC.KeepAlive(inNotificationFuncPtr);
             return result;
         }
 
