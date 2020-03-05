@@ -17,7 +17,6 @@ namespace XP.SDK.Widgets.Internal
 
         static UIGraphics()
         {
-            const string libraryName = "Widgets";
             DrawWindowPtr = Lib.GetExport("XPDrawWindow");
             GetWindowDefaultDimensionsPtr = Lib.GetExport("XPGetWindowDefaultDimensions");
             DrawElementPtr = Lib.GetExport("XPDrawElement");

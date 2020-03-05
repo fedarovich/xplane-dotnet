@@ -4660,6 +4660,27 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Window.OnDrawWindow">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.XPLM.Window.OnMouseLeftButtonEvent(System.Int32,System.Int32,XP.SDK.XPLM.MouseStatus)">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.XPLM.Window.OnMouseRightButtonEvent(System.Int32,System.Int32,XP.SDK.XPLM.MouseStatus)">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.XPLM.Window.OnMouseWheelEvent(System.Int32,System.Int32,XP.SDK.XPLM.MouseWheel,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.XPLM.Window.OnKeyEvent(System.Byte,XP.SDK.XPLM.KeyFlags,System.Byte,System.Boolean)">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.XPLM.Window.OnCursorRequested(System.Int32,System.Int32)">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.Dispose">
+            <inheritdoc />
+        </member>
         <member name="T:XP.SDK.XPLM.WindowDecoration">
             <summary>
             <para>

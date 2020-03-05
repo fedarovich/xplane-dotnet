@@ -21,7 +21,6 @@ namespace XP.SDK.XPLM.Internal
 
         static Graphics()
         {
-            const string libraryName = "XPLM";
             SetGraphicsStatePtr = Lib.GetExport("XPLMSetGraphicsState");
             BindTexture2dPtr = Lib.GetExport("XPLMBindTexture2d");
             GenerateTextureNumbersPtr = Lib.GetExport("XPLMGenerateTextureNumbers");

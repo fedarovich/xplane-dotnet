@@ -14,10 +14,6 @@ namespace XP.SDK
             Bottom = bottom;
         }
 
-        public static Rect FromSize(int left, int top, int width, int height) => new Rect(left, top, left + width, top + height);
-
-        public static Rect FromSize(int left, int top, in Size size) => new Rect(left, top, left + size.Width, top + size.Height);
-
         public int Left { get; }
 
         public int Top { get; }
@@ -28,7 +24,7 @@ namespace XP.SDK
 
         public int Width => Right - Left;
 
-        public int Height => Bottom - Top;
+        public int Height => Top - Bottom;
 
         public bool Equals(Rect other) => Left == other.Left && Top == other.Top && Right == other.Right && Bottom == other.Bottom;
 

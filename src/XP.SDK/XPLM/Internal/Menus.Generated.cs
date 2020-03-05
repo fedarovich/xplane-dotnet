@@ -23,7 +23,6 @@ namespace XP.SDK.XPLM.Internal
 
         static Menus()
         {
-            const string libraryName = "XPLM";
             FindPluginsMenuPtr = Lib.GetExport("XPLMFindPluginsMenu");
             FindAircraftMenuPtr = Lib.GetExport("XPLMFindAircraftMenu");
             CreateMenuPtr = Lib.GetExport("XPLMCreateMenu");

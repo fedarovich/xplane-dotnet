@@ -27,7 +27,6 @@ namespace XP.SDK.XPLM.Internal
 
         static Navigation()
         {
-            const string libraryName = "XPLM";
             GetFirstNavAidPtr = Lib.GetExport("XPLMGetFirstNavAid");
             GetNextNavAidPtr = Lib.GetExport("XPLMGetNextNavAid");
             FindFirstNavAidOfTypePtr = Lib.GetExport("XPLMFindFirstNavAidOfType");

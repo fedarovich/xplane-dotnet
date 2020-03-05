@@ -25,7 +25,6 @@ namespace XP.SDK.XPLM.Internal
 
         static Plugin()
         {
-            const string libraryName = "XPLM";
             GetMyIDPtr = Lib.GetExport("XPLMGetMyID");
             CountPluginsPtr = Lib.GetExport("XPLMCountPlugins");
             GetNthPluginPtr = Lib.GetExport("XPLMGetNthPlugin");

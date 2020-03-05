@@ -20,7 +20,6 @@ namespace XP.SDK.XPLM.Internal
 
         static Map()
         {
-            const string libraryName = "XPLM";
             CreateMapLayerPtr = Lib.GetExport("XPLMCreateMapLayer");
             DestroyMapLayerPtr = Lib.GetExport("XPLMDestroyMapLayer");
             RegisterMapCreationHookPtr = Lib.GetExport("XPLMRegisterMapCreationHook");

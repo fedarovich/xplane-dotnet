@@ -14,7 +14,6 @@ namespace XP.SDK.XPLM.Internal
 
         static Camera()
         {
-            const string libraryName = "XPLM";
             ControlCameraPtr = Lib.GetExport("XPLMControlCamera");
             DontControlCameraPtr = Lib.GetExport("XPLMDontControlCamera");
             IsCameraBeingControlledPtr = Lib.GetExport("XPLMIsCameraBeingControlled");

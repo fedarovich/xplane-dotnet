@@ -18,7 +18,6 @@ namespace XP.SDK.XPLM.Internal
 
         static Processing()
         {
-            const string libraryName = "XPLM";
             GetElapsedTimePtr = Lib.GetExport("XPLMGetElapsedTime");
             GetCycleNumberPtr = Lib.GetExport("XPLMGetCycleNumber");
             RegisterFlightLoopCallbackPtr = Lib.GetExport("XPLMRegisterFlightLoopCallback");

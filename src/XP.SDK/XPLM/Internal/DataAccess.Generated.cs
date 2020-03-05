@@ -30,7 +30,6 @@ namespace XP.SDK.XPLM.Internal
 
         static DataAccess()
         {
-            const string libraryName = "XPLM";
             FindDataRefPtr = Lib.GetExport("XPLMFindDataRef");
             CanWriteDataRefPtr = Lib.GetExport("XPLMCanWriteDataRef");
             IsDataRefGoodPtr = Lib.GetExport("XPLMIsDataRefGood");

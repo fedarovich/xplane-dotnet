@@ -37,7 +37,6 @@ namespace XP.SDK.XPLM.Internal
 
         static Utilities()
         {
-            const string libraryName = "XPLM";
             SimulateKeyPressPtr = Lib.GetExport("XPLMSimulateKeyPress");
             SpeakStringPtr = Lib.GetExport("XPLMSpeakString");
             CommandKeyStrokePtr = Lib.GetExport("XPLMCommandKeyStroke");

@@ -16,7 +16,6 @@ namespace XP.SDK.Widgets.Internal
 
         static WidgetUtils()
         {
-            const string libraryName = "Widgets";
             CreateWidgetsPtr = Lib.GetExport("XPUCreateWidgets");
             MoveWidgetByPtr = Lib.GetExport("XPUMoveWidgetBy");
             FixedLayoutPtr = Lib.GetExport("XPUFixedLayout");

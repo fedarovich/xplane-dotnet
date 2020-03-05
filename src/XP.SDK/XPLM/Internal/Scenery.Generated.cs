@@ -21,7 +21,6 @@ namespace XP.SDK.XPLM.Internal
 
         static Scenery()
         {
-            const string libraryName = "XPLM";
             CreateProbePtr = Lib.GetExport("XPLMCreateProbe");
             DestroyProbePtr = Lib.GetExport("XPLMDestroyProbe");
             ProbeTerrainXYZPtr = Lib.GetExport("XPLMProbeTerrainXYZ");

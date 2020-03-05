@@ -39,7 +39,6 @@ namespace XP.SDK.Widgets.Internal
 
         static Widgets()
         {
-            const string libraryName = "Widgets";
             CreateWidgetPtr = Lib.GetExport("XPCreateWidget");
             CreateCustomWidgetPtr = Lib.GetExport("XPCreateCustomWidget");
             DestroyWidgetPtr = Lib.GetExport("XPDestroyWidget");

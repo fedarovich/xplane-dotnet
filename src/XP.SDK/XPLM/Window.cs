@@ -7,7 +7,8 @@ namespace XP.SDK.XPLM
 {
     public sealed class Window : WindowBase
     {
-        public Window(in Rect rect, bool visible, 
+        public Window(in Rect rect, 
+            bool visible = true, 
             WindowLayer layer = WindowLayer.FloatingWindows, 
             WindowDecoration decoration = WindowDecoration.None, 
             MouseHandlers mouseHandlers = MouseHandlers.All) 

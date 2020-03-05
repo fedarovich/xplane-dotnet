@@ -49,7 +49,6 @@ namespace XP.SDK.XPLM.Internal
 
         static Display()
         {
-            const string libraryName = "XPLM";
             RegisterDrawCallbackPtr = Lib.GetExport("XPLMRegisterDrawCallback");
             UnregisterDrawCallbackPtr = Lib.GetExport("XPLMUnregisterDrawCallback");
             CreateWindowExPtr = Lib.GetExport("XPLMCreateWindowEx");

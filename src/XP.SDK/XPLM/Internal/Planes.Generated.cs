@@ -22,7 +22,6 @@ namespace XP.SDK.XPLM.Internal
 
         static Planes()
         {
-            const string libraryName = "XPLM";
             SetUsersAircraftPtr = Lib.GetExport("XPLMSetUsersAircraft");
             PlaceUserAtAirportPtr = Lib.GetExport("XPLMPlaceUserAtAirport");
             PlaceUserAtLocationPtr = Lib.GetExport("XPLMPlaceUserAtLocation");

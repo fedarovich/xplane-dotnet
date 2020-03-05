@@ -59,13 +59,6 @@ namespace BindingsGenerator
 
             IEnumerable<StatementSyntax> BuildStaticConstructorExpressions()
             {
-                yield return LocalDeclarationStatement(VariableDeclaration(PredefinedType(Token(SyntaxKind.StringKeyword)))
-                        .AddVariables(VariableDeclarator("libraryName")
-                            .WithInitializer(EqualsValueClause(
-                                LiteralExpression(SyntaxKind.StringLiteralExpression, 
-                                    Literal(GetNativeLibrary(cppFunctions.First())))))))
-                    .AddModifiers(Token(SyntaxKind.ConstKeyword));
-
                 foreach (var cppFunction in cppFunctions)
                 {
                     yield return ExpressionStatement(

@@ -13,7 +13,6 @@ namespace XP.SDK.XPLM.Internal
 
         static Instance()
         {
-            const string libraryName = "XPLM";
             CreateInstancePtr = Lib.GetExport("XPLMCreateInstance");
             DestroyInstancePtr = Lib.GetExport("XPLMDestroyInstance");
             InstanceSetPositionPtr = Lib.GetExport("XPLMInstanceSetPosition");
