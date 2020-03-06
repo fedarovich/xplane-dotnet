@@ -4,7 +4,13 @@ using System.Text;
 
 namespace XP.SDK
 {
-    public delegate void InStructEventHandler<T>(object sender, in T args) where T : struct;
+    public delegate void TypedEventHandler<in TSender>(TSender sender, EventArgs args);
 
-    public delegate void RefStructEventHandler<T>(object sender, ref T args) where T : struct;
+    public delegate void InStructEventHandler<TArgs>(object sender, in TArgs args) where TArgs : struct;
+
+    public delegate void InStructEventHandler<in TSender, TArgs>(TSender sender, in TArgs args) where TArgs : struct;
+
+    public delegate void RefStructEventHandler<TArgs>(object sender, ref TArgs args) where TArgs : struct;
+
+    public delegate void RefStructEventHandler<in TSender, TArgs>(TSender sender, ref TArgs args) where TArgs : struct;
 }

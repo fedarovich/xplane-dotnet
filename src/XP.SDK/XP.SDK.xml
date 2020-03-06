@@ -2096,6 +2096,16 @@
             <summary>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.Graphics.DrawString(XP.SDK.RGBColor,System.Int32,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32*,XP.SDK.XPLM.FontID)">
+            <summary>
+            <para>
+            This routine draws a NULL terminated string in a given font.  Pass in the
+            lower left pixel that the character is to be drawn onto.  Also pass the
+            character and font ID. This function returns the x offset plus the width of
+            all drawn characters. 
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.Graphics.SetGraphicsState(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
             <para>
@@ -4558,6 +4568,37 @@
             </para>
             </summary>
         </member>
+        <member name="T:XP.SDK.XPLM.KeySniffer">
+            <summary>
+            Key sniffer provides low-level keyboard handlers.
+            Allows for intercepting keystrokes outside the normal rules of the user interface.
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.KeySniffer.Callback">
+            <summary>
+            Key sniffer callback.
+            </summary>
+            <returns>
+            Return <see langword="true"/> to pass the key on to the next sniffer, the window manager,
+            X-Plane, or whomever is down stream.  Return <see langword="false"/> to consume the key.
+            </returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.KeySniffer.TryRegisterCallback(XP.SDK.XPLM.KeySniffer.Callback,System.Boolean)">
+            <summary>
+            <para>
+            This routine registers a key sniffing callback.  You specify whether you
+            want to sniff before the window system, or only sniff keys the window
+            system does not consume.  You should ALMOST ALWAYS sniff non-control keys
+            after the window system.  When the window system consumes a key, it is
+            because the user has "focused" a window.  Consuming the key or taking
+            action based on the key will produce very weird results.  
+            </para>
+            </summary>
+            <returns>
+            The <see cref="T:System.IDisposable"/> object, than you must use for unsubscription, if the subscription succeeds.
+            <see langword="null"/> otherwise.
+            </returns>
+        </member>
         <member name="T:XP.SDK.XPLM.LanguageCode">
             <summary>
             <para>
@@ -4660,6 +4701,21 @@
             </para>
             </summary>
         </member>
+        <member name="T:XP.SDK.XPLM.Window">
+            <summary>
+            Represents the modern (XPLM300) X-Plane window.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Window.#ctor(XP.SDK.Rect@,System.Boolean,XP.SDK.XPLM.WindowLayer,XP.SDK.XPLM.WindowDecoration,XP.SDK.XPLM.MouseHandlers)">
+            <summary>
+            Creates a new instance of Window.
+            </summary>
+            <param name="bounds">Window bounds in global desktop boxels.</param>
+            <param name="visible">Window visibility.</param>
+            <param name="layer">Window layer.</param>
+            <param name="decoration">The type of X-Plane 11-style "wrapper" you want around your window, if any.</param>
+            <param name="mouseHandlers">The mouse events, that the window must handle.</param>
+        </member>
         <member name="M:XP.SDK.XPLM.Window.OnDrawWindow">
             <inheritdoc />
         </member>
@@ -4677,6 +4733,337 @@
         </member>
         <member name="M:XP.SDK.XPLM.Window.OnCursorRequested(System.Int32,System.Int32)">
             <inheritdoc />
+        </member>
+        <member name="E:XP.SDK.XPLM.Window.DrawWindow">
+            <summary>
+            Occurs when the window content must be drawn.
+            </summary>
+        </member>
+        <member name="E:XP.SDK.XPLM.Window.MouseLeftButtonEvent">
+            <summary>
+            Occurs on left mouse button input event.
+            </summary>
+        </member>
+        <member name="E:XP.SDK.XPLM.Window.MouseRightButtonEvent">
+            <summary>
+            Occurs on right mouse button input event.
+            </summary>
+        </member>
+        <member name="E:XP.SDK.XPLM.Window.MouseWheelEvent">
+            <summary>
+            Occurs on mouse wheel input event.
+            </summary>
+        </member>
+        <member name="E:XP.SDK.XPLM.Window.KeyEvent">
+            <summary>
+            Occurs on keyboard input event.
+            </summary>
+        </member>
+        <member name="E:XP.SDK.XPLM.Window.CursorRequested">
+            <summary>
+            Occurs when the cursor for the current mouse coordinates is requested.
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.WindowBase">
+            <summary>
+            The base class for modern (XPLM300) X-Plane windows.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.#ctor(XP.SDK.Rect@,System.Boolean,XP.SDK.XPLM.WindowLayer,XP.SDK.XPLM.WindowDecoration,XP.SDK.XPLM.MouseHandlers)">
+            <summary>
+            Creates a new instance of WindowBase.
+            </summary>
+            <param name="bounds">Window bounds in global desktop boxels.</param>
+            <param name="visible">Window visibility.</param>
+            <param name="layer">Window layer.</param>
+            <param name="decoration">The type of X-Plane 11-style "wrapper" you want around your window, if any.</param>
+            <param name="mouseHandlers">The mouse events, that the window must handle.</param>
+        </member>
+        <member name="P:XP.SDK.XPLM.WindowBase.HasKeyboardFocus">
+            <summary>
+            Gets the value indicating whether this window has keyboard focus.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.WindowBase.Id">
+            <summary>
+            Gets the window ID.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.WindowBase.IsInFront">
+            <summary>
+            Gets the value indicating whether the window is the frontmost
+            visible window in its layer.
+            </summary>
+            <remarks>
+            If you have a window at the front of the floating window layer
+            (<see cref="F:XP.SDK.XPLM.WindowLayer.FloatingWindows"/>), this will return true even if there is a
+            modal window (in layer <see cref="F:XP.SDK.XPLM.WindowLayer.Modal"/>) above you. (Not to worry,
+            though: in such a case, X-Plane will not pass clicks or keyboard input down
+            to your layer until the window above stops "eating" the input.)
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.XPLM.WindowBase.IsInVirtualReality">
+            <summary>
+            True if this window has been moved to the virtual reality (VR) headset,
+            which in turn is true if and only if you have set the window's positioning
+            mode to <see cref="F:XP.SDK.XPLM.WindowPositioningMode.VR"/>.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.WindowBase.IsPoppedOut">
+            <summary>
+            True if this window has been popped out (making it a first-class window in
+            the operating system), which in turn is true if and only if you have set
+            the window's positioning mode to <see cref="F:XP.SDK.XPLM.WindowPositioningMode.PopOut"/>.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.WindowBase.IsVisible">
+            <summary>
+            Gets or sets the window visibility.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.WindowBase.Geometry">
+            <summary>
+            Gets or sets the position and size of the windows.
+            </summary>
+            <remarks>
+            <para>
+            If the window is popped out, the values are in the OS pixels.
+            </para>
+            <para>
+            If the window is in virtual reality, the <see cref="P:XP.SDK.Rect.Left"/> and <see cref="P:XP.SDK.Rect.Bottom"/> are set to zero,
+            and the size is in boxels.
+            </para>
+            <para>
+            Otherwise, the values are in boxels.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.XPLM.WindowBase.Title">
+            <summary>
+            Gets or sets the window title.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.WindowBase.ScreenBoundsGlobal">
+            <summary>
+            This property returns the bounds of the "global" X-Plane desktop, in boxels.
+            It is multi-monitor aware. 
+            </summary>
+            <remarks>
+            <para>
+            There are three primary consequences of multimonitor awareness.
+            </para>
+            <para>
+            First, if the user is running X-Plane in full-screen on two or more
+            monitors (typically configured using one full-screen window per monitor),
+            the global desktop will be sized to include all X-Plane windows.
+            </para>
+            <para>
+            Second, the origin of the screen coordinates is not guaranteed to be (0,
+            0). Suppose the user has two displays side-by-side, both running at 1080p.
+            Suppose further that they've configured their OS to make the left display
+            their "primary" monitor, and that X-Plane is running in full-screen on
+            their right monitor only. In this case, the global desktop bounds would be
+            the rectangle from (1920, 0) to (3840, 1080). If the user later asked
+            X-Plane to draw on their primary monitor as well, the bounds would change
+            to (0, 0) to (3840, 1080).
+            </para>
+            <para>
+            Finally, if the usable area of the virtual desktop is not a perfect
+            rectangle (for instance, because the monitors have different resolutions or
+            because one monitor is configured in the operating system to be above and
+            to the right of the other), the global desktop will include any wasted
+            space. Thus, if you have two 1080p monitors, and monitor 2 is configured to
+            have its bottom left touch monitor 1's upper right, your global desktop
+            area would be the rectangle from (0, 0) to (3840, 2160).
+            </para>
+            <para>
+            Note that popped-out windows (windows drawn in their own operating system
+            windows, rather than "floating" within X-Plane) are not included in these
+            bounds.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.XPLM.WindowBase.AllMonitorBoundsGlobal">
+            <summary>
+            Gets the bounds (in boxels) of all full-screen X-Plane windows within the X-Plane global desktop space.
+            </summary>
+            <remarks>
+            <para>
+            Note  that if a monitor is *not* covered by an X-Plane window, you cannot get its
+            bounds this way. Likewise, monitors with only an X-Plane window (not in
+            full-screen mode) will not be included.
+            </para>
+            <para>
+            If X-Plane is running in full-screen and your monitors are of the same size
+            and configured contiguously in the OS, then the combined global bounds of
+            all full-screen monitors will match the total global desktop bounds, as
+            returned by XPLMGetScreenBoundsGlobal(). (Of course, if X-Plane is running
+            in windowed mode, this will not be the case. Likewise, if you have
+            differently sized monitors, the global desktop space will include wasted
+            space.)
+            </para>
+            <para>
+            Note that this function's monitor indices match those provided by
+            XPLMGetAllMonitorBoundsOS(), but the coordinates are different (since the
+            X-Plane global desktop may not match the operating system's global desktop,
+            and one X-Plane boxel may be larger than one pixel due to 150% or 200%
+            scaling).
+            </para>
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.XPLM.WindowBase.AllMonitorBoundsOS">
+            <summary>
+            <para>
+            This property returns the bounds (in pixels) of each
+            monitor within the operating system's global desktop space. Note that
+            unlike <see cref="P:XP.SDK.XPLM.WindowBase.AllMonitorBoundsGlobal"/>, this may include monitors that have
+            no X-Plane window on them.
+            </para>
+            </summary>
+            <remarks>
+            <para>
+            Note that this function's monitor indices match those provided by
+            <see cref="P:XP.SDK.XPLM.WindowBase.AllMonitorBoundsGlobal"/>, but the coordinates are different (since
+            the X-Plane global desktop may not match the operating system's global
+            desktop, and one X-Plane boxel may be larger than one pixel).
+            </para>
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.XPLM.WindowBase.MouseLocationGlobal">
+            <summary>
+            Returns the current mouse location in global desktop boxels.
+            </summary>
+            <remarks>
+            The bottom left of the main X-Plane window is not
+            guaranteed to be (0, 0). Instead, the origin is the lower left of the
+            entire global desktop space. In addition, this routine gives the real mouse
+            location when the mouse goes to X-Plane windows other than the primary
+            display. Thus, it can be used with both pop-out windows and secondary
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.XPLM.WindowBase.XPlaneHasKeyboardFocus">
+            <summary>
+            Gets the value indicating if XPlane itself has the keyboard focus, and thus no window has focus.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.BringToFront">
+            <summary>
+            This routine brings the window to the front of the Z-order for its layer.
+            Windows are brought to the front automatically when they are created.
+            Beyond that, you should make sure you are front before handling mouse
+            clicks.
+            </summary>
+            <remarks>
+            Note that this only brings your window to the front of its layer
+            (<see cref="T:XP.SDK.XPLM.WindowLayer"/>). Thus, if you have a window in the floating window layer
+            (<see cref="F:XP.SDK.XPLM.WindowLayer.FloatingWindows"/>), but there is a modal window (in layer
+            <see cref="F:XP.SDK.XPLM.WindowLayer.Modal"/>) above you, you would still not be the true frontmost
+            window after calling this. (After all, the window layers are strictly
+            ordered, and no window in a lower layer can ever be above any window in a
+            higher one.)
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.ReleaseKeyboardFocus">
+            <summary>
+            Releases keyboard focus from this window.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.SetGravity(System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Set the window gravity.
+            </summary>
+            <remarks>
+            <para>
+            A window's "gravity" controls how the window shifts as the whole X-Plane
+            window resizes. A gravity of 1 means the window maintains its positioning
+            relative to the right or top edges, 0 the left/bottom, and 0.5 keeps it
+            centered.
+            </para>
+            <para>
+            Default gravity is (0, 1, 0, 1), meaning your window will maintain its
+            position relative to the top left and will not change size as its
+            containing window grows.
+            </para>
+            <para>
+            If you wanted, say, a window that sticks to the top of the screen (with a
+            constant height), but which grows to take the full width of the window, you
+            would pass (0, 1, 1, 1). Because your left and right edges would maintain
+            their positioning relative to their respective edges of the screen, the
+            whole width of your window would change with the X-Plane window.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.SetPositioningMode(XP.SDK.XPLM.WindowPositioningMode,System.Int32)">
+            <summary>
+            Sets the policy for how X-Plane will position your window.
+            </summary>
+            <remarks>
+            <para>
+            Some positioning modes apply to a particular monitor. For those modes, you
+            can pass a negative monitor index to position the window on the main
+            X-Plane monitor (the screen with the X-Plane menu bar at the top). Or, if
+            you have a specific monitor you want to position your window on, you can
+            pass a real monitor index as received from, e.g., <see cref="P:XP.SDK.XPLM.WindowBase.AllMonitorBoundsOS"/>.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.SetResizingLimits(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Sets the minimum and maximum size of the client rectangle of the given
+            window. (That is, it does not include any window styling that you might
+            have asked X-Plane to apply on your behalf.) All resizing operations are
+            constrained to these sizes.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.TakeKeyboardFocus">
+            <summary>
+            Gives the keyboard focus to this window.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.RemoveKeyboardFocus">
+            <summary>
+            Removes keyboard focus from currently focused window.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.FromId(XP.SDK.XPLM.Internal.WindowID)">
+            <summary>
+            Gets the window with the specified <paramref name="id"/>.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.OnDrawWindow">
+            <summary>
+            Override this method to handle drawing inside the window.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.OnMouseLeftButtonEvent(System.Int32,System.Int32,XP.SDK.XPLM.MouseStatus)">
+            <summary>
+            Override this method to handle mouse left button events.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.OnMouseRightButtonEvent(System.Int32,System.Int32,XP.SDK.XPLM.MouseStatus)">
+            <summary>
+            Override this method to handle mouse right button events.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.OnMouseWheelEvent(System.Int32,System.Int32,XP.SDK.XPLM.MouseWheel,System.Int32)">
+            <summary>
+            Override this method to handle mouse wheel button events.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.OnKeyEvent(System.Byte,XP.SDK.XPLM.KeyFlags,System.Byte,System.Boolean)">
+            <summary>
+            Override this method to handle keyboard events.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.OnCursorRequested(System.Int32,System.Int32)">
+            <summary>
+            Override this method to change the cursor depending on the mouse coordinates..
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.WindowBase.Dispose(System.Boolean)">
+            <summary>
+            Frees the resources allocated for this window.
+            </summary>
         </member>
         <member name="M:XP.SDK.XPLM.WindowBase.Dispose">
             <inheritdoc />

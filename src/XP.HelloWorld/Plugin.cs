@@ -30,7 +30,7 @@ namespace XP.HelloWorld
             return true;
         }
 
-        private static unsafe void OnDrawWindow(object sender, EventArgs e)
+        private static unsafe void OnDrawWindow(Window sender, EventArgs e)
         {
             Graphics.SetGraphicsState(
                 0 /* no fog */,
@@ -40,7 +40,7 @@ namespace XP.HelloWorld
                 1 /* do alpha blend */,
                 1 /* do depth testing */,
                 0 /* no depth writing */);
-            var rect = ((Window) sender).Geometry;
+            var rect = sender.Geometry;
             var message = "Hello, world!";
             Graphics.DrawString(new RGBColor(1, 1, 1), rect.Left + 10, rect.Top - 20, message, null, FontID.Proportional);
         }

@@ -5,14 +5,25 @@ using XP.SDK.XPLM.Internal;
 
 namespace XP.SDK.XPLM
 {
+    /// <summary>
+    /// Represents the modern (XPLM300) X-Plane window.
+    /// </summary>
     public sealed class Window : WindowBase
     {
-        public Window(in Rect rect, 
+        /// <summary>
+        /// Creates a new instance of Window.
+        /// </summary>
+        /// <param name="bounds">Window bounds in global desktop boxels.</param>
+        /// <param name="visible">Window visibility.</param>
+        /// <param name="layer">Window layer.</param>
+        /// <param name="decoration">The type of X-Plane 11-style "wrapper" you want around your window, if any.</param>
+        /// <param name="mouseHandlers">The mouse events, that the window must handle.</param>
+        public Window(in Rect bounds, 
             bool visible = true, 
             WindowLayer layer = WindowLayer.FloatingWindows, 
             WindowDecoration decoration = WindowDecoration.None, 
             MouseHandlers mouseHandlers = MouseHandlers.All) 
-            : base(in rect, visible, layer, decoration, mouseHandlers)
+            : base(in bounds, visible, layer, decoration, mouseHandlers)
         {
         }
 
@@ -63,16 +74,34 @@ namespace XP.SDK.XPLM
             return args.Cursor;
         }
 
-        public event EventHandler DrawWindow;
+        /// <summary>
+        /// Occurs when the window content must be drawn.
+        /// </summary>
+        public event TypedEventHandler<Window> DrawWindow;
 
-        public event RefStructEventHandler<MouseButtonEventArgs> MouseLeftButtonEvent;
-        
-        public event RefStructEventHandler<MouseButtonEventArgs> MouseRightButtonEvent;
+        /// <summary>
+        /// Occurs on left mouse button input event.
+        /// </summary>
+        public event RefStructEventHandler<Window, MouseButtonEventArgs> MouseLeftButtonEvent;
 
-        public event RefStructEventHandler<MouseWheelEventArgs> MouseWheelEvent;
+        /// <summary>
+        /// Occurs on right mouse button input event.
+        /// </summary>
+        public event RefStructEventHandler<Window, MouseButtonEventArgs> MouseRightButtonEvent;
 
-        public event InStructEventHandler<KeyEventArgs> KeyEvent;
+        /// <summary>
+        /// Occurs on mouse wheel input event.
+        /// </summary>
+        public event RefStructEventHandler<Window, MouseWheelEventArgs> MouseWheelEvent;
 
-        public event RefStructEventHandler<CursorRequestEventArgs> CursorRequested;
+        /// <summary>
+        /// Occurs on keyboard input event.
+        /// </summary>
+        public event InStructEventHandler<Window, KeyEventArgs> KeyEvent;
+
+        /// <summary>
+        /// Occurs when the cursor for the current mouse coordinates is requested.
+        /// </summary>
+        public event RefStructEventHandler<Window, CursorRequestEventArgs> CursorRequested;
     }
 }
