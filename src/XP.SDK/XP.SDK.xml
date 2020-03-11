@@ -859,6 +859,11 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.HotKey.SetHotKeyCombination(XP.SDK.XPLM.Internal.HotKeyID,System.Byte,XP.SDK.XPLM.KeyFlags)">
+            <summary>
+            Remaps a hot keys keystrokes. You may remap another plugin's keystrokes.
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.Camera.ControlCamera(XP.SDK.XPLM.CameraControlDuration,XP.SDK.XPLM.Internal.CameraControlCallback,System.Void*)">
             <summary>
             <para>
