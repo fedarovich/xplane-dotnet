@@ -5,10 +5,68 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>xpproxy</AssemblyName>
     <EnableDynamicLoading>true</EnableDynamicLoading>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>XP.SDK.Host</PackageId>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <BuildOutputTargetFolder>build</BuildOutputTargetFolder>
+    <Authors>Pavel Fedarovich</Authors>
+    <Company>Pavel Fedarovich</Company>
+    <Product>XP.SDK</Product>
+    <Copyright>© Pavel Fedarovich, 2020</Copyright>
+    <RepositoryUrl>https://github.com/fedarovich/xplane-dotnet</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/fedarovich/xplane-dotnet</PackageProjectUrl>
   </PropertyGroup>
-
+  <PropertyGroup>
+    <TargetsForTfmSpecificBuildOutput>
+      $(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage;CopyDepsJsonToPackage
+    </TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(WindowsHostDir)' == ''">
+    <WindowsHostDir>..\..\host\out\build\x64-$(Configuration)\</WindowsHostDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(LinuxHostDir)' == ''">
+    <LinuxHostDir>..\..\host\out\build\WSL-$(Configuration)\</LinuxHostDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(MacosHostDir)' == ''">
+    <MacosHostDir>..\..\host\out\build\osx-$(Configuration)\</MacosHostDir>
+  </PropertyGroup>
+  <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+    </ItemGroup>
+  </Target>
+  <Target Name="CopyDepsJsonToPackage">
+    <ItemGroup>
+      <BuildOutputInPackage Include="$(TargetDir)$(TargetName).deps.json" />
+    </ItemGroup>
+  </Target>
   <ItemGroup>
     <ProjectReference Include="..\XP.SDK\XP.SDK.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Folder Include="native\linux-x64\" />
+    <Folder Include="native\win-x64\" />
+    <Folder Include="native\osx-x64\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="build/**" Pack="True" PackagePath="build/" />
+  </ItemGroup>
+  <ItemGroup Condition="Exists('$(WindowsHostDir)')"> 
+    <None Include="$(WindowsHostDir)xphost\nethost.dll" Link="native\win-x64\nethost.dll" Pack="True" PackagePath="build/$(TargetFramework)/win-x64/native/" />
+    <None Include="$(WindowsHostDir)xphost\xphost.xpl" Link="native\win-x64\xphost.xpl" Pack="True" PackagePath="build/$(TargetFramework)/win-x64/native/" />
+  </ItemGroup>
+  <ItemGroup Condition="Exists('$(LinuxHostDir)')">
+    <None Include="$(LinuxHostDir)xphost\xphost.xpl" Link="native\linux-x64\xphost.xpl" Pack="True" PackagePath="build/$(TargetFramework)/linux-x64/native/" />
+  </ItemGroup>
+  <ItemGroup Condition="Exists('$(MacosHostDir)')">
+    <None Include="$(MacosHostDir)xphost\xphost.xpl" Link="native\osx-x64\xphost.xpl" Pack="True" PackagePath="build/$(TargetFramework)/osx-x64/native/" />
+  </ItemGroup>
+  <Target Name="WarnOnMisingHostBinaries" BeforeTargets="Pack">
+    <ItemGroup>
+      <Warning Condition="!Exists('$(WindowsHostDir)')" Text="win-x64 host binaries not found." />
+      <Warning Condition="!Exists('$(LinuxHostDir)')" Text="linux-x64 host binaries not found." />
+      <Warning Condition="!Exists('$(MacosHostDir)')" Text="os-x64 host binaries not found." />
+    </ItemGroup>
+  </Target>
 </Project>

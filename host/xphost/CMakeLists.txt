@@ -14,7 +14,7 @@ endif ()
 # Add source to this project's executable.
 add_library (xphost SHARED ${XPHOST_SOURCES})
 
-set_target_properties(xphost PROPERTIES OUTPUT_NAME "xphost" SUFFIX ".xpl")
+set_target_properties(xphost PROPERTIES OUTPUT_NAME "xphost" PREFIX "" SUFFIX ".xpl")
 
 # TODO: Add tests and install targets if needed..
 

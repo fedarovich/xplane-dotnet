@@ -11,7 +11,7 @@ using XP.SDK.XPLM.Internal;
 
 namespace XP.Proxy
 {
-    public static class PluginProxy
+    internal static class PluginProxy
     {
         private static PluginContext _context;
         private static PluginBase _plugin;

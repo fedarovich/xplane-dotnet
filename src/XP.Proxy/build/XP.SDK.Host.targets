@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)$(TargetFramework)/*.*" 
+             CopyToOutputDirectory="Always" 
+             Visible="False" />
+  </ItemGroup>
+  <ItemGroup>
+    <ContentWithTargetPath Condition="$(RuntimeIdentifier) != ''"
+                           Include="$(MSBuildThisFileDirectory)$(TargetFramework)/$(RuntimeIdentifier)/native/xphost.xpl"
+                           TargetPath="$(TargetName).xpl"
+                           CopyToOutputDirectory="Always"
+                           Visible="False" />
+    <ContentWithTargetPath Condition="$(RuntimeIdentifier) != ''"
+                           Include="$(MSBuildThisFileDirectory)$(TargetFramework)/$(RuntimeIdentifier)/native/*" 
+                           Exclude="$(MSBuildThisFileDirectory)$(TargetFramework)/$(RuntimeIdentifier)/native/xphost.xpl"
+                           TargetPath="%(FileName)%(Extension)"
+                           CopyToOutputDirectory="Always"
+                           Visible="False" />
+  </ItemGroup>
+</Project>

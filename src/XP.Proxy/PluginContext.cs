@@ -7,7 +7,7 @@ using System.Runtime.Loader;
 
 namespace XP.Proxy
 {
-    public class PluginContext : AssemblyLoadContext
+    internal class PluginContext : AssemblyLoadContext
     {
         private readonly AssemblyLoadContext _parentContext;
         private readonly AssemblyDependencyResolver _resolver;

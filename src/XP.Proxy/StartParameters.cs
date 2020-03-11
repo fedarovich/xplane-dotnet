@@ -5,7 +5,7 @@ using System.Text;
 
 namespace XP.Proxy
 {
-    public struct StartParameters
+    internal struct StartParameters
     {
         public IntPtr Name;
         public IntPtr Sig;

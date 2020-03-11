@@ -4,10 +4,23 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DocumentationFile>$(OutputDir)XP.SDK.xml</DocumentationFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <BuildOutputTargetFolder>ref</BuildOutputTargetFolder>
+    <DevelopmentDependency>false</DevelopmentDependency>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/fedarovich/xplane-dotnet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/fedarovich/xplane-dotnet</RepositoryUrl>
+    <Authors>Pavel Fedarovich</Authors>
+    <Company>Pavel Fedarovich</Company>
+    <Copyright>© Pavel Fedarovich, 2020</Copyright>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);NU5131</NoWarn>
   </PropertyGroup>
   
   <ItemGroup>
@@ -20,4 +33,7 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="build/**" Pack="True" PackagePath="build/" />
+  </ItemGroup>
 </Project>
