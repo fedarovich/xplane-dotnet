@@ -155,7 +155,7 @@ namespace BindingsGenerator
             return @struct;
         }
 
-        protected override string GetRelativeNamespace(CppTypedef cppElement) => $"{base.GetRelativeNamespace(cppElement)}.Internal";
+        protected override string GetRelativeNamespace(CppTypedef cppElement) => $"{base.GetRelativeNamespace(cppElement)}";
 
         protected override string GetNativeName(CppTypedef type) => type.Name;
 

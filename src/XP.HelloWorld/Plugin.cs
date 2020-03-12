@@ -3,7 +3,6 @@ using System.Runtime.CompilerServices;
 using System.Text.Unicode;
 using XP.SDK;
 using XP.SDK.XPLM;
-using PluginID = XP.SDK.XPLM.Internal.PluginID;
 
 [assembly: Plugin(typeof(XP.HelloWorld.Plugin))]
 

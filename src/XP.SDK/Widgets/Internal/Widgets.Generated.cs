@@ -2,7 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using InlineIL;
-using XP.SDK.XPLM.Internal;
+using XP.SDK.XPLM;
 
 namespace XP.SDK.Widgets.Internal
 {

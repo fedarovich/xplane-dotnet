@@ -1,39 +1,38 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace XP.SDK.XPLM.Internal
+namespace XP.SDK.XPLM
 {
     
     /// <summary>
     /// <para>
-    /// This is an opaque identifier for a flight loop callback. You can use this
-    /// identifier to easily track and remove your callbacks, or to use the new
-    /// flight loop APIs.
+    /// An XPLMProbeRef is an opaque handle to a probe, used for querying the
+    /// terrain.
     /// </para>
     /// </summary>
-    public readonly partial struct FlightLoopID : System.IEquatable<FlightLoopID>
+    public readonly partial struct ProbeRef : System.IEquatable<ProbeRef>
     {
         private readonly System.IntPtr _value;
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public FlightLoopID(System.IntPtr value) => _value = value;
+        public ProbeRef(System.IntPtr value) => _value = value;
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator FlightLoopID(System.IntPtr value) => new FlightLoopID(value);
+        public static implicit operator ProbeRef(System.IntPtr value) => new ProbeRef(value);
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static explicit operator System.IntPtr(FlightLoopID value) => value._value;
+        public static explicit operator System.IntPtr(ProbeRef value) => value._value;
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj) => obj is FlightLoopID other && Equals(other);
+        public override bool Equals(object obj) => obj is ProbeRef other && Equals(other);
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode() => _value.GetHashCode();
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(FlightLoopID other) => _value == other._value;
+        public bool Equals(ProbeRef other) => _value == other._value;
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static bool operator ==(FlightLoopID left, FlightLoopID right) => left.Equals(right);
+        public static bool operator ==(ProbeRef left, ProbeRef right) => left.Equals(right);
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static bool operator !=(FlightLoopID left, FlightLoopID right) => !left.Equals(right);
+        public static bool operator !=(ProbeRef left, ProbeRef right) => !left.Equals(right);
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public override string ToString() => _value.ToString();

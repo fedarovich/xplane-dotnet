@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace XP.SDK.Widgets.Internal
+namespace XP.SDK.Widgets
 {
     
     /// <summary>

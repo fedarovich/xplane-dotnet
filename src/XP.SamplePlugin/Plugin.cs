@@ -1,6 +1,6 @@
 ﻿using System;
 using XP.SDK;
-using XP.SDK.XPLM.Internal;
+using XP.SDK.XPLM;
 
 [assembly: Plugin(typeof(XP.SamplePlugin.Plugin))]
 
@@ -15,29 +15,29 @@ namespace XP.SamplePlugin
         
         protected override bool OnStart()
         {
-            Utilities.DebugString("Start sample plugin.");
+            XPlane.Trace.WriteLine("Start sample plugin.");
             return true;
         }
 
         protected override bool OnEnable()
         {
-            Utilities.DebugString("Enable sample plugin.");
+            XPlane.Trace.WriteLine("Enable sample plugin.");
             return true;
         }
 
         protected override void OnDisable()
         {
-            Utilities.DebugString("Disable sample plugin.");
+            XPlane.Trace.WriteLine("Disable sample plugin.");
         }
 
         protected override void OnStop()
         {
-            Utilities.DebugString("Stop sample plugin.");
+            XPlane.Trace.WriteLine("Stop sample plugin.");
         }
 
         protected override void OnReceiveMessage(PluginID pluginId, int message, IntPtr param)
         {
-            Utilities.DebugString($"Received message {message} from plugin {pluginId} with payload 0x{param.ToInt64():X8}.");
+            XPlane.Trace.WriteLine($"Received message {message} from plugin {pluginId} with payload 0x{param.ToInt64():X8}.");
         }
     }
 }

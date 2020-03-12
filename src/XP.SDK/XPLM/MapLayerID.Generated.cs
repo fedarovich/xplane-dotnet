@@ -1,37 +1,38 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace XP.SDK.XPLM.Internal
+namespace XP.SDK.XPLM
 {
     
     /// <summary>
     /// <para>
-    /// This is a unique ID for each menu you create.
+    /// This is an opaque handle for a plugin-created map layer. Pass it to the map
+    /// drawing APIs from an appropriate callback to draw in the layer you created.
     /// </para>
     /// </summary>
-    public readonly partial struct MenuID : System.IEquatable<MenuID>
+    public readonly partial struct MapLayerID : System.IEquatable<MapLayerID>
     {
         private readonly System.IntPtr _value;
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public MenuID(System.IntPtr value) => _value = value;
+        public MapLayerID(System.IntPtr value) => _value = value;
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator MenuID(System.IntPtr value) => new MenuID(value);
+        public static implicit operator MapLayerID(System.IntPtr value) => new MapLayerID(value);
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static explicit operator System.IntPtr(MenuID value) => value._value;
+        public static explicit operator System.IntPtr(MapLayerID value) => value._value;
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj) => obj is MenuID other && Equals(other);
+        public override bool Equals(object obj) => obj is MapLayerID other && Equals(other);
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode() => _value.GetHashCode();
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(MenuID other) => _value == other._value;
+        public bool Equals(MapLayerID other) => _value == other._value;
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static bool operator ==(MenuID left, MenuID right) => left.Equals(right);
+        public static bool operator ==(MapLayerID left, MapLayerID right) => left.Equals(right);
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static bool operator !=(MenuID left, MenuID right) => !left.Equals(right);
+        public static bool operator !=(MapLayerID left, MapLayerID right) => !left.Equals(right);
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public override string ToString() => _value.ToString();

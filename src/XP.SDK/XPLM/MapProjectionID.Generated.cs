@@ -1,37 +1,38 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace XP.SDK.XPLM.Internal
+namespace XP.SDK.XPLM
 {
     
     /// <summary>
     /// <para>
-    /// An opaque IDs used to identify a hot key.
+    /// This is an opaque handle for a map projection. Pass it to the projection
+    /// APIs to translate between map coordinates and latitude/longitudes.
     /// </para>
     /// </summary>
-    public readonly partial struct HotKeyID : System.IEquatable<HotKeyID>
+    public readonly partial struct MapProjectionID : System.IEquatable<MapProjectionID>
     {
         private readonly System.IntPtr _value;
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public HotKeyID(System.IntPtr value) => _value = value;
+        public MapProjectionID(System.IntPtr value) => _value = value;
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static implicit operator HotKeyID(System.IntPtr value) => new HotKeyID(value);
+        public static implicit operator MapProjectionID(System.IntPtr value) => new MapProjectionID(value);
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static explicit operator System.IntPtr(HotKeyID value) => value._value;
+        public static explicit operator System.IntPtr(MapProjectionID value) => value._value;
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj) => obj is HotKeyID other && Equals(other);
+        public override bool Equals(object obj) => obj is MapProjectionID other && Equals(other);
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode() => _value.GetHashCode();
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public bool Equals(HotKeyID other) => _value == other._value;
+        public bool Equals(MapProjectionID other) => _value == other._value;
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static bool operator ==(HotKeyID left, HotKeyID right) => left.Equals(right);
+        public static bool operator ==(MapProjectionID left, MapProjectionID right) => left.Equals(right);
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static bool operator !=(HotKeyID left, HotKeyID right) => !left.Equals(right);
+        public static bool operator !=(MapProjectionID left, MapProjectionID right) => !left.Equals(right);
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public override string ToString() => _value.ToString();

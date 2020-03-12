@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using XP.SDK.XPLM.Internal;
+using XP.SDK.XPLM;
 
 namespace XP.SDK
 {

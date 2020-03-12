@@ -122,15 +122,6 @@
             </para>
             </summary>
         </member>
-        <member name="T:XP.SDK.Widgets.Internal.WidgetClass">
-            <summary>
-            <para>
-            Widget classes define predefined widget types. A widget class basically
-            specifies from a library the widget function to be used for the widget.
-            Most widgets can be made right from classes.
-            </para>
-            </summary>
-        </member>
         <member name="T:XP.SDK.Widgets.Internal.WidgetCreate">
             <summary>
             <para>
@@ -167,17 +158,7 @@
             </para>
             </summary>
         </member>
-        <member name="T:XP.SDK.Widgets.Internal.WidgetID">
-            <summary>
-            <para>
-            A Widget ID is an opaque unique non-zero handle identifying your widget.
-            Use 0 to specify "no widget". This type is defined as wide enough to hold a
-            pointer. You receive a widget ID when you create a new widget and then use
-            that widget ID to further refer to the widget.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.CreateWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte*,System.Int32,XP.SDK.Widgets.Internal.WidgetID,XP.SDK.Widgets.Internal.WidgetClass)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.CreateWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte*,System.Int32,XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.WidgetClass)">
             <summary>
             <para>
             This function creates a new widget and returns the new widget's ID to you.
@@ -223,7 +204,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.CreateWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32,XP.SDK.Widgets.Internal.WidgetID,XP.SDK.Widgets.Internal.WidgetClass)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.CreateWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32,XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.WidgetClass)">
             <summary>
             <para>
             This function creates a new widget and returns the new widget's ID to you.
@@ -269,7 +250,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.CreateCustomWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte*,System.Int32,XP.SDK.Widgets.Internal.WidgetID,XP.SDK.Widgets.Internal.WidgetFuncCallback)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.CreateCustomWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte*,System.Int32,XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.Internal.WidgetFuncCallback)">
             <summary>
             <para>
             This function is the same as XPCreateWidget except that instead of passing
@@ -280,7 +261,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.CreateCustomWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32,XP.SDK.Widgets.Internal.WidgetID,XP.SDK.Widgets.Internal.WidgetFuncCallback)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.CreateCustomWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32,XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.Internal.WidgetFuncCallback)">
             <summary>
             <para>
             This function is the same as XPCreateWidget except that instead of passing
@@ -291,7 +272,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.DestroyWidget(XP.SDK.Widgets.Internal.WidgetID,System.Int32)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.DestroyWidget(XP.SDK.Widgets.WidgetID,System.Int32)">
             <summary>
             <para>
             This class destroys a widget. Pass in the ID of the widget to kill. If you
@@ -303,7 +284,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.SendMessageToWidget(XP.SDK.Widgets.Internal.WidgetID,XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.DispatchMode,System.IntPtr,System.IntPtr)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.SendMessageToWidget(XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.DispatchMode,System.IntPtr,System.IntPtr)">
             <summary>
             <para>
             This sends any message to a widget. You should probably not go around
@@ -323,7 +304,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.PlaceWidgetWithin(XP.SDK.Widgets.Internal.WidgetID,XP.SDK.Widgets.Internal.WidgetID)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.PlaceWidgetWithin(XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.WidgetID)">
             <summary>
             <para>
             This function changes which container a widget resides in. You may NOT use
@@ -343,14 +324,14 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.CountChildWidgets(XP.SDK.Widgets.Internal.WidgetID)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.CountChildWidgets(XP.SDK.Widgets.WidgetID)">
             <summary>
             <para>
             This routine returns the number of widgets another widget contains.
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetNthChildWidget(XP.SDK.Widgets.Internal.WidgetID,System.Int32)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetNthChildWidget(XP.SDK.Widgets.WidgetID,System.Int32)">
             <summary>
             <para>
             This routine returns the widget ID of a child widget by index. Indexes are
@@ -359,7 +340,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetParentWidget(XP.SDK.Widgets.Internal.WidgetID)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetParentWidget(XP.SDK.Widgets.WidgetID)">
             <summary>
             <para>
             This routine returns the parent of a widget, or 0 if the widget has no
@@ -367,7 +348,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.ShowWidget(XP.SDK.Widgets.Internal.WidgetID)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.ShowWidget(XP.SDK.Widgets.WidgetID)">
             <summary>
             <para>
             This routine makes a widget visible if it is not already. Note that if a
@@ -376,7 +357,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.HideWidget(XP.SDK.Widgets.Internal.WidgetID)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.HideWidget(XP.SDK.Widgets.WidgetID)">
             <summary>
             <para>
             Makes a widget invisible. See XPShowWidget for considerations of when a
@@ -384,7 +365,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.IsWidgetVisible(XP.SDK.Widgets.Internal.WidgetID)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.IsWidgetVisible(XP.SDK.Widgets.WidgetID)">
             <summary>
             <para>
             This returns 1 if a widget is visible, 0 if it is not. Note that this
@@ -393,7 +374,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.FindRootWidget(XP.SDK.Widgets.Internal.WidgetID)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.FindRootWidget(XP.SDK.Widgets.WidgetID)">
             <summary>
             <para>
             XPFindRootWidget returns the Widget ID of the root widget that contains the
@@ -402,7 +383,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.BringRootWidgetToFront(XP.SDK.Widgets.Internal.WidgetID)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.BringRootWidgetToFront(XP.SDK.Widgets.WidgetID)">
             <summary>
             <para>
             This routine makes the specified widget be in the front most widget
@@ -413,7 +394,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.IsWidgetInFront(XP.SDK.Widgets.Internal.WidgetID)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.IsWidgetInFront(XP.SDK.Widgets.WidgetID)">
             <summary>
             <para>
             This routine returns true if this widget's hierarchy is the front most
@@ -422,7 +403,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetWidgetGeometry(XP.SDK.Widgets.Internal.WidgetID,System.Int32*,System.Int32*,System.Int32*,System.Int32*)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetWidgetGeometry(XP.SDK.Widgets.WidgetID,System.Int32*,System.Int32*,System.Int32*,System.Int32*)">
             <summary>
             <para>
             This routine returns the bounding box of a widget in global coordinates.
@@ -430,14 +411,14 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.SetWidgetGeometry(XP.SDK.Widgets.Internal.WidgetID,System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.SetWidgetGeometry(XP.SDK.Widgets.WidgetID,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
             <para>
             This function changes the bounding box of a widget.
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetWidgetForLocation(XP.SDK.Widgets.Internal.WidgetID,System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetWidgetForLocation(XP.SDK.Widgets.WidgetID,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
             <para>
             Given a widget and a location, this routine returns the widget ID of the
@@ -457,7 +438,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetWidgetExposedGeometry(XP.SDK.Widgets.Internal.WidgetID,System.Int32*,System.Int32*,System.Int32*,System.Int32*)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetWidgetExposedGeometry(XP.SDK.Widgets.WidgetID,System.Int32*,System.Int32*,System.Int32*,System.Int32*)">
             <summary>
             <para>
             This routine returns the bounds of the area of a widget that is completely
@@ -470,7 +451,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.SetWidgetDescriptor(XP.SDK.Widgets.Internal.WidgetID,System.Byte*)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.SetWidgetDescriptor(XP.SDK.Widgets.WidgetID,System.Byte*)">
             <summary>
             <para>
             Every widget has a descriptor, which is a text string. What the text string
@@ -483,7 +464,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.SetWidgetDescriptor(XP.SDK.Widgets.Internal.WidgetID,System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.SetWidgetDescriptor(XP.SDK.Widgets.WidgetID,System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             Every widget has a descriptor, which is a text string. What the text string
@@ -496,7 +477,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetWidgetDescriptor(XP.SDK.Widgets.Internal.WidgetID,System.Byte*,System.Int32)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetWidgetDescriptor(XP.SDK.Widgets.WidgetID,System.Byte*,System.Int32)">
             <summary>
             <para>
             This routine returns the widget's descriptor. Pass in the length of the
@@ -509,7 +490,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetWidgetUnderlyingWindow(XP.SDK.Widgets.Internal.WidgetID)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetWidgetUnderlyingWindow(XP.SDK.Widgets.WidgetID)">
             <summary>
             <para>
             Returns the window (from the XPLMDisplay API) that backs your widget
@@ -521,7 +502,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.SetWidgetProperty(XP.SDK.Widgets.Internal.WidgetID,XP.SDK.Widgets.WidgetPropertyID,System.IntPtr)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.SetWidgetProperty(XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.WidgetPropertyID,System.IntPtr)">
             <summary>
             <para>
             This function sets a widget's property. Properties are arbitrary values
@@ -529,7 +510,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetWidgetProperty(XP.SDK.Widgets.Internal.WidgetID,XP.SDK.Widgets.WidgetPropertyID,System.Int32*)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetWidgetProperty(XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.WidgetPropertyID,System.Int32*)">
             <summary>
             <para>
             This routine returns the value of a widget's property, or 0 if the property
@@ -540,7 +521,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.SetKeyboardFocus(XP.SDK.Widgets.Internal.WidgetID)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.SetKeyboardFocus(XP.SDK.Widgets.WidgetID)">
             <summary>
             <para>
             XPSetKeyboardFocus controls which widget will receive keystrokes. Pass the
@@ -564,7 +545,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.LoseKeyboardFocus(XP.SDK.Widgets.Internal.WidgetID)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.LoseKeyboardFocus(XP.SDK.Widgets.WidgetID)">
             <summary>
             <para>
             This causes the specified widget to lose focus; focus is passed to its
@@ -582,7 +563,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.AddWidgetCallback(XP.SDK.Widgets.Internal.WidgetID,XP.SDK.Widgets.Internal.WidgetFuncCallback)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.AddWidgetCallback(XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.Internal.WidgetFuncCallback)">
             <summary>
             <para>
             This function adds a new widget callback to a widget. This widget callback
@@ -602,7 +583,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetWidgetClassFunc(XP.SDK.Widgets.Internal.WidgetClass)">
+        <member name="M:XP.SDK.Widgets.Internal.Widgets.GetWidgetClassFunc(XP.SDK.Widgets.WidgetClass)">
             <summary>
             <para>
             Given a widget class, this function returns the callbacks that power that
@@ -610,7 +591,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.WidgetUtils.CreateWidgets(XP.SDK.Widgets.Internal.WidgetCreate*,System.Int32,XP.SDK.Widgets.Internal.WidgetID,XP.SDK.Widgets.Internal.WidgetID*)">
+        <member name="M:XP.SDK.Widgets.Internal.WidgetUtils.CreateWidgets(XP.SDK.Widgets.Internal.WidgetCreate*,System.Int32,XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.WidgetID*)">
             <summary>
             <para>
             This function creates a series of widgets from a table...see
@@ -630,7 +611,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.WidgetUtils.MoveWidgetBy(XP.SDK.Widgets.Internal.WidgetID,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.Widgets.Internal.WidgetUtils.MoveWidgetBy(XP.SDK.Widgets.WidgetID,System.Int32,System.Int32)">
             <summary>
             <para>
             Simply moves a widget by an amount, +x = right, +y=up, without resizing the
@@ -638,7 +619,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.WidgetUtils.FixedLayout(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.Internal.WidgetID,System.IntPtr,System.IntPtr)">
+        <member name="M:XP.SDK.Widgets.Internal.WidgetUtils.FixedLayout(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.WidgetID,System.IntPtr,System.IntPtr)">
             <summary>
             <para>
             This function causes the widget to maintain its children in fixed position
@@ -647,7 +628,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.WidgetUtils.SelectIfNeeded(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.Internal.WidgetID,System.IntPtr,System.IntPtr,System.Int32)">
+        <member name="M:XP.SDK.Widgets.Internal.WidgetUtils.SelectIfNeeded(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.WidgetID,System.IntPtr,System.IntPtr,System.Int32)">
             <summary>
             <para>
             This causes the widget to bring its window to the foreground if it is not
@@ -656,7 +637,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.WidgetUtils.DefocusKeyboard(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.Internal.WidgetID,System.IntPtr,System.IntPtr,System.Int32)">
+        <member name="M:XP.SDK.Widgets.Internal.WidgetUtils.DefocusKeyboard(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.WidgetID,System.IntPtr,System.IntPtr,System.Int32)">
             <summary>
             <para>
             This causes a click in the widget to send keyboard focus back to X-Plane.
@@ -664,7 +645,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Internal.WidgetUtils.DragWidget(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.Internal.WidgetID,System.IntPtr,System.IntPtr,System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.Widgets.Internal.WidgetUtils.DragWidget(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.WidgetID,System.IntPtr,System.IntPtr,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
             <para>
             XPUDragWidget drags the widget in response to mouse clicks. Pass in not
@@ -687,6 +668,25 @@
             ScrollBar - this is a standard scroll bar with arrows and a thumb to drag.
             Slider - this is a simple track with a ball in the middle that can be slid.
             Progress - this is a progress indicator showing how a long task is going.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.WidgetClass">
+            <summary>
+            <para>
+            Widget classes define predefined widget types. A widget class basically
+            specifies from a library the widget function to be used for the widget.
+            Most widgets can be made right from classes.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.WidgetID">
+            <summary>
+            <para>
+            A Widget ID is an opaque unique non-zero handle identifying your widget.
+            Use 0 to specify "no widget". This type is defined as wide enough to hold a
+            pointer. You receive a widget ID when you create a new widget and then use
+            that widget ID to further refer to the widget.
             </para>
             </summary>
         </member>
@@ -775,6 +775,21 @@
             </para>
             </summary>
         </member>
+        <member name="T:XP.SDK.XPLM.CommandRef">
+            <summary>
+            <para>
+            A command ref is an opaque identifier for an X-Plane command. Command
+            references stay the same for the life of your plugin but not between
+            executions of X-Plane. Command refs are used to execute commands, create
+            commands, and create callbacks for particular commands.
+            </para>
+            <para>
+            Note that a command is not "owned" by a particular plugin. Since many
+            plugins may participate in a command's execution, the command does not go
+            away if the plugin that created it is unloaded.
+            </para>
+            </summary>
+        </member>
         <member name="T:XP.SDK.XPLM.CursorStatus">
             <summary>
             <para>
@@ -788,6 +803,16 @@
             <para>
             These enums define types of data files you can load or unload using the
             SDK.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.DataRef">
+            <summary>
+            <para>
+            A data ref is an opaque handle to data provided by the simulator or another
+            plugin. It uniquely identifies one variable (or array of variables) over
+            the lifetime of your plugin. You never hard code these values; you always
+            get them from XPLMFindDataRef.
             </para>
             </summary>
         </member>
@@ -818,6 +843,15 @@
             exist and new ones may be invented.  If you need a particularly specific
             use of these codes, consult Austin and/or be prepared to revise your code
             as X-Plane evolves.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.FlightLoopID">
+            <summary>
+            <para>
+            This is an opaque identifier for a flight loop callback. You can use this
+            identifier to easily track and remove your callbacks, or to use the new
+            flight loop APIs.
             </para>
             </summary>
         </member>
@@ -1033,9 +1067,23 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.HotKey.SetHotKeyCombination(XP.SDK.XPLM.Internal.HotKeyID,System.Byte,XP.SDK.XPLM.KeyFlags)">
+        <member name="M:XP.SDK.XPLM.HotKey.SetHotKeyCombination(XP.SDK.XPLM.HotKeyID,System.Byte,XP.SDK.XPLM.KeyFlags)">
             <summary>
             Remaps a hot keys keystrokes. You may remap another plugin's keystrokes.
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.HotKeyID">
+            <summary>
+            <para>
+            An opaque IDs used to identify a hot key.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.InstanceRef">
+            <summary>
+            <para>
+            An opaque handle to an instance.
+            </para>
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.Camera.ControlCamera(XP.SDK.XPLM.CameraControlDuration,XP.SDK.XPLM.Internal.CameraControlCallback,System.Void*)">
@@ -1116,21 +1164,6 @@
             Your command handler should return 1 to let processing of the command
             continue to other plugins and X-Plane, or 0 to halt processing, potentially
             bypassing X-Plane code.
-            </para>
-            </summary>
-        </member>
-        <member name="T:XP.SDK.XPLM.Internal.CommandRef">
-            <summary>
-            <para>
-            A command ref is an opaque identifier for an X-Plane command. Command
-            references stay the same for the life of your plugin but not between
-            executions of X-Plane. Command refs are used to execute commands, create
-            commands, and create callbacks for particular commands.
-            </para>
-            <para>
-            Note that a command is not "owned" by a particular plugin. Since many
-            plugins may participate in a command's execution, the command does not go
-            away if the plugin that created it is unloaded.
             </para>
             </summary>
         </member>
@@ -1228,7 +1261,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.CanWriteDataRef(XP.SDK.XPLM.Internal.DataRef)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.CanWriteDataRef(XP.SDK.XPLM.DataRef)">
             <summary>
             <para>
             Given a data ref, this routine returns true if you can successfully set the
@@ -1236,7 +1269,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.IsDataRefGood(XP.SDK.XPLM.Internal.DataRef)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.IsDataRefGood(XP.SDK.XPLM.DataRef)">
             <summary>
             <para>
             WARNING: This function is deprecated and should not be used. Datarefs are
@@ -1253,7 +1286,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.GetDataRefTypes(XP.SDK.XPLM.Internal.DataRef)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.GetDataRefTypes(XP.SDK.XPLM.DataRef)">
             <summary>
             <para>
             This routine returns the types of the data ref for accessor use. If a data
@@ -1261,7 +1294,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.GetDatai(XP.SDK.XPLM.Internal.DataRef)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.GetDatai(XP.SDK.XPLM.DataRef)">
             <summary>
             <para>
             Read an integer data ref and return its value. The return value is the
@@ -1270,7 +1303,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.SetDatai(XP.SDK.XPLM.Internal.DataRef,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.SetDatai(XP.SDK.XPLM.DataRef,System.Int32)">
             <summary>
             <para>
             Write a new value to an integer data ref. This routine is a no-op if the
@@ -1279,7 +1312,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.GetDataf(XP.SDK.XPLM.Internal.DataRef)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.GetDataf(XP.SDK.XPLM.DataRef)">
             <summary>
             <para>
             Read a single precision floating point dataref and return its value. The
@@ -1288,7 +1321,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.SetDataf(XP.SDK.XPLM.Internal.DataRef,System.Single)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.SetDataf(XP.SDK.XPLM.DataRef,System.Single)">
             <summary>
             <para>
             Write a new value to a single precision floating point data ref. This
@@ -1297,7 +1330,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.GetDatad(XP.SDK.XPLM.Internal.DataRef)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.GetDatad(XP.SDK.XPLM.DataRef)">
             <summary>
             <para>
             Read a double precision floating point dataref and return its value. The
@@ -1306,7 +1339,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.SetDatad(XP.SDK.XPLM.Internal.DataRef,System.Double)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.SetDatad(XP.SDK.XPLM.DataRef,System.Double)">
             <summary>
             <para>
             Write a new value to a double precision floating point data ref. This
@@ -1315,7 +1348,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.GetDatavi(XP.SDK.XPLM.Internal.DataRef,System.Int32*,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.GetDatavi(XP.SDK.XPLM.DataRef,System.Int32*,System.Int32,System.Int32)">
             <summary>
             <para>
             Read a part of an integer array dataref. If you pass NULL for outVaules,
@@ -1335,7 +1368,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.SetDatavi(XP.SDK.XPLM.Internal.DataRef,System.Int32*,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.SetDatavi(XP.SDK.XPLM.DataRef,System.Int32*,System.Int32,System.Int32)">
             <summary>
             <para>
             Write part or all of an integer array dataref. The values passed by
@@ -1351,7 +1384,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.GetDatavf(XP.SDK.XPLM.Internal.DataRef,System.Single*,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.GetDatavf(XP.SDK.XPLM.DataRef,System.Single*,System.Int32,System.Int32)">
             <summary>
             <para>
             Read a part of a single precision floating point array dataref. If you pass
@@ -1372,7 +1405,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.SetDatavf(XP.SDK.XPLM.Internal.DataRef,System.Single*,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.SetDatavf(XP.SDK.XPLM.DataRef,System.Single*,System.Int32,System.Int32)">
             <summary>
             <para>
             Write part or all of a single precision floating point array dataref. The
@@ -1388,7 +1421,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.GetDatab(XP.SDK.XPLM.Internal.DataRef,System.Void*,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.GetDatab(XP.SDK.XPLM.DataRef,System.Void*,System.Int32,System.Int32)">
             <summary>
             <para>
             Read a part of a byte array dataref. If you pass NULL for outVaules, the
@@ -1408,7 +1441,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.SetDatab(XP.SDK.XPLM.Internal.DataRef,System.Void*,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.SetDatab(XP.SDK.XPLM.DataRef,System.Void*,System.Int32,System.Int32)">
             <summary>
             <para>
             Write part or all of a byte array dataref. The values passed by inValues
@@ -1456,7 +1489,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.DataAccess.UnregisterDataAccessor(XP.SDK.XPLM.Internal.DataRef)">
+        <member name="M:XP.SDK.XPLM.Internal.DataAccess.UnregisterDataAccessor(XP.SDK.XPLM.DataRef)">
             <summary>
             <para>
             Use this routine to unregister any data accessors you may have registered.
@@ -1548,16 +1581,6 @@
             </para>
             </summary>
         </member>
-        <member name="T:XP.SDK.XPLM.Internal.DataRef">
-            <summary>
-            <para>
-            A data ref is an opaque handle to data provided by the simulator or another
-            plugin. It uniquely identifies one variable (or array of variables) over
-            the lifetime of your plugin. You never hard code these values; you always
-            get them from XPLMFindDataRef.
-            </para>
-            </summary>
-        </member>
         <member name="M:XP.SDK.XPLM.Internal.Display.RegisterDrawCallback(XP.SDK.XPLM.Internal.DrawCallback,XP.SDK.XPLM.DrawingPhase,System.Int32,System.Void*)">
             <summary>
             <para>
@@ -1628,7 +1651,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.DestroyWindow(XP.SDK.XPLM.Internal.WindowID)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.DestroyWindow(XP.SDK.XPLM.WindowID)">
             <summary>
             <para>
             This routine destroys a window.  The window's callbacks are not called
@@ -1771,7 +1794,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.GetWindowGeometry(XP.SDK.XPLM.Internal.WindowID,System.Int32*,System.Int32*,System.Int32*,System.Int32*)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.GetWindowGeometry(XP.SDK.XPLM.WindowID,System.Int32*,System.Int32*,System.Int32*,System.Int32*)">
             <summary>
             <para>
             This routine returns the position and size of a window. The units and
@@ -1793,7 +1816,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowGeometry(XP.SDK.XPLM.Internal.WindowID,System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowGeometry(XP.SDK.XPLM.WindowID,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
             <para>
             This routine allows you to set the position and size of a window.
@@ -1812,7 +1835,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.GetWindowGeometryOS(XP.SDK.XPLM.Internal.WindowID,System.Int32*,System.Int32*,System.Int32*,System.Int32*)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.GetWindowGeometryOS(XP.SDK.XPLM.WindowID,System.Int32*,System.Int32*,System.Int32*,System.Int32*)">
             <summary>
             <para>
             This routine returns the position and size of a "popped out" window (i.e.,
@@ -1821,7 +1844,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowGeometryOS(XP.SDK.XPLM.Internal.WindowID,System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowGeometryOS(XP.SDK.XPLM.WindowID,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
             <para>
             This routine allows you to set the position and size, in operating system
@@ -1836,7 +1859,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.GetWindowGeometryVR(XP.SDK.XPLM.Internal.WindowID,System.Int32*,System.Int32*)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.GetWindowGeometryVR(XP.SDK.XPLM.WindowID,System.Int32*,System.Int32*)">
             <summary>
             <para>
             Returns the width and height, in boxels, of a window in VR. Note that you
@@ -1845,7 +1868,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowGeometryVR(XP.SDK.XPLM.Internal.WindowID,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowGeometryVR(XP.SDK.XPLM.WindowID,System.Int32,System.Int32)">
             <summary>
             <para>
             This routine allows you to set the size, in boxels, of a window in VR (that
@@ -1857,21 +1880,21 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.GetWindowIsVisible(XP.SDK.XPLM.Internal.WindowID)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.GetWindowIsVisible(XP.SDK.XPLM.WindowID)">
             <summary>
             <para>
             This routine returns whether a window is visible.
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowIsVisible(XP.SDK.XPLM.Internal.WindowID,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowIsVisible(XP.SDK.XPLM.WindowID,System.Int32)">
             <summary>
             <para>
             This routine shows or hides a window.
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.WindowIsPoppedOut(XP.SDK.XPLM.Internal.WindowID)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.WindowIsPoppedOut(XP.SDK.XPLM.WindowID)">
             <summary>
             <para>
             True if this window has been popped out (making it a first-class window in
@@ -1885,7 +1908,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.WindowIsInVR(XP.SDK.XPLM.Internal.WindowID)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.WindowIsInVR(XP.SDK.XPLM.WindowID)">
             <summary>
             <para>
             True if this window has been moved to the virtual reality (VR) headset,
@@ -1899,7 +1922,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowGravity(XP.SDK.XPLM.Internal.WindowID,System.Single,System.Single,System.Single,System.Single)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowGravity(XP.SDK.XPLM.WindowID,System.Single,System.Single,System.Single,System.Single)">
             <summary>
             <para>
             A window's "gravity" controls how the window shifts as the whole X-Plane
@@ -1926,7 +1949,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowResizingLimits(XP.SDK.XPLM.Internal.WindowID,System.Int32,System.Int32,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowResizingLimits(XP.SDK.XPLM.WindowID,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
             <para>
             Sets the minimum and maximum size of the client rectangle of the given
@@ -1941,7 +1964,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowPositioningMode(XP.SDK.XPLM.Internal.WindowID,XP.SDK.XPLM.WindowPositioningMode,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowPositioningMode(XP.SDK.XPLM.WindowID,XP.SDK.XPLM.WindowPositioningMode,System.Int32)">
             <summary>
             <para>
             Sets the policy for how X-Plane will position your window.
@@ -1961,7 +1984,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowTitle(XP.SDK.XPLM.Internal.WindowID,System.Byte*)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowTitle(XP.SDK.XPLM.WindowID,System.Byte*)">
             <summary>
             <para>
             Sets the name for a window. This only applies to windows that opted-in to
@@ -1971,7 +1994,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowTitle(XP.SDK.XPLM.Internal.WindowID,System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowTitle(XP.SDK.XPLM.WindowID,System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             Sets the name for a window. This only applies to windows that opted-in to
@@ -1981,7 +2004,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.GetWindowRefCon(XP.SDK.XPLM.Internal.WindowID)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.GetWindowRefCon(XP.SDK.XPLM.WindowID)">
             <summary>
             <para>
             This routine returns a window's reference constant, the unique value you
@@ -1989,7 +2012,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowRefCon(XP.SDK.XPLM.Internal.WindowID,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.SetWindowRefCon(XP.SDK.XPLM.WindowID,System.Void*)">
             <summary>
             <para>
             This routine sets a window's reference constant.  Use this to pass data to
@@ -1997,7 +2020,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.TakeKeyboardFocus(XP.SDK.XPLM.Internal.WindowID)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.TakeKeyboardFocus(XP.SDK.XPLM.WindowID)">
             <summary>
             <para>
             This routine gives a specific window keyboard focus.  Keystrokes will be
@@ -2007,7 +2030,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.HasKeyboardFocus(XP.SDK.XPLM.Internal.WindowID)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.HasKeyboardFocus(XP.SDK.XPLM.WindowID)">
             <summary>
             <para>
             Returns true (1) if the indicated window has keyboard focus. Pass a window
@@ -2016,7 +2039,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.BringWindowToFront(XP.SDK.XPLM.Internal.WindowID)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.BringWindowToFront(XP.SDK.XPLM.WindowID)">
             <summary>
             <para>
             This routine brings the window to the front of the Z-order for its layer.
@@ -2035,7 +2058,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.IsWindowInFront(XP.SDK.XPLM.Internal.WindowID)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.IsWindowInFront(XP.SDK.XPLM.WindowID)">
             <summary>
             <para>
             This routine returns true if the window you passed in is the frontmost
@@ -2096,7 +2119,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.UnregisterHotKey(XP.SDK.XPLM.Internal.HotKeyID)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.UnregisterHotKey(XP.SDK.XPLM.HotKeyID)">
             <summary>
             <para>
             This API unregisters a hot key.  You can only unregister your own hot keys.
@@ -2117,7 +2140,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.GetHotKeyInfo(XP.SDK.XPLM.Internal.HotKeyID,System.Byte*,XP.SDK.XPLM.KeyFlags*,System.Byte*,XP.SDK.XPLM.Internal.PluginID*)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.GetHotKeyInfo(XP.SDK.XPLM.HotKeyID,System.Byte*,XP.SDK.XPLM.KeyFlags*,System.Byte*,XP.SDK.XPLM.PluginID*)">
             <summary>
             <para>
             Returns information about the hot key.  Return NULL for any  parameter you
@@ -2125,7 +2148,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Display.SetHotKeyCombination(XP.SDK.XPLM.Internal.HotKeyID,System.Byte,XP.SDK.XPLM.KeyFlags)">
+        <member name="M:XP.SDK.XPLM.Internal.Display.SetHotKeyCombination(XP.SDK.XPLM.HotKeyID,System.Byte,XP.SDK.XPLM.KeyFlags)">
             <summary>
             <para>
             XPLMSetHotKeyCombination remaps a hot keys keystrokes.  You may remap
@@ -2223,15 +2246,6 @@
             </para>
             <para>
             The reference constant you passed to your loop is passed back to you.
-            </para>
-            </summary>
-        </member>
-        <member name="T:XP.SDK.XPLM.Internal.FlightLoopID">
-            <summary>
-            <para>
-            This is an opaque identifier for a flight loop callback. You can use this
-            identifier to easily track and remove your callbacks, or to use the new
-            flight loop APIs.
             </para>
             </summary>
         </member>
@@ -2588,39 +2602,25 @@
             </para>
             </summary>
         </member>
-        <member name="T:XP.SDK.XPLM.Internal.HotKeyID">
-            <summary>
-            <para>
-            An opaque IDs used to identify a hot key.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.Instance.CreateInstance(XP.SDK.XPLM.Internal.ObjectRef,System.Byte**)">
+        <member name="M:XP.SDK.XPLM.Internal.Instance.CreateInstance(XP.SDK.XPLM.ObjectRef,System.Byte**)">
             <summary>
             <para>
             Registers an instance of an X-Plane object.
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Instance.DestroyInstance(XP.SDK.XPLM.Internal.InstanceRef)">
+        <member name="M:XP.SDK.XPLM.Internal.Instance.DestroyInstance(XP.SDK.XPLM.InstanceRef)">
             <summary>
             <para>
             Unregisters an instance.
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Instance.InstanceSetPosition(XP.SDK.XPLM.Internal.InstanceRef,XP.SDK.XPLM.Internal.DrawInfo*,System.Single*)">
+        <member name="M:XP.SDK.XPLM.Internal.Instance.InstanceSetPosition(XP.SDK.XPLM.InstanceRef,XP.SDK.XPLM.Internal.DrawInfo*,System.Single*)">
             <summary>
             <para>
             Updates both the position of the instance and all datarefs you registered
             for it.
-            </para>
-            </summary>
-        </member>
-        <member name="T:XP.SDK.XPLM.Internal.InstanceRef">
-            <summary>
-            <para>
-            An opaque handle to an instance.
             </para>
             </summary>
         </member>
@@ -2676,7 +2676,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Map.DestroyMapLayer(XP.SDK.XPLM.Internal.MapLayerID)">
+        <member name="M:XP.SDK.XPLM.Internal.Map.DestroyMapLayer(XP.SDK.XPLM.MapLayerID)">
             <summary>
             <para>
             Destroys a map layer you created (calling your
@@ -2716,7 +2716,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Map.DrawMapIconFromSheet(XP.SDK.XPLM.Internal.MapLayerID,System.Byte*,System.Int32,System.Int32,System.Int32,System.Int32,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single,System.Single)">
+        <member name="M:XP.SDK.XPLM.Internal.Map.DrawMapIconFromSheet(XP.SDK.XPLM.MapLayerID,System.Byte*,System.Int32,System.Int32,System.Int32,System.Int32,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single,System.Single)">
             <summary>
             <para>
             Enables plugin-created map layers to draw PNG icons using X-Plane's
@@ -2755,7 +2755,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Map.DrawMapIconFromSheet(XP.SDK.XPLM.Internal.MapLayerID,System.ReadOnlySpan{System.Char}@,System.Int32,System.Int32,System.Int32,System.Int32,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single,System.Single)">
+        <member name="M:XP.SDK.XPLM.Internal.Map.DrawMapIconFromSheet(XP.SDK.XPLM.MapLayerID,System.ReadOnlySpan{System.Char}@,System.Int32,System.Int32,System.Int32,System.Int32,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single,System.Single)">
             <summary>
             <para>
             Enables plugin-created map layers to draw PNG icons using X-Plane's
@@ -2794,7 +2794,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Map.DrawMapLabel(XP.SDK.XPLM.Internal.MapLayerID,System.Byte*,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single)">
+        <member name="M:XP.SDK.XPLM.Internal.Map.DrawMapLabel(XP.SDK.XPLM.MapLayerID,System.Byte*,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single)">
             <summary>
             <para>
             Enables plugin-created map layers to draw text labels using X-Plane's
@@ -2804,7 +2804,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Map.DrawMapLabel(XP.SDK.XPLM.Internal.MapLayerID,System.ReadOnlySpan{System.Char}@,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single)">
+        <member name="M:XP.SDK.XPLM.Internal.Map.DrawMapLabel(XP.SDK.XPLM.MapLayerID,System.ReadOnlySpan{System.Char}@,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single)">
             <summary>
             <para>
             Enables plugin-created map layers to draw text labels using X-Plane's
@@ -2814,7 +2814,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Map.MapProject(XP.SDK.XPLM.Internal.MapProjectionID,System.Double,System.Double,System.Single*,System.Single*)">
+        <member name="M:XP.SDK.XPLM.Internal.Map.MapProject(XP.SDK.XPLM.MapProjectionID,System.Double,System.Double,System.Single*,System.Single*)">
             <summary>
             <para>
             Projects a latitude/longitude into map coordinates. This is the inverse of
@@ -2827,7 +2827,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Map.MapUnproject(XP.SDK.XPLM.Internal.MapProjectionID,System.Single,System.Single,System.Double*,System.Double*)">
+        <member name="M:XP.SDK.XPLM.Internal.Map.MapUnproject(XP.SDK.XPLM.MapProjectionID,System.Single,System.Single,System.Double*,System.Double*)">
             <summary>
             <para>
             Transforms map coordinates back into a latitude and longitude. This is the
@@ -2840,7 +2840,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Map.MapScaleMeter(XP.SDK.XPLM.Internal.MapProjectionID,System.Single,System.Single)">
+        <member name="M:XP.SDK.XPLM.Internal.Map.MapScaleMeter(XP.SDK.XPLM.MapProjectionID,System.Single,System.Single)">
             <summary>
             <para>
             Returns the number of map units that correspond to a distance of one meter
@@ -2853,7 +2853,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Map.MapGetNorthHeading(XP.SDK.XPLM.Internal.MapProjectionID,System.Single,System.Single)">
+        <member name="M:XP.SDK.XPLM.Internal.Map.MapGetNorthHeading(XP.SDK.XPLM.MapProjectionID,System.Single,System.Single)">
             <summary>
             <para>
             Returns the heading (in degrees clockwise from "up") that corresponds to
@@ -2940,14 +2940,6 @@
             </para>
             </summary>
         </member>
-        <member name="T:XP.SDK.XPLM.Internal.MapLayerID">
-            <summary>
-            <para>
-            This is an opaque handle for a plugin-created map layer. Pass it to the map
-            drawing APIs from an appropriate callback to draw in the layer you created.
-            </para>
-            </summary>
-        </member>
         <member name="T:XP.SDK.XPLM.Internal.MapPrepareCacheCallback">
             <summary>
             <para>
@@ -2974,14 +2966,6 @@
             </para>
             </summary>
         </member>
-        <member name="T:XP.SDK.XPLM.Internal.MapProjectionID">
-            <summary>
-            <para>
-            This is an opaque handle for a map projection. Pass it to the projection
-            APIs to translate between map coordinates and latitude/longitudes.
-            </para>
-            </summary>
-        </member>
         <member name="T:XP.SDK.XPLM.Internal.MapWillBeDeletedCallback">
             <summary>
             <para>
@@ -2997,13 +2981,6 @@
             A menu handler function takes two reference pointers, one for the menu
             (specified when the menu was created) and one for the item (specified when
             the item was created).
-            </para>
-            </summary>
-        </member>
-        <member name="T:XP.SDK.XPLM.Internal.MenuID">
-            <summary>
-            <para>
-            This is a unique ID for each menu you create.
             </para>
             </summary>
         </member>
@@ -3033,7 +3010,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Menus.CreateMenu(System.Byte*,XP.SDK.XPLM.Internal.MenuID,System.Int32,XP.SDK.XPLM.Internal.MenuHandlerCallback,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Internal.Menus.CreateMenu(System.Byte*,XP.SDK.XPLM.MenuID,System.Int32,XP.SDK.XPLM.Internal.MenuHandlerCallback,System.Void*)">
             <summary>
             <para>
             This function creates a new menu and returns its ID.  It returns NULL if
@@ -3050,7 +3027,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Menus.CreateMenu(System.ReadOnlySpan{System.Char}@,XP.SDK.XPLM.Internal.MenuID,System.Int32,XP.SDK.XPLM.Internal.MenuHandlerCallback,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Internal.Menus.CreateMenu(System.ReadOnlySpan{System.Char}@,XP.SDK.XPLM.MenuID,System.Int32,XP.SDK.XPLM.Internal.MenuHandlerCallback,System.Void*)">
             <summary>
             <para>
             This function creates a new menu and returns its ID.  It returns NULL if
@@ -3067,7 +3044,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Menus.DestroyMenu(XP.SDK.XPLM.Internal.MenuID)">
+        <member name="M:XP.SDK.XPLM.Internal.Menus.DestroyMenu(XP.SDK.XPLM.MenuID)">
             <summary>
             <para>
             This function destroys a menu that you have created.  Use this to remove a
@@ -3075,7 +3052,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Menus.ClearAllMenuItems(XP.SDK.XPLM.Internal.MenuID)">
+        <member name="M:XP.SDK.XPLM.Internal.Menus.ClearAllMenuItems(XP.SDK.XPLM.MenuID)">
             <summary>
             <para>
             This function removes all menu items from a menu, allowing you to rebuild
@@ -3083,7 +3060,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Menus.AppendMenuItem(XP.SDK.XPLM.Internal.MenuID,System.Byte*,System.Void*,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.Menus.AppendMenuItem(XP.SDK.XPLM.MenuID,System.Byte*,System.Void*,System.Int32)">
             <summary>
             <para>
             This routine appends a new menu item to the bottom of a menu and returns
@@ -3105,7 +3082,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Menus.AppendMenuItem(XP.SDK.XPLM.Internal.MenuID,System.ReadOnlySpan{System.Char}@,System.Void*,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.Menus.AppendMenuItem(XP.SDK.XPLM.MenuID,System.ReadOnlySpan{System.Char}@,System.Void*,System.Int32)">
             <summary>
             <para>
             This routine appends a new menu item to the bottom of a menu and returns
@@ -3127,7 +3104,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Menus.AppendMenuItemWithCommand(XP.SDK.XPLM.Internal.MenuID,System.Byte*,XP.SDK.XPLM.Internal.CommandRef)">
+        <member name="M:XP.SDK.XPLM.Internal.Menus.AppendMenuItemWithCommand(XP.SDK.XPLM.MenuID,System.Byte*,XP.SDK.XPLM.CommandRef)">
             <summary>
             <para>
             Like XPLMAppendMenuItem(), but instead of the new menu item triggering the
@@ -3146,7 +3123,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Menus.AppendMenuItemWithCommand(XP.SDK.XPLM.Internal.MenuID,System.ReadOnlySpan{System.Char}@,XP.SDK.XPLM.Internal.CommandRef)">
+        <member name="M:XP.SDK.XPLM.Internal.Menus.AppendMenuItemWithCommand(XP.SDK.XPLM.MenuID,System.ReadOnlySpan{System.Char}@,XP.SDK.XPLM.CommandRef)">
             <summary>
             <para>
             Like XPLMAppendMenuItem(), but instead of the new menu item triggering the
@@ -3165,7 +3142,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Menus.AppendMenuSeparator(XP.SDK.XPLM.Internal.MenuID)">
+        <member name="M:XP.SDK.XPLM.Internal.Menus.AppendMenuSeparator(XP.SDK.XPLM.MenuID)">
             <summary>
             <para>
             This routine adds a separator to the end of a menu.
@@ -3176,7 +3153,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Menus.SetMenuItemName(XP.SDK.XPLM.Internal.MenuID,System.Int32,System.Byte*,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.Menus.SetMenuItemName(XP.SDK.XPLM.MenuID,System.Int32,System.Byte*,System.Int32)">
             <summary>
             <para>
             This routine changes the name of an existing menu item.  Pass in the menu
@@ -3184,7 +3161,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Menus.SetMenuItemName(XP.SDK.XPLM.Internal.MenuID,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.Menus.SetMenuItemName(XP.SDK.XPLM.MenuID,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32)">
             <summary>
             <para>
             This routine changes the name of an existing menu item.  Pass in the menu
@@ -3192,14 +3169,14 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Menus.CheckMenuItem(XP.SDK.XPLM.Internal.MenuID,System.Int32,XP.SDK.XPLM.MenuCheck)">
+        <member name="M:XP.SDK.XPLM.Internal.Menus.CheckMenuItem(XP.SDK.XPLM.MenuID,System.Int32,XP.SDK.XPLM.MenuCheck)">
             <summary>
             <para>
             Set whether a menu item is checked.  Pass in the menu ID and item index.
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Menus.CheckMenuItemState(XP.SDK.XPLM.Internal.MenuID,System.Int32,XP.SDK.XPLM.MenuCheck*)">
+        <member name="M:XP.SDK.XPLM.Internal.Menus.CheckMenuItemState(XP.SDK.XPLM.MenuID,System.Int32,XP.SDK.XPLM.MenuCheck*)">
             <summary>
             <para>
             This routine returns whether a menu item is checked or not. A menu item's
@@ -3207,14 +3184,14 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Menus.EnableMenuItem(XP.SDK.XPLM.Internal.MenuID,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.Menus.EnableMenuItem(XP.SDK.XPLM.MenuID,System.Int32,System.Int32)">
             <summary>
             <para>
             Sets whether this menu item is enabled.  Items start out enabled.
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Menus.RemoveMenuItem(XP.SDK.XPLM.Internal.MenuID,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.Menus.RemoveMenuItem(XP.SDK.XPLM.MenuID,System.Int32)">
             <summary>
             <para>
             Removes one item from a menu.  Note that all menu items below are moved up
@@ -3231,7 +3208,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Navigation.GetNextNavAid(XP.SDK.XPLM.Internal.NavRef)">
+        <member name="M:XP.SDK.XPLM.Internal.Navigation.GetNextNavAid(XP.SDK.XPLM.NavRef)">
             <summary>
             <para>
             Given a nav aid ref, this routine returns the next navaid.  It returns
@@ -3344,7 +3321,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Navigation.GetNavAidInfo(XP.SDK.XPLM.Internal.NavRef,XP.SDK.XPLM.NavType*,System.Single*,System.Single*,System.Single*,System.Int32*,System.Single*,System.Byte*,System.Byte*,System.Byte*)">
+        <member name="M:XP.SDK.XPLM.Internal.Navigation.GetNavAidInfo(XP.SDK.XPLM.NavRef,XP.SDK.XPLM.NavType*,System.Single*,System.Single*,System.Single*,System.Int32*,System.Single*,System.Byte*,System.Byte*,System.Byte*)">
             <summary>
             <para>
             This routine returns information about a navaid.  Any non-null field is
@@ -3404,7 +3381,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Navigation.GetFMSEntryInfo(System.Int32,XP.SDK.XPLM.NavType*,System.Byte*,XP.SDK.XPLM.Internal.NavRef*,System.Int32*,System.Single*,System.Single*)">
+        <member name="M:XP.SDK.XPLM.Internal.Navigation.GetFMSEntryInfo(System.Int32,XP.SDK.XPLM.NavType*,System.Byte*,XP.SDK.XPLM.NavRef*,System.Int32*,System.Single*,System.Single*)">
             <summary>
             <para>
             This routine returns information about a given FMS entry.  A reference to a
@@ -3417,7 +3394,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Navigation.SetFMSEntryInfo(System.Int32,XP.SDK.XPLM.Internal.NavRef,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.Navigation.SetFMSEntryInfo(System.Int32,XP.SDK.XPLM.NavRef,System.Int32)">
             <summary>
             <para>
             This routine changes an entry in the FMS to have the destination navaid
@@ -3458,23 +3435,6 @@
             </para>
             </summary>
         </member>
-        <member name="T:XP.SDK.XPLM.Internal.NavRef">
-            <summary>
-            <para>
-            XPLMNavRef is an iterator into the navigation database.  The navigation
-            database is essentially an array, but it is not necessarily densely
-            populated. The only assumption you can safely make is that like-typed
-            nav-aids are  grouped together.
-            </para>
-            <para>
-            Use XPLMNavRef to refer to a nav-aid.
-            </para>
-            <para>
-            XPLM_NAV_NOT_FOUND is returned by functions that return an XPLMNavRef when
-            the iterator must be invalid.
-            </para>
-            </summary>
-        </member>
         <member name="T:XP.SDK.XPLM.Internal.ObjectLoadedCallback">
             <summary>
             <para>
@@ -3487,14 +3447,6 @@
             If your plugin is disabled, this callback will be delivered as soon as the
             plugin is re-enabled. If your plugin is unloaded before this callback is
             ever called, the SDK will release the object handle for you.
-            </para>
-            </summary>
-        </member>
-        <member name="T:XP.SDK.XPLM.Internal.ObjectRef">
-            <summary>
-            <para>
-            An XPLMObjectRef is a opaque handle to an .obj file that has been loaded
-            into memory.
             </para>
             </summary>
         </member>
@@ -3565,7 +3517,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Planes.CountAircraft(System.Int32*,System.Int32*,XP.SDK.XPLM.Internal.PluginID*)">
+        <member name="M:XP.SDK.XPLM.Internal.Planes.CountAircraft(System.Int32*,System.Int32*,XP.SDK.XPLM.PluginID*)">
             <summary>
             <para>
             This function returns the number of aircraft X-Plane is capable of having,
@@ -3750,7 +3702,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Plugin.GetPluginInfo(XP.SDK.XPLM.Internal.PluginID,System.Byte*,System.Byte*,System.Byte*,System.Byte*)">
+        <member name="M:XP.SDK.XPLM.Internal.Plugin.GetPluginInfo(XP.SDK.XPLM.PluginID,System.Byte*,System.Byte*,System.Byte*,System.Byte*)">
             <summary>
             <para>
             This routine returns information about a plug-in.  Each parameter should be
@@ -3765,14 +3717,14 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Plugin.IsPluginEnabled(XP.SDK.XPLM.Internal.PluginID)">
+        <member name="M:XP.SDK.XPLM.Internal.Plugin.IsPluginEnabled(XP.SDK.XPLM.PluginID)">
             <summary>
             <para>
             Returns whether the specified plug-in is enabled for running.
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Plugin.EnablePlugin(XP.SDK.XPLM.Internal.PluginID)">
+        <member name="M:XP.SDK.XPLM.Internal.Plugin.EnablePlugin(XP.SDK.XPLM.PluginID)">
             <summary>
             <para>
             This routine enables a plug-in if it is not already enabled.  It returns 1
@@ -3782,7 +3734,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Plugin.DisablePlugin(XP.SDK.XPLM.Internal.PluginID)">
+        <member name="M:XP.SDK.XPLM.Internal.Plugin.DisablePlugin(XP.SDK.XPLM.PluginID)">
             <summary>
             <para>
             This routine disableds an enabled plug-in.
@@ -3800,7 +3752,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Plugin.SendMessageToPlugin(XP.SDK.XPLM.Internal.PluginID,System.Int32,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Internal.Plugin.SendMessageToPlugin(XP.SDK.XPLM.PluginID,System.Int32,System.Void*)">
             <summary>
             <para>
             This function sends a message to another plug-in or X-Plane.  Pass
@@ -3870,37 +3822,11 @@
             </para>
             </summary>
         </member>
-        <member name="T:XP.SDK.XPLM.Internal.PluginID">
-            <summary>
-            <para>
-            Each plug-in is identified by a unique integer ID.  This ID can be used to
-            disable or enable a plug-in, or discover what plug-in is 'running' at the
-            time.  A plug-in ID is unique within the currently running instance of
-            X-Plane unless plug-ins are reloaded.  Plug-ins may receive a different
-            unique ID each time they are loaded.
-            </para>
-            <para>
-            For persistent identification of plug-ins, use XPLMFindPluginBySignature in
-            XPLMUtiltiies.h
-            </para>
-            <para>
-            -1 indicates no plug-in.
-            </para>
-            </summary>
-        </member>
         <member name="T:XP.SDK.XPLM.Internal.ProbeInfo">
             <summary>
             <para>
             XPLMProbeInfo_t contains the results of a probe call. Make sure to set
             structSize to the size of the struct before using it.
-            </para>
-            </summary>
-        </member>
-        <member name="T:XP.SDK.XPLM.Internal.ProbeRef">
-            <summary>
-            <para>
-            An XPLMProbeRef is an opaque handle to a probe, used for querying the
-            terrain.
             </para>
             </summary>
         </member>
@@ -3966,14 +3892,14 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Processing.DestroyFlightLoop(XP.SDK.XPLM.Internal.FlightLoopID)">
+        <member name="M:XP.SDK.XPLM.Internal.Processing.DestroyFlightLoop(XP.SDK.XPLM.FlightLoopID)">
             <summary>
             <para>
             This routine destroys a flight loop callback by ID.
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Processing.ScheduleFlightLoop(XP.SDK.XPLM.Internal.FlightLoopID,System.Single,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.Processing.ScheduleFlightLoop(XP.SDK.XPLM.FlightLoopID,System.Single,System.Int32)">
             <summary>
             <para>
             This routine schedules a flight loop callback for future execution. If
@@ -4042,14 +3968,14 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Scenery.DestroyProbe(XP.SDK.XPLM.Internal.ProbeRef)">
+        <member name="M:XP.SDK.XPLM.Internal.Scenery.DestroyProbe(XP.SDK.XPLM.ProbeRef)">
             <summary>
             <para>
             Deallocates an existing probe object.
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Scenery.ProbeTerrainXYZ(XP.SDK.XPLM.Internal.ProbeRef,System.Single,System.Single,System.Single,XP.SDK.XPLM.Internal.ProbeInfo*)">
+        <member name="M:XP.SDK.XPLM.Internal.Scenery.ProbeTerrainXYZ(XP.SDK.XPLM.ProbeRef,System.Single,System.Single,System.Single,XP.SDK.XPLM.Internal.ProbeInfo*)">
             <summary>
             <para>
             Probes the terrain. Pass in the XYZ coordinate of the probe point, a probe
@@ -4177,7 +4103,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Scenery.DrawObjects(XP.SDK.XPLM.Internal.ObjectRef,System.Int32,XP.SDK.XPLM.Internal.DrawInfo*,System.Int32,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Internal.Scenery.DrawObjects(XP.SDK.XPLM.ObjectRef,System.Int32,XP.SDK.XPLM.Internal.DrawInfo*,System.Int32,System.Int32)">
             <summary>
             <para>
             XPLMDrawObjects draws an object from an OBJ file one or more times. You
@@ -4204,7 +4130,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Scenery.UnloadObject(XP.SDK.XPLM.Internal.ObjectRef)">
+        <member name="M:XP.SDK.XPLM.Internal.Scenery.UnloadObject(XP.SDK.XPLM.ObjectRef)">
             <summary>
             <para>
             This routine marks an object as no longer being used by your plugin.
@@ -4650,7 +4576,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Utilities.CommandBegin(XP.SDK.XPLM.Internal.CommandRef)">
+        <member name="M:XP.SDK.XPLM.Internal.Utilities.CommandBegin(XP.SDK.XPLM.CommandRef)">
             <summary>
             <para>
             XPLMCommandBegin starts the execution of a command, specified by its
@@ -4659,7 +4585,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Utilities.CommandEnd(XP.SDK.XPLM.Internal.CommandRef)">
+        <member name="M:XP.SDK.XPLM.Internal.Utilities.CommandEnd(XP.SDK.XPLM.CommandRef)">
             <summary>
             <para>
             XPLMCommandEnd ends the execution of a given command that was started with
@@ -4667,7 +4593,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Utilities.CommandOnce(XP.SDK.XPLM.Internal.CommandRef)">
+        <member name="M:XP.SDK.XPLM.Internal.Utilities.CommandOnce(XP.SDK.XPLM.CommandRef)">
             <summary>
             <para>
             This executes a given command momentarily, that is, the command begins and
@@ -4695,7 +4621,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Utilities.RegisterCommandHandler(XP.SDK.XPLM.Internal.CommandRef,XP.SDK.XPLM.Internal.CommandCallback,System.Int32,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Internal.Utilities.RegisterCommandHandler(XP.SDK.XPLM.CommandRef,XP.SDK.XPLM.Internal.CommandCallback,System.Int32,System.Void*)">
             <summary>
             <para>
             XPLMRegisterCommandHandler registers a callback to be called when a command
@@ -4710,21 +4636,11 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.Utilities.UnregisterCommandHandler(XP.SDK.XPLM.Internal.CommandRef,XP.SDK.XPLM.Internal.CommandCallback,System.Int32,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Internal.Utilities.UnregisterCommandHandler(XP.SDK.XPLM.CommandRef,XP.SDK.XPLM.Internal.CommandCallback,System.Int32,System.Void*)">
             <summary>
             <para>
             XPLMUnregisterCommandHandler removes a command callback registered with
             XPLMRegisterCommandHandler.
-            </para>
-            </summary>
-        </member>
-        <member name="T:XP.SDK.XPLM.Internal.WindowID">
-            <summary>
-            <para>
-            This is an opaque identifier for a window.  You use it to control your
-            window. When you create a window (via either XPLMCreateWindow() or
-            XPLMCreateWindowEx()), you will specify callbacks to handle drawing, mouse
-            interaction, etc.
             </para>
             </summary>
         </member>
@@ -4788,6 +4704,14 @@
             </para>
             </summary>
         </member>
+        <member name="T:XP.SDK.XPLM.MapLayerID">
+            <summary>
+            <para>
+            This is an opaque handle for a plugin-created map layer. Pass it to the map
+            drawing APIs from an appropriate callback to draw in the layer you created.
+            </para>
+            </summary>
+        </member>
         <member name="T:XP.SDK.XPLM.MapLayerType">
             <summary>
             <para>
@@ -4805,6 +4729,14 @@
             draw a text label such that it is always rotated zero degrees relative to
             the user's perspective. In that case, you would have it draw with UI
             orientation.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.MapProjectionID">
+            <summary>
+            <para>
+            This is an opaque handle for a map projection. Pass it to the projection
+            APIs to translate between map coordinates and latitude/longitudes.
             </para>
             </summary>
         </member>
@@ -4829,6 +4761,13 @@
             </para>
             </summary>
         </member>
+        <member name="T:XP.SDK.XPLM.MenuID">
+            <summary>
+            <para>
+            This is a unique ID for each menu you create.
+            </para>
+            </summary>
+        </member>
         <member name="T:XP.SDK.XPLM.MouseStatus">
             <summary>
             <para>
@@ -4838,6 +4777,23 @@
             the mouse up message.  All of these messages will be directed to the same
             window; you are guaranteed to not receive a drag or mouse-up event without
             first receiving the corresponding mouse-down.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.NavRef">
+            <summary>
+            <para>
+            XPLMNavRef is an iterator into the navigation database.  The navigation
+            database is essentially an array, but it is not necessarily densely
+            populated. The only assumption you can safely make is that like-typed
+            nav-aids are  grouped together.
+            </para>
+            <para>
+            Use XPLMNavRef to refer to a nav-aid.
+            </para>
+            <para>
+            XPLM_NAV_NOT_FOUND is returned by functions that return an XPLMNavRef when
+            the iterator must be invalid.
             </para>
             </summary>
         </member>
@@ -4853,6 +4809,40 @@
             FMS. It will not exist in the database, and cannot be programmed into the
             FMS. Querying the FMS for navaids will return it.  Use
             XPLMSetFMSEntryLatLon to set a lat/lon waypoint.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.ObjectRef">
+            <summary>
+            <para>
+            An XPLMObjectRef is a opaque handle to an .obj file that has been loaded
+            into memory.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.PluginID">
+            <summary>
+            <para>
+            Each plug-in is identified by a unique integer ID.  This ID can be used to
+            disable or enable a plug-in, or discover what plug-in is 'running' at the
+            time.  A plug-in ID is unique within the currently running instance of
+            X-Plane unless plug-ins are reloaded.  Plug-ins may receive a different
+            unique ID each time they are loaded.
+            </para>
+            <para>
+            For persistent identification of plug-ins, use XPLMFindPluginBySignature in
+            XPLMUtiltiies.h
+            </para>
+            <para>
+            -1 indicates no plug-in.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.ProbeRef">
+            <summary>
+            <para>
+            An XPLMProbeRef is an opaque handle to a probe, used for querying the
+            terrain.
             </para>
             </summary>
         </member>
@@ -5204,7 +5194,7 @@
             Removes keyboard focus from currently focused window.
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.WindowBase.FromId(XP.SDK.XPLM.Internal.WindowID)">
+        <member name="M:XP.SDK.XPLM.WindowBase.FromId(XP.SDK.XPLM.WindowID)">
             <summary>
             Gets the window with the specified <paramref name="id"/>.
             </summary>
@@ -5260,6 +5250,16 @@
             </para>
             </summary>
         </member>
+        <member name="T:XP.SDK.XPLM.WindowID">
+            <summary>
+            <para>
+            This is an opaque identifier for a window.  You use it to control your
+            window. When you create a window (via either XPLMCreateWindow() or
+            XPLMCreateWindowEx()), you will specify callbacks to handle drawing, mouse
+            interaction, etc.
+            </para>
+            </summary>
+        </member>
         <member name="T:XP.SDK.XPLM.WindowLayer">
             <summary>
             <para>
@@ -5295,6 +5295,275 @@
             "free" positioning mode.
             </para>
             </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.XPlane">
+            <summary>
+            Provides various utility functions of the X-Plane.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.XPlane.SystemPath">
+            <summary>
+            Gets the full path to the X-System folder.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.XPlane.PreferencesPath">
+            <summary>
+            Gets a full path to a file that is within X-Plane’s preferences directory.
+            </summary>
+            <remarks>
+            You should remove the file name back to the last directory separator to get the preferences directory.
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.XPLM.XPlane.Language">
+            <summary>
+            Returns the langauge the sim is running in.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.XPlane.Version">
+            <summary>
+            Gets the version of X-Plane.
+            </summary>
+            <remarks>
+            The version is a three- or four-digit decimal number, e.g. 1142 for version 11.42 of X-Plane.
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.XPLM.XPlane.XplmVersion">
+            <summary>
+            Gets the version of the XPLM DLL.
+            </summary>
+            <remarks>
+            The version is a three-digit decimal number, e.g. 300 for version 3.00 of XPLM.
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.XPLM.XPlane.HostApplication">
+            <summary>
+            Gets the host application ID.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.SetErrorCallback(System.Action{System.String})">
+            <summary>
+            <para>
+            Installs an error-reporting callback for your plugin.
+            Normally the plugin system performs minimum diagnostics to maximize
+            performance. When you install an error callback, you will receive calls due
+            to certain plugin errors, such as passing bad parameters or incorrect data.
+            </para>
+            <para>
+            The intention is for you to install the error callback during debug
+            sections and put a break-point inside your callback. This will cause you to
+            break into the debugger from within the SDK at the point in your plugin
+            where you made an illegal call.
+            </para>
+            <para>
+            Installing an error callback may activate error checking code that would
+            not normally run, and this may adversely affect performance, so do not
+            leave error callbacks installed in shipping plugins.
+            </para>
+            <para>
+            For this reason, it is recommended to use <seealso cref="M:XP.SDK.XPLM.XPlane.SetErrorCallbackForDebugBuild(System.Action{System.String})"/> instead.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.SetErrorCallbackForDebugBuild(System.Action{System.String})">
+            <summary>
+            <para>
+            Installs an error-reporting callback for your plugin.
+            Normally the plugin system performs minimum diagnostics to maximize
+            performance. When you install an error callback, you will receive calls due
+            to certain plugin errors, such as passing bad parameters or incorrect data.
+            </para>
+            <para>
+            The intention is for you to install the error callback during debug
+            sections and put a break-point inside your callback. This will cause you to
+            break into the debugger from within the SDK at the point in your plugin
+            where you made an illegal call.
+            </para>
+            <para>
+            Installing an error callback may activate error checking code that would
+            not normally run, and this may adversely affect performance, so do not
+            leave error callbacks installed in shipping plugins.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.Speak(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            This function displays the string in a translucent overlay over the current display and also speaks the string if text-to-speech is enabled.
+            The string is spoken asynchronously, this function returns immediately. This function may not speak or print depending on user preferences.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.FindSymbol(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            This routine will attempt to find the symbol passed in the <paramref name="name"/>
+            parameter. If the symbol is found a pointer the function is returned,
+            otherwise the function will return <seealso cref="F:System.IntPtr.Zero"/>.
+            </summary>
+            <remarks>
+            <para>
+            You can use FindSymbol to utilize newer SDK API features without requiring newer versions of the SDK (and X-Plane)
+            as your minimum X-Plane version as follows:
+            </para>
+            <list type="bullet">
+            <item>
+            <description>
+            Use <seealso cref="P:XP.SDK.XPLM.XPlane.Version"/>, <see cref="P:XP.SDK.XPLM.XPlane.XplmVersion"/> and <see cref="M:XP.SDK.XPLM.XPlane.FindSymbol(System.ReadOnlySpan{System.Char}@)"/> to detect that the host sim is new enough
+            to use new functions and resolve function pointers.
+            </description>
+            </item>
+            <item>
+            <description>
+            Conditionally use the new functions if and only if <see cref="M:XP.SDK.XPLM.XPlane.FindSymbol(System.ReadOnlySpan{System.Char}@)"/> returns a non-NULL pointer.
+            </description>
+            </item>
+            </list>
+            <para>
+            Warning: you should always check the XPLM API version as well as the results of <see cref="M:XP.SDK.XPLM.XPlane.FindSymbol(System.ReadOnlySpan{System.Char}@)"/> to determine if functionality is safe to use.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.FindFunction``1(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            This routine will attempt to find the symbol passed in the <paramref name="name"/>
+            parameter. If the symbol is found a delegate is returned,
+            otherwise the function will return <seealso langword="null"/>.
+            </summary>
+            <remarks>
+            <para>
+            You can use FindSymbol to utilize newer SDK API features without requiring newer versions of the SDK (and X-Plane)
+            as your minimum X-Plane version as follows:
+            </para>
+            <list type="bullet">
+            <item>
+            <description>
+            Use <seealso cref="P:XP.SDK.XPLM.XPlane.Version"/>, <see cref="P:XP.SDK.XPLM.XPlane.XplmVersion"/> and <see cref="M:XP.SDK.XPLM.XPlane.FindFunction``1(System.ReadOnlySpan{System.Char}@)"/> to detect that the host sim is new enough
+            to use new functions and resolve function pointers.
+            </description>
+            </item>
+            <item>
+            <description>
+            Conditionally use the new functions if and only if <see cref="M:XP.SDK.XPLM.XPlane.FindFunction``1(System.ReadOnlySpan{System.Char}@)"/> returns a non-NULL pointer.
+            </description>
+            </item>
+            </list>
+            <para>
+            Warning: you should always check the XPLM API version as well as the results of <see cref="M:XP.SDK.XPLM.XPlane.FindFunction``1(System.ReadOnlySpan{System.Char}@)"/> to determine if functionality is safe to use.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.LoadDataFile(XP.SDK.XPLM.DataFileType,System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            Loads a data file of a given type. Paths must be relative to the X-System folder.
+            To clear the replay, pass <see langword="null"/> or <see langword="default"/> as the <paramref name="path"/>
+            (this is only valid with replay movies, not sit files).
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.SaveDataFile(XP.SDK.XPLM.DataFileType,System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            Saves the current situation or replay; paths are relative to the X-System folder.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.GetVirtualKeyDescription(System.Byte)">
+            <summary>
+            Given a virtual key code this routine returns a human-readable string describing the character.
+            This routine is provided for showing users what keyboard mappings they have set up.
+            The string may read 'unknown' or be an empty string if the virtual key is unknown.
+            </summary>
+            <param name="virtualKey"></param>
+            <returns></returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.ReloadScenery">
+            <summary>
+            Reloads the current set of scenery.
+            You can use this function in two typical ways: simply call it to reload the scenery,
+            picking up any new installed scenery, .env files, etc. from disk.
+            Or, change the lat/ref and lon/ref data refs and then call this function to shift the scenery environment.
+            This routine is equivalent to picking "reload scenery" from the developer menu.
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.XPlane.Trace">
+            <summary>
+            Provides the methods to output string to the X-Plane's Log.txt file.
+            </summary>
+            <remarks>
+            <para>
+            Please do not leave routine diagnostic logging enabled in your shipping plugin.
+            The X-Plane Log file is shared by X-Plane and every plugin in the system,
+            and plugins that (when functioning normally) print verbose log output make it difficult for developers
+            to find error conditions from other parts of the system.
+            </para>
+            <para>
+            For most cases you should use <seealso cref="T:XP.SDK.XPLM.XPlane.Debug"/> which is no-op in Release builds.
+            </para>
+            </remarks>
+            <seealso cref="T:XP.SDK.XPLM.XPlane.Debug"/>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.Trace.Write(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            This routine outputs a string to the Log.txt file.
+            The file is immediately flushed so you will not lose data. (This does cause a performance penalty.)
+            </summary>
+            <remarks>
+            <para>
+            Please do not leave routine diagnostic logging enabled in your shipping plugin.
+            The X-Plane Log file is shared by X-Plane and every plugin in the system,
+            and plugins that (when functioning normally) print verbose log output make it difficult for developers
+            to find error conditions from other parts of the system.
+            </para>
+            <para>
+            For most cases you should use <seealso cref="M:XP.SDK.XPLM.XPlane.Debug.Write(System.ReadOnlySpan{System.Char}@)"/> which is no-op in Release builds.
+            </para>
+            </remarks>
+            <seealso cref="M:XP.SDK.XPLM.XPlane.Trace.WriteLine(System.ReadOnlySpan{System.Char}@)"/>
+            <seealso cref="T:XP.SDK.XPLM.XPlane.Debug"/>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.Trace.WriteLine(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            This routine outputs a string to the Log.txt file.
+            The file is immediately flushed so you will not lose data. (This does cause a performance penalty.)
+            </summary>
+            <remarks>
+            <para>
+            Please do not leave routine diagnostic logging enabled in your shipping plugin.
+            The X-Plane Log file is shared by X-Plane and every plugin in the system,
+            and plugins that (when functioning normally) print verbose log output make it difficult for developers
+            to find error conditions from other parts of the system.
+            </para>
+            <para>
+            For most cases you should use <seealso cref="M:XP.SDK.XPLM.XPlane.Debug.WriteLine(System.ReadOnlySpan{System.Char}@)"/> which is no-op in Release builds.
+            </para>
+            </remarks>
+            <seealso cref="M:XP.SDK.XPLM.XPlane.Trace.Write(System.ReadOnlySpan{System.Char}@)"/>
+            <seealso cref="T:XP.SDK.XPLM.XPlane.Debug"/>
+        </member>
+        <member name="T:XP.SDK.XPLM.XPlane.Debug">
+            <summary>
+            Provides the methods to output string to the X-Plane's Log.txt file.
+            </summary>
+            <remarks>
+            This method is no-op if DEBUG is not defined.
+            </remarks>
+            <seealso cref="T:XP.SDK.XPLM.XPlane.Trace" />
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.Debug.Write(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            This routine outputs a string to the Log.txt file.
+            The file is immediately flushed so you will not lose data. (This does cause a performance penalty.)
+            </summary>
+            <remarks>
+            This method is no-op if DEBUG is not defined.
+            </remarks>
+            <seealso cref="M:XP.SDK.XPLM.XPlane.Debug.WriteLine(System.ReadOnlySpan{System.Char}@)"/>
+            <seealso cref="T:XP.SDK.XPLM.XPlane.Trace"/>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.Debug.WriteLine(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            This routine outputs a string to the Log.txt file.
+            The file is immediately flushed so you will not lose data. (This does cause a performance penalty.)
+            </summary>
+            <remarks>
+            This method is no-op if DEBUG is not defined.
+            </remarks>
+            <seealso cref="M:XP.SDK.XPLM.XPlane.Debug.Write(System.ReadOnlySpan{System.Char}@)"/>
+            <seealso cref="T:XP.SDK.XPLM.XPlane.Trace"/>
         </member>
     </members>
 </doc>

@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace XP.SDK.XPLM.Internal
+namespace XP.SDK.XPLM
 {
     
     /// <summary>
