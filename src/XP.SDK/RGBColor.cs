@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace XP.SDK
 {
@@ -26,5 +24,14 @@ namespace XP.SDK
         public static bool operator ==(RGBColor left, RGBColor right) => left.Equals(right);
 
         public static bool operator !=(RGBColor left, RGBColor right) => !left.Equals(right);
+
+        public static implicit operator RGBColor((float r, float g, float b) tuple) => new RGBColor(tuple.r, tuple.g, tuple.b);
+
+        public void Deconstruct(out float r, out float g, out float b)
+        {
+            r = R;
+            g = G;
+            b = B;
+        }
     }
 }

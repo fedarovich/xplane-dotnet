@@ -17,13 +17,15 @@ namespace XP.SDK.XPLM.Internal
         /// </para>
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void DrawString(RGBColor inColorRGB, int inXOffset, int inYOffset, in ReadOnlySpan<char> inChar, int* inWordWrapWidth, FontID inFontID)
+        public static unsafe void DrawString(in RGBColor inColorRGB, int inXOffset, int inYOffset, in ReadOnlySpan<char> inChar, int* inWordWrapWidth, FontID inFontID)
         {
             IL.DeclareLocals(false);
             Span<byte> inCharUtf8 = stackalloc byte[(inChar.Length << 1) | 1];
             var inCharPtr = Utils.ToUtf8Unsafe(inChar, inCharUtf8);
-            float* color = &inColorRGB.R;
-            DrawString(color, inXOffset, inYOffset, inCharPtr, inWordWrapWidth, inFontID);
+            fixed (float* color = &inColorRGB.R)
+            {
+                DrawString(color, inXOffset, inYOffset, inCharPtr, inWordWrapWidth, inFontID);
+            }
         }
     }
 }

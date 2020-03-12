@@ -35,5 +35,13 @@ namespace XP.SDK
         public static bool operator ==(Rect left, Rect right) => left.Equals(right);
 
         public static bool operator !=(Rect left, Rect right) => !left.Equals(right);
+
+        public void Deconstruct(out int left, out int top, out int right, out int bottom)
+        {
+            left = Left;
+            top = Top;
+            right = Right;
+            bottom = Bottom;
+        }
     }
 }
