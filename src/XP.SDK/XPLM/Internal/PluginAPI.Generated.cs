@@ -5,7 +5,7 @@ using InlineIL;
 
 namespace XP.SDK.XPLM.Internal
 {
-    public static partial class Plugin
+    public static partial class PluginAPI
     {
         private static IntPtr GetMyIDPtr;
         private static IntPtr CountPluginsPtr;
@@ -23,7 +23,7 @@ namespace XP.SDK.XPLM.Internal
         private static IntPtr EnableFeaturePtr;
         private static IntPtr EnumerateFeaturesPtr;
 
-        static Plugin()
+        static PluginAPI()
         {
             GetMyIDPtr = Lib.GetExport("XPLMGetMyID");
             CountPluginsPtr = Lib.GetExport("XPLMCountPlugins");
@@ -440,9 +440,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void EnumerateFeatures(FeatureEnumeratorCallback inEnumerator, void* inRef)
         {
             IL.DeclareLocals(false);
-            IntPtr inEnumeratorPtr = Marshal.GetFunctionPointerForDelegate(inEnumerator);
+            IntPtr inEnumeratorPtr = inEnumerator != null ? Marshal.GetFunctionPointerForDelegate(inEnumerator) : default;
             EnumerateFeaturesPrivate(inEnumeratorPtr, inRef);
-            GC.KeepAlive(inEnumeratorPtr);
+            GC.KeepAlive(inEnumerator);
         }
     }
 }

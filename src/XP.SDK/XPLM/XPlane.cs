@@ -52,21 +52,21 @@ namespace XP.SDK.XPLM
             static (int, int, HostApplicationID) GetVersion()
             {
                 (int xplaneVersion, int xplmVersion, HostApplicationID app) result = default;
-                Utilities.GetVersions(&result.xplaneVersion, &result.xplmVersion, &result.app);
+                UtilitiesAPI.GetVersions(&result.xplaneVersion, &result.xplmVersion, &result.app);
                 return result;
             }
 
             static string GetSystemPath()
             {
                 Span<byte> buffer = stackalloc byte[MaxPath];
-                Utilities.GetSystemPath((byte*)Unsafe.AsPointer(ref buffer.GetPinnableReference()));
+                UtilitiesAPI.GetSystemPath((byte*)Unsafe.AsPointer(ref buffer.GetPinnableReference()));
                 return Encoding.UTF8.GetString(buffer[..buffer.IndexOf((byte)0)]);
             }
 
             static string GetPreferencesPath()
             {
                 Span<byte> buffer = stackalloc byte[MaxPath];
-                Utilities.GetSystemPath((byte*)Unsafe.AsPointer(ref buffer.GetPinnableReference()));
+                UtilitiesAPI.GetSystemPath((byte*)Unsafe.AsPointer(ref buffer.GetPinnableReference()));
                 return Encoding.UTF8.GetString(buffer[..buffer.IndexOf((byte)0)]);
             }
 
@@ -100,7 +100,7 @@ namespace XP.SDK.XPLM
         /// <summary>
         /// Returns the langauge the sim is running in.
         /// </summary>
-        public static LanguageCode Language => Utilities.GetLanguage();
+        public static LanguageCode Language => UtilitiesAPI.GetLanguage();
 
         /// <summary>
         /// Gets the version of X-Plane.
@@ -158,7 +158,7 @@ namespace XP.SDK.XPLM
 
             if (Interlocked.Exchange(ref _errorCallback, callback) == null)
             {
-                Utilities.SetErrorCallback(ErrorCallback);
+                UtilitiesAPI.SetErrorCallback(ErrorCallback);
             }
         }
 
@@ -195,7 +195,7 @@ namespace XP.SDK.XPLM
         /// </summary>
         public static void Speak(in ReadOnlySpan<char> str)
         {
-            Utilities.SpeakString(str);
+            UtilitiesAPI.SpeakString(str);
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace XP.SDK.XPLM
         /// </remarks>
         public static unsafe IntPtr FindSymbol(in ReadOnlySpan<char> name)
         {
-            return new IntPtr(Utilities.FindSymbol(name));
+            return new IntPtr(UtilitiesAPI.FindSymbol(name));
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace XP.SDK.XPLM
         /// </summary>
         public static int LoadDataFile(DataFileType fileType, in ReadOnlySpan<char> path = default)
         {
-            return Utilities.LoadDataFile(fileType, path);
+            return UtilitiesAPI.LoadDataFile(fileType, path);
         }
 
         /// <summary>
@@ -278,7 +278,7 @@ namespace XP.SDK.XPLM
         /// </summary>
         public static int SaveDataFile(DataFileType fileType, in ReadOnlySpan<char> path)
         {
-            return Utilities.SaveDataFile(fileType, path);
+            return UtilitiesAPI.SaveDataFile(fileType, path);
         }
 
         /// <summary>
@@ -290,7 +290,7 @@ namespace XP.SDK.XPLM
         /// <returns></returns>
         public static unsafe string GetVirtualKeyDescription(byte virtualKey)
         {
-            var ptr = Utilities.GetVirtualKeyDescription(virtualKey);
+            var ptr = UtilitiesAPI.GetVirtualKeyDescription(virtualKey);
             return ptr != null ? Marshal.PtrToStringUTF8(new IntPtr(ptr)) : string.Empty;
         }
 
@@ -303,7 +303,7 @@ namespace XP.SDK.XPLM
         /// </summary>
         public static void ReloadScenery()
         {
-            Utilities.ReloadScenery();
+            UtilitiesAPI.ReloadScenery();
         }
 
         #endregion
@@ -346,7 +346,7 @@ namespace XP.SDK.XPLM
             /// <seealso cref="Debug"/>
             public static void Write(in ReadOnlySpan<char> str)
             {
-                Utilities.DebugString(str);
+                UtilitiesAPI.DebugString(str);
             }
 
             /// <summary>
@@ -374,7 +374,7 @@ namespace XP.SDK.XPLM
                 // TODO: Check whether we have to use \r\n on Windows.
                 strPtr[count] = (byte) '\n';
                 strPtr[count + 1] = 0;
-                Utilities.DebugString(strPtr);
+                UtilitiesAPI.DebugString(strPtr);
             }
         }
 

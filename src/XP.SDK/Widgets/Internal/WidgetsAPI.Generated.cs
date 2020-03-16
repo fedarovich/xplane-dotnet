@@ -6,7 +6,7 @@ using XP.SDK.XPLM;
 
 namespace XP.SDK.Widgets.Internal
 {
-    public static partial class Widgets
+    public static partial class WidgetsAPI
     {
         private static IntPtr CreateWidgetPtr;
         private static IntPtr CreateCustomWidgetPtr;
@@ -37,7 +37,7 @@ namespace XP.SDK.Widgets.Internal
         private static IntPtr AddWidgetCallbackPtr;
         private static IntPtr GetWidgetClassFuncPtr;
 
-        static Widgets()
+        static WidgetsAPI()
         {
             CreateWidgetPtr = Lib.GetExport("XPCreateWidget");
             CreateCustomWidgetPtr = Lib.GetExport("XPCreateCustomWidget");
@@ -224,9 +224,9 @@ namespace XP.SDK.Widgets.Internal
         public static unsafe WidgetID CreateCustomWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, byte* inDescriptor, int inIsRoot, WidgetID inContainer, WidgetFuncCallback inCallback)
         {
             IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
+            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
             WidgetID result = CreateCustomWidgetPrivate(inLeft, inTop, inRight, inBottom, inVisible, inDescriptor, inIsRoot, inContainer, inCallbackPtr);
-            GC.KeepAlive(inCallbackPtr);
+            GC.KeepAlive(inCallback);
             return result;
         }
 
@@ -866,9 +866,9 @@ namespace XP.SDK.Widgets.Internal
         public static void AddWidgetCallback(WidgetID inWidget, WidgetFuncCallback inNewCallback)
         {
             IL.DeclareLocals(false);
-            IntPtr inNewCallbackPtr = Marshal.GetFunctionPointerForDelegate(inNewCallback);
+            IntPtr inNewCallbackPtr = inNewCallback != null ? Marshal.GetFunctionPointerForDelegate(inNewCallback) : default;
             AddWidgetCallbackPrivate(inWidget, inNewCallbackPtr);
-            GC.KeepAlive(inNewCallbackPtr);
+            GC.KeepAlive(inNewCallback);
         }
 
         

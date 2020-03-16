@@ -5,7 +5,7 @@ using InlineIL;
 
 namespace XP.SDK.XPLM.Internal
 {
-    public static partial class Utilities
+    public static partial class UtilitiesAPI
     {
         private static IntPtr SimulateKeyPressPtr;
         private static IntPtr SpeakStringPtr;
@@ -35,7 +35,7 @@ namespace XP.SDK.XPLM.Internal
         private static IntPtr RegisterCommandHandlerPtr;
         private static IntPtr UnregisterCommandHandlerPtr;
 
-        static Utilities()
+        static UtilitiesAPI()
         {
             SimulateKeyPressPtr = Lib.GetExport("XPLMSimulateKeyPress");
             SpeakStringPtr = Lib.GetExport("XPLMSpeakString");
@@ -583,9 +583,9 @@ namespace XP.SDK.XPLM.Internal
         public static void SetErrorCallback(ErrorCallback inCallback)
         {
             IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
+            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
             SetErrorCallbackPrivate(inCallbackPtr);
-            GC.KeepAlive(inCallbackPtr);
+            GC.KeepAlive(inCallback);
         }
 
         
@@ -864,9 +864,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void RegisterCommandHandler(CommandRef inComand, CommandCallback inHandler, int inBefore, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inHandlerPtr = Marshal.GetFunctionPointerForDelegate(inHandler);
+            IntPtr inHandlerPtr = inHandler != null ? Marshal.GetFunctionPointerForDelegate(inHandler) : default;
             RegisterCommandHandlerPrivate(inComand, inHandlerPtr, inBefore, inRefcon);
-            GC.KeepAlive(inHandlerPtr);
+            GC.KeepAlive(inHandler);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -893,9 +893,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void UnregisterCommandHandler(CommandRef inComand, CommandCallback inHandler, int inBefore, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inHandlerPtr = Marshal.GetFunctionPointerForDelegate(inHandler);
+            IntPtr inHandlerPtr = inHandler != null ? Marshal.GetFunctionPointerForDelegate(inHandler) : default;
             UnregisterCommandHandlerPrivate(inComand, inHandlerPtr, inBefore, inRefcon);
-            GC.KeepAlive(inHandlerPtr);
+            GC.KeepAlive(inHandler);
         }
     }
 }

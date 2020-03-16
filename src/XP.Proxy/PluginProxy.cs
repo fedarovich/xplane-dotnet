@@ -24,7 +24,7 @@ namespace XP.Proxy
             var pluginPath = Marshal.PtrToStringUTF8(parameters.PluginPath);
             if (string.IsNullOrEmpty(pluginPath))
             {
-                Utilities.DebugString($"Plugin path is null.");
+                UtilitiesAPI.DebugString($"Plugin path is null.");
                 return 0;
             }
 
@@ -43,7 +43,7 @@ namespace XP.Proxy
                 var attr = assembly.GetCustomAttribute<PluginAttribute>();
                 if (attr == null)
                 {
-                    Utilities.DebugString($"Plugin assembly {assemblyPath} does not have '{typeof(PluginAttribute).FullName}' attribute defined.");
+                    UtilitiesAPI.DebugString($"Plugin assembly {assemblyPath} does not have '{typeof(PluginAttribute).FullName}' attribute defined.");
                     return 0;
                 }
 
@@ -55,7 +55,7 @@ namespace XP.Proxy
             }
             catch (Exception ex)
             {
-                Utilities.DebugString(ex.ToString());
+                UtilitiesAPI.DebugString(ex.ToString());
                 return 0;
             }
 
@@ -84,7 +84,7 @@ namespace XP.Proxy
 
             if (weakRef.IsAlive)
             {
-                Utilities.DebugString("Failed to unload plugin assembly.");
+                UtilitiesAPI.DebugString("Failed to unload plugin assembly.");
             }
         }
 

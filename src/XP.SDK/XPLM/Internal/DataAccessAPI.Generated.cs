@@ -5,7 +5,7 @@ using InlineIL;
 
 namespace XP.SDK.XPLM.Internal
 {
-    public static partial class DataAccess
+    public static partial class DataAccessAPI
     {
         private static IntPtr FindDataRefPtr;
         private static IntPtr CanWriteDataRefPtr;
@@ -28,7 +28,7 @@ namespace XP.SDK.XPLM.Internal
         private static IntPtr ShareDataPtr;
         private static IntPtr UnshareDataPtr;
 
-        static DataAccess()
+        static DataAccessAPI()
         {
             FindDataRefPtr = Lib.GetExport("XPLMFindDataRef");
             CanWriteDataRefPtr = Lib.GetExport("XPLMCanWriteDataRef");
@@ -533,31 +533,31 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe DataRef RegisterDataAccessor(byte* inDataName, DataTypeID inDataType, int inIsWritable, GetDataiCallback inReadInt, SetDataiCallback inWriteInt, GetDatafCallback inReadFloat, SetDatafCallback inWriteFloat, GetDatadCallback inReadDouble, SetDatadCallback inWriteDouble, GetDataviCallback inReadIntArray, SetDataviCallback inWriteIntArray, GetDatavfCallback inReadFloatArray, SetDatavfCallback inWriteFloatArray, GetDatabCallback inReadData, SetDatabCallback inWriteData, void* inReadRefcon, void* inWriteRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inReadIntPtr = Marshal.GetFunctionPointerForDelegate(inReadInt);
-            IntPtr inWriteIntPtr = Marshal.GetFunctionPointerForDelegate(inWriteInt);
-            IntPtr inReadFloatPtr = Marshal.GetFunctionPointerForDelegate(inReadFloat);
-            IntPtr inWriteFloatPtr = Marshal.GetFunctionPointerForDelegate(inWriteFloat);
-            IntPtr inReadDoublePtr = Marshal.GetFunctionPointerForDelegate(inReadDouble);
-            IntPtr inWriteDoublePtr = Marshal.GetFunctionPointerForDelegate(inWriteDouble);
-            IntPtr inReadIntArrayPtr = Marshal.GetFunctionPointerForDelegate(inReadIntArray);
-            IntPtr inWriteIntArrayPtr = Marshal.GetFunctionPointerForDelegate(inWriteIntArray);
-            IntPtr inReadFloatArrayPtr = Marshal.GetFunctionPointerForDelegate(inReadFloatArray);
-            IntPtr inWriteFloatArrayPtr = Marshal.GetFunctionPointerForDelegate(inWriteFloatArray);
-            IntPtr inReadDataPtr = Marshal.GetFunctionPointerForDelegate(inReadData);
-            IntPtr inWriteDataPtr = Marshal.GetFunctionPointerForDelegate(inWriteData);
+            IntPtr inReadIntPtr = inReadInt != null ? Marshal.GetFunctionPointerForDelegate(inReadInt) : default;
+            IntPtr inWriteIntPtr = inWriteInt != null ? Marshal.GetFunctionPointerForDelegate(inWriteInt) : default;
+            IntPtr inReadFloatPtr = inReadFloat != null ? Marshal.GetFunctionPointerForDelegate(inReadFloat) : default;
+            IntPtr inWriteFloatPtr = inWriteFloat != null ? Marshal.GetFunctionPointerForDelegate(inWriteFloat) : default;
+            IntPtr inReadDoublePtr = inReadDouble != null ? Marshal.GetFunctionPointerForDelegate(inReadDouble) : default;
+            IntPtr inWriteDoublePtr = inWriteDouble != null ? Marshal.GetFunctionPointerForDelegate(inWriteDouble) : default;
+            IntPtr inReadIntArrayPtr = inReadIntArray != null ? Marshal.GetFunctionPointerForDelegate(inReadIntArray) : default;
+            IntPtr inWriteIntArrayPtr = inWriteIntArray != null ? Marshal.GetFunctionPointerForDelegate(inWriteIntArray) : default;
+            IntPtr inReadFloatArrayPtr = inReadFloatArray != null ? Marshal.GetFunctionPointerForDelegate(inReadFloatArray) : default;
+            IntPtr inWriteFloatArrayPtr = inWriteFloatArray != null ? Marshal.GetFunctionPointerForDelegate(inWriteFloatArray) : default;
+            IntPtr inReadDataPtr = inReadData != null ? Marshal.GetFunctionPointerForDelegate(inReadData) : default;
+            IntPtr inWriteDataPtr = inWriteData != null ? Marshal.GetFunctionPointerForDelegate(inWriteData) : default;
             DataRef result = RegisterDataAccessorPrivate(inDataName, inDataType, inIsWritable, inReadIntPtr, inWriteIntPtr, inReadFloatPtr, inWriteFloatPtr, inReadDoublePtr, inWriteDoublePtr, inReadIntArrayPtr, inWriteIntArrayPtr, inReadFloatArrayPtr, inWriteFloatArrayPtr, inReadDataPtr, inWriteDataPtr, inReadRefcon, inWriteRefcon);
-            GC.KeepAlive(inWriteDataPtr);
-            GC.KeepAlive(inReadDataPtr);
-            GC.KeepAlive(inWriteFloatArrayPtr);
-            GC.KeepAlive(inReadFloatArrayPtr);
-            GC.KeepAlive(inWriteIntArrayPtr);
-            GC.KeepAlive(inReadIntArrayPtr);
-            GC.KeepAlive(inWriteDoublePtr);
-            GC.KeepAlive(inReadDoublePtr);
-            GC.KeepAlive(inWriteFloatPtr);
-            GC.KeepAlive(inReadFloatPtr);
-            GC.KeepAlive(inWriteIntPtr);
-            GC.KeepAlive(inReadIntPtr);
+            GC.KeepAlive(inWriteData);
+            GC.KeepAlive(inReadData);
+            GC.KeepAlive(inWriteFloatArray);
+            GC.KeepAlive(inReadFloatArray);
+            GC.KeepAlive(inWriteIntArray);
+            GC.KeepAlive(inReadIntArray);
+            GC.KeepAlive(inWriteDouble);
+            GC.KeepAlive(inReadDouble);
+            GC.KeepAlive(inWriteFloat);
+            GC.KeepAlive(inReadFloat);
+            GC.KeepAlive(inWriteInt);
+            GC.KeepAlive(inReadInt);
             return result;
         }
 
@@ -652,9 +652,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int ShareData(byte* inDataName, DataTypeID inDataType, DataChangedCallback inNotificationFunc, void* inNotificationRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inNotificationFuncPtr = Marshal.GetFunctionPointerForDelegate(inNotificationFunc);
+            IntPtr inNotificationFuncPtr = inNotificationFunc != null ? Marshal.GetFunctionPointerForDelegate(inNotificationFunc) : default;
             int result = ShareDataPrivate(inDataName, inDataType, inNotificationFuncPtr, inNotificationRefcon);
-            GC.KeepAlive(inNotificationFuncPtr);
+            GC.KeepAlive(inNotificationFunc);
             return result;
         }
 
@@ -718,9 +718,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int UnshareData(byte* inDataName, DataTypeID inDataType, DataChangedCallback inNotificationFunc, void* inNotificationRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inNotificationFuncPtr = Marshal.GetFunctionPointerForDelegate(inNotificationFunc);
+            IntPtr inNotificationFuncPtr = inNotificationFunc != null ? Marshal.GetFunctionPointerForDelegate(inNotificationFunc) : default;
             int result = UnshareDataPrivate(inDataName, inDataType, inNotificationFuncPtr, inNotificationRefcon);
-            GC.KeepAlive(inNotificationFuncPtr);
+            GC.KeepAlive(inNotificationFunc);
             return result;
         }
 

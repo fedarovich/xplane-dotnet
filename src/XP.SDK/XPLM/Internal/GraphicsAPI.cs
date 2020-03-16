@@ -6,7 +6,7 @@ using InlineIL;
 
 namespace XP.SDK.XPLM.Internal
 {
-    public static partial class Graphics
+    public static partial class GraphicsAPI
     {
         /// <summary>
         /// <para>

@@ -5,13 +5,13 @@ using InlineIL;
 
 namespace XP.SDK.XPLM.Internal
 {
-    public static partial class Instance
+    public static partial class InstanceAPI
     {
         private static IntPtr CreateInstancePtr;
         private static IntPtr DestroyInstancePtr;
         private static IntPtr InstanceSetPositionPtr;
 
-        static Instance()
+        static InstanceAPI()
         {
             CreateInstancePtr = Lib.GetExport("XPLMCreateInstance");
             DestroyInstancePtr = Lib.GetExport("XPLMDestroyInstance");

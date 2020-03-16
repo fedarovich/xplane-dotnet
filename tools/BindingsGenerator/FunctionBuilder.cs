@@ -241,9 +241,10 @@ namespace BindingsGenerator
 
             foreach (var cppParameter in cppFunction.Parameters.Reverse())
             {
-                if (delegates.TryGetValue(cppParameter.Name, out var paramName))
+                if (delegates.ContainsKey(cppParameter.Name))
                 {
-                    yield return SyntaxBuilder.CallKeepAlive(IdentifierName(paramName));
+                    var managedParameterName = GetManagedName(cppParameter.Name);
+                    yield return SyntaxBuilder.CallKeepAlive(IdentifierName(managedParameterName));
                 }
             }
 
@@ -313,7 +314,7 @@ namespace BindingsGenerator
         {
             var file = Path.GetFileNameWithoutExtension(cppFunction.Span.Start.File);
             var name = GetManagedName(file);
-            return name;
+            return name + "API";
         }
     }
 }

@@ -5,7 +5,7 @@ using InlineIL;
 
 namespace XP.SDK.XPLM.Internal
 {
-    public static partial class Display
+    public static partial class DisplayAPI
     {
         private static IntPtr RegisterDrawCallbackPtr;
         private static IntPtr UnregisterDrawCallbackPtr;
@@ -47,7 +47,7 @@ namespace XP.SDK.XPLM.Internal
         private static IntPtr GetHotKeyInfoPtr;
         private static IntPtr SetHotKeyCombinationPtr;
 
-        static Display()
+        static DisplayAPI()
         {
             RegisterDrawCallbackPtr = Lib.GetExport("XPLMRegisterDrawCallback");
             UnregisterDrawCallbackPtr = Lib.GetExport("XPLMUnregisterDrawCallback");
@@ -126,9 +126,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int RegisterDrawCallback(DrawCallback inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
+            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
             int result = RegisterDrawCallbackPrivate(inCallbackPtr, inPhase, inWantsBefore, inRefcon);
-            GC.KeepAlive(inCallbackPtr);
+            GC.KeepAlive(inCallback);
             return result;
         }
 
@@ -166,9 +166,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int UnregisterDrawCallback(DrawCallback inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
+            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
             int result = UnregisterDrawCallbackPrivate(inCallbackPtr, inPhase, inWantsBefore, inRefcon);
-            GC.KeepAlive(inCallbackPtr);
+            GC.KeepAlive(inCallback);
             return result;
         }
 
@@ -246,13 +246,13 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe WindowID CreateWindow(int inLeft, int inTop, int inRight, int inBottom, int inIsVisible, DrawWindowCallback inDrawCallback, HandleKeyCallback inKeyCallback, HandleMouseClickCallback inMouseCallback, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inDrawCallbackPtr = Marshal.GetFunctionPointerForDelegate(inDrawCallback);
-            IntPtr inKeyCallbackPtr = Marshal.GetFunctionPointerForDelegate(inKeyCallback);
-            IntPtr inMouseCallbackPtr = Marshal.GetFunctionPointerForDelegate(inMouseCallback);
+            IntPtr inDrawCallbackPtr = inDrawCallback != null ? Marshal.GetFunctionPointerForDelegate(inDrawCallback) : default;
+            IntPtr inKeyCallbackPtr = inKeyCallback != null ? Marshal.GetFunctionPointerForDelegate(inKeyCallback) : default;
+            IntPtr inMouseCallbackPtr = inMouseCallback != null ? Marshal.GetFunctionPointerForDelegate(inMouseCallback) : default;
             WindowID result = CreateWindowPrivate(inLeft, inTop, inRight, inBottom, inIsVisible, inDrawCallbackPtr, inKeyCallbackPtr, inMouseCallbackPtr, inRefcon);
-            GC.KeepAlive(inMouseCallbackPtr);
-            GC.KeepAlive(inKeyCallbackPtr);
-            GC.KeepAlive(inDrawCallbackPtr);
+            GC.KeepAlive(inMouseCallback);
+            GC.KeepAlive(inKeyCallback);
+            GC.KeepAlive(inDrawCallback);
             return result;
         }
 
@@ -384,9 +384,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetAllMonitorBoundsGlobal(ReceiveMonitorBoundsGlobalCallback inMonitorBoundsCallback, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inMonitorBoundsCallbackPtr = Marshal.GetFunctionPointerForDelegate(inMonitorBoundsCallback);
+            IntPtr inMonitorBoundsCallbackPtr = inMonitorBoundsCallback != null ? Marshal.GetFunctionPointerForDelegate(inMonitorBoundsCallback) : default;
             GetAllMonitorBoundsGlobalPrivate(inMonitorBoundsCallbackPtr, inRefcon);
-            GC.KeepAlive(inMonitorBoundsCallbackPtr);
+            GC.KeepAlive(inMonitorBoundsCallback);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -419,9 +419,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void GetAllMonitorBoundsOS(ReceiveMonitorBoundsOSCallback inMonitorBoundsCallback, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inMonitorBoundsCallbackPtr = Marshal.GetFunctionPointerForDelegate(inMonitorBoundsCallback);
+            IntPtr inMonitorBoundsCallbackPtr = inMonitorBoundsCallback != null ? Marshal.GetFunctionPointerForDelegate(inMonitorBoundsCallback) : default;
             GetAllMonitorBoundsOSPrivate(inMonitorBoundsCallbackPtr, inRefcon);
-            GC.KeepAlive(inMonitorBoundsCallbackPtr);
+            GC.KeepAlive(inMonitorBoundsCallback);
         }
 
         
@@ -1037,9 +1037,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int RegisterKeySniffer(KeySnifferCallback inCallback, int inBeforeWindows, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
+            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
             int result = RegisterKeySnifferPrivate(inCallbackPtr, inBeforeWindows, inRefcon);
-            GC.KeepAlive(inCallbackPtr);
+            GC.KeepAlive(inCallback);
             return result;
         }
 
@@ -1070,9 +1070,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int UnregisterKeySniffer(KeySnifferCallback inCallback, int inBeforeWindows, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
+            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
             int result = UnregisterKeySnifferPrivate(inCallbackPtr, inBeforeWindows, inRefcon);
-            GC.KeepAlive(inCallbackPtr);
+            GC.KeepAlive(inCallback);
             return result;
         }
 
@@ -1108,9 +1108,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, byte* inDescription, HotKeyCallback inCallback, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
+            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
             HotKeyID result = RegisterHotKeyPrivate(inVirtualKey, inFlags, inDescription, inCallbackPtr, inRefcon);
-            GC.KeepAlive(inCallbackPtr);
+            GC.KeepAlive(inCallback);
             return result;
         }
 

@@ -52,7 +52,7 @@ namespace XP.SDK.XPLM
                 throw new ArgumentNullException(nameof(callback));
 
             GCHandle handle = GCHandle.Alloc(callback);
-            int result = Display.RegisterKeySniffer(
+            int result = DisplayAPI.RegisterKeySniffer(
                 _keySnifferCallback, 
                 beforeWindows ? 1 : 0,
                 GCHandle.ToIntPtr(handle).ToPointer());
@@ -81,7 +81,7 @@ namespace XP.SDK.XPLM
             {
                 if (Interlocked.CompareExchange(ref _disposed, 1, 0) == 0)
                 {
-                    Display.UnregisterKeySniffer(
+                    DisplayAPI.UnregisterKeySniffer(
                         _keySnifferCallback, 
                         _beforeWindows ? 1 : 0, 
                         GCHandle.ToIntPtr(_handle).ToPointer());

@@ -97,7 +97,7 @@ namespace XP.SDK.XPLM
                    : IntPtr.Zero
             };
 
-            _id = Display.CreateWindowEx(&parameters);
+            _id = DisplayAPI.CreateWindowEx(&parameters);
 
             // TODO: Register window in global context or plugin base
         }
@@ -114,7 +114,7 @@ namespace XP.SDK.XPLM
         /// <summary>
         /// Gets the value indicating whether this window has keyboard focus.
         /// </summary>
-        public bool HasKeyboardFocus => Display.HasKeyboardFocus(_id) != 0;
+        public bool HasKeyboardFocus => DisplayAPI.HasKeyboardFocus(_id) != 0;
 
         /// <summary>
         /// Gets the window ID.
@@ -132,29 +132,29 @@ namespace XP.SDK.XPLM
         /// though: in such a case, X-Plane will not pass clicks or keyboard input down
         /// to your layer until the window above stops "eating" the input.)
         /// </remarks>
-        public bool IsInFront => Display.IsWindowInFront(_id) != 0;
+        public bool IsInFront => DisplayAPI.IsWindowInFront(_id) != 0;
 
         /// <summary>
         /// True if this window has been moved to the virtual reality (VR) headset,
         /// which in turn is true if and only if you have set the window's positioning
         /// mode to <see cref="WindowPositioningMode.VR"/>.
         /// </summary>
-        public bool IsInVirtualReality => Display.WindowIsInVR(_id) != 0;
+        public bool IsInVirtualReality => DisplayAPI.WindowIsInVR(_id) != 0;
 
         /// <summary>
         /// True if this window has been popped out (making it a first-class window in
         /// the operating system), which in turn is true if and only if you have set
         /// the window's positioning mode to <see cref="WindowPositioningMode.PopOut"/>.
         /// </summary>
-        public bool IsPoppedOut => Display.WindowIsPoppedOut(_id) != 0;
+        public bool IsPoppedOut => DisplayAPI.WindowIsPoppedOut(_id) != 0;
 
         /// <summary>
         /// Gets or sets the window visibility.
         /// </summary>
         public bool IsVisible
         {
-            get => Display.GetWindowIsVisible(_id) != 0;
-            set => Display.SetWindowIsVisible(_id, value ? 1 : 0);
+            get => DisplayAPI.GetWindowIsVisible(_id) != 0;
+            set => DisplayAPI.SetWindowIsVisible(_id, value ? 1 : 0);
         }
 
         /// <summary>
@@ -179,17 +179,17 @@ namespace XP.SDK.XPLM
                 int left, top, right, bottom;
                 if (IsPoppedOut)
                 {
-                    Display.GetWindowGeometryOS(_id, &left, &top, &right, &bottom);
+                    DisplayAPI.GetWindowGeometryOS(_id, &left, &top, &right, &bottom);
                 }
                 else if (IsInVirtualReality)
                 {
                     left = 0;
                     bottom = 0;
-                    Display.GetWindowGeometryVR(_id, &right, &top);
+                    DisplayAPI.GetWindowGeometryVR(_id, &right, &top);
                 }
                 else
                 {
-                    Display.GetWindowGeometry(_id, &left, &top, &right, &bottom);
+                    DisplayAPI.GetWindowGeometry(_id, &left, &top, &right, &bottom);
                 }
                 return new Rect(left, top, right, bottom);
             }
@@ -197,15 +197,15 @@ namespace XP.SDK.XPLM
             {
                 if (IsPoppedOut)
                 {
-                    Display.SetWindowGeometryOS(_id, value.Left, value.Top, value.Right, value.Bottom);
+                    DisplayAPI.SetWindowGeometryOS(_id, value.Left, value.Top, value.Right, value.Bottom);
                 }
                 else if (IsInVirtualReality)
                 {
-                    Display.SetWindowGeometryVR(_id, value.Width, value.Height);
+                    DisplayAPI.SetWindowGeometryVR(_id, value.Width, value.Height);
                 }
                 else
                 {
-                    Display.SetWindowGeometry(_id, value.Left, value.Top, value.Right, value.Bottom);
+                    DisplayAPI.SetWindowGeometry(_id, value.Left, value.Top, value.Right, value.Bottom);
                 }
             }
         }
@@ -219,7 +219,7 @@ namespace XP.SDK.XPLM
             set
             {
                 _title = value;
-                Display.SetWindowTitle(_id, value);
+                DisplayAPI.SetWindowTitle(_id, value);
             }
         }
 
@@ -266,7 +266,7 @@ namespace XP.SDK.XPLM
             get
             {
                 int left, top, right, bottom;
-                Display.GetScreenBoundsGlobal(&left, &top, &right, &bottom);
+                DisplayAPI.GetScreenBoundsGlobal(&left, &top, &right, &bottom);
                 return new Rect(left, top, right, bottom);
             }
         }
@@ -303,7 +303,7 @@ namespace XP.SDK.XPLM
             {
                 var dict = new Dictionary<int, Rect>();
                 var dictHandle = GCHandle.Alloc(dict);
-                Display.GetAllMonitorBoundsGlobal(Callback, GCHandle.ToIntPtr(dictHandle).ToPointer());
+                DisplayAPI.GetAllMonitorBoundsGlobal(Callback, GCHandle.ToIntPtr(dictHandle).ToPointer());
                 return dict;
 
                 static void Callback(int index, int left, int top, int right, int bottom, void* inrefcon)
@@ -336,7 +336,7 @@ namespace XP.SDK.XPLM
             {
                 var dict = new Dictionary<int, Rect>();
                 var dictHandle = GCHandle.Alloc(dict);
-                Display.GetAllMonitorBoundsOS(Callback, GCHandle.ToIntPtr(dictHandle).ToPointer());
+                DisplayAPI.GetAllMonitorBoundsOS(Callback, GCHandle.ToIntPtr(dictHandle).ToPointer());
                 return dict;
 
                 static void Callback(int index, int left, int top, int right, int bottom, void* inrefcon)
@@ -355,14 +355,14 @@ namespace XP.SDK.XPLM
         /// guaranteed to be (0, 0). Instead, the origin is the lower left of the
         /// entire global desktop space. In addition, this routine gives the real mouse
         /// location when the mouse goes to X-Plane windows other than the primary
-        /// display. Thus, it can be used with both pop-out windows and secondary
+        /// DisplayAPI. Thus, it can be used with both pop-out windows and secondary
         /// </remarks>
         public static unsafe (int X, int Y) MouseLocationGlobal
         {
             get
             {
                 int x, y;
-                Display.GetMouseLocationGlobal(&x, &y);
+                DisplayAPI.GetMouseLocationGlobal(&x, &y);
                 return (x, y);
             }
         }
@@ -370,7 +370,7 @@ namespace XP.SDK.XPLM
         /// <summary>
         /// Gets the value indicating if XPlane itself has the keyboard focus, and thus no window has focus.
         /// </summary>
-        public static bool XPlaneHasKeyboardFocus => Display.HasKeyboardFocus(default) != 0;
+        public static bool XPlaneHasKeyboardFocus => DisplayAPI.HasKeyboardFocus(default) != 0;
 
         #endregion
 
@@ -391,7 +391,7 @@ namespace XP.SDK.XPLM
         /// ordered, and no window in a lower layer can ever be above any window in a
         /// higher one.)
         /// </remarks>
-        public void BringToFront() => Display.BringWindowToFront(_id);
+        public void BringToFront() => DisplayAPI.BringWindowToFront(_id);
 
         /// <summary>
         /// Releases keyboard focus from this window.
@@ -427,7 +427,7 @@ namespace XP.SDK.XPLM
         /// whole width of your window would change with the X-Plane window.
         /// </para>
         /// </remarks>
-        public void SetGravity(float left = 0, float top = 1, float right = 0, float bottom = 1) => Display.SetWindowGravity(_id, left, top, right, bottom);
+        public void SetGravity(float left = 0, float top = 1, float right = 0, float bottom = 1) => DisplayAPI.SetWindowGravity(_id, left, top, right, bottom);
 
 
         /// <summary>
@@ -442,7 +442,7 @@ namespace XP.SDK.XPLM
         /// pass a real monitor index as received from, e.g., <see cref="AllMonitorBoundsOS"/>.
         /// </para>
         /// </remarks>
-        public void SetPositioningMode(WindowPositioningMode mode, int monitorIndex = -1) => Display.SetWindowPositioningMode(_id, mode, monitorIndex);
+        public void SetPositioningMode(WindowPositioningMode mode, int monitorIndex = -1) => DisplayAPI.SetWindowPositioningMode(_id, mode, monitorIndex);
 
         /// <summary>
         /// Sets the minimum and maximum size of the client rectangle of the given
@@ -451,17 +451,17 @@ namespace XP.SDK.XPLM
         /// constrained to these sizes.
         /// </summary>
         public void SetResizingLimits(int minWidth, int minHeight, int maxWidth, int maxHeight) => 
-            Display.SetWindowResizingLimits(_id, minWidth, minHeight, maxWidth, maxHeight);
+            DisplayAPI.SetWindowResizingLimits(_id, minWidth, minHeight, maxWidth, maxHeight);
 
         /// <summary>
         /// Gives the keyboard focus to this window.
         /// </summary>
-        public void TakeKeyboardFocus() => Display.TakeKeyboardFocus(_id);
+        public void TakeKeyboardFocus() => DisplayAPI.TakeKeyboardFocus(_id);
 
         /// <summary>
         /// Removes keyboard focus from currently focused window.
         /// </summary>
-        public static void RemoveKeyboardFocus() => Display.TakeKeyboardFocus(default);
+        public static void RemoveKeyboardFocus() => DisplayAPI.TakeKeyboardFocus(default);
 
         /// <summary>
         /// Gets the window with the specified <paramref name="id"/>.
@@ -520,7 +520,7 @@ namespace XP.SDK.XPLM
                 // If handle is not allocated, we don't own this windows, e.g. it has been received by FromID(id) method call. 
                 if (_handle.IsAllocated)
                 {
-                    Display.DestroyWindow(_id);
+                    DisplayAPI.DestroyWindow(_id);
                     _handle.Free();
                 }
 

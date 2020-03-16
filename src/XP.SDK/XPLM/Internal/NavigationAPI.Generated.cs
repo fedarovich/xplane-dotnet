@@ -5,7 +5,7 @@ using InlineIL;
 
 namespace XP.SDK.XPLM.Internal
 {
-    public static partial class Navigation
+    public static partial class NavigationAPI
     {
         private static IntPtr GetFirstNavAidPtr;
         private static IntPtr GetNextNavAidPtr;
@@ -25,7 +25,7 @@ namespace XP.SDK.XPLM.Internal
         private static IntPtr GetGPSDestinationTypePtr;
         private static IntPtr GetGPSDestinationPtr;
 
-        static Navigation()
+        static NavigationAPI()
         {
             GetFirstNavAidPtr = Lib.GetExport("XPLMGetFirstNavAid");
             GetNextNavAidPtr = Lib.GetExport("XPLMGetNextNavAid");

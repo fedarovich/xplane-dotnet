@@ -5,7 +5,7 @@ using InlineIL;
 
 namespace XP.SDK.XPLM.Internal
 {
-    public static partial class Map
+    public static partial class MapAPI
     {
         private static IntPtr CreateMapLayerPtr;
         private static IntPtr DestroyMapLayerPtr;
@@ -18,7 +18,7 @@ namespace XP.SDK.XPLM.Internal
         private static IntPtr MapScaleMeterPtr;
         private static IntPtr MapGetNorthHeadingPtr;
 
-        static Map()
+        static MapAPI()
         {
             CreateMapLayerPtr = Lib.GetExport("XPLMCreateMapLayer");
             DestroyMapLayerPtr = Lib.GetExport("XPLMDestroyMapLayer");
@@ -109,9 +109,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void RegisterMapCreationHook(MapCreatedCallback callback, void* refcon)
         {
             IL.DeclareLocals(false);
-            IntPtr callbackPtr = Marshal.GetFunctionPointerForDelegate(callback);
+            IntPtr callbackPtr = callback != null ? Marshal.GetFunctionPointerForDelegate(callback) : default;
             RegisterMapCreationHookPrivate(callbackPtr, refcon);
-            GC.KeepAlive(callbackPtr);
+            GC.KeepAlive(callback);
         }
 
         

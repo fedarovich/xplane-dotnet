@@ -42,7 +42,7 @@ namespace XP.SDK.XPLM
         public static unsafe HotKey Register(byte virtualKey, KeyFlags keyFlags, string description, Action<HotKey> action)
         {
             var hotKey = new HotKey(action);
-            hotKey._id = Display.RegisterHotKey(
+            hotKey._id = DisplayAPI.RegisterHotKey(
                 virtualKey, 
                 keyFlags, 
                 description,
@@ -66,7 +66,7 @@ namespace XP.SDK.XPLM
         {
             if (Interlocked.CompareExchange(ref _disposed, 1, 0) == 0)
             {
-                Display.UnregisterHotKey(_id);
+                DisplayAPI.UnregisterHotKey(_id);
                 _handle.Free();
                 _id = default;
             }
@@ -77,20 +77,20 @@ namespace XP.SDK.XPLM
         /// </summary>
         public static void SetHotKeyCombination(HotKeyID id, byte virtualKey, KeyFlags keyFlags)
         {
-            Display.SetHotKeyCombination(id, virtualKey, keyFlags);
+            DisplayAPI.SetHotKeyCombination(id, virtualKey, keyFlags);
         }
 
         public static int Count
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => Display.CountHotKeys();
+            get => DisplayAPI.CountHotKeys();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static HotKeyID GetIdByIndex(int index) => Display.GetNthHotKey(index);
+        public static HotKeyID GetIdByIndex(int index) => DisplayAPI.GetNthHotKey(index);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static HotKeyInfo GetInfoByIndex(int index, bool withDescription = true) => new HotKeyInfo(Display.GetNthHotKey(index), withDescription);
+        public static HotKeyInfo GetInfoByIndex(int index, bool withDescription = true) => new HotKeyInfo(DisplayAPI.GetNthHotKey(index), withDescription);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static HotKeyInfo GetInfoById(HotKeyID id, bool withDescription = true) => new HotKeyInfo(id, withDescription);
@@ -104,7 +104,7 @@ namespace XP.SDK.XPLM
                 KeyFlags flags;
                 byte virtualKey;
                 Span<byte> description = withDescription ? stackalloc byte[512] : default;
-                Display.GetHotKeyInfo(id, 
+                DisplayAPI.GetHotKeyInfo(id, 
                     &virtualKey, 
                     &flags,
                     (byte*)Unsafe.AsPointer(ref description.GetPinnableReference()),

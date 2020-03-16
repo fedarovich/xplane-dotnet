@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Unicode;
-using G = XP.SDK.XPLM.Internal.Graphics;
+using XP.SDK.XPLM.Internal;
 
 namespace XP.SDK.XPLM
 {
@@ -62,7 +62,7 @@ namespace XP.SDK.XPLM
             bool enableDepthTesting,
             bool enableDepthWriting)
         {
-            G.SetGraphicsState(
+            GraphicsAPI.SetGraphicsState(
                 enableFog ? 1 : 0,
                 numberTexUnits,
                 enableLighting ? 1 : 0,
@@ -114,7 +114,7 @@ namespace XP.SDK.XPLM
             bool enableDepthTesting = true,
             bool enableDepthWriting = false)
         {
-            G.SetGraphicsState(
+            GraphicsAPI.SetGraphicsState(
                 0,
                 numberTexUnits,
                 0,
@@ -143,7 +143,7 @@ namespace XP.SDK.XPLM
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static void BindTexture2d(int textureId, int textureUnit)
         {
-            G.BindTexture2d(textureId, textureUnit);
+            GraphicsAPI.BindTexture2d(textureId, textureUnit);
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace XP.SDK.XPLM
         {
             fixed (int* textureIdsPtr = textureIds)
             {
-                G.GenerateTextureNumbers(textureIdsPtr, textureIds.Length);
+                GraphicsAPI.GenerateTextureNumbers(textureIdsPtr, textureIds.Length);
             }
         }
 
@@ -167,7 +167,7 @@ namespace XP.SDK.XPLM
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static int GetTexture(TextureID textureId)
         {
-            return G.GetTexture(textureId);
+            return GraphicsAPI.GetTexture(textureId);
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace XP.SDK.XPLM
         public static unsafe (double x, double y, double z) WorldToLocal(double latitude, double longitude, double altitude)
         {
             (double x, double y , double z) result = default;
-            G.WorldToLocal(latitude, longitude, altitude, &result.x, &result.y, &result.z);
+            GraphicsAPI.WorldToLocal(latitude, longitude, altitude, &result.x, &result.y, &result.z);
             return result;
         }
 
@@ -195,7 +195,7 @@ namespace XP.SDK.XPLM
         public static unsafe (double latitude, double longitude, double altitude) LocalToWorld(double x, double y, double z)
         {
             (double lat, double lon, double alt) result = default;
-            G.LocalToWorld(x, y, z, &result.lat, &result.lon, &result.alt);
+            GraphicsAPI.LocalToWorld(x, y, z, &result.lat, &result.lon, &result.alt);
             return result;
         }
 
@@ -206,7 +206,7 @@ namespace XP.SDK.XPLM
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void DrawTranslucentDarkBox(int left, int top, int right, int bottom)
         {
-            G.DrawTranslucentDarkBox(left, top, right, bottom);
+            GraphicsAPI.DrawTranslucentDarkBox(left, top, right, bottom);
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace XP.SDK.XPLM
         {
             fixed (int* inWordWrapWidth = &wordWrapWidth)
             {
-                G.DrawString(color, xOffset, yOffset, text, inWordWrapWidth, fontId);
+                GraphicsAPI.DrawString(color, xOffset, yOffset, text, inWordWrapWidth, fontId);
             }
         }
 
@@ -239,7 +239,7 @@ namespace XP.SDK.XPLM
             in ReadOnlySpan<char> text,
             FontID fontId)
         {
-            G.DrawString(color, xOffset, yOffset, text, null, fontId);
+            GraphicsAPI.DrawString(color, xOffset, yOffset, text, null, fontId);
         }
 
         /// <summary>
@@ -256,7 +256,7 @@ namespace XP.SDK.XPLM
         {
             fixed (float* r = &color.R)
             {
-                G.DrawNumber(r, xOffset, yOffset, value, digits, decimals, showSign ? 1 : 0, fontId);
+                GraphicsAPI.DrawNumber(r, xOffset, yOffset, value, digits, decimals, showSign ? 1 : 0, fontId);
             }
         }
 
@@ -270,7 +270,7 @@ namespace XP.SDK.XPLM
         public static unsafe (int charWidth, int charHeight, bool digitsOnly) GetFontDimensions(FontID fontId)
         {
             int charWidth, charHeight, digits;
-            G.GetFontDimensions(fontId, &charWidth, &charHeight, &digits);
+            GraphicsAPI.GetFontDimensions(fontId, &charWidth, &charHeight, &digits);
             return (charWidth, charHeight, digits != 0);
         }
 
@@ -282,7 +282,7 @@ namespace XP.SDK.XPLM
         {
             Span<byte> bytes = stackalloc byte[@string.Length << 1];
             Utf8.FromUtf16(@string, bytes, out _, out var length);
-            return G.MeasureString(fontId, (byte*) Unsafe.AsPointer(ref bytes.GetPinnableReference()), length);
+            return GraphicsAPI.MeasureString(fontId, (byte*) Unsafe.AsPointer(ref bytes.GetPinnableReference()), length);
         }
 
         /// <summary>
@@ -293,7 +293,7 @@ namespace XP.SDK.XPLM
         {
             fixed (byte* ptr = utf8string)
             {
-                return G.MeasureString(fontId, ptr, utf8string.Length);
+                return GraphicsAPI.MeasureString(fontId, ptr, utf8string.Length);
             }
         }
     }

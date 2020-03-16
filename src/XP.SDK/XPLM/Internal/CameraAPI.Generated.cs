@@ -5,14 +5,14 @@ using InlineIL;
 
 namespace XP.SDK.XPLM.Internal
 {
-    public static partial class Camera
+    public static partial class CameraAPI
     {
         private static IntPtr ControlCameraPtr;
         private static IntPtr DontControlCameraPtr;
         private static IntPtr IsCameraBeingControlledPtr;
         private static IntPtr ReadCameraPositionPtr;
 
-        static Camera()
+        static CameraAPI()
         {
             ControlCameraPtr = Lib.GetExport("XPLMControlCamera");
             DontControlCameraPtr = Lib.GetExport("XPLMDontControlCamera");
@@ -44,9 +44,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void ControlCamera(CameraControlDuration inHowLong, CameraControlCallback inControlFunc, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inControlFuncPtr = Marshal.GetFunctionPointerForDelegate(inControlFunc);
+            IntPtr inControlFuncPtr = inControlFunc != null ? Marshal.GetFunctionPointerForDelegate(inControlFunc) : default;
             ControlCameraPrivate(inHowLong, inControlFuncPtr, inRefcon);
-            GC.KeepAlive(inControlFuncPtr);
+            GC.KeepAlive(inControlFunc);
         }
 
         

@@ -5,7 +5,7 @@ using InlineIL;
 
 namespace XP.SDK.XPLM.Internal
 {
-    public static partial class Processing
+    public static partial class ProcessingAPI
     {
         private static IntPtr GetElapsedTimePtr;
         private static IntPtr GetCycleNumberPtr;
@@ -16,7 +16,7 @@ namespace XP.SDK.XPLM.Internal
         private static IntPtr DestroyFlightLoopPtr;
         private static IntPtr ScheduleFlightLoopPtr;
 
-        static Processing()
+        static ProcessingAPI()
         {
             GetElapsedTimePtr = Lib.GetExport("XPLMGetElapsedTime");
             GetCycleNumberPtr = Lib.GetExport("XPLMGetCycleNumber");
@@ -93,9 +93,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void RegisterFlightLoopCallback(FlightLoopCallback inFlightLoop, float inInterval, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inFlightLoopPtr = Marshal.GetFunctionPointerForDelegate(inFlightLoop);
+            IntPtr inFlightLoopPtr = inFlightLoop != null ? Marshal.GetFunctionPointerForDelegate(inFlightLoop) : default;
             RegisterFlightLoopCallbackPrivate(inFlightLoopPtr, inInterval, inRefcon);
-            GC.KeepAlive(inFlightLoopPtr);
+            GC.KeepAlive(inFlightLoop);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -121,9 +121,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void UnregisterFlightLoopCallback(FlightLoopCallback inFlightLoop, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inFlightLoopPtr = Marshal.GetFunctionPointerForDelegate(inFlightLoop);
+            IntPtr inFlightLoopPtr = inFlightLoop != null ? Marshal.GetFunctionPointerForDelegate(inFlightLoop) : default;
             UnregisterFlightLoopCallbackPrivate(inFlightLoopPtr, inRefcon);
-            GC.KeepAlive(inFlightLoopPtr);
+            GC.KeepAlive(inFlightLoop);
         }
 
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -158,9 +158,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void SetFlightLoopCallbackInterval(FlightLoopCallback inFlightLoop, float inInterval, int inRelativeToNow, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inFlightLoopPtr = Marshal.GetFunctionPointerForDelegate(inFlightLoop);
+            IntPtr inFlightLoopPtr = inFlightLoop != null ? Marshal.GetFunctionPointerForDelegate(inFlightLoop) : default;
             SetFlightLoopCallbackIntervalPrivate(inFlightLoopPtr, inInterval, inRelativeToNow, inRefcon);
-            GC.KeepAlive(inFlightLoopPtr);
+            GC.KeepAlive(inFlightLoop);
         }
 
         

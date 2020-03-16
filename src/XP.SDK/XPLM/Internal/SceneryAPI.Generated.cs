@@ -5,7 +5,7 @@ using InlineIL;
 
 namespace XP.SDK.XPLM.Internal
 {
-    public static partial class Scenery
+    public static partial class SceneryAPI
     {
         private static IntPtr CreateProbePtr;
         private static IntPtr DestroyProbePtr;
@@ -19,7 +19,7 @@ namespace XP.SDK.XPLM.Internal
         private static IntPtr UnloadObjectPtr;
         private static IntPtr LookupObjectsPtr;
 
-        static Scenery()
+        static SceneryAPI()
         {
             CreateProbePtr = Lib.GetExport("XPLMCreateProbe");
             DestroyProbePtr = Lib.GetExport("XPLMDestroyProbe");
@@ -265,9 +265,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe void LoadObjectAsync(byte* inPath, ObjectLoadedCallback inCallback, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
+            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
             LoadObjectAsyncPrivate(inPath, inCallbackPtr, inRefcon);
-            GC.KeepAlive(inCallbackPtr);
+            GC.KeepAlive(inCallback);
         }
 
         
@@ -393,9 +393,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int LookupObjects(byte* inPath, float inLatitude, float inLongitude, LibraryEnumeratorCallback enumerator, void* @ref)
         {
             IL.DeclareLocals(false);
-            IntPtr enumeratorPtr = Marshal.GetFunctionPointerForDelegate(enumerator);
+            IntPtr enumeratorPtr = enumerator != null ? Marshal.GetFunctionPointerForDelegate(enumerator) : default;
             int result = LookupObjectsPrivate(inPath, inLatitude, inLongitude, enumeratorPtr, @ref);
-            GC.KeepAlive(enumeratorPtr);
+            GC.KeepAlive(enumerator);
             return result;
         }
 

@@ -5,7 +5,7 @@ using InlineIL;
 
 namespace XP.SDK.XPLM.Internal
 {
-    public static partial class Menus
+    public static partial class MenusAPI
     {
         private static IntPtr FindPluginsMenuPtr;
         private static IntPtr FindAircraftMenuPtr;
@@ -21,7 +21,7 @@ namespace XP.SDK.XPLM.Internal
         private static IntPtr EnableMenuItemPtr;
         private static IntPtr RemoveMenuItemPtr;
 
-        static Menus()
+        static MenusAPI()
         {
             FindPluginsMenuPtr = Lib.GetExport("XPLMFindPluginsMenu");
             FindAircraftMenuPtr = Lib.GetExport("XPLMFindAircraftMenu");
@@ -123,9 +123,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe MenuID CreateMenu(byte* inName, MenuID inParentMenu, int inParentItem, MenuHandlerCallback inHandler, void* inMenuRef)
         {
             IL.DeclareLocals(false);
-            IntPtr inHandlerPtr = Marshal.GetFunctionPointerForDelegate(inHandler);
+            IntPtr inHandlerPtr = inHandler != null ? Marshal.GetFunctionPointerForDelegate(inHandler) : default;
             MenuID result = CreateMenuPrivate(inName, inParentMenu, inParentItem, inHandlerPtr, inMenuRef);
-            GC.KeepAlive(inHandlerPtr);
+            GC.KeepAlive(inHandler);
             return result;
         }
 

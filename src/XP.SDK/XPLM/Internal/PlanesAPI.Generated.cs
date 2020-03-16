@@ -5,7 +5,7 @@ using InlineIL;
 
 namespace XP.SDK.XPLM.Internal
 {
-    public static partial class Planes
+    public static partial class PlanesAPI
     {
         private static IntPtr SetUsersAircraftPtr;
         private static IntPtr PlaceUserAtAirportPtr;
@@ -20,7 +20,7 @@ namespace XP.SDK.XPLM.Internal
         private static IntPtr DrawAircraftPtr;
         private static IntPtr ReinitUsersPlanePtr;
 
-        static Planes()
+        static PlanesAPI()
         {
             SetUsersAircraftPtr = Lib.GetExport("XPLMSetUsersAircraft");
             PlaceUserAtAirportPtr = Lib.GetExport("XPLMPlaceUserAtAirport");
@@ -207,9 +207,9 @@ namespace XP.SDK.XPLM.Internal
         public static unsafe int AcquirePlanes(byte** inAircraft, PlanesAvailableCallback inCallback, void* inRefcon)
         {
             IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = Marshal.GetFunctionPointerForDelegate(inCallback);
+            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
             int result = AcquirePlanesPrivate(inAircraft, inCallbackPtr, inRefcon);
-            GC.KeepAlive(inCallbackPtr);
+            GC.KeepAlive(inCallback);
             return result;
         }
 

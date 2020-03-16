@@ -111,12 +111,20 @@ namespace BindingsGenerator
                     .AddVariables(VariableDeclarator(variableName)
                         .WithInitializer(
                             EqualsValueClause(
-                                InvocationExpression(
-                                    MemberAccessExpression(
-                                        SyntaxKind.SimpleMemberAccessExpression,
-                                        IdentifierName(nameof(Marshal)),
-                                        IdentifierName(nameof(Marshal.GetFunctionPointerForDelegate))),
-                                    ArgumentList(SingletonSeparatedList(Argument(IdentifierName(parameterName)))))))));
+                                ConditionalExpression(
+                                    BinaryExpression(
+                                        SyntaxKind.NotEqualsExpression,
+                                        IdentifierName(parameterName),
+                                        LiteralExpression(SyntaxKind.NullLiteralExpression)),
+                                    InvocationExpression(
+                                        MemberAccessExpression(
+                                            SyntaxKind.SimpleMemberAccessExpression,
+                                            IdentifierName(nameof(Marshal)),
+                                            IdentifierName(nameof(Marshal.GetFunctionPointerForDelegate))),
+                                        ArgumentList(SingletonSeparatedList(Argument(IdentifierName(parameterName))))),
+                                    LiteralExpression(
+                                        SyntaxKind.DefaultLiteralExpression,
+                                        Token(SyntaxKind.DefaultKeyword)))))));
         }
 
         public static ExpressionStatementSyntax EmitPush(IdentifierNameSyntax parameter)

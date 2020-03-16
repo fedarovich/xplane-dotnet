@@ -5,7 +5,7 @@ using InlineIL;
 
 namespace XP.SDK.XPLM.Internal
 {
-    public static partial class Graphics
+    public static partial class GraphicsAPI
     {
         private static IntPtr SetGraphicsStatePtr;
         private static IntPtr BindTexture2dPtr;
@@ -19,7 +19,7 @@ namespace XP.SDK.XPLM.Internal
         private static IntPtr GetFontDimensionsPtr;
         private static IntPtr MeasureStringPtr;
 
-        static Graphics()
+        static GraphicsAPI()
         {
             SetGraphicsStatePtr = Lib.GetExport("XPLMSetGraphicsState");
             BindTexture2dPtr = Lib.GetExport("XPLMBindTexture2d");

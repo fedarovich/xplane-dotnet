@@ -5,7 +5,7 @@ using InlineIL;
 
 namespace XP.SDK.Widgets.Internal
 {
-    public static partial class UIGraphics
+    public static partial class UIGraphicsAPI
     {
         private static IntPtr DrawWindowPtr;
         private static IntPtr GetWindowDefaultDimensionsPtr;
@@ -15,7 +15,7 @@ namespace XP.SDK.Widgets.Internal
         private static IntPtr GetTrackDefaultDimensionsPtr;
         private static IntPtr GetTrackMetricsPtr;
 
-        static UIGraphics()
+        static UIGraphicsAPI()
         {
             DrawWindowPtr = Lib.GetExport("XPDrawWindow");
             GetWindowDefaultDimensionsPtr = Lib.GetExport("XPGetWindowDefaultDimensions");

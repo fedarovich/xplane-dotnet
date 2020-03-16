@@ -5,7 +5,7 @@ using InlineIL;
 
 namespace XP.SDK.Widgets.Internal
 {
-    public static partial class WidgetUtils
+    public static partial class WidgetUtilsAPI
     {
         private static IntPtr CreateWidgetsPtr;
         private static IntPtr MoveWidgetByPtr;
@@ -14,7 +14,7 @@ namespace XP.SDK.Widgets.Internal
         private static IntPtr DefocusKeyboardPtr;
         private static IntPtr DragWidgetPtr;
 
-        static WidgetUtils()
+        static WidgetUtilsAPI()
         {
             CreateWidgetsPtr = Lib.GetExport("XPUCreateWidgets");
             MoveWidgetByPtr = Lib.GetExport("XPUMoveWidgetBy");
