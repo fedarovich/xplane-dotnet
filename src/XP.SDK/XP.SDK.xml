@@ -741,6 +741,91 @@
             </para>
             </summary>
         </member>
+        <member name="T:XP.SDK.XPLM.Camera">
+            <summary>
+            <para>
+            The Camera APIs allow plug-ins to control the camera angle in X-Plane. This has a number of applications, including but not limited to:
+            </para>
+            <list type="bullet">
+            <item>
+            <description>Creating new views (including dynamic/user-controllable views) for the user.</description>
+            </item>
+            <item>
+            <description>Creating applications that use X-Plane as a renderer of scenery, aircrafts, or both.</description>
+            </item>
+            </list>
+            </summary>
+            <remarks>
+            <para>
+            The camera is controlled via six parameters: a location in OpenGL coordinates and pitch, roll and yaw, similar to an airplane’s position.
+            OpenGL coordinate info is described in detail in the XPLMGraphics documentation; generally you should use the XPLMGraphics routines to convert from world to local coordinates.
+            The camera’s orientation starts facing level with the ground directly up the negative-Z axis (approximately north) with the horizon horizontal.
+            It is then rotated clockwise for yaw, pitched up for positive pitch, and rolled clockwise around the vector it is looking along for roll.
+            </para>
+            <para>
+            You control the camera either until the user selects a new view or permanently (the later being similar to how UDP camera control works).
+            You control the camera by registering a callback per frame from which you calculate the new camera positions.
+            This guarantees smooth camera motion.
+            </para>
+            <para>
+            Use the XPLMDataAccess APIs to get information like the position of the aircraft, etc. for complex camera positioning.
+            </para>
+            <para>
+            Note: if your goal is to move the virtual pilot in the cockpit, this API is not needed; simply update the datarefs for the pilot’s head position.
+            </para>
+            <para>
+            For custom exterior cameras, set the camera’s mode to an external view first to get correct sound and 2-d panel behavior.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.Camera.ControlCamera(XP.SDK.XPLM.CameraControlDuration,XP.SDK.XPLM.Camera.CameraControlAction,System.Action)">
+            <summary>
+            This function repositions the camera on the next drawing cycle.
+            You must pass a non-null <paramref name="controlAction"/>.
+            Specify in <paramref name="duration"/> how long you’d like control (indefinitely or until a new view mode is set by the user).
+            </summary>
+            <param name="duration">How long you’d like control (indefinitely or until a new view mode is set by the user).</param>
+            <param name="controlAction">Camera control action.</param>
+            <param name="onLoosingControl">Callback called before loosing control.</param>
+            <returns>Camera controller.</returns>
+        </member>
+        <member name="P:XP.SDK.XPLM.Camera.IsBeingControlled">
+            <summary>
+            Gets the value indicating whether the camera is being controlled.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.Camera.CurrentControlDuration">
+            <summary>
+            Gets the current <see cref="T:XP.SDK.XPLM.CameraControlDuration"/> if the camera is being controlled; <see langword="null"/> otherwise.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Camera.ReadCurrentPosition(XP.SDK.XPLM.Internal.CameraPosition@)">
+            <summary>
+            Reads the current camera position.
+            </summary>
+            <param name="position">The current camera position</param>
+            <seealso cref="M:XP.SDK.XPLM.Camera.GetCurrentPosition"/>
+        </member>
+        <member name="M:XP.SDK.XPLM.Camera.GetCurrentPosition">
+            <summary>
+            Get the current camera position.
+            </summary>
+            <remarks>
+            For better performance consider using <see cref="M:XP.SDK.XPLM.Camera.ReadCurrentPosition(XP.SDK.XPLM.Internal.CameraPosition@)" /> function.
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.Camera.Controller.Dispose">
+            <inheritdoc cref="M:System.IDisposable.Dispose"/>
+        </member>
+        <member name="T:XP.SDK.XPLM.Camera.CameraControlAction">
+            <summary>
+            You use an CameraControlAction delegate to provide continuous control over the camera.
+            You are passed in a structure in which to put the new camera position;
+            modify it and return <see langword="true"/> to reposition the camera.
+            Return <see langword="false"/> to surrender control of the camera; camera control will be handled by X-Plane on this draw loop.
+            The contents of the structure as you are called are undefined.
+            </summary>
+        </member>
         <member name="T:XP.SDK.XPLM.CameraControlDuration">
             <summary>
             <para>
@@ -843,6 +928,33 @@
             exist and new ones may be invented.  If you need a particularly specific
             use of these codes, consult Austin and/or be prepared to revise your code
             as X-Plane evolves.
+            </para>
+            </summary>
+        </member>
+        <member name="F:XP.SDK.XPLM.Features.WantsReflections">
+            <summary>
+            Available in the SDK 2.0 and later for X-Plane 9, enabling this capability causes your plugin
+            to receive drawing hook callbacks when X-Plane builds its off-screen reflection and shadow rendering passes.
+            Plugins should enable this and examine the dataref sim/graphics/view/plane_render_type
+            to determine whether the drawing callback is for a reflection, shadow calculation, or the main screen.
+            Rendering can be simplified or omitted for reflections, and non-solid drawing should be skipped for shadow calculations.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.XPLM.Features.UseNativePaths">
+            <summary>
+            Modifies the plugin system to use Unix-style paths on all operating systems. Enabled by default.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.XPLM.Features.UseNativeWidgetWindows">
+            <summary>
+            <para>
+            This capability tells the widgets library to use new, modern X-Plane windows to anchor all widget trees. Without it, widgets will always use legacy windows.
+            </para>
+            <para>
+            Plugins should enable this to allow their widget hierarchies to respond to the user’s UI size settings and to map widget-based windwos to a VR HMD.
+            </para>
+            <para>
+            Before enabling this, make sure any custom widget code in your plugin is prepared to cope with the UI coordinate system not being th same as the OpenGL window coordinate system.
             </para>
             </summary>
         </member>
@@ -1782,7 +1894,7 @@
             guaranteed to be (0, 0)---instead, the origin is the lower left of the
             entire global desktop space. In addition, this routine gives the real mouse
             location when the mouse goes to X-Plane windows other than the primary
-            DisplayAPI. Thus, it can be used with both pop-out windows and secondary
+            display. Thus, it can be used with both pop-out windows and secondary
             monitors.
             </para>
             <para>
@@ -1804,7 +1916,7 @@
             If this is a legacy window (one compiled against a pre-XPLM300 version of
             the SDK, or an XPLM300 window that was not created using
             XPLMCreateWindowEx()), the units are pixels relative to the main X-Plane
-            DisplayAPI.
+            display.
             </para>
             <para>
             If, on the other hand, this is a new X-Plane 11-style window (compiled
@@ -1824,7 +1936,7 @@
             <para>
             The units and coordinate system match those of XPLMGetWindowGeometry().
             That is, modern windows use global desktop boxel coordinates, while legacy
-            windows use pixels relative to the main X-Plane DisplayAPI.
+            windows use pixels relative to the main X-Plane display.
             </para>
             <para>
             Note that this only applies to "floating" windows (that is, windows that
