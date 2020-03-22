@@ -13,6 +13,8 @@ namespace XP.SDK
 
         public abstract string Description { get; }
 
+        protected PluginInfo ThisPlugin => PluginInfo.ThisPlugin;
+
         public bool Start()
         {
             return OnStart();
