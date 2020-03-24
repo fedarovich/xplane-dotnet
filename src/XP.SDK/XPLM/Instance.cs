@@ -17,6 +17,10 @@ namespace XP.SDK.XPLM
         private InstanceRef _instanceRef;
         private int _disposed;
 
+        public Instance(SceneryObject obj, params string[] dataRefs) : this(obj.Ref, dataRefs)
+        {
+        }
+
         public unsafe Instance(ObjectRef objectRef, params string[] dataRefs)
         {
             if (dataRefs == null)

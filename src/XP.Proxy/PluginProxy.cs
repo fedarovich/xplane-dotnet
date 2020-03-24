@@ -51,11 +51,13 @@ namespace XP.Proxy
                 WriteUtf8String(_plugin.Name, parameters.Name);
                 WriteUtf8String(_plugin.Signature, parameters.Sig);
                 WriteUtf8String(_plugin.Description, parameters.Desc);
+                GlobalContext.CurrentPlugin = new WeakReference<PluginBase>(_plugin);
                 return _plugin.Start() ? 1 : 0;
             }
             catch (Exception ex)
             {
                 UtilitiesAPI.DebugString(ex.ToString());
+                Unload();
                 return 0;
             }
 
@@ -70,22 +72,7 @@ namespace XP.Proxy
         public static void XPluginStop()
         {
             _plugin.Stop();
-            var weakRef = new WeakReference(_context, true);
-            _context.Unload();
-            _context = null;
-            _plugin = null;
-            for (int i = 0; i < 10; i++)
-            {
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                if (!weakRef.IsAlive)
-                    return;
-            }
-
-            if (weakRef.IsAlive)
-            {
-                UtilitiesAPI.DebugString("Failed to unload plugin assembly.");
-            }
+            Unload();
         }
 
         public static int XPluginEnable()
@@ -107,6 +94,26 @@ namespace XP.Proxy
         private static IntPtr ResolveUnmanagedDll(Assembly assembly, string name)
         {
             return IntPtr.Zero;
+        }
+
+        private static void Unload()
+        {
+            var weakRef = new WeakReference(_context, true);
+            _context.Unload();
+            _context = null;
+            _plugin = null;
+            for (int i = 0; i < 10; i++)
+            {
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                if (!weakRef.IsAlive)
+                    return;
+            }
+
+            if (weakRef.IsAlive)
+            {
+                UtilitiesAPI.DebugString("Failed to unload plugin assembly.");
+            }
         }
     }
 }

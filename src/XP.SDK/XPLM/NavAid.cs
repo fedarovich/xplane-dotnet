@@ -229,5 +229,10 @@ namespace XP.SDK.XPLM
                 type);
             return new NavAid(navRef);
         }
+
+        public static NavAid GetGPSDestination()
+        {
+            return new NavAid(NavigationAPI.GetGPSDestination());
+        }
     }
 }

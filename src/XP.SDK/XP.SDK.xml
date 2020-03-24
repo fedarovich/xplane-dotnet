@@ -4816,6 +4816,43 @@
             </para>
             </summary>
         </member>
+        <member name="T:XP.SDK.XPLM.MagneticVariation">
+            <summary>
+            <para>
+            Use the magnetic variation (more properly, the "magnetic declination") API to find the offset of magnetic north from true north at a given latitude and longitude within the simulator.
+            </para>
+            <para>
+            In the real world, the Earth’s magnetic field is irregular, such that true north (the direction along a meridian toward the north pole) does not necessarily match what a magnetic compass shows as north.
+            </para>
+            <para>
+            Using this API ensures that you present the same offsets to users as X-Plane’s built-in instruments.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.MagneticVariation.Get(System.Double,System.Double)">
+            <summary>
+            <para>
+            Returns X-Plane's simulated magnetic variation (declination) at the
+            indication latitude and longitude.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.MagneticVariation.TrueToMagnetic(System.Single)">
+            <summary>
+            <para>
+            Converts a heading in degrees relative to true north into a value relative
+            to magnetic north at the user's current location.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.MagneticVariation.MagneticToTrue(System.Single)">
+            <summary>
+            <para>
+            Converts a heading in degrees relative to magnetic north at the user's
+            current location into a value relative to true north.
+            </para>
+            </summary>
+        </member>
         <member name="T:XP.SDK.XPLM.MapLayerID">
             <summary>
             <para>
@@ -4950,6 +4987,9 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Probe.Dispose">
+            <inheritdoc />
+        </member>
         <member name="T:XP.SDK.XPLM.ProbeRef">
             <summary>
             <para>
@@ -4981,6 +5021,28 @@
             allows you to recycle textures from X-Plane, saving VRAM.
             </para>
             </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.User.SetAircraft(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            Changes the user’s aircraft. Note that this will reinitialize the user to be on the nearest airport’s first runway.
+            </summary>
+            <param name="aircraftPath">A full path (hard drive and everything including the .acf extension) to the .acf file.</param>
+        </member>
+        <member name="M:XP.SDK.XPLM.User.PlaceAtAirport(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            Places the user at a given airport.
+            </summary>
+            <param name="airportCode">The airport by its X-Plane airport ID (e.g. 'KBOS').</param>
+        </member>
+        <member name="M:XP.SDK.XPLM.User.PlaceAtLocation(System.Double,System.Double,System.Single,System.Single,System.Single)">
+            <summary>
+            Places the user at a specific location after performing any necessary scenery loads.
+            </summary>
+            <remarks>
+            As with in-air starts initiated from the X-Plane user interface,
+            the aircraft will always start with its engines running, regardless of the user’s preferences
+            (i.e., regardless of what the dataref <c>sim/operation/prefs/startup_running</c> says).
+            </remarks>
         </member>
         <member name="T:XP.SDK.XPLM.Window">
             <summary>
