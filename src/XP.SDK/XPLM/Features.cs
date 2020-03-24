@@ -40,7 +40,7 @@ namespace XP.SDK.XPLM
 
         public static bool IsFeatureEnabled(string feature) => PluginAPI.IsFeatureEnabled(feature) != 0;
 
-        public static void EnableFeature(string feature, bool enable = true) => PluginAPI.EnableFeature(feature, enable ? 1 : 0);
+        public static void EnableFeature(string feature, bool enable = true) => PluginAPI.EnableFeature(feature, enable.ToInt());
 
         public static unsafe IReadOnlyCollection<string> GetFeatures()
         {

@@ -152,7 +152,7 @@ namespace XP.SDK.XPLM
             _dataRef = DataAccessAPI.RegisterDataAccessor(
                 name,
                 dataTypes,
-                isWriteable ? 1 : 0,
+                isWriteable.ToInt(),
                 Getter(DataTypeID.Int, _getDatai),
                 Setter(DataTypeID.Int, _setDatai),
                 Getter(DataTypeID.Float, _getDataf),

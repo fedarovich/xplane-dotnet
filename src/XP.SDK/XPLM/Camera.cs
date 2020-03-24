@@ -158,7 +158,7 @@ namespace XP.SDK.XPLM
                 if (inislosingcontrol == 0)
                 {
                     ref CameraPosition position = ref Unsafe.AsRef<CameraPosition>(outcameraposition);
-                    return _controlAction(this, ref position) ? 1 : 0;
+                    return _controlAction(this, ref position).ToInt();
                 }
 
                 try

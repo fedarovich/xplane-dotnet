@@ -43,13 +43,13 @@ namespace XP.SDK.XPLM
                 Utils.TryGetObject<WindowBase>(inrefcon)?.OnDrawWindow();
 
             static int HandleMouseLeftClick(WindowID inwindowid, int x, int y, MouseStatus inmouse, void* inrefcon) =>
-                Utils.TryGetObject<WindowBase>(inrefcon)?.OnMouseLeftButtonEvent(x, y, inmouse) == true ? 1 : 0;
+                (Utils.TryGetObject<WindowBase>(inrefcon)?.OnMouseLeftButtonEvent(x, y, inmouse) == true).ToInt();
 
             static int HandleMouseRightClick(WindowID inwindowid, int x, int y, MouseStatus inmouse, void* inrefcon) =>
-                Utils.TryGetObject<WindowBase>(inrefcon)?.OnMouseRightButtonEvent(x, y, inmouse) == true ? 1 : 0;
+                (Utils.TryGetObject<WindowBase>(inrefcon)?.OnMouseRightButtonEvent(x, y, inmouse) == true).ToInt();
 
             static int HandleMouseWheel(WindowID inwindowid, int x, int y, int wheel, int clicks, void* inrefcon) =>
-                Utils.TryGetObject<WindowBase>(inrefcon)?.OnMouseWheelEvent(x, y, (MouseWheel)wheel, clicks) == true ? 1 : 0;
+                (Utils.TryGetObject<WindowBase>(inrefcon)?.OnMouseWheelEvent(x, y, (MouseWheel)wheel, clicks) == true).ToInt();
 
             static void HandleKey(WindowID inwindowid, byte inkey, KeyFlags inflags, byte invirtualkey, void* inrefcon, int losingfocus) =>
                 Utils.TryGetObject<WindowBase>(inrefcon)?.OnKeyEvent(inkey, inflags, invirtualkey, losingfocus == 1);
@@ -81,7 +81,7 @@ namespace XP.SDK.XPLM
                 top = bounds.Top,
                 right = bounds.Right,
                 bottom = bounds.Bottom,
-                visible = visible ? 1 : 0,
+                visible = visible.ToInt(),
                 drawWindowFunc = Marshal.GetFunctionPointerForDelegate(_drawWindowCallback),
                 handleMouseClickFunc = (mouseHandlers & MouseHandlers.LeftClick) != default 
                     ? Marshal.GetFunctionPointerForDelegate(_handleLeftClickCallback) 
@@ -154,7 +154,7 @@ namespace XP.SDK.XPLM
         public bool IsVisible
         {
             get => DisplayAPI.GetWindowIsVisible(_id) != 0;
-            set => DisplayAPI.SetWindowIsVisible(_id, value ? 1 : 0);
+            set => DisplayAPI.SetWindowIsVisible(_id, value.ToInt());
         }
 
         /// <summary>

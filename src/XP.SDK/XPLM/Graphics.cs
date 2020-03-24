@@ -63,13 +63,13 @@ namespace XP.SDK.XPLM
             bool enableDepthWriting)
         {
             GraphicsAPI.SetGraphicsState(
-                enableFog ? 1 : 0,
+                enableFog.ToInt(),
                 numberTexUnits,
-                enableLighting ? 1 : 0,
-                enableAlphaTesting ? 1 : 0,
-                enableAlphaBlending ? 1 : 0,
-                enableDepthTesting ? 1 : 0,
-                enableDepthWriting ? 1 : 0);
+                enableLighting.ToInt(),
+                enableAlphaTesting.ToInt(),
+                enableAlphaBlending.ToInt(),
+                enableDepthTesting.ToInt(),
+                enableDepthWriting.ToInt());
         }
 
         /// <summary>
@@ -118,10 +118,10 @@ namespace XP.SDK.XPLM
                 0,
                 numberTexUnits,
                 0,
-                enableAlphaTesting ? 1 : 0,
-                enableAlphaBlending ? 1 : 0,
-                enableDepthTesting ? 1 : 0,
-                enableDepthWriting ? 1 : 0);
+                enableAlphaTesting.ToInt(),
+                enableAlphaBlending.ToInt(),
+                enableDepthTesting.ToInt(),
+                enableDepthWriting.ToInt());
         }
 
         /// <summary>
@@ -256,7 +256,7 @@ namespace XP.SDK.XPLM
         {
             fixed (float* r = &color.R)
             {
-                GraphicsAPI.DrawNumber(r, xOffset, yOffset, value, digits, decimals, showSign ? 1 : 0, fontId);
+                GraphicsAPI.DrawNumber(r, xOffset, yOffset, value, digits, decimals, showSign.ToInt(), fontId);
             }
         }
 

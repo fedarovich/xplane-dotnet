@@ -29,7 +29,7 @@ namespace XP.SDK.XPLM
             _keySnifferCallback = HandleKeySnifferCallback;
 
             static int HandleKeySnifferCallback(byte inchar, KeyFlags inflags, byte invirtualkey, void* inrefcon) =>
-                Utils.TryGetObject<Callback>(inrefcon)?.Invoke(inchar, inflags, invirtualkey) == true ? 1 : 0;
+                (Utils.TryGetObject<Callback>(inrefcon)?.Invoke(inchar, inflags, invirtualkey) == true).ToInt();
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace XP.SDK.XPLM
             GCHandle handle = GCHandle.Alloc(callback);
             int result = DisplayAPI.RegisterKeySniffer(
                 _keySnifferCallback, 
-                beforeWindows ? 1 : 0,
+                beforeWindows.ToInt(),
                 GCHandle.ToIntPtr(handle).ToPointer());
             if (result == 1)
             {
@@ -83,7 +83,7 @@ namespace XP.SDK.XPLM
                 {
                     DisplayAPI.UnregisterKeySniffer(
                         _keySnifferCallback, 
-                        _beforeWindows ? 1 : 0, 
+                        _beforeWindows.ToInt(), 
                         GCHandle.ToIntPtr(_handle).ToPointer());
                     _handle.Free();
                 }
