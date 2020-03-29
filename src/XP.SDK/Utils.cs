@@ -51,5 +51,14 @@ namespace XP.SDK
                 ? GCHandle.FromIntPtr(new IntPtr(refcon)).Target as T
                 : null;
         }
+
+        internal static unsafe int StrLen(byte* str)
+        {
+            byte* s;
+            for (s = str; *s != 0; ++s)
+            {
+            }
+            return (int)(s - str);
+        }
     }
 }

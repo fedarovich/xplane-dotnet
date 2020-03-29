@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 using XP.SDK.XPLM;
@@ -7,6 +8,8 @@ namespace XP.SDK
 {
     public abstract class PluginBase
     {
+        private static ConcurrentStack<object> _registeredObjects;
+
         public abstract string Name { get; }
 
         public abstract string Signature { get; }
@@ -17,6 +20,7 @@ namespace XP.SDK
 
         public bool Start()
         {
+            _registeredObjects = new ConcurrentStack<object>();
             return OnStart();
         }
 
@@ -32,7 +36,14 @@ namespace XP.SDK
 
         public void Stop()
         {
-            OnStop();
+            try
+            {
+                OnStop();
+            }
+            finally
+            {
+                ReleaseRegisteredObjects();
+            }
         }
 
         public void ReceiveMessage(PluginID pluginId, int message, IntPtr param)
@@ -49,5 +60,20 @@ namespace XP.SDK
         protected abstract void OnStop();
 
         protected abstract void OnReceiveMessage(PluginID pluginId, int message, IntPtr param);
+
+        internal static void RegisterObject(object obj)
+        {
+            _registeredObjects.Push(obj);
+        }
+
+        private void ReleaseRegisteredObjects()
+        {
+            while (_registeredObjects.TryPop(out var obj))
+            {
+                (obj as IDisposable)?.Dispose();
+            }
+
+            _registeredObjects = null;
+        }
     }
 }
