@@ -12,11 +12,11 @@ namespace XP.SDK.XPLM
 
         public static readonly string InstructorOperatorStation = "XPLM_MAP_IOS";
 
-        private static readonly ReadOnlyMemory<byte> UserInterfaceUtf8;
+        internal static readonly ReadOnlyMemory<byte> UserInterfaceUtf8;
 
-        private static readonly ReadOnlyMemory<byte> InstructorOperatorStationUtf8;
+        internal static readonly ReadOnlyMemory<byte> InstructorOperatorStationUtf8;
 
-        private static readonly MapCreatedCallback MapCreatedCallback;
+        private static readonly MapCreatedCallback _mapCreatedCallback;
 
         static unsafe Map()
         {
@@ -28,7 +28,7 @@ namespace XP.SDK.XPLM
             Utf8.FromUtf16(InstructorOperatorStation, instructorOperatorStationUtf8, out _, out _);
             InstructorOperatorStationUtf8 = instructorOperatorStationUtf8;
 
-            MapCreatedCallback = OnMapCreated;
+            _mapCreatedCallback = OnMapCreated;
 
             static void OnMapCreated(byte* mapidentifier, void* refcon) => 
                 Utils.TryGetObject<MapCreationHook>(refcon)?.Invoke(mapidentifier);
@@ -39,8 +39,13 @@ namespace XP.SDK.XPLM
             var hook = new MapCreationHook(callback);
             PluginBase.RegisterObject(hook);
             MapAPI.RegisterMapCreationHook(
-                MapCreatedCallback,
+                _mapCreatedCallback,
                 GCHandle.ToIntPtr(hook.Handle).ToPointer());
+        }
+
+        public static bool Exists(string mapIdentifier)
+        {
+            return MapAPI.MapExists(mapIdentifier) != 0;
         }
 
         private sealed class MapCreationHook : DelegateWrapper<Action<string>>

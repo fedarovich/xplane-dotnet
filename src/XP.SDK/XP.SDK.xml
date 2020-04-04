@@ -4853,6 +4853,9 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.MapLayer.Dispose">
+            <inheritdoc />
+        </member>
         <member name="T:XP.SDK.XPLM.MapLayerID">
             <summary>
             <para>
