@@ -43,19 +43,11 @@ namespace XP.SDK.XPLM
                 GCHandle.ToIntPtr(hook.Handle).ToPointer());
         }
 
-        private sealed class MapCreationHook : IDisposable
+        private sealed class MapCreationHook : DelegateWrapper<Action<string>>
         {
-            private readonly Action<string> _callback;
-            private GCHandle _handle;
-            private int _disposed;
-
-            public MapCreationHook(Action<string> callback)
+            public MapCreationHook(Action<string> @delegate) : base(@delegate)
             {
-                _handle = GCHandle.Alloc(_handle);
-                _callback = callback;
             }
-
-            public GCHandle Handle => _handle;
 
             public unsafe void Invoke(byte* mapIdentifier)
             {
@@ -63,27 +55,17 @@ namespace XP.SDK.XPLM
                 var span = new Span<byte>(mapIdentifier, len + 1);
                 if (span.SequenceEqual(UserInterfaceUtf8.Span))
                 {
-                    _callback(UserInterface);
+                    Delegate.Invoke(UserInterface);
                 }
                 else if (span.SequenceEqual(InstructorOperatorStationUtf8.Span))
                 {
-                    _callback(InstructorOperatorStation);
+                    Delegate.Invoke(InstructorOperatorStation);
                 }
                 else
                 {
-                    _callback(Marshal.PtrToStringUTF8(new IntPtr(mapIdentifier)));
+                    Delegate.Invoke(Marshal.PtrToStringUTF8(new IntPtr(mapIdentifier)));
                 }
             }
-
-            public void Dispose()
-            {
-                if (Interlocked.CompareExchange(ref _disposed, 1, 0) == 0)
-                {
-                    _handle.Free();
-                }
-            }
-
-            
         }
     }
 }

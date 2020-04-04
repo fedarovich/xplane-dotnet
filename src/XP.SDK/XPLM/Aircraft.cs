@@ -13,7 +13,6 @@ namespace XP.SDK.XPLM
     public static class Aircraft
     {
         private static readonly PlanesAvailableCallback _planesAvailable;
-        private static readonly ConditionalWeakTable<PluginBase, HashSet<ActionWrapper>> _actionList = new ConditionalWeakTable<PluginBase, HashSet<ActionWrapper>>();
 
         public const int UserAircraft = 0;
 
@@ -83,18 +82,19 @@ namespace XP.SDK.XPLM
 
             var pArray = (byte**) Unsafe.AsPointer(ref array.GetPinnableReference());
             bool result;
-            if (callback != null && GlobalContext.CurrentPlugin.TryGetTarget(out var plugin))
+            if (callback != null)
             {
                 var wrapper = new ActionWrapper(callback);
-                var wrappers = _actionList.GetOrCreateValue(plugin);
-                wrappers.Add(wrapper);
-
                 result = PlanesAPI.AcquirePlanes(pArray, 
                     _planesAvailable,
                     GCHandle.ToIntPtr(wrapper.Handle).ToPointer()) != 0;
                 if (result)
                 {
                     wrapper.Dispose();
+                }
+                else
+                {
+                    PluginBase.RegisterObject(wrapper);
                 }
             }
             else
@@ -118,61 +118,13 @@ namespace XP.SDK.XPLM
             PlanesAPI.ReleasePlanes();
         }
 
-        private sealed class ActionWrapper : IDisposable, IEquatable<ActionWrapper>
+        private sealed class ActionWrapper : DelegateWrapper<Action>
         {
-            private Action _action;
-            private int _disposed;
-            public GCHandle Handle;
-
-            public ActionWrapper(Action action)
+            public ActionWrapper(Action @delegate) : base(@delegate)
             {
-                _action = action;
-                Handle = GCHandle.Alloc(this, GCHandleType.Weak);
             }
 
-            ~ActionWrapper()
-            {
-                Dispose(false);
-            }
-
-            public void Invoke() => _action.Invoke();
-
-            private void Dispose(bool disposing)
-            {
-                if (Interlocked.CompareExchange(ref _disposed, 1, 0) == 0)
-                {
-                    if (GlobalContext.CurrentPlugin.TryGetTarget(out var plugin))
-                    {
-                        var wrappers = _actionList.GetOrCreateValue(plugin);
-                        wrappers.Remove(this);
-                    }
-
-                    Handle.Free();
-                }
-            }
-
-            public void Dispose()
-            {
-                GC.SuppressFinalize(this);
-                Dispose(true);
-            }
-
-            public bool Equals(ActionWrapper other)
-            {
-                if (ReferenceEquals(null, other)) return false;
-                if (ReferenceEquals(this, other)) return true;
-                return Handle.Equals(other.Handle);
-            }
-
-            public override bool Equals(object obj)
-            {
-                return ReferenceEquals(this, obj) || obj is ActionWrapper other && Equals(other);
-            }
-
-            public override int GetHashCode()
-            {
-                return Handle.GetHashCode();
-            }
+            public void Invoke() => Delegate.Invoke();
         }
     }
 }
