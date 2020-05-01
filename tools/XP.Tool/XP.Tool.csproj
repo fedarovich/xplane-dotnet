@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>xpdn</AssemblyName>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>xpdn</ToolCommandName>
+    <Version>0.1.0</Version>
+    <PackageId>xpdn</PackageId>
+    <Authors>Pavel Fedarovich</Authors>
+    <Product>XP.SDK</Product>
+    <Copyright>© Pavel Fedarovich, 2020</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/fedarovich/xplane-dotnet</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.0.0" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "XP.Tool": {
+      "commandName": "Project",
+      "commandLineArgs": "publish \"c:\\Users\\Pavel\\source\\repos\\fedarovich\\xplane-dotnet\\src\\XP.HelloWorld\\XP.HelloWorld.csproj\" -o r:\\test"
+    }
+  }
+}
