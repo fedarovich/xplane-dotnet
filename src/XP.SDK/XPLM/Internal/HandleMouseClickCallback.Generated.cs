@@ -9,9 +9,10 @@ namespace XP.SDK.XPLM.Internal
     /// You receive this call for one of three events:
     /// </para>
     /// <para>
-    /// - when the user clicks the mouse button down - (optionally) when the user
-    /// drags the mouse after a down-click, but before the up-click - when the user
-    /// releases the down-clicked mouse button.
+    /// - when the user clicks the mouse button down
+    /// - (optionally) when the user drags the mouse after a down-click, but before
+    /// the up-click
+    /// - when the user releases the down-clicked mouse button.
     /// </para>
     /// <para>
     /// You receive the x and y of the click, your window, and a refcon.  Return 1
@@ -28,7 +29,7 @@ namespace XP.SDK.XPLM.Internal
     /// will get pixels. Legacy windows have their origin in the lower left of the
     /// main X-Plane window, while modern windows have their origin in the lower
     /// left of the global desktop space. In both cases, x increases as you move
-    /// left, and y increases as you move up.
+    /// right, and y increases as you move up.
     /// </para>
     /// </summary>
     [UnmanagedFunctionPointerAttribute(CallingConvention.Cdecl, BestFitMapping = false, SetLastError = false)]

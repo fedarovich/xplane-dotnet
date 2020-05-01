@@ -27,8 +27,8 @@ namespace XP.SDK.Widgets.Internal
         
         /// <summary>
         /// <para>
-        /// This function creates a series of widgets from a table...see
-        /// XPCreateWidget_t above. Pass in an array of widget creation structures and
+        /// This function creates a series of widgets from a table (see
+        /// XPCreateWidget_t above). Pass in an array of widget creation structures and
         /// an array of widget IDs that will receive each widget.
         /// </para>
         /// <para>

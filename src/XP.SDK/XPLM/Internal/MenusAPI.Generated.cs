@@ -343,14 +343,14 @@ namespace XP.SDK.XPLM.Internal
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetMenuItemName(MenuID inMenu, int inIndex, byte* inItemName, int inForceEnglish)
+        public static unsafe void SetMenuItemName(MenuID inMenu, int inIndex, byte* inItemName, int inDeprecatedAndIgnored)
         {
             IL.DeclareLocals(false);
             Guard.NotNull(SetMenuItemNamePtr);
             IL.Push(inMenu);
             IL.Push(inIndex);
             IL.Push(inItemName);
-            IL.Push(inForceEnglish);
+            IL.Push(inDeprecatedAndIgnored);
             IL.Push(SetMenuItemNamePtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(MenuID), typeof(int), typeof(byte*), typeof(int)));
         }
@@ -363,12 +363,12 @@ namespace XP.SDK.XPLM.Internal
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetMenuItemName(MenuID inMenu, int inIndex, in ReadOnlySpan<char> inItemName, int inForceEnglish)
+        public static unsafe void SetMenuItemName(MenuID inMenu, int inIndex, in ReadOnlySpan<char> inItemName, int inDeprecatedAndIgnored)
         {
             IL.DeclareLocals(false);
             Span<byte> inItemNameUtf8 = stackalloc byte[(inItemName.Length << 1) | 1];
             var inItemNamePtr = Utils.ToUtf8Unsafe(inItemName, inItemNameUtf8);
-            SetMenuItemName(inMenu, inIndex, inItemNamePtr, inForceEnglish);
+            SetMenuItemName(inMenu, inIndex, inItemNamePtr, inDeprecatedAndIgnored);
         }
 
         

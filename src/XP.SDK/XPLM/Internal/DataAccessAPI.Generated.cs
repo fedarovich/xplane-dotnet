@@ -112,6 +112,12 @@ namespace XP.SDK.XPLM.Internal
         /// Given a data ref, this routine returns true if you can successfully set the
         /// data, false otherwise. Some datarefs are read-only.
         /// </para>
+        /// <para>
+        /// NOTE: even if a dataref is marked writable, it may not act writable.  This
+        /// can happen for datarefs that X-Plane writes to on every frame of
+        /// simulation.  In some cases, the dataref is writable but you have to set a
+        /// separate "override" dataref to 1 to stop X-Plane from writing it.
+        /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static int CanWriteDataRef(DataRef inDataRef)
@@ -129,17 +135,17 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// WARNING: This function is deprecated and should not be used. Datarefs are
-        /// valid until plugins are reloaded or the sim quits. Plugins sharing datarefs
-        /// should support these semantics by not unregistering datarefs during
-        /// operation. (You should however unregister datarefs when your plugin is
-        /// unloaded, as part of general resource cleanup.)
+        /// This function returns true if the passed in handle is a valid dataref that
+        /// is not orphaned.
         /// </para>
         /// <para>
-        /// This function returns whether a data ref is still valid. If it returns
-        /// false, you should refind the data ref from its original string. Calling an
-        /// accessor function on a bad data ref will return a default value, typically
-        /// 0 or 0-length data.
+        /// Note: there is normally no need to call this function; datarefs returned by
+        /// XPLMFindDataRef remain valid (but possibly orphaned) unless there is a
+        /// complete plugin reload (in which case your plugin is reloaded anyway).
+        /// Orphaned datarefs can be safely read and return 0. Therefore you never need
+        /// to call XPLMIsDataRefGood to 'check' the safety of a dataref.
+        /// (XPLMIsDatarefGood performs some slow checking of the handle validity, so
+        /// it has a perormance cost.)
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -159,7 +165,8 @@ namespace XP.SDK.XPLM.Internal
         /// <summary>
         /// <para>
         /// This routine returns the types of the data ref for accessor use. If a data
-        /// ref is available in multiple data types, they will all be returned.
+        /// ref is available in multiple data types, the bit-wise OR of these types
+        /// will be returned.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -179,8 +186,7 @@ namespace XP.SDK.XPLM.Internal
         /// <summary>
         /// <para>
         /// Read an integer data ref and return its value. The return value is the
-        /// dataref value or 0 if the dataref is invalid/NULL or the plugin is
-        /// disabled.
+        /// dataref value or 0 if the dataref is NULL or the plugin is disabled.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -200,7 +206,7 @@ namespace XP.SDK.XPLM.Internal
         /// <summary>
         /// <para>
         /// Write a new value to an integer data ref. This routine is a no-op if the
-        /// plugin publishing the dataref is disabled, the dataref is invalid, or the
+        /// plugin publishing the dataref is disabled, the dataref is NULL, or the
         /// dataref is not writable.
         /// </para>
         /// </summary>
@@ -219,8 +225,8 @@ namespace XP.SDK.XPLM.Internal
         /// <summary>
         /// <para>
         /// Read a single precision floating point dataref and return its value. The
-        /// return value is the dataref value or 0.0 if the dataref is invalid/NULL or
-        /// the plugin is disabled.
+        /// return value is the dataref value or 0.0 if the dataref is NULL or the
+        /// plugin is disabled.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -241,7 +247,7 @@ namespace XP.SDK.XPLM.Internal
         /// <para>
         /// Write a new value to a single precision floating point data ref. This
         /// routine is a no-op if the plugin publishing the dataref is disabled, the
-        /// dataref is invalid, or the dataref is not writable.
+        /// dataref is NULL, or the dataref is not writable.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -259,8 +265,8 @@ namespace XP.SDK.XPLM.Internal
         /// <summary>
         /// <para>
         /// Read a double precision floating point dataref and return its value. The
-        /// return value is the dataref value or 0.0 if the dataref is invalid/NULL or
-        /// the plugin is disabled.
+        /// return value is the dataref value or 0.0 if the dataref is NULL or the
+        /// plugin is disabled.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -281,7 +287,7 @@ namespace XP.SDK.XPLM.Internal
         /// <para>
         /// Write a new value to a double precision floating point data ref. This
         /// routine is a no-op if the plugin publishing the dataref is disabled, the
-        /// dataref is invalid, or the dataref is not writable.
+        /// dataref is NULL, or the dataref is not writable.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -298,7 +304,7 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// Read a part of an integer array dataref. If you pass NULL for outVaules,
+        /// Read a part of an integer array dataref. If you pass NULL for outValues,
         /// the routine will return the size of the array, ignoring inOffset and inMax.
         /// </para>
         /// <para>
@@ -592,12 +598,6 @@ namespace XP.SDK.XPLM.Internal
         /// You unregister a data ref by the XPLMDataRef you get back from
         /// registration. Once you unregister a data ref, your function pointer will
         /// not be called anymore.
-        /// </para>
-        /// <para>
-        /// For maximum compatibility, do not unregister your data accessors until
-        /// final shutdown (when your XPluginStop routine is called). This allows other
-        /// plugins to find your data reference once and use it for their entire time
-        /// of operation.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

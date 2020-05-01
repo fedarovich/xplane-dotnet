@@ -152,7 +152,7 @@ namespace XP.SDK.XPLM.Internal
         /// <summary>
         /// <para>
         /// This routine unregisters a draw callback.  You must unregister a callback
-        /// for each  time you register a callback if you have registered it multiple
+        /// for each time you register a callback if you have registered it multiple
         /// times with different refcons.  The routine returns 1 if it can find the
         /// callback to unregister, 0 otherwise.
         /// </para>
@@ -651,7 +651,7 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// This routine returns whether a window is visible.
+        /// Returns true (1) if the specified window is visible.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -876,8 +876,8 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// This routine returns a window's reference constant, the unique value you
-        /// can use for your own purposes.
+        /// Returns a window's reference constant, the unique value you can use for
+        /// your own purposes.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -896,8 +896,8 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// This routine sets a window's reference constant.  Use this to pass data to
-        /// yourself in the callbacks.
+        /// Sets a window's reference constant.  Use this to pass data to yourself in
+        /// the callbacks.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -915,7 +915,7 @@ namespace XP.SDK.XPLM.Internal
         /// <summary>
         /// <para>
         /// This routine gives a specific window keyboard focus.  Keystrokes will be
-        /// sent to  that window.  Pass a window ID of 0 to remove keyboard focus from
+        /// sent to that window.  Pass a window ID of 0 to remove keyboard focus from
         /// any plugin-created windows and instead pass keyboard strokes directly to
         /// X-Plane.
         /// </para>
@@ -992,6 +992,13 @@ namespace XP.SDK.XPLM.Internal
         /// though: in such a case, X-Plane will not pass clicks or keyboard input down
         /// to your layer until the window above stops "eating" the input.)
         /// </para>
+        /// <para>
+        /// Note that legacy windows are always placed in layer
+        /// xplm_WindowLayerFlightOverlay, while modern-style windows default to
+        /// xplm_WindowLayerFloatingWindows. This means it's perfectly consistent to
+        /// have two different plugin-created windows (one legacy, one modern) *both*
+        /// be in the front (of their different layers!) at the same time.
+        /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static int IsWindowInFront(WindowID inWindow)
@@ -1029,8 +1036,8 @@ namespace XP.SDK.XPLM.Internal
         /// system does not consume.  You should ALMOST ALWAYS sniff non-control keys
         /// after the window system.  When the window system consumes a key, it is
         /// because the user has "focused" a window.  Consuming the key or taking
-        /// action based on the key will produce very weird results.  Returns 1 if
-        /// successful.
+        /// action based on the key will produce very weird results.  Returns
+        /// 1 if successful.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -1137,7 +1144,7 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// This API unregisters a hot key.  You can only unregister your own hot keys.
+        /// Unregisters a hot key.  You can only unregister your own hot keys.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -1190,7 +1197,7 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// Returns information about the hot key.  Return NULL for any  parameter you
+        /// Returns information about the hot key.  Return NULL for any parameter you
         /// don't want info about.  The description should be at least 512 chars long.
         /// </para>
         /// </summary>
@@ -1211,8 +1218,7 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// XPLMSetHotKeyCombination remaps a hot keys keystrokes.  You may remap
-        /// another plugin's keystrokes.
+        /// Remaps a hot key's keystrokes.  You may remap another plugin's keystrokes.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

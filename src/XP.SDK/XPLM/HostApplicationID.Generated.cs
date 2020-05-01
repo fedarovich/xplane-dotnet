@@ -5,12 +5,11 @@ namespace XP.SDK.XPLM
     
     /// <summary>
     /// <para>
-    /// The plug-in system is based on Austin's cross-platform OpenGL framework and
-    /// could theoretically be adapted to run in other apps like WorldMaker. The
-    /// plug-in system also runs against a test harness for internal development
-    /// and could be adapted to another flight sim (in theory at least). So an ID
-    /// is providing allowing plug-ins to indentify what app they are running
-    /// under.
+    /// While the plug-in SDK is currently only accessible to plugins running
+    /// inside X-Plane, the original authors considered extending the API to other
+    /// applications that shared basic infrastructure with X-Plane. These
+    /// enumerations defined some of those applications.  As of this writing, only
+    /// X-Plane is available as a host application.
     /// </para>
     /// </summary>
     public enum HostApplicationID

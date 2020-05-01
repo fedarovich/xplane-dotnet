@@ -13,9 +13,10 @@ namespace XP.SDK.Widgets
     /// (showing the user manipulating them).
     /// </para>
     /// <para>
-    /// ScrollBar - this is a standard scroll bar with arrows and a thumb to drag.
-    /// Slider - this is a simple track with a ball in the middle that can be slid.
-    /// Progress - this is a progress indicator showing how a long task is going.
+    /// - ScrollBar: this is a standard scroll bar with arrows and a thumb to drag.
+    /// - Slider: this is a simple track with a ball in the middle that can be
+    /// slid.
+    /// - Progress: this is a progress indicator showing how a long task is going.
     /// </para>
     /// </summary>
     public enum TrackStyle

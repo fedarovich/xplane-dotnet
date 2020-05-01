@@ -83,26 +83,16 @@ namespace XP.SDK.Widgets.Internal
         /// <para>
         /// - Top, left, bottom, and right in global screen coordinates defining the
         /// widget's location on the screen.
-        /// </para>
-        /// <para>
         /// - inVisible is 1 if the widget should be drawn, 0 to start the widget as
         /// hidden.
-        /// </para>
-        /// <para>
         /// - inDescriptor is a null terminated string that will become the widget's
         /// descriptor.
-        /// </para>
-        /// <para>
         /// - inIsRoot is 1 if this is going to be a root widget, 0 if it will not be.
-        /// </para>
-        /// <para>
         /// - inContainer is the ID of this widget's container. It must be 0 for a root
         /// widget. for a non-root widget, pass the widget ID of the widget to place
         /// this widget within. If this widget is not going to start inside another
         /// widget, pass 0; this new widget will then just be floating off in space
         /// (and will not be drawn until it is placed in a widget.
-        /// </para>
-        /// <para>
         /// - inClass is the class of the widget to draw. Use one of the predefined
         /// class-IDs to create a standard widget.
         /// </para>
@@ -149,26 +139,16 @@ namespace XP.SDK.Widgets.Internal
         /// <para>
         /// - Top, left, bottom, and right in global screen coordinates defining the
         /// widget's location on the screen.
-        /// </para>
-        /// <para>
         /// - inVisible is 1 if the widget should be drawn, 0 to start the widget as
         /// hidden.
-        /// </para>
-        /// <para>
         /// - inDescriptor is a null terminated string that will become the widget's
         /// descriptor.
-        /// </para>
-        /// <para>
         /// - inIsRoot is 1 if this is going to be a root widget, 0 if it will not be.
-        /// </para>
-        /// <para>
         /// - inContainer is the ID of this widget's container. It must be 0 for a root
         /// widget. for a non-root widget, pass the widget ID of the widget to place
         /// this widget within. If this widget is not going to start inside another
         /// widget, pass 0; this new widget will then just be floating off in space
         /// (and will not be drawn until it is placed in a widget.
-        /// </para>
-        /// <para>
         /// - inClass is the class of the widget to draw. Use one of the predefined
         /// class-IDs to create a standard widget.
         /// </para>
@@ -381,8 +361,8 @@ namespace XP.SDK.Widgets.Internal
         
         /// <summary>
         /// <para>
-        /// This routine returns the parent of a widget, or 0 if the widget has no
-        /// parent. Root widgets never have parents and therefore always return 0.
+        /// Returns the parent of a widget, or 0 if the widget has no parent. Root
+        /// widgets never have parents and therefore always return 0.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -457,9 +437,8 @@ namespace XP.SDK.Widgets.Internal
         
         /// <summary>
         /// <para>
-        /// XPFindRootWidget returns the Widget ID of the root widget that contains the
-        /// passed in widget or NULL if the passed in widget is not in a rooted
-        /// hierarchy.
+        /// Returns the Widget ID of the root widget that contains the passed in widget
+        /// or NULL if the passed in widget is not in a rooted hierarchy.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -761,13 +740,13 @@ namespace XP.SDK.Widgets.Internal
         
         /// <summary>
         /// <para>
-        /// XPSetKeyboardFocus controls which widget will receive keystrokes. Pass the
-        /// Widget ID of the widget to get the keys. Note that if the widget does not
-        /// care about keystrokes, they will go to the parent widget, and if no widget
-        /// cares about them, they go to X-Plane.
+        /// Controls which widget will receive keystrokes. Pass the widget ID of the
+        /// widget to get the keys. Note that if the widget does not care about
+        /// keystrokes, they will go to the parent widget, and if no widget cares about
+        /// them, they go to X-Plane.
         /// </para>
         /// <para>
-        /// If you set the keyboard focus to Widget ID 0, X-Plane gets keyboard focus.
+        /// If you set the keyboard focus to widget ID 0, X-Plane gets keyboard focus.
         /// </para>
         /// <para>
         /// This routine returns the widget ID that ended up with keyboard focus, or 0
@@ -776,9 +755,6 @@ namespace XP.SDK.Widgets.Internal
         /// <para>
         /// Keyboard focus is not changed if the new widget will not accept it. For
         /// setting to X-Plane, keyboard focus is always accepted.
-        /// </para>
-        /// <para>
-        /// *
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

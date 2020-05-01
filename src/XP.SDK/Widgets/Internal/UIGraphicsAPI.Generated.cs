@@ -72,10 +72,11 @@ namespace XP.SDK.Widgets.Internal
         /// <summary>
         /// <para>
         /// XPDrawElement draws a given element at an offset on the virtual screen in
-        /// set dimensions. EVEN if the element is not scalable, it will be scaled if
-        /// the width and height do not match the preferred dimensions; it'll just look
-        /// ugly. Pass inLit to see the lit version of the element; if the element
-        /// cannot be lit this is ignored.
+        /// set dimensions.
+        /// *Even* if the element is not scalable, it will be scaled if the width and
+        /// height do not match the preferred dimensions; it'll just look ugly. Pass
+        /// inLit to see the lit version of the element; if the element cannot be lit
+        /// this is ignored.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -98,7 +99,7 @@ namespace XP.SDK.Widgets.Internal
         /// <para>
         /// This routine returns the recommended or minimum dimensions of a given UI
         /// element. outCanBeLit tells whether the element has both a lit and unlit
-        /// state. Pass NULL to not receive any of these parameters.
+        /// state. Pass `NULL` to not receive any of these parameters.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

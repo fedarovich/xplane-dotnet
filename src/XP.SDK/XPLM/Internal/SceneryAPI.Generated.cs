@@ -15,7 +15,6 @@ namespace XP.SDK.XPLM.Internal
         private static IntPtr DegMagneticToDegTruePtr;
         private static IntPtr LoadObjectPtr;
         private static IntPtr LoadObjectAsyncPtr;
-        private static IntPtr DrawObjectsPtr;
         private static IntPtr UnloadObjectPtr;
         private static IntPtr LookupObjectsPtr;
 
@@ -29,7 +28,6 @@ namespace XP.SDK.XPLM.Internal
             DegMagneticToDegTruePtr = Lib.GetExport("XPLMDegMagneticToDegTrue");
             LoadObjectPtr = Lib.GetExport("XPLMLoadObject");
             LoadObjectAsyncPtr = Lib.GetExport("XPLMLoadObjectAsync");
-            DrawObjectsPtr = Lib.GetExport("XPLMDrawObjects");
             UnloadObjectPtr = Lib.GetExport("XPLMUnloadObject");
             LookupObjectsPtr = Lib.GetExport("XPLMLookupObjects");
         }
@@ -296,46 +294,6 @@ namespace XP.SDK.XPLM.Internal
             Span<byte> inPathUtf8 = stackalloc byte[(inPath.Length << 1) | 1];
             var inPathPtr = Utils.ToUtf8Unsafe(inPath, inPathUtf8);
             LoadObjectAsync(inPathPtr, inCallback, inRefcon);
-        }
-
-        
-        /// <summary>
-        /// <para>
-        /// XPLMDrawObjects draws an object from an OBJ file one or more times. You
-        /// pass in the object and an array of XPLMDrawInfo_t structs, one for each
-        /// place you would like the object to be drawn.
-        /// </para>
-        /// <para>
-        /// X-Plane will attempt to cull the objects based on LOD and visibility, and
-        /// will pick the appropriate LOD.
-        /// </para>
-        /// <para>
-        /// Lighting is a boolean; pass 1 to show the night version of object with
-        /// night-only lights lit up. Pass 0 to show the daytime version of the object.
-        /// </para>
-        /// <para>
-        /// earth_relative controls the coordinate system. If this is 1, the rotations
-        /// you specify are applied to the object after its coordinate system is
-        /// transformed from local to earth-relative coordinates -- that is, an object
-        /// with no rotations will point toward true north and the Y axis will be up
-        /// against gravity. If this is 0, the object is drawn with your rotations from
-        /// local coordanates -- that is, an object with no rotations is drawn pointing
-        /// down the -Z axis and the Y axis of the object matches the local coordinate
-        /// Y axis.
-        /// </para>
-        /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void DrawObjects(ObjectRef inObject, int inCount, DrawInfo* inLocations, int lighting, int earth_relative)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DrawObjectsPtr);
-            IL.Push(inObject);
-            IL.Push(inCount);
-            IL.Push(inLocations);
-            IL.Push(lighting);
-            IL.Push(earth_relative);
-            IL.Push(DrawObjectsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(ObjectRef), typeof(int), typeof(DrawInfo*), typeof(int), typeof(int)));
         }
 
         

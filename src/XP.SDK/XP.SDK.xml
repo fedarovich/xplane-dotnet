@@ -67,10 +67,11 @@
             <summary>
             <para>
             XPDrawElement draws a given element at an offset on the virtual screen in
-            set dimensions. EVEN if the element is not scalable, it will be scaled if
-            the width and height do not match the preferred dimensions; it'll just look
-            ugly. Pass inLit to see the lit version of the element; if the element
-            cannot be lit this is ignored.
+            set dimensions.
+            *Even* if the element is not scalable, it will be scaled if the width and
+            height do not match the preferred dimensions; it'll just look ugly. Pass
+            inLit to see the lit version of the element; if the element cannot be lit
+            this is ignored.
             </para>
             </summary>
         </member>
@@ -79,7 +80,7 @@
             <para>
             This routine returns the recommended or minimum dimensions of a given UI
             element. outCanBeLit tells whether the element has both a lit and unlit
-            state. Pass NULL to not receive any of these parameters.
+            state. Pass `NULL` to not receive any of these parameters.
             </para>
             </summary>
         </member>
@@ -128,12 +129,17 @@
             This structure contains all of the parameters needed to create a wiget. It
             is used with XPUCreateWidgets to create widgets in bulk from an array. All
             parameters correspond to those of XPCreateWidget except for the container
-            index. If the container index is equal to the index of a widget in the
-            array, the widget in the array passed to XPUCreateWidgets is used as the
-            parent of this widget. Note that if you pass an index greater than your own
-            position in the array, the parent you are requesting will not exist yet. If
-            the container index is NO_PARENT, the parent widget is specified as NULL.
-            If the container index is PARAM_PARENT, the widget passed into
+            index.
+            </para>
+            <para>
+            If the container index is equal to the index of a widget in the array, the
+            widget in the array passed to XPUCreateWidgets is used as the parent of
+            this widget. Note that if you pass an index greater than your own position
+            in the array, the parent you are requesting will not exist yet.
+            </para>
+            <para>
+            If the container index is NO_PARENT, the parent widget is specified as
+            NULL. If the container index is PARAM_PARENT, the widget passed into
             XPUCreateWidgets is used.
             </para>
             </summary>
@@ -172,26 +178,16 @@
             <para>
             - Top, left, bottom, and right in global screen coordinates defining the
             widget's location on the screen.
-            </para>
-            <para>
             - inVisible is 1 if the widget should be drawn, 0 to start the widget as
             hidden.
-            </para>
-            <para>
             - inDescriptor is a null terminated string that will become the widget's
             descriptor.
-            </para>
-            <para>
             - inIsRoot is 1 if this is going to be a root widget, 0 if it will not be.
-            </para>
-            <para>
             - inContainer is the ID of this widget's container. It must be 0 for a root
             widget. for a non-root widget, pass the widget ID of the widget to place
             this widget within. If this widget is not going to start inside another
             widget, pass 0; this new widget will then just be floating off in space
             (and will not be drawn until it is placed in a widget.
-            </para>
-            <para>
             - inClass is the class of the widget to draw. Use one of the predefined
             class-IDs to create a standard widget.
             </para>
@@ -218,26 +214,16 @@
             <para>
             - Top, left, bottom, and right in global screen coordinates defining the
             widget's location on the screen.
-            </para>
-            <para>
             - inVisible is 1 if the widget should be drawn, 0 to start the widget as
             hidden.
-            </para>
-            <para>
             - inDescriptor is a null terminated string that will become the widget's
             descriptor.
-            </para>
-            <para>
             - inIsRoot is 1 if this is going to be a root widget, 0 if it will not be.
-            </para>
-            <para>
             - inContainer is the ID of this widget's container. It must be 0 for a root
             widget. for a non-root widget, pass the widget ID of the widget to place
             this widget within. If this widget is not going to start inside another
             widget, pass 0; this new widget will then just be floating off in space
             (and will not be drawn until it is placed in a widget.
-            </para>
-            <para>
             - inClass is the class of the widget to draw. Use one of the predefined
             class-IDs to create a standard widget.
             </para>
@@ -343,8 +329,8 @@
         <member name="M:XP.SDK.Widgets.Internal.WidgetsAPI.GetParentWidget(XP.SDK.Widgets.WidgetID)">
             <summary>
             <para>
-            This routine returns the parent of a widget, or 0 if the widget has no
-            parent. Root widgets never have parents and therefore always return 0.
+            Returns the parent of a widget, or 0 if the widget has no parent. Root
+            widgets never have parents and therefore always return 0.
             </para>
             </summary>
         </member>
@@ -377,9 +363,8 @@
         <member name="M:XP.SDK.Widgets.Internal.WidgetsAPI.FindRootWidget(XP.SDK.Widgets.WidgetID)">
             <summary>
             <para>
-            XPFindRootWidget returns the Widget ID of the root widget that contains the
-            passed in widget or NULL if the passed in widget is not in a rooted
-            hierarchy.
+            Returns the Widget ID of the root widget that contains the passed in widget
+            or NULL if the passed in widget is not in a rooted hierarchy.
             </para>
             </summary>
         </member>
@@ -524,13 +509,13 @@
         <member name="M:XP.SDK.Widgets.Internal.WidgetsAPI.SetKeyboardFocus(XP.SDK.Widgets.WidgetID)">
             <summary>
             <para>
-            XPSetKeyboardFocus controls which widget will receive keystrokes. Pass the
-            Widget ID of the widget to get the keys. Note that if the widget does not
-            care about keystrokes, they will go to the parent widget, and if no widget
-            cares about them, they go to X-Plane.
+            Controls which widget will receive keystrokes. Pass the widget ID of the
+            widget to get the keys. Note that if the widget does not care about
+            keystrokes, they will go to the parent widget, and if no widget cares about
+            them, they go to X-Plane.
             </para>
             <para>
-            If you set the keyboard focus to Widget ID 0, X-Plane gets keyboard focus.
+            If you set the keyboard focus to widget ID 0, X-Plane gets keyboard focus.
             </para>
             <para>
             This routine returns the widget ID that ended up with keyboard focus, or 0
@@ -539,9 +524,6 @@
             <para>
             Keyboard focus is not changed if the new widget will not accept it. For
             setting to X-Plane, keyboard focus is always accepted.
-            </para>
-            <para>
-            *
             </para>
             </summary>
         </member>
@@ -594,8 +576,8 @@
         <member name="M:XP.SDK.Widgets.Internal.WidgetUtilsAPI.CreateWidgets(XP.SDK.Widgets.Internal.WidgetCreate*,System.Int32,XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.WidgetID*)">
             <summary>
             <para>
-            This function creates a series of widgets from a table...see
-            XPCreateWidget_t above. Pass in an array of widget creation structures and
+            This function creates a series of widgets from a table (see
+            XPCreateWidget_t above). Pass in an array of widget creation structures and
             an array of widget IDs that will receive each widget.
             </para>
             <para>
@@ -665,9 +647,10 @@
             (showing the user manipulating them).
             </para>
             <para>
-            ScrollBar - this is a standard scroll bar with arrows and a thumb to drag.
-            Slider - this is a simple track with a ball in the middle that can be slid.
-            Progress - this is a progress indicator showing how a long task is going.
+            - ScrollBar: this is a standard scroll bar with arrows and a thumb to drag.
+            - Slider: this is a simple track with a ball in the middle that can be
+            slid.
+            - Progress: this is a progress indicator showing how a long task is going.
             </para>
             </summary>
         </member>
@@ -910,7 +893,9 @@
             expecting from the online documentation.
             </para>
             <para>
-            Data types each take a bit field, so sets of data types may be formed.
+            Data types each take a bit field; it is legal to have a single dataref be
+            more than one type of data.  Whe this happens, you can pick any matching
+            get/set API.
             </para>
             </summary>
         </member>
@@ -919,12 +904,24 @@
             <para>
             This constant indicates which part of drawing we are in.  Drawing is done
             from the back to the front.  We get a callback before or after each item.
-            Metaphases provide access to the beginning and end of the 3d (scene) and 2d
-            (cockpit) drawing in a manner that is independent of new phases added  via
-            X-Plane implementation.
+            Metaphases provide access to the beginning and end of the 3d (scene) and
+            2d (cockpit) drawing in a manner that is independent of new phases added
+            via X-Plane implementation.
             </para>
             <para>
-            WARNING: As X-Plane's scenery evolves, some drawing phases may cease to
+            **NOTE**: As of XPLM302 the legacy 3D drawing phases (xplm_Phase_FirstScene
+            to xplm_Phase_LastScene) are deprecated. When running under X-Plane 11.50
+            with the modern Vulkan or Metal backend, X-Plane will no longer call
+            these drawing phases. There is a new drawing phase, xplm_Phase_Modern3D,
+            which is supported under OpenGL and Vulkan which is called out roughly
+            where the old before xplm_Phase_Airplanes phase was for blending. This
+            phase is *NOT* supported under Metal and comes with potentially
+            substantial performance overhead. Please do *NOT* opt into this phase if
+            you don't do any actual drawing that requires the depth buffer in some
+            way!
+            </para>
+            <para>
+            **WARNING**: As X-Plane's scenery evolves, some drawing phases may cease to
             exist and new ones may be invented.  If you need a particularly specific
             use of these codes, consult Austin and/or be prepared to revise your code
             as X-Plane evolves.
@@ -1098,12 +1095,6 @@
             </summary>
             <param name="textureIds"></param>
         </member>
-        <member name="M:XP.SDK.XPLM.Graphics.GetTexture(XP.SDK.XPLM.TextureID)">
-            <summary>
-            Returns the OpenGL texture ID of an X-Plane texture based on a generic identifying code.
-            For example, you can get the texture for X-Plane’s UI bitmaps.
-            </summary>
-        </member>
         <member name="M:XP.SDK.XPLM.Graphics.WorldToLocal(System.Double,System.Double,System.Double)">
             <summary>
             Translates coordinates from latitude, longitude, and altitude to local scene coordinates.
@@ -1170,12 +1161,11 @@
         <member name="T:XP.SDK.XPLM.HostApplicationID">
             <summary>
             <para>
-            The plug-in system is based on Austin's cross-platform OpenGL framework and
-            could theoretically be adapted to run in other apps like WorldMaker. The
-            plug-in system also runs against a test harness for internal development
-            and could be adapted to another flight sim (in theory at least). So an ID
-            is providing allowing plug-ins to indentify what app they are running
-            under.
+            While the plug-in SDK is currently only accessible to plugins running
+            inside X-Plane, the original authors considered extending the API to other
+            applications that shared basic infrastructure with X-Plane. These
+            enumerations defined some of those applications.  As of this writing, only
+            X-Plane is available as a host application.
             </para>
             </summary>
         </member>
@@ -1187,7 +1177,7 @@
         <member name="T:XP.SDK.XPLM.HotKeyID">
             <summary>
             <para>
-            An opaque IDs used to identify a hot key.
+            An opaque ID used to identify a hot key.
             </para>
             </summary>
         </member>
@@ -1203,7 +1193,7 @@
             <para>
             This function repositions the camera on the next drawing cycle. You must
             pass a non-null control function. Specify in inHowLong how long you'd like
-            control (indefinitely or until a key is pressed).
+            control (indefinitely or until a new view mode is set by the user).
             </para>
             </summary>
         </member>
@@ -1379,22 +1369,28 @@
             Given a data ref, this routine returns true if you can successfully set the
             data, false otherwise. Some datarefs are read-only.
             </para>
+            <para>
+            NOTE: even if a dataref is marked writable, it may not act writable.  This
+            can happen for datarefs that X-Plane writes to on every frame of
+            simulation.  In some cases, the dataref is writable but you have to set a
+            separate "override" dataref to 1 to stop X-Plane from writing it.
+            </para>
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.DataAccessAPI.IsDataRefGood(XP.SDK.XPLM.DataRef)">
             <summary>
             <para>
-            WARNING: This function is deprecated and should not be used. Datarefs are
-            valid until plugins are reloaded or the sim quits. Plugins sharing datarefs
-            should support these semantics by not unregistering datarefs during
-            operation. (You should however unregister datarefs when your plugin is
-            unloaded, as part of general resource cleanup.)
+            This function returns true if the passed in handle is a valid dataref that
+            is not orphaned.
             </para>
             <para>
-            This function returns whether a data ref is still valid. If it returns
-            false, you should refind the data ref from its original string. Calling an
-            accessor function on a bad data ref will return a default value, typically
-            0 or 0-length data.
+            Note: there is normally no need to call this function; datarefs returned by
+            XPLMFindDataRef remain valid (but possibly orphaned) unless there is a
+            complete plugin reload (in which case your plugin is reloaded anyway).
+            Orphaned datarefs can be safely read and return 0. Therefore you never need
+            to call XPLMIsDataRefGood to 'check' the safety of a dataref.
+            (XPLMIsDatarefGood performs some slow checking of the handle validity, so
+            it has a perormance cost.)
             </para>
             </summary>
         </member>
@@ -1402,7 +1398,8 @@
             <summary>
             <para>
             This routine returns the types of the data ref for accessor use. If a data
-            ref is available in multiple data types, they will all be returned.
+            ref is available in multiple data types, the bit-wise OR of these types
+            will be returned.
             </para>
             </summary>
         </member>
@@ -1410,8 +1407,7 @@
             <summary>
             <para>
             Read an integer data ref and return its value. The return value is the
-            dataref value or 0 if the dataref is invalid/NULL or the plugin is
-            disabled.
+            dataref value or 0 if the dataref is NULL or the plugin is disabled.
             </para>
             </summary>
         </member>
@@ -1419,7 +1415,7 @@
             <summary>
             <para>
             Write a new value to an integer data ref. This routine is a no-op if the
-            plugin publishing the dataref is disabled, the dataref is invalid, or the
+            plugin publishing the dataref is disabled, the dataref is NULL, or the
             dataref is not writable.
             </para>
             </summary>
@@ -1428,8 +1424,8 @@
             <summary>
             <para>
             Read a single precision floating point dataref and return its value. The
-            return value is the dataref value or 0.0 if the dataref is invalid/NULL or
-            the plugin is disabled.
+            return value is the dataref value or 0.0 if the dataref is NULL or the
+            plugin is disabled.
             </para>
             </summary>
         </member>
@@ -1438,7 +1434,7 @@
             <para>
             Write a new value to a single precision floating point data ref. This
             routine is a no-op if the plugin publishing the dataref is disabled, the
-            dataref is invalid, or the dataref is not writable.
+            dataref is NULL, or the dataref is not writable.
             </para>
             </summary>
         </member>
@@ -1446,8 +1442,8 @@
             <summary>
             <para>
             Read a double precision floating point dataref and return its value. The
-            return value is the dataref value or 0.0 if the dataref is invalid/NULL or
-            the plugin is disabled.
+            return value is the dataref value or 0.0 if the dataref is NULL or the
+            plugin is disabled.
             </para>
             </summary>
         </member>
@@ -1456,14 +1452,14 @@
             <para>
             Write a new value to a double precision floating point data ref. This
             routine is a no-op if the plugin publishing the dataref is disabled, the
-            dataref is invalid, or the dataref is not writable.
+            dataref is NULL, or the dataref is not writable.
             </para>
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.DataAccessAPI.GetDatavi(XP.SDK.XPLM.DataRef,System.Int32*,System.Int32,System.Int32)">
             <summary>
             <para>
-            Read a part of an integer array dataref. If you pass NULL for outVaules,
+            Read a part of an integer array dataref. If you pass NULL for outValues,
             the routine will return the size of the array, ignoring inOffset and inMax.
             </para>
             <para>
@@ -1609,12 +1605,6 @@
             registration. Once you unregister a data ref, your function pointer will
             not be called anymore.
             </para>
-            <para>
-            For maximum compatibility, do not unregister your data accessors until
-            final shutdown (when your XPluginStop routine is called). This allows other
-            plugins to find your data reference once and use it for their entire time
-            of operation.
-            </para>
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.DataAccessAPI.ShareData(System.Byte*,XP.SDK.XPLM.DataTypeID,XP.SDK.XPLM.Internal.DataChangedCallback,System.Void*)">
@@ -1714,7 +1704,7 @@
             <summary>
             <para>
             This routine unregisters a draw callback.  You must unregister a callback
-            for each  time you register a callback if you have registered it multiple
+            for each time you register a callback if you have registered it multiple
             times with different refcons.  The routine returns 1 if it can find the
             callback to unregister, 0 otherwise.
             </para>
@@ -1995,7 +1985,7 @@
         <member name="M:XP.SDK.XPLM.Internal.DisplayAPI.GetWindowIsVisible(XP.SDK.XPLM.WindowID)">
             <summary>
             <para>
-            This routine returns whether a window is visible.
+            Returns true (1) if the specified window is visible.
             </para>
             </summary>
         </member>
@@ -2119,16 +2109,16 @@
         <member name="M:XP.SDK.XPLM.Internal.DisplayAPI.GetWindowRefCon(XP.SDK.XPLM.WindowID)">
             <summary>
             <para>
-            This routine returns a window's reference constant, the unique value you
-            can use for your own purposes.
+            Returns a window's reference constant, the unique value you can use for
+            your own purposes.
             </para>
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.DisplayAPI.SetWindowRefCon(XP.SDK.XPLM.WindowID,System.Void*)">
             <summary>
             <para>
-            This routine sets a window's reference constant.  Use this to pass data to
-            yourself in the callbacks.
+            Sets a window's reference constant.  Use this to pass data to yourself in
+            the callbacks.
             </para>
             </summary>
         </member>
@@ -2136,7 +2126,7 @@
             <summary>
             <para>
             This routine gives a specific window keyboard focus.  Keystrokes will be
-            sent to  that window.  Pass a window ID of 0 to remove keyboard focus from
+            sent to that window.  Pass a window ID of 0 to remove keyboard focus from
             any plugin-created windows and instead pass keyboard strokes directly to
             X-Plane.
             </para>
@@ -2183,6 +2173,13 @@
             though: in such a case, X-Plane will not pass clicks or keyboard input down
             to your layer until the window above stops "eating" the input.)
             </para>
+            <para>
+            Note that legacy windows are always placed in layer
+            xplm_WindowLayerFlightOverlay, while modern-style windows default to
+            xplm_WindowLayerFloatingWindows. This means it's perfectly consistent to
+            have two different plugin-created windows (one legacy, one modern) *both*
+            be in the front (of their different layers!) at the same time.
+            </para>
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.DisplayAPI.RegisterKeySniffer(XP.SDK.XPLM.Internal.KeySnifferCallback,System.Int32,System.Void*)">
@@ -2193,8 +2190,8 @@
             system does not consume.  You should ALMOST ALWAYS sniff non-control keys
             after the window system.  When the window system consumes a key, it is
             because the user has "focused" a window.  Consuming the key or taking
-            action based on the key will produce very weird results.  Returns 1 if
-            successful.
+            action based on the key will produce very weird results.  Returns
+            1 if successful.
             </para>
             </summary>
         </member>
@@ -2234,7 +2231,7 @@
         <member name="M:XP.SDK.XPLM.Internal.DisplayAPI.UnregisterHotKey(XP.SDK.XPLM.HotKeyID)">
             <summary>
             <para>
-            This API unregisters a hot key.  You can only unregister your own hot keys.
+            Unregisters a hot key.  You can only unregister your own hot keys.
             </para>
             </summary>
         </member>
@@ -2255,7 +2252,7 @@
         <member name="M:XP.SDK.XPLM.Internal.DisplayAPI.GetHotKeyInfo(XP.SDK.XPLM.HotKeyID,System.Byte*,XP.SDK.XPLM.KeyFlags*,System.Byte*,XP.SDK.XPLM.PluginID*)">
             <summary>
             <para>
-            Returns information about the hot key.  Return NULL for any  parameter you
+            Returns information about the hot key.  Return NULL for any parameter you
             don't want info about.  The description should be at least 512 chars long.
             </para>
             </summary>
@@ -2263,8 +2260,7 @@
         <member name="M:XP.SDK.XPLM.Internal.DisplayAPI.SetHotKeyCombination(XP.SDK.XPLM.HotKeyID,System.Byte,XP.SDK.XPLM.KeyFlags)">
             <summary>
             <para>
-            XPLMSetHotKeyCombination remaps a hot keys keystrokes.  You may remap
-            another plugin's keystrokes.
+            Remaps a hot key's keystrokes.  You may remap another plugin's keystrokes.
             </para>
             </summary>
         </member>
@@ -2306,9 +2302,9 @@
             window drawing.
             </para>
             <para>
-            NOTE: Because you are drawing your window over a background, you can make a
-            translucent window easily by simply not filling in your entire window's
-            bounds.
+            **Note**: Because you are drawing your window over a background, you can
+            make a translucent window easily by simply not filling in your entire
+            window's bounds.
             </para>
             </summary>
         </member>
@@ -2321,7 +2317,8 @@
             called even if your plugin is not enabled, allowing you to receive debug
             info in your XPluginStart and XPluginStop callbacks. To avoid causing logic
             errors in the management code, do not call any other plugin routines from
-            your error callback - it is only meant for logging!
+            your error callback - it is only meant for catching errors in the
+            debugging.
             </para>
             </summary>
         </member>
@@ -2338,26 +2335,39 @@
             <summary>
             <para>
             This is your flight loop callback. Each time the flight loop is iterated
-            through, you receive this call at the end. You receive a time since you
-            were last called and a time since the last loop, as well as a loop counter.
-            The 'phase' parameter is deprecated and should be ignored.
+            through, you receive this call at the end.
             </para>
             <para>
-            Your return value controls when you will next be called. Return 0 to stop
-            receiving callbacks. Pass a positive number to specify how many seconds
-            until the next callback. (You will be called at or after this time, not
-            before.) Pass a negative number to specify how many loops must go by until
-            you are called. For example, -1.0 means call me the very next loop. Try to
-            run your flight loop as infrequently as is practical, and suspend it (using
-            return value 0) when you do not need it; lots of flight loop callbacks that
-            do nothing lowers X-Plane's frame rate.
+            Flight loop callbacks receive a number of input timing parameters. These
+            input timing parameters are not particularly useful; you may need to track
+            your own timing data (e.g. by reading datarefs). The input parameters are:
+            </para>
+            <para>
+            - inElapsedSinceLastCall: the wall time since your last callback.
+            - inElapsedTimeSinceLastFlightLoop: the wall time since any flight loop was
+            dispatched.
+            - inCounter: a monotonically increasing counter, bumped once per flight
+            loop dispatch from the sim.
+            - inRefcon: your own ptr constant from when you regitered yor callback.
+            </para>
+            <para>
+            Your return value controls when you will next be called.
+            </para>
+            <para>
+            - Return 0 to stop receiving callbacks.
+            - Pass a positive number to specify how many seconds until the next
+            callback. (You will be called at or after this time, not before.)
+            - Pass a negative number to specify how many loops must go by until you
+            are called. For example, -1.0 means call me the very next loop.
+            </para>
+            <para>
+            Try to run your flight loop as infrequently as is practical, and suspend it
+            (using return value 0) when you do not need it; lots of flight loop
+            callbacks that do nothing lowers X-Plane's frame rate.
             </para>
             <para>
             Your callback will NOT be unregistered if you return 0; it will merely be
             inactive.
-            </para>
-            <para>
-            The reference constant you passed to your loop is passed back to you.
             </para>
             </summary>
         </member>
@@ -2381,7 +2391,7 @@
             <para>
             These define the function pointers you provide to get or set data. Note
             that you are passed a generic pointer for each one. This is the same
-            pointer you pass in your register routine; you can use it to find global
+            pointer you pass in your register routine; you can use it to locate plugin
             variables, etc.
             </para>
             <para>
@@ -2414,37 +2424,28 @@
         <member name="M:XP.SDK.XPLM.Internal.GraphicsAPI.SetGraphicsState(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
             <para>
-            XPLMSetGraphicsState changes OpenGL's graphics state in a number of ways:
+            XPLMSetGraphicsState changes OpenGL's fixed function pipeline state.  You
+            are not responsible for restoring any state that is accessed via
+            XPLMSetGraphicsState, but you are responsible for not accessing this state
+            directly.
             </para>
             <para>
-            inEnableFog - enables or disables fog, equivalent to: glEnable(GL_FOG);
-            </para>
-            <para>
-            inNumberTexUnits - enables or disables a number of multitexturing units. If
-            the number is 0, 2d texturing is disabled entirely, as in
-            glDisable(GL_TEXTURE_2D);  Otherwise, 2d texturing is enabled, and  a
-            number of multitexturing units are enabled sequentially, starting  with
-            unit 0, e.g. glActiveTextureARB(GL_TEXTURE0_ARB);  glEnable
+            - inEnableFog - enables or disables fog, equivalent to: glEnable(GL_FOG);
+            - inNumberTexUnits - enables or disables a number of multitexturing units.
+            If the number is 0, 2d texturing is disabled entirely, as in
+            glDisable(GL_TEXTURE_2D);  Otherwise, 2d texturing is enabled, and a
+            number of multitexturing units are enabled sequentially, starting with
+            unit 0, e.g. glActiveTextureARB(GL_TEXTURE0_ARB); glEnable
             (GL_TEXTURE_2D);
-            </para>
-            <para>
-            inEnableLighting - enables or disables OpenGL lighting, e.g.
+            - inEnableLighting - enables or disables OpenGL lighting, e.g.
             glEnable(GL_LIGHTING); glEnable(GL_LIGHT0);
-            </para>
-            <para>
-            inEnableAlphaTesting - enables or disables the alpha test per pixel, e.g.
+            - inEnableAlphaTesting - enables or disables the alpha test per pixel, e.g.
             glEnable(GL_ALPHA_TEST);
-            </para>
-            <para>
-            inEnableAlphaBlending - enables or disables alpha blending per pixel, e.g.
-            glEnable(GL_BLEND);
-            </para>
-            <para>
-            inEnableDepthTesting - enables per pixel depth testing, as in
+            - inEnableAlphaBlending - enables or disables alpha blending per pixel,
+            e.g. glEnable(GL_BLEND);
+            - inEnableDepthTesting - enables per pixel depth testing, as in
             glEnable(GL_DEPTH_TEST);
-            </para>
-            <para>
-            inEnableDepthWriting - enables writing back of depth information to the
+            - inEnableDepthWriting - enables writing back of depth information to the
             depth bufffer, as in glDepthMask(GL_TRUE);
             </para>
             <para>
@@ -2455,31 +2456,39 @@
             skips calls to change state that is already properly enabled.
             </para>
             <para>
-            X-Plane does not have a 'default' OGL state to plug-ins; plug-ins should
-            totally set OGL state before drawing.  Use XPLMSetGraphicsState instead of
-            any of the above OpenGL calls.
+            X-Plane does not have a 'default' OGL state for plug-ins with respect to
+            the above state vector; plug-ins should totally set OGL state using this
+            API before drawing.  Use XPLMSetGraphicsState instead of any of the above
+            OpenGL calls.
             </para>
             <para>
             WARNING: Any routine that performs drawing (e.g. XPLMDrawString or widget
             code) may change X-Plane's state.  Always set state before drawing after
             unknown code has executed.
             </para>
+            <para>
+            *Deprecation Warnings*: X-Plane's lighting and fog environemnt is
+            significantly more complex than the fixed function pipeline can express;
+            do not assume that lighting and fog state is a good approximation for 3-d
+            drawing.  Prefer to use XPLMInstancing to draw objects.  All calls to
+            XPLMSetGraphicsState should have no fog or lighting.
+            </para>
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.GraphicsAPI.BindTexture2d(System.Int32,System.Int32)">
             <summary>
             <para>
-            XPLMBindTexture2d changes what texture is bound to the 2d texturing target.
-            This routine caches the current 2d texture across all texturing units in
-            the sim and plug-ins, preventing extraneous binding.  For example, consider
-            several plug-ins running in series; if they all use the 'general interface'
-            bitmap to do UI, calling this function will skip the rebinding of the
-            general interface texture on all but the first plug-in, which can provide
-            better frame rate son some graphics cards.
+            XPLMBindTexture2d changes what texture is bound to the 2d texturing
+            target. This routine caches the current 2d texture across all texturing
+            units in the sim and plug-ins, preventing extraneous binding.  For
+            example, consider several plug-ins running in series; if they all use the
+            'general interface' bitmap to do UI, calling this function will skip the
+            rebinding of the general interface texture on all but the first plug-in,
+            which can provide better frame rate son some graphics cards.
             </para>
             <para>
             inTextureID is the ID of the texture object to bind; inTextureUnit is a
-            zero-based  texture unit (e.g. 0 for the first one), up to a maximum of 4
+            zero-based texture unit (e.g. 0 for the first one), up to a maximum of 4
             units.  (This number may increase in future versions of X-Plane.)
             </para>
             <para>
@@ -2490,30 +2499,9 @@
         <member name="M:XP.SDK.XPLM.Internal.GraphicsAPI.GenerateTextureNumbers(System.Int32*,System.Int32)">
             <summary>
             <para>
-            This routine generates unused texture numbers that a plug-in can use to
-            safely bind textures. Use this routine instead of glGenTextures;
-            glGenTextures will allocate texture numbers in ranges that X-Plane reserves
-            for its own use but does not always use; for example, it might provide an
-            ID within the range of textures reserved for terrain...loading a new .env
-            file as the plane flies might then cause X-Plane to use this texture ID.
-            X-Plane will then  overwrite the plug-ins texture.  This routine returns
-            texture IDs that are out of X-Plane's usage range.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.GraphicsAPI.GetTexture(XP.SDK.XPLM.TextureID)">
-            <summary>
-            <para>
-            XPLMGetTexture returns the OpenGL texture enumeration of an X-Plane texture
-            based on a  generic identifying code.  For example, you can get the texture
-            for X-Plane's UI bitmaps.  This allows you to build new gauges that take
-            advantage of X-Plane's textures, for smooth artwork integration and also
-            saving texture memory.  Note that the texture might not be loaded yet,
-            depending on what the  plane's panel contains.
-            </para>
-            <para>
-            OPEN ISSUE: We really need a way to make sure X-Plane loads this texture if
-            it isn't around, or at least a way to find out whether it is loaded or not.
+            Use this routine instead of glGenTextures to generate new texture object
+            IDs. This routine historically ensured that plugins don't use texure IDs
+            that X-Plane is reserving for its own use.
             </para>
             </summary>
         </member>
@@ -2568,7 +2556,7 @@
             This routine draws a number similar to the digit editing fields in
             PlaneMaker and data output display in X-Plane.  Pass in a color, a
             position, a floating point value, and formatting info.  Specify how many
-            integer and how many decimal digits to show and  whether to show a sign, as
+            integer and how many decimal digits to show and whether to show a sign, as
             well as a character set. This routine returns the xOffset plus width of the
             string drawn.
             </para>
@@ -2636,7 +2624,7 @@
             will get pixels. Legacy windows have their origin in the lower left of the
             main X-Plane window, while modern windows have their origin in the lower
             left of the global desktop space. In both cases, x increases as you move
-            left, and y increases as you move up.
+            right, and y increases as you move up.
             </para>
             </summary>
         </member>
@@ -2662,9 +2650,10 @@
             You receive this call for one of three events:
             </para>
             <para>
-            - when the user clicks the mouse button down - (optionally) when the user
-            drags the mouse after a down-click, but before the up-click - when the user
-            releases the down-clicked mouse button.
+            - when the user clicks the mouse button down
+            - (optionally) when the user drags the mouse after a down-click, but before
+            the up-click
+            - when the user releases the down-clicked mouse button.
             </para>
             <para>
             You receive the x and y of the click, your window, and a refcon.  Return 1
@@ -2681,7 +2670,7 @@
             will get pixels. Legacy windows have their origin in the lower left of the
             main X-Plane window, while modern windows have their origin in the lower
             left of the global desktop space. In both cases, x increases as you move
-            left, and y increases as you move up.
+            right, and y increases as you move up.
             </para>
             </summary>
         </member>
@@ -2703,7 +2692,7 @@
             will get pixels. Legacy windows have their origin in the lower left of the
             main X-Plane window, while modern windows have their origin in the lower
             left of the global desktop space. In both cases, x increases as you move
-            left, and y increases as you move up.
+            right, and y increases as you move up.
             </para>
             </summary>
         </member>
@@ -3323,15 +3312,10 @@
         <member name="M:XP.SDK.XPLM.Internal.NavigationAPI.GetNextNavAid(XP.SDK.XPLM.NavRef)">
             <summary>
             <para>
-            Given a nav aid ref, this routine returns the next navaid.  It returns
-            XPLM_NAV_NOT_FOUND if the nav aid passed in was invalid or if the navaid
-            passed in was the last one in the database.  Use this routine to iterate
-            across all like-typed navaids or the entire database.
-            </para>
-            <para>
-            WARNING: due to a bug in the SDK, when fix loading is disabled in the
-            rendering settings screen, calling this routine with the last airport
-            returns a bogus nav aid.  Using this nav aid can crash X-Plane.
+            Given a valid nav aid ref, this routine returns the next navaid.  It
+            returns XPLM_NAV_NOT_FOUND if the nav aid passed in was invalid or if the
+            navaid passed in was the last one in the database.  Use this routine to
+            iterate across all like-typed navaids or the entire database.
             </para>
             </summary>
         </member>
@@ -3342,11 +3326,6 @@
             database or XPLM_NAV_NOT_FOUND if there are no navaids of that type in the
             database.  You must pass exactly one nav aid type to this routine.
             </para>
-            <para>
-            WARNING: due to a bug in the SDK, when fix loading is disabled in the
-            rendering settings screen, calling this routine with fixes returns a bogus
-            nav aid.  Using this nav aid can crash X-Plane.
-            </para>
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.NavigationAPI.FindLastNavAidOfType(XP.SDK.XPLM.NavType)">
@@ -3356,11 +3335,6 @@
             database or XPLM_NAV_NOT_FOUND if there are no navaids of that type in the
             database.  You must pass exactly one nav aid type to this routine.
             </para>
-            <para>
-            WARNING: due to a bug in the SDK, when fix loading is disabled in the
-            rendering settings screen, calling this routine with fixes returns a bogus
-            nav aid.  Using this nav aid can crash X-Plane.
-            </para>
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.NavigationAPI.FindNavAid(System.Byte*,System.Byte*,System.Single*,System.Single*,System.Int32*,XP.SDK.XPLM.NavType)">
@@ -3369,32 +3343,31 @@
             This routine provides a number of searching capabilities for the nav
             database. XPLMFindNavAid will search through every nav aid whose type is
             within inType (multiple types may be added together) and return any
-            nav-aids found based  on the following rules:
+            nav-aids found based on the following rules:
             </para>
             <para>
-            If inLat and inLon are not NULL, the navaid nearest to that lat/lon will be
-            returned, otherwise the last navaid found will be returned.
+            * If inLat and inLon are not NULL, the navaid nearest to that lat/lon will
+            be returned, otherwise the last navaid found will be returned.
             </para>
             <para>
-            If inFrequency is not NULL, then any navaids considered must match this
+            * If inFrequency is not NULL, then any navaids considered must match this
             frequency.  Note that this will screen out radio beacons that do not have
             frequency data published (like inner markers) but not fixes and airports.
             </para>
             <para>
-            If inNameFragment is not NULL, only navaids that contain the fragment in
+            * If inNameFragment is not NULL, only navaids that contain the fragment in
             their name will be returned.
             </para>
             <para>
-            If inIDFragment is not NULL, only navaids that contain the fragment in
+            * If inIDFragment is not NULL, only navaids that contain the fragment in
             their IDs will be returned.
             </para>
             <para>
             This routine provides a simple way to do a number of useful searches:
-            </para>
-            <para>
-            Find the nearest navaid on this frequency. Find the nearest airport. Find
-            the VOR whose ID is "KBOS". Find the nearest airport whose name contains
-            "Chicago".
+            * Find the nearest navaid on this frequency.
+            * Find the nearest airport.
+            * Find the VOR whose ID is "KBOS".
+            * Find the nearest airport whose name contains "Chicago".
             </para>
             </summary>
         </member>
@@ -3404,32 +3377,31 @@
             This routine provides a number of searching capabilities for the nav
             database. XPLMFindNavAid will search through every nav aid whose type is
             within inType (multiple types may be added together) and return any
-            nav-aids found based  on the following rules:
+            nav-aids found based on the following rules:
             </para>
             <para>
-            If inLat and inLon are not NULL, the navaid nearest to that lat/lon will be
-            returned, otherwise the last navaid found will be returned.
+            * If inLat and inLon are not NULL, the navaid nearest to that lat/lon will
+            be returned, otherwise the last navaid found will be returned.
             </para>
             <para>
-            If inFrequency is not NULL, then any navaids considered must match this
+            * If inFrequency is not NULL, then any navaids considered must match this
             frequency.  Note that this will screen out radio beacons that do not have
             frequency data published (like inner markers) but not fixes and airports.
             </para>
             <para>
-            If inNameFragment is not NULL, only navaids that contain the fragment in
+            * If inNameFragment is not NULL, only navaids that contain the fragment in
             their name will be returned.
             </para>
             <para>
-            If inIDFragment is not NULL, only navaids that contain the fragment in
+            * If inIDFragment is not NULL, only navaids that contain the fragment in
             their IDs will be returned.
             </para>
             <para>
             This routine provides a simple way to do a number of useful searches:
-            </para>
-            <para>
-            Find the nearest navaid on this frequency. Find the nearest airport. Find
-            the VOR whose ID is "KBOS". Find the nearest airport whose name contains
-            "Chicago".
+            * Find the nearest navaid on this frequency.
+            * Find the nearest airport.
+            * Find the VOR whose ID is "KBOS".
+            * Find the nearest airport whose name contains "Chicago".
             </para>
             </summary>
         </member>
@@ -3482,7 +3454,6 @@
             <summary>
             <para>
             This routine changes which entry the FMS is showing to the index specified.
-            *
             </para>
             </summary>
         </member>
@@ -3496,13 +3467,23 @@
         <member name="M:XP.SDK.XPLM.Internal.NavigationAPI.GetFMSEntryInfo(System.Int32,XP.SDK.XPLM.NavType*,System.Byte*,XP.SDK.XPLM.NavRef*,System.Int32*,System.Single*,System.Single*)">
             <summary>
             <para>
-            This routine returns information about a given FMS entry.  A reference to a
-            navaid can be returned allowing you to find additional information (such as
-            a frequency, ILS heading, name, etc.).  Some information is available
-            immediately.  For a lat/lon entry, the lat/lon is returned by this routine
-            but the navaid cannot be looked up (and the reference will be
-            XPLM_NAV_NOT_FOUND. FMS name entry buffers should be at least 256 chars in
-            length.
+            This routine returns information about a given FMS entry. If the entry is
+            an airport or navaid, a reference to a nav entry can be returned allowing
+            you to find additional information (such as a frequency, ILS heading, name,
+            etc.). Note that this reference can be XPLM_NAV_NOT_FOUND until the
+            information has been looked up asynchronously, so after flightplan changes,
+            it might take up to a second for this field to become populated. The other
+            information is available immediately. For a lat/lon entry, the lat/lon is
+            returned by this routine but the navaid cannot be looked up (and the
+            reference will be XPLM_NAV_NOT_FOUND). FMS name entry buffers should be at
+            least 256 chars in length.
+            </para>
+            <para>
+            WARNING: Due to a bug in X-Plane prior to 11.31, the navaid reference will
+            not be set to XPLM_NAV_NOT_FOUND while no data is available, and instead
+            just remain the value of the variable that you passed the pointer to.
+            Therefore, always initialize the variable to XPLM_NAV_NOT_FOUND before
+            passing the pointer to this function.
             </para>
             </summary>
         </member>
@@ -3603,7 +3584,7 @@
             <summary>
             <para>
             This routine places the user at a given airport.  Specify the airport by
-            its ICAO code (e.g. 'KBOS').
+            its X-Plane airport ID (e.g. 'KBOS').
             </para>
             </summary>
         </member>
@@ -3611,7 +3592,7 @@
             <summary>
             <para>
             This routine places the user at a given airport.  Specify the airport by
-            its ICAO code (e.g. 'KBOS').
+            its X-Plane airport ID (e.g. 'KBOS').
             </para>
             </summary>
         </member>
@@ -3625,7 +3606,7 @@
             As with in-air starts initiated from the X-Plane user interface, the
             aircraft will always start with its engines running, regardless of the
             user's preferences (i.e., regardless of what the dataref
-            sim/operation/prefs/startup_running says).
+            `sim/operation/prefs/startup_running` says).
             </para>
             </summary>
         </member>
@@ -3654,14 +3635,19 @@
             <summary>
             <para>
             XPLMAcquirePlanes grants your plugin exclusive access to the aircraft.  It
-            returns 1 if you gain access, 0 if you do not. inAircraft - pass in an
-            array of pointers to strings specifying the planes you want loaded.  For
-            any plane index you do not want loaded, pass a 0-length string.  Other
-            strings should be full paths with the .acf extension.  NULL terminates this
-            array, or pass NULL if there are no planes you want loaded. If you pass in
-            a callback and do not receive access to the planes your callback will be
-            called when the airplanes are available. If you do receive airplane access,
-            your callback will not be called.
+            returns 1 if you gain access, 0 if you do not.
+            </para>
+            <para>
+            inAircraft - pass in an array of pointers to strings specifying the planes
+            you want loaded.  For any plane index you do not want loaded, pass a
+            0-length string.  Other strings should be full paths with the .acf
+            extension.  NULL terminates this array, or pass NULL if there are no planes
+            you want loaded.
+            </para>
+            <para>
+            If you pass in a callback and do not receive access to the planes your
+            callback will be called when the airplanes are available. If you do receive
+            airplane access, your callback will not be called.
             </para>
             </summary>
         </member>
@@ -3685,9 +3671,9 @@
         <member name="M:XP.SDK.XPLM.Internal.PlanesAPI.SetAircraftModel(System.Int32,System.Byte*)">
             <summary>
             <para>
-            This routine loads an aircraft model.  It may only be called if you  have
-            exclusive access to the airplane APIs.  Pass in the path of the  model with
-            the .acf extension.  The index is zero based, but you  may not pass in 0
+            This routine loads an aircraft model.  It may only be called if you have
+            exclusive access to the airplane APIs.  Pass in the path of the model with
+            the .acf extension.  The index is zero based, but you may not pass in 0
             (use XPLMSetUsersAircraft to load the user's aircracft).
             </para>
             </summary>
@@ -3695,9 +3681,9 @@
         <member name="M:XP.SDK.XPLM.Internal.PlanesAPI.SetAircraftModel(System.Int32,System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
-            This routine loads an aircraft model.  It may only be called if you  have
-            exclusive access to the airplane APIs.  Pass in the path of the  model with
-            the .acf extension.  The index is zero based, but you  may not pass in 0
+            This routine loads an aircraft model.  It may only be called if you have
+            exclusive access to the airplane APIs.  Pass in the path of the model with
+            the .acf extension.  The index is zero based, but you may not pass in 0
             (use XPLMSetUsersAircraft to load the user's aircracft).
             </para>
             </summary>
@@ -3706,35 +3692,7 @@
             <summary>
             <para>
             This routine turns off X-Plane's AI for a given plane.  The plane will
-            continue to draw and be a real plane in X-Plane, but will not  move itself.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.PlanesAPI.DrawAircraft(System.Int32,System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.Int32,XP.SDK.XPLM.Internal.PlaneDrawState*)">
-            <summary>
-            <para>
-            This routine draws an aircraft.  It can only be called from a 3-d drawing
-            callback.  Pass in the position of the plane in OpenGL local coordinates
-            and the orientation of the plane.  A 1 for full drawing indicates that the
-            whole plane must be drawn; a 0 indicates you only need the nav lights
-            drawn. (This saves rendering time when planes are far away.)
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.PlanesAPI.ReinitUsersPlane">
-            <summary>
-            <para>
-            This function recomputes the derived flight model data from the aircraft
-            structure in memory.  If you have used the data access layer to modify the
-            aircraft structure, use this routine to resynchronize X-Plane; since
-            X-Plane works at least partly from derived values, the sim will not behave
-            properly until this is called.
-            </para>
-            <para>
-            WARNING: this routine does not necessarily place the airplane at the
-            airport; use XPLMSetUsersAircraft to be compatible.  This routine is
-            provided to do special experimentation with flight models without resetting
-            flight.
+            continue to draw and be a real plane in X-Plane, but will not move itself.
             </para>
             </summary>
         </member>
@@ -3818,11 +3776,11 @@
             <summary>
             <para>
             This routine returns information about a plug-in.  Each parameter should be
-            a pointer to a buffer of at least 256 characters, or NULL to not receive
-            the information.
+            a pointer to a buffer of at least
+            256 characters, or NULL to not receive the information.
             </para>
             <para>
-            outName - the human-readable name of the plug-in.   outFilePath - the
+            outName - the human-readable name of the plug-in. outFilePath - the
             absolute file path to the file that contains this plug-in. outSignature - a
             unique string that identifies this plug-in. outDescription - a
             human-readable description of this plug-in.
@@ -3839,7 +3797,7 @@
         <member name="M:XP.SDK.XPLM.Internal.PluginAPI.EnablePlugin(XP.SDK.XPLM.PluginID)">
             <summary>
             <para>
-            This routine enables a plug-in if it is not already enabled.  It returns 1
+            This routine enables a plug-in if it is not already enabled. It returns 1
             if the plugin was enabled or successfully enables itself, 0 if it does not.
             Plugins may fail to enable (for example, if resources cannot be acquired)
             by returning 0 from their XPluginEnable callback.
@@ -3858,7 +3816,7 @@
             <para>
             This routine reloads all plug-ins.  Once this routine is called and you
             return from the callback you were within (e.g. a menu select callback) you
-            will receive your XPluginDisable and XPluginStop callbacks and your  DLL
+            will receive your XPluginDisable and XPluginStop callbacks and your DLL
             will be unloaded, then the start process happens as if the sim was starting
             up.
             </para>
@@ -3946,7 +3904,13 @@
             <summary>
             <para>
             This routine returns the elapsed time since the sim started up in decimal
-            seconds.
+            seconds. This is a wall timer; it keeps counting upward even if the sim is
+            pasued.
+            </para>
+            <para>
+            __WARNING__: XPLMGetElapsedTime is not a very good timer!  It lacks
+            precision in both its data type and its source.  Do not attempt to use it
+            for timing critical applications like network multiplayer.
             </para>
             </summary>
         </member>
@@ -3968,6 +3932,10 @@
             be called (e.g. pass -1 to be called at the next cylcle). Pass 0 to not be
             called; your callback will be inactive.
             </para>
+            <para>
+            (This legacy function only installs pre-flight-loop callbacks; use
+            XPLMCreateFlightLoop for more control.)
+            </para>
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.ProcessingAPI.UnregisterFlightLoopCallback(XP.SDK.XPLM.Internal.FlightLoopCallback,System.Void*)">
@@ -3976,6 +3944,10 @@
             This routine unregisters your flight loop callback. Do NOT call it from
             your flight loop callback. Once your flight loop callback is unregistered,
             it will not be called again.
+            </para>
+            <para>
+            Only use this on flight loops registered via
+            XPLMRegisterFlightLoopCallback.
             </para>
             </summary>
         </member>
@@ -4007,7 +3979,8 @@
         <member name="M:XP.SDK.XPLM.Internal.ProcessingAPI.DestroyFlightLoop(XP.SDK.XPLM.FlightLoopID)">
             <summary>
             <para>
-            This routine destroys a flight loop callback by ID.
+            This routine destroys a flight loop callback by ID. Only call it on flight
+            loops created with the newer XPLMCreateFlightLoop API.
             </para>
             </summary>
         </member>
@@ -4023,32 +3996,6 @@
             If inRelativeToNow is true, ties are interpretted relative to the time this
             routine is called; otherwise they are relative to the last call time or the
             time the flight loop was registered (if never called).
-            </para>
-            <para>
-            THREAD SAFETY: it is legal to call this routine from any thread under the
-            following conditions:
-            </para>
-            <para>
-            1. The call must be between the beginning of an XPLMEnable and the end of
-            an XPLMDisable sequence. (That is, you must not call this routine from
-            thread activity when your plugin was supposed to be disabled. Since plugins
-            are only enabled while loaded, this also implies you cannot run this
-            routine outside an XPLMStart/XPLMStop sequence.)
-            </para>
-            <para>
-            2. You may not call this routine re-entrantly for a single flight loop ID.
-            (That is, you can't enable from multiple threads at the same time.)
-            </para>
-            <para>
-            3. You must call this routine between the time after XPLMCreateFlightLoop
-            returns a value and the time you call XPLMDestroyFlightLoop. (That is, you
-            must ensure that your threaded activity is within the life of the object.
-            The SDK does not check this for you, nor does it synchronize destruction of
-            the object.)
-            </para>
-            <para>
-            4. The object must be unscheduled if this routine is to be called from a
-            thread other than the main thread.
             </para>
             </summary>
         </member>
@@ -4215,33 +4162,6 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.SceneryAPI.DrawObjects(XP.SDK.XPLM.ObjectRef,System.Int32,XP.SDK.XPLM.Internal.DrawInfo*,System.Int32,System.Int32)">
-            <summary>
-            <para>
-            XPLMDrawObjects draws an object from an OBJ file one or more times. You
-            pass in the object and an array of XPLMDrawInfo_t structs, one for each
-            place you would like the object to be drawn.
-            </para>
-            <para>
-            X-Plane will attempt to cull the objects based on LOD and visibility, and
-            will pick the appropriate LOD.
-            </para>
-            <para>
-            Lighting is a boolean; pass 1 to show the night version of object with
-            night-only lights lit up. Pass 0 to show the daytime version of the object.
-            </para>
-            <para>
-            earth_relative controls the coordinate system. If this is 1, the rotations
-            you specify are applied to the object after its coordinate system is
-            transformed from local to earth-relative coordinates -- that is, an object
-            with no rotations will point toward true north and the Y axis will be up
-            against gravity. If this is 0, the object is drawn with your rotations from
-            local coordanates -- that is, an object with no rotations is drawn pointing
-            down the -Z axis and the Y axis of the object matches the local coordinate
-            Y axis.
-            </para>
-            </summary>
-        </member>
         <member name="M:XP.SDK.XPLM.Internal.SceneryAPI.UnloadObject(XP.SDK.XPLM.ObjectRef)">
             <summary>
             <para>
@@ -4308,94 +4228,15 @@
             <summary>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.SimulateKeyPress(System.Int32,System.Int32)">
-            <summary>
-            <para>
-            This function simulates a key being pressed for X-Plane. The keystroke goes
-            directly to X-Plane; it is never sent to any plug-ins. However, since this
-            is a raw key stroke it may be mapped by the keys file or enter text into a
-            field.
-            </para>
-            <para>
-            WARNING: This function will be deprecated; do not use it. Instead use
-            XPLMCommandKeyStroke.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.SpeakString(System.Byte*)">
-            <summary>
-            <para>
-            This function displays the string in a translucent overlay over the current
-            display and also speaks the string if text-to-speech is enabled. The string
-            is spoken asynchronously, this function returns immediately.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.SpeakString(System.ReadOnlySpan{System.Char}@)">
-            <summary>
-            <para>
-            This function displays the string in a translucent overlay over the current
-            display and also speaks the string if text-to-speech is enabled. The string
-            is spoken asynchronously, this function returns immediately.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.CommandKeyStroke(XP.SDK.XPLM.CommandKeyID)">
-            <summary>
-            <para>
-            This routine simulates a command-key stroke. However, the keys are done by
-            function, not by actual letter, so this function works even if the user has
-            remapped their keyboard. Examples of things you might do with this include
-            pausing the simulator.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.CommandButtonPress(XP.SDK.XPLM.CommandButtonID)">
-            <summary>
-            <para>
-            This function simulates any of the actions that might be taken by pressing
-            a joystick button. However, this lets you call the command directly rather
-            than have to know which button is mapped where. Important: you must release
-            each button you press. The APIs are separate so that you can 'hold down' a
-            button for a fixed amount of time.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.CommandButtonRelease(XP.SDK.XPLM.CommandButtonID)">
-            <summary>
-            <para>
-            This function simulates any of the actions that might be taken by pressing
-            a joystick button. See XPLMCommandButtonPress
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.GetVirtualKeyDescription(System.Byte)">
-            <summary>
-            <para>
-            Given a virtual key code (as defined in XPLMDefs.h) this routine returns a
-            human-readable string describing the character. This routine is provided
-            for showing users what keyboard mappings they have set up. The string may
-            read 'unknown' or be a blank or NULL string if the virtual key is unknown.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.ReloadScenery">
-            <summary>
-            <para>
-            XPLMReloadScenery reloads the current set of scenery. You can use this
-            function in two typical ways: simply call it to reload the scenery, picking
-            up any new installed scenery, .env files, etc. from disk. Or, change the
-            lat/ref and lon/ref data refs and then call this function to shift the
-            scenery environment.
-            </para>
-            </summary>
-        </member>
         <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.GetSystemPath(System.Byte*)">
             <summary>
             <para>
             This function returns the full path to the X-System folder. Note that this
-            is a directory path, so it ends in a trailing : or /. The buffer you pass
-            should be at least 512 characters long.
+            is a directory path, so it ends in a trailing : or /.
+            </para>
+            <para>
+            The buffer you pass should be at least 512 characters long.  The path is
+            returned using the current native or OS path conventions.
             </para>
             </summary>
         </member>
@@ -4404,8 +4245,12 @@
             <para>
             This routine returns a full path to a file that is within X-Plane's
             preferences directory. (You should remove the file name back to the last
-            directory separator to get the preferences directory. The buffer you pass
-            should be at least 512 characters long.
+            directory separator to get the preferences directory using
+            XPLMExtractFileAndPath.)
+            </para>
+            <para>
+            The buffer you pass should be at least 512 characters long.  The path is
+            returned using the current native or OS path conventions.
             </para>
             </summary>
         </member>
@@ -4415,7 +4260,7 @@
             This routine returns a string with one char and a null terminator that is
             the directory separator for the current platform. This allows you to write
             code that concatinates directory paths without having to #ifdef for
-            platform.
+            platform. The character returned will reflect the current file path mode.
             </para>
             </summary>
         </member>
@@ -4428,7 +4273,7 @@
             ) the trailing
             directory separator is removed. This routine works in-place; a pointer to
             the file part of the buffer is returned; the original buffer still starts
-            with the path.
+            with the path and is null terminated with no trailing separator.
             </para>
             </summary>
         </member>
@@ -4440,51 +4285,50 @@
             \
             ). The output is returned as a list of NULL
             terminated strings. An index array (if specified) is filled with pointers
-            into the strings. This routine The last file is indicated by a zero-length
-            string (and NULL in the indices). This routine will return 1 if you had
-            capacity for all files or 0 if you did not. You can also skip a given
-            number of files.
+            into the strings. The last file is indicated by a zero-length string (and
+            NULL in the indices). This routine will return 1 if you had capacity for
+            all files or 0 if you did not. You can also skip a given number of files.
             </para>
             <para>
-            inDirectoryPath - a null terminated C string containing the full path to
+            * inDirectoryPath - a null terminated C string containing the full path to
             the directory with no trailing directory char.
             </para>
             <para>
-            inFirstReturn - the zero-based index of the first file in the directory to
-            return. (Usually zero to fetch all in one pass.)
+            * inFirstReturn - the zero-based index of the first file in the directory
+            to return. (Usually zero to fetch all in one pass.)
             </para>
             <para>
-            outFileNames - a buffer to receive a series of sequential null terminated
-            C-string file names. A zero-length C string will be appended to the very
-            end.
+            * outFileNames - a buffer to receive a series of sequential null
+            terminated C-string file names. A zero-length C string will be appended
+            to the very end.
             </para>
             <para>
-            inFileNameBufSize - the size of the file name buffer in bytes.
+            * inFileNameBufSize - the size of the file name buffer in bytes.
             </para>
             <para>
-            outIndices - a pointer to an array of character pointers that will become
-            an index into the directory. The last file will be followed by a NULL
-            value. Pass NULL if you do not want indexing information.
+            * outIndices - a pointer to an array of character pointers that will
+            become an index into the directory. The last file will be followed by a
+            NULL value. Pass NULL if you do not want indexing information.
             </para>
             <para>
-            inIndexCount - the max size of the index in entries.
+            * inIndexCount - the max size of the index in entries.
             </para>
             <para>
-            outTotalFiles - if not NULL, this is filled in with the number of files in
-            the directory.
+            * outTotalFiles - if not NULL, this is filled in with the number of files
+            in the directory.
             </para>
             <para>
-            outReturnedFiles - if not NULL, the number of files returned by this
+            * outReturnedFiles - if not NULL, the number of files returned by this
             iteration.
             </para>
             <para>
-            Return value - 1 if all info could be returned, 0 if there was a buffer
+            Return value: 1 if all info could be returned, 0 if there was a buffer
             overrun.
             </para>
             <para>
             WARNING: Before X-Plane 7 this routine did not properly iterate through
-            directories. If X-Plane 6 compatibility is needed, use your own code to
-            iterate directories.
+            directories. If X-Plane
+            6 compatibility is needed, use your own code to iterate directories.
             </para>
             </summary>
         </member>
@@ -4496,145 +4340,50 @@
             \
             ). The output is returned as a list of NULL
             terminated strings. An index array (if specified) is filled with pointers
-            into the strings. This routine The last file is indicated by a zero-length
-            string (and NULL in the indices). This routine will return 1 if you had
-            capacity for all files or 0 if you did not. You can also skip a given
-            number of files.
+            into the strings. The last file is indicated by a zero-length string (and
+            NULL in the indices). This routine will return 1 if you had capacity for
+            all files or 0 if you did not. You can also skip a given number of files.
             </para>
             <para>
-            inDirectoryPath - a null terminated C string containing the full path to
+            * inDirectoryPath - a null terminated C string containing the full path to
             the directory with no trailing directory char.
             </para>
             <para>
-            inFirstReturn - the zero-based index of the first file in the directory to
-            return. (Usually zero to fetch all in one pass.)
+            * inFirstReturn - the zero-based index of the first file in the directory
+            to return. (Usually zero to fetch all in one pass.)
             </para>
             <para>
-            outFileNames - a buffer to receive a series of sequential null terminated
-            C-string file names. A zero-length C string will be appended to the very
-            end.
+            * outFileNames - a buffer to receive a series of sequential null
+            terminated C-string file names. A zero-length C string will be appended
+            to the very end.
             </para>
             <para>
-            inFileNameBufSize - the size of the file name buffer in bytes.
+            * inFileNameBufSize - the size of the file name buffer in bytes.
             </para>
             <para>
-            outIndices - a pointer to an array of character pointers that will become
-            an index into the directory. The last file will be followed by a NULL
-            value. Pass NULL if you do not want indexing information.
+            * outIndices - a pointer to an array of character pointers that will
+            become an index into the directory. The last file will be followed by a
+            NULL value. Pass NULL if you do not want indexing information.
             </para>
             <para>
-            inIndexCount - the max size of the index in entries.
+            * inIndexCount - the max size of the index in entries.
             </para>
             <para>
-            outTotalFiles - if not NULL, this is filled in with the number of files in
-            the directory.
+            * outTotalFiles - if not NULL, this is filled in with the number of files
+            in the directory.
             </para>
             <para>
-            outReturnedFiles - if not NULL, the number of files returned by this
+            * outReturnedFiles - if not NULL, the number of files returned by this
             iteration.
             </para>
             <para>
-            Return value - 1 if all info could be returned, 0 if there was a buffer
+            Return value: 1 if all info could be returned, 0 if there was a buffer
             overrun.
             </para>
             <para>
             WARNING: Before X-Plane 7 this routine did not properly iterate through
-            directories. If X-Plane 6 compatibility is needed, use your own code to
-            iterate directories.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.Initialized">
-            <summary>
-            <para>
-            This function returns 1 if X-Plane has properly initialized the plug-in
-            system. If this routine returns 0, many XPLM functions will not work.
-            </para>
-            <para>
-            NOTE: Under normal circumstances a plug-in should never be running while
-            the plug-in manager is not initialized.
-            </para>
-            <para>
-            WARNING: This function is generally not needed and may be deprecated in the
-            future.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.GetVersions(System.Int32*,System.Int32*,XP.SDK.XPLM.HostApplicationID*)">
-            <summary>
-            <para>
-            This routine returns the revision of both X-Plane and the XPLM DLL. All
-            versions are three-digit decimal numbers (e.g. 606 for version 6.06 of
-            X-Plane); the current revision of the XPLM is 200 (2.00). This routine also
-            returns the host ID of the app running us.
-            </para>
-            <para>
-            The most common use of this routine is to special-case around X-Plane
-            version-specific behavior.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.GetLanguage">
-            <summary>
-            <para>
-            This routine returns the langauge the sim is running in.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.DebugString(System.Byte*)">
-            <summary>
-            <para>
-            This routine outputs a C-style string to the Log.txt file. The file is
-            immediately flushed so you will not lose data. (This does cause a
-            performance penalty.)
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.DebugString(System.ReadOnlySpan{System.Char}@)">
-            <summary>
-            <para>
-            This routine outputs a C-style string to the Log.txt file. The file is
-            immediately flushed so you will not lose data. (This does cause a
-            performance penalty.)
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.SetErrorCallback(XP.SDK.XPLM.Internal.ErrorCallback)">
-            <summary>
-            <para>
-            XPLMSetErrorCallback installs an error-reporting callback for your plugin.
-            Normally the plugin system performs minimum diagnostics to maximize
-            performance. When you install an error callback, you will receive calls due
-            to certain plugin errors, such as passing bad parameters or incorrect data.
-            </para>
-            <para>
-            The intention is for you to install the error callback during debug
-            sections and put a break-point inside your callback. This will cause you to
-            break into the debugger from within the SDK at the point in your plugin
-            where you made an illegal call.
-            </para>
-            <para>
-            Installing an error callback may activate error checking code that would
-            not normally run, and this may adversely affect performance, so do not
-            leave error callbacks installed in shipping plugins.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.FindSymbol(System.Byte*)">
-            <summary>
-            <para>
-            This routine will attempt to find the symbol passed in the inString
-            parameter. If the symbol is found a pointer the function is returned,
-            othewise the function will return NULL.
-            </para>
-            </summary>
-        </member>
-        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.FindSymbol(System.ReadOnlySpan{System.Char}@)">
-            <summary>
-            <para>
-            This routine will attempt to find the symbol passed in the inString
-            parameter. If the symbol is found a pointer the function is returned,
-            othewise the function will return NULL.
+            directories. If X-Plane
+            6 compatibility is needed, use your own code to iterate directories.
             </para>
             </summary>
         </member>
@@ -4672,6 +4421,200 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.GetVersions(System.Int32*,System.Int32*,XP.SDK.XPLM.HostApplicationID*)">
+            <summary>
+            <para>
+            This routine returns the revision of both X-Plane and the XPLM DLL. All
+            versions are three-digit decimal numbers (e.g. 606 for version 6.06 of
+            X-Plane); the current revision of the XPLM is 200 (2.00). This routine also
+            returns the host ID of the app running us.
+            </para>
+            <para>
+            The most common use of this routine is to special-case around X-Plane
+            version-specific behavior.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.GetLanguage">
+            <summary>
+            <para>
+            This routine returns the langauge the sim is running in.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.FindSymbol(System.Byte*)">
+            <summary>
+            <para>
+            This routine will attempt to find the symbol passed in the inString
+            parameter. If the symbol is found a pointer the function is returned,
+            othewise the function will return NULL.
+            </para>
+            <para>
+            You can use XPLMFindSymbol to utilize newer SDK API features without
+            requiring newer versions of the SDK (and X-Plane) as your minimum X-Plane
+            version as follows:
+            </para>
+            <para>
+            * Define the XPLMnnn macro to the minimum required XPLM version you will
+            ship with (e.g. XPLM210 for X-Plane 10 compatibility).
+            </para>
+            <para>
+            * Use XPLMGetVersions and XPLMFindSymbol to detect that the host sim is
+            new enough to use new functions and resolve function pointers.
+            </para>
+            <para>
+            * Conditionally use the new functions if and only if XPLMFindSymbol only
+            returns a non- NULL pointer.
+            </para>
+            <para>
+            Warning: you should always check the XPLM API version as well as the
+            results of XPLMFindSymbol to determine if funtionality is safe to use.
+            </para>
+            <para>
+            To use functionality via XPLMFindSymbol you will need to copy your own
+            definitions of the X-Plane API prototypes and cast the returned pointer to
+            the correct type.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.FindSymbol(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            <para>
+            This routine will attempt to find the symbol passed in the inString
+            parameter. If the symbol is found a pointer the function is returned,
+            othewise the function will return NULL.
+            </para>
+            <para>
+            You can use XPLMFindSymbol to utilize newer SDK API features without
+            requiring newer versions of the SDK (and X-Plane) as your minimum X-Plane
+            version as follows:
+            </para>
+            <para>
+            * Define the XPLMnnn macro to the minimum required XPLM version you will
+            ship with (e.g. XPLM210 for X-Plane 10 compatibility).
+            </para>
+            <para>
+            * Use XPLMGetVersions and XPLMFindSymbol to detect that the host sim is
+            new enough to use new functions and resolve function pointers.
+            </para>
+            <para>
+            * Conditionally use the new functions if and only if XPLMFindSymbol only
+            returns a non- NULL pointer.
+            </para>
+            <para>
+            Warning: you should always check the XPLM API version as well as the
+            results of XPLMFindSymbol to determine if funtionality is safe to use.
+            </para>
+            <para>
+            To use functionality via XPLMFindSymbol you will need to copy your own
+            definitions of the X-Plane API prototypes and cast the returned pointer to
+            the correct type.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.SetErrorCallback(XP.SDK.XPLM.Internal.ErrorCallback)">
+            <summary>
+            <para>
+            XPLMSetErrorCallback installs an error-reporting callback for your plugin.
+            Normally the plugin system performs minimum diagnostics to maximize
+            performance. When you install an error callback, you will receive calls due
+            to certain plugin errors, such as passing bad parameters or incorrect data.
+            </para>
+            <para>
+            Important: the error callback determines *programming* errors, e.g. bad API
+            parameters. Every error that is returned by the error callback represents a
+            mistake in your plugin that you should fix. Error callbacks are not used to
+            report expected run-time problems (e.g. disk I/O errors).
+            </para>
+            <para>
+            The intention is for you to install the error callback during debug
+            sections and put a break-point inside your callback. This will cause you to
+            break into the debugger from within the SDK at the point in your plugin
+            where you made an illegal call.
+            </para>
+            <para>
+            Installing an error callback may activate error checking code that would
+            not normally run, and this may adversely affect performance, so do not
+            leave error callbacks installed in shipping plugins. Since the only useful
+            response to an error is to change code, error callbacks are not useful "in
+            the field".
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.DebugString(System.Byte*)">
+            <summary>
+            <para>
+            This routine outputs a C-style string to the Log.txt file. The file is
+            immediately flushed so you will not lose data. (This does cause a
+            performance penalty.)
+            </para>
+            <para>
+            Please do *not* leave routine diagnostic logging enabled in your shipping
+            plugin. The X-Plane Log file is shared by X-Plane and every plugin in the
+            system, and plugins that (when functioning normally) print verbose log
+            output make it difficult for developers to find error conditions from other
+            parts of the system.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.DebugString(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            <para>
+            This routine outputs a C-style string to the Log.txt file. The file is
+            immediately flushed so you will not lose data. (This does cause a
+            performance penalty.)
+            </para>
+            <para>
+            Please do *not* leave routine diagnostic logging enabled in your shipping
+            plugin. The X-Plane Log file is shared by X-Plane and every plugin in the
+            system, and plugins that (when functioning normally) print verbose log
+            output make it difficult for developers to find error conditions from other
+            parts of the system.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.SpeakString(System.Byte*)">
+            <summary>
+            <para>
+            This function displays the string in a translucent overlay over the current
+            display and also speaks the string if text-to-speech is enabled. The string
+            is spoken asynchronously, this function returns immediately. This function
+            may not speak or print depending on user preferences.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.SpeakString(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            <para>
+            This function displays the string in a translucent overlay over the current
+            display and also speaks the string if text-to-speech is enabled. The string
+            is spoken asynchronously, this function returns immediately. This function
+            may not speak or print depending on user preferences.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.GetVirtualKeyDescription(System.Byte)">
+            <summary>
+            <para>
+            Given a virtual key code (as defined in XPLMDefs.h) this routine returns a
+            human-readable string describing the character. This routine is provided
+            for showing users what keyboard mappings they have set up. The string may
+            read 'unknown' or be a blank or NULL string if the virtual key is unknown.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.ReloadScenery">
+            <summary>
+            <para>
+            XPLMReloadScenery reloads the current set of scenery. You can use this
+            function in two typical ways: simply call it to reload the scenery, picking
+            up any new installed scenery, .env files, etc. from disk. Or, change the
+            lat/ref and lon/ref data refs and then call this function to shift the
+            scenery environment.  This routine is equivalent to picking "reload
+            scenery" from the developer menu.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.FindCommand(System.Byte*)">
             <summary>
             <para>
@@ -4693,7 +4636,8 @@
             <para>
             XPLMCommandBegin starts the execution of a command, specified by its
             command reference. The command is "held down" until XPLMCommandEnd is
-            called.
+            called.  You must balance each XPLMCommandBegin call with an XPLMCommandEnd
+            call.
             </para>
             </summary>
         </member>
@@ -4701,7 +4645,8 @@
             <summary>
             <para>
             XPLMCommandEnd ends the execution of a given command that was started with
-            XPLMCommandBegin.
+            XPLMCommandBegin.  You must not issue XPLMCommandEnd for a command you did
+            not begin.
             </para>
             </summary>
         </member>
@@ -4709,7 +4654,8 @@
             <summary>
             <para>
             This executes a given command momentarily, that is, the command begins and
-            ends immediately.
+            ends immediately. This is the equivalent of calling XPLMCommandBegin() and
+            XPLMCommandEnd() back ot back.
             </para>
             </summary>
         </member>
@@ -4938,7 +4884,7 @@
             XPLMNavRef is an iterator into the navigation database.  The navigation
             database is essentially an array, but it is not necessarily densely
             populated. The only assumption you can safely make is that like-typed
-            nav-aids are  grouped together.
+            nav-aids are grouped together.
             </para>
             <para>
             Use XPLMNavRef to refer to a nav-aid.
@@ -4979,7 +4925,8 @@
             disable or enable a plug-in, or discover what plug-in is 'running' at the
             time.  A plug-in ID is unique within the currently running instance of
             X-Plane unless plug-ins are reloaded.  Plug-ins may receive a different
-            unique ID each time they are loaded.
+            unique ID each time they are loaded. This includes the unloading and
+            reloading of plugins that are part of the user's aircraft.
             </para>
             <para>
             For persistent identification of plug-ins, use XPLMFindPluginBySignature in
@@ -5022,6 +4969,11 @@
             <para>
             XPLM Texture IDs name well-known textures in the sim for you to use. This
             allows you to recycle textures from X-Plane, saving VRAM.
+            </para>
+            <para>
+            *Warning*: do not use these enums.  The only remaining use they have is to
+            access the legacy compatibility v10 UI texture; if you need this, get it
+            via the Widgets library.
             </para>
             </summary>
         </member>

@@ -10,7 +10,6 @@ namespace XP.SDK.XPLM.Internal
         private static IntPtr SetGraphicsStatePtr;
         private static IntPtr BindTexture2dPtr;
         private static IntPtr GenerateTextureNumbersPtr;
-        private static IntPtr GetTexturePtr;
         private static IntPtr WorldToLocalPtr;
         private static IntPtr LocalToWorldPtr;
         private static IntPtr DrawTranslucentDarkBoxPtr;
@@ -24,7 +23,6 @@ namespace XP.SDK.XPLM.Internal
             SetGraphicsStatePtr = Lib.GetExport("XPLMSetGraphicsState");
             BindTexture2dPtr = Lib.GetExport("XPLMBindTexture2d");
             GenerateTextureNumbersPtr = Lib.GetExport("XPLMGenerateTextureNumbers");
-            GetTexturePtr = Lib.GetExport("XPLMGetTexture");
             WorldToLocalPtr = Lib.GetExport("XPLMWorldToLocal");
             LocalToWorldPtr = Lib.GetExport("XPLMLocalToWorld");
             DrawTranslucentDarkBoxPtr = Lib.GetExport("XPLMDrawTranslucentDarkBox");
@@ -37,37 +35,28 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// XPLMSetGraphicsState changes OpenGL's graphics state in a number of ways:
+        /// XPLMSetGraphicsState changes OpenGL's fixed function pipeline state.  You
+        /// are not responsible for restoring any state that is accessed via
+        /// XPLMSetGraphicsState, but you are responsible for not accessing this state
+        /// directly.
         /// </para>
         /// <para>
-        /// inEnableFog - enables or disables fog, equivalent to: glEnable(GL_FOG);
-        /// </para>
-        /// <para>
-        /// inNumberTexUnits - enables or disables a number of multitexturing units. If
-        /// the number is 0, 2d texturing is disabled entirely, as in
-        /// glDisable(GL_TEXTURE_2D);  Otherwise, 2d texturing is enabled, and  a
-        /// number of multitexturing units are enabled sequentially, starting  with
-        /// unit 0, e.g. glActiveTextureARB(GL_TEXTURE0_ARB);  glEnable
+        /// - inEnableFog - enables or disables fog, equivalent to: glEnable(GL_FOG);
+        /// - inNumberTexUnits - enables or disables a number of multitexturing units.
+        /// If the number is 0, 2d texturing is disabled entirely, as in
+        /// glDisable(GL_TEXTURE_2D);  Otherwise, 2d texturing is enabled, and a
+        /// number of multitexturing units are enabled sequentially, starting with
+        /// unit 0, e.g. glActiveTextureARB(GL_TEXTURE0_ARB); glEnable
         /// (GL_TEXTURE_2D);
-        /// </para>
-        /// <para>
-        /// inEnableLighting - enables or disables OpenGL lighting, e.g.
+        /// - inEnableLighting - enables or disables OpenGL lighting, e.g.
         /// glEnable(GL_LIGHTING); glEnable(GL_LIGHT0);
-        /// </para>
-        /// <para>
-        /// inEnableAlphaTesting - enables or disables the alpha test per pixel, e.g.
+        /// - inEnableAlphaTesting - enables or disables the alpha test per pixel, e.g.
         /// glEnable(GL_ALPHA_TEST);
-        /// </para>
-        /// <para>
-        /// inEnableAlphaBlending - enables or disables alpha blending per pixel, e.g.
-        /// glEnable(GL_BLEND);
-        /// </para>
-        /// <para>
-        /// inEnableDepthTesting - enables per pixel depth testing, as in
+        /// - inEnableAlphaBlending - enables or disables alpha blending per pixel,
+        /// e.g. glEnable(GL_BLEND);
+        /// - inEnableDepthTesting - enables per pixel depth testing, as in
         /// glEnable(GL_DEPTH_TEST);
-        /// </para>
-        /// <para>
-        /// inEnableDepthWriting - enables writing back of depth information to the
+        /// - inEnableDepthWriting - enables writing back of depth information to the
         /// depth bufffer, as in glDepthMask(GL_TRUE);
         /// </para>
         /// <para>
@@ -78,14 +67,22 @@ namespace XP.SDK.XPLM.Internal
         /// skips calls to change state that is already properly enabled.
         /// </para>
         /// <para>
-        /// X-Plane does not have a 'default' OGL state to plug-ins; plug-ins should
-        /// totally set OGL state before drawing.  Use XPLMSetGraphicsState instead of
-        /// any of the above OpenGL calls.
+        /// X-Plane does not have a 'default' OGL state for plug-ins with respect to
+        /// the above state vector; plug-ins should totally set OGL state using this
+        /// API before drawing.  Use XPLMSetGraphicsState instead of any of the above
+        /// OpenGL calls.
         /// </para>
         /// <para>
         /// WARNING: Any routine that performs drawing (e.g. XPLMDrawString or widget
         /// code) may change X-Plane's state.  Always set state before drawing after
         /// unknown code has executed.
+        /// </para>
+        /// <para>
+        /// *Deprecation Warnings*: X-Plane's lighting and fog environemnt is
+        /// significantly more complex than the fixed function pipeline can express;
+        /// do not assume that lighting and fog state is a good approximation for 3-d
+        /// drawing.  Prefer to use XPLMInstancing to draw objects.  All calls to
+        /// XPLMSetGraphicsState should have no fog or lighting.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -107,17 +104,17 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// XPLMBindTexture2d changes what texture is bound to the 2d texturing target.
-        /// This routine caches the current 2d texture across all texturing units in
-        /// the sim and plug-ins, preventing extraneous binding.  For example, consider
-        /// several plug-ins running in series; if they all use the 'general interface'
-        /// bitmap to do UI, calling this function will skip the rebinding of the
-        /// general interface texture on all but the first plug-in, which can provide
-        /// better frame rate son some graphics cards.
+        /// XPLMBindTexture2d changes what texture is bound to the 2d texturing
+        /// target. This routine caches the current 2d texture across all texturing
+        /// units in the sim and plug-ins, preventing extraneous binding.  For
+        /// example, consider several plug-ins running in series; if they all use the
+        /// 'general interface' bitmap to do UI, calling this function will skip the
+        /// rebinding of the general interface texture on all but the first plug-in,
+        /// which can provide better frame rate son some graphics cards.
         /// </para>
         /// <para>
         /// inTextureID is the ID of the texture object to bind; inTextureUnit is a
-        /// zero-based  texture unit (e.g. 0 for the first one), up to a maximum of 4
+        /// zero-based texture unit (e.g. 0 for the first one), up to a maximum of 4
         /// units.  (This number may increase in future versions of X-Plane.)
         /// </para>
         /// <para>
@@ -138,14 +135,9 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// This routine generates unused texture numbers that a plug-in can use to
-        /// safely bind textures. Use this routine instead of glGenTextures;
-        /// glGenTextures will allocate texture numbers in ranges that X-Plane reserves
-        /// for its own use but does not always use; for example, it might provide an
-        /// ID within the range of textures reserved for terrain...loading a new .env
-        /// file as the plane flies might then cause X-Plane to use this texture ID.
-        /// X-Plane will then  overwrite the plug-ins texture.  This routine returns
-        /// texture IDs that are out of X-Plane's usage range.
+        /// Use this routine instead of glGenTextures to generate new texture object
+        /// IDs. This routine historically ensured that plugins don't use texure IDs
+        /// that X-Plane is reserving for its own use.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -157,34 +149,6 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inCount);
             IL.Push(GenerateTextureNumbersPtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int*), typeof(int)));
-        }
-
-        
-        /// <summary>
-        /// <para>
-        /// XPLMGetTexture returns the OpenGL texture enumeration of an X-Plane texture
-        /// based on a  generic identifying code.  For example, you can get the texture
-        /// for X-Plane's UI bitmaps.  This allows you to build new gauges that take
-        /// advantage of X-Plane's textures, for smooth artwork integration and also
-        /// saving texture memory.  Note that the texture might not be loaded yet,
-        /// depending on what the  plane's panel contains.
-        /// </para>
-        /// <para>
-        /// OPEN ISSUE: We really need a way to make sure X-Plane loads this texture if
-        /// it isn't around, or at least a way to find out whether it is loaded or not.
-        /// </para>
-        /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int GetTexture(TextureID inTexture)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetTexturePtr);
-            int result;
-            IL.Push(inTexture);
-            IL.Push(GetTexturePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(TextureID)));
-            IL.Pop(out result);
-            return result;
         }
 
         
@@ -292,7 +256,7 @@ namespace XP.SDK.XPLM.Internal
         /// This routine draws a number similar to the digit editing fields in
         /// PlaneMaker and data output display in X-Plane.  Pass in a color, a
         /// position, a floating point value, and formatting info.  Specify how many
-        /// integer and how many decimal digits to show and  whether to show a sign, as
+        /// integer and how many decimal digits to show and whether to show a sign, as
         /// well as a character set. This routine returns the xOffset plus width of the
         /// string drawn.
         /// </para>

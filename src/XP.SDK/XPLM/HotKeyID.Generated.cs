@@ -6,7 +6,7 @@ namespace XP.SDK.XPLM
     
     /// <summary>
     /// <para>
-    /// An opaque IDs used to identify a hot key.
+    /// An opaque ID used to identify a hot key.
     /// </para>
     /// </summary>
     public readonly partial struct HotKeyID : System.IEquatable<HotKeyID>

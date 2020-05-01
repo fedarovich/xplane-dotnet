@@ -9,7 +9,7 @@ namespace XP.SDK.XPLM
     /// XPLMNavRef is an iterator into the navigation database.  The navigation
     /// database is essentially an array, but it is not necessarily densely
     /// populated. The only assumption you can safely make is that like-typed
-    /// nav-aids are  grouped together.
+    /// nav-aids are grouped together.
     /// </para>
     /// <para>
     /// Use XPLMNavRef to refer to a nav-aid.

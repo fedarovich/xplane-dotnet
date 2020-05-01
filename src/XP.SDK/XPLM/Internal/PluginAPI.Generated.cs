@@ -187,11 +187,11 @@ namespace XP.SDK.XPLM.Internal
         /// <summary>
         /// <para>
         /// This routine returns information about a plug-in.  Each parameter should be
-        /// a pointer to a buffer of at least 256 characters, or NULL to not receive
-        /// the information.
+        /// a pointer to a buffer of at least
+        /// 256 characters, or NULL to not receive the information.
         /// </para>
         /// <para>
-        /// outName - the human-readable name of the plug-in.   outFilePath - the
+        /// outName - the human-readable name of the plug-in. outFilePath - the
         /// absolute file path to the file that contains this plug-in. outSignature - a
         /// unique string that identifies this plug-in. outDescription - a
         /// human-readable description of this plug-in.
@@ -233,7 +233,7 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// This routine enables a plug-in if it is not already enabled.  It returns 1
+        /// This routine enables a plug-in if it is not already enabled. It returns 1
         /// if the plugin was enabled or successfully enables itself, 0 if it does not.
         /// Plugins may fail to enable (for example, if resources cannot be acquired)
         /// by returning 0 from their XPluginEnable callback.
@@ -273,7 +273,7 @@ namespace XP.SDK.XPLM.Internal
         /// <para>
         /// This routine reloads all plug-ins.  Once this routine is called and you
         /// return from the callback you were within (e.g. a menu select callback) you
-        /// will receive your XPluginDisable and XPluginStop callbacks and your  DLL
+        /// will receive your XPluginDisable and XPluginStop callbacks and your DLL
         /// will be unloaded, then the start process happens as if the sim was starting
         /// up.
         /// </para>

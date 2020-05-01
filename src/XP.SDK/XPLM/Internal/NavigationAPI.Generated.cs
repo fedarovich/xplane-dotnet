@@ -69,15 +69,10 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// Given a nav aid ref, this routine returns the next navaid.  It returns
-        /// XPLM_NAV_NOT_FOUND if the nav aid passed in was invalid or if the navaid
-        /// passed in was the last one in the database.  Use this routine to iterate
-        /// across all like-typed navaids or the entire database.
-        /// </para>
-        /// <para>
-        /// WARNING: due to a bug in the SDK, when fix loading is disabled in the
-        /// rendering settings screen, calling this routine with the last airport
-        /// returns a bogus nav aid.  Using this nav aid can crash X-Plane.
+        /// Given a valid nav aid ref, this routine returns the next navaid.  It
+        /// returns XPLM_NAV_NOT_FOUND if the nav aid passed in was invalid or if the
+        /// navaid passed in was the last one in the database.  Use this routine to
+        /// iterate across all like-typed navaids or the entire database.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -100,11 +95,6 @@ namespace XP.SDK.XPLM.Internal
         /// database or XPLM_NAV_NOT_FOUND if there are no navaids of that type in the
         /// database.  You must pass exactly one nav aid type to this routine.
         /// </para>
-        /// <para>
-        /// WARNING: due to a bug in the SDK, when fix loading is disabled in the
-        /// rendering settings screen, calling this routine with fixes returns a bogus
-        /// nav aid.  Using this nav aid can crash X-Plane.
-        /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static NavRef FindFirstNavAidOfType(NavType inType)
@@ -126,11 +116,6 @@ namespace XP.SDK.XPLM.Internal
         /// database or XPLM_NAV_NOT_FOUND if there are no navaids of that type in the
         /// database.  You must pass exactly one nav aid type to this routine.
         /// </para>
-        /// <para>
-        /// WARNING: due to a bug in the SDK, when fix loading is disabled in the
-        /// rendering settings screen, calling this routine with fixes returns a bogus
-        /// nav aid.  Using this nav aid can crash X-Plane.
-        /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static NavRef FindLastNavAidOfType(NavType inType)
@@ -151,32 +136,31 @@ namespace XP.SDK.XPLM.Internal
         /// This routine provides a number of searching capabilities for the nav
         /// database. XPLMFindNavAid will search through every nav aid whose type is
         /// within inType (multiple types may be added together) and return any
-        /// nav-aids found based  on the following rules:
+        /// nav-aids found based on the following rules:
         /// </para>
         /// <para>
-        /// If inLat and inLon are not NULL, the navaid nearest to that lat/lon will be
-        /// returned, otherwise the last navaid found will be returned.
+        /// * If inLat and inLon are not NULL, the navaid nearest to that lat/lon will
+        /// be returned, otherwise the last navaid found will be returned.
         /// </para>
         /// <para>
-        /// If inFrequency is not NULL, then any navaids considered must match this
+        /// * If inFrequency is not NULL, then any navaids considered must match this
         /// frequency.  Note that this will screen out radio beacons that do not have
         /// frequency data published (like inner markers) but not fixes and airports.
         /// </para>
         /// <para>
-        /// If inNameFragment is not NULL, only navaids that contain the fragment in
+        /// * If inNameFragment is not NULL, only navaids that contain the fragment in
         /// their name will be returned.
         /// </para>
         /// <para>
-        /// If inIDFragment is not NULL, only navaids that contain the fragment in
+        /// * If inIDFragment is not NULL, only navaids that contain the fragment in
         /// their IDs will be returned.
         /// </para>
         /// <para>
         /// This routine provides a simple way to do a number of useful searches:
-        /// </para>
-        /// <para>
-        /// Find the nearest navaid on this frequency. Find the nearest airport. Find
-        /// the VOR whose ID is "KBOS". Find the nearest airport whose name contains
-        /// "Chicago".
+        /// * Find the nearest navaid on this frequency.
+        /// * Find the nearest airport.
+        /// * Find the VOR whose ID is "KBOS".
+        /// * Find the nearest airport whose name contains "Chicago".
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -203,32 +187,31 @@ namespace XP.SDK.XPLM.Internal
         /// This routine provides a number of searching capabilities for the nav
         /// database. XPLMFindNavAid will search through every nav aid whose type is
         /// within inType (multiple types may be added together) and return any
-        /// nav-aids found based  on the following rules:
+        /// nav-aids found based on the following rules:
         /// </para>
         /// <para>
-        /// If inLat and inLon are not NULL, the navaid nearest to that lat/lon will be
-        /// returned, otherwise the last navaid found will be returned.
+        /// * If inLat and inLon are not NULL, the navaid nearest to that lat/lon will
+        /// be returned, otherwise the last navaid found will be returned.
         /// </para>
         /// <para>
-        /// If inFrequency is not NULL, then any navaids considered must match this
+        /// * If inFrequency is not NULL, then any navaids considered must match this
         /// frequency.  Note that this will screen out radio beacons that do not have
         /// frequency data published (like inner markers) but not fixes and airports.
         /// </para>
         /// <para>
-        /// If inNameFragment is not NULL, only navaids that contain the fragment in
+        /// * If inNameFragment is not NULL, only navaids that contain the fragment in
         /// their name will be returned.
         /// </para>
         /// <para>
-        /// If inIDFragment is not NULL, only navaids that contain the fragment in
+        /// * If inIDFragment is not NULL, only navaids that contain the fragment in
         /// their IDs will be returned.
         /// </para>
         /// <para>
         /// This routine provides a simple way to do a number of useful searches:
-        /// </para>
-        /// <para>
-        /// Find the nearest navaid on this frequency. Find the nearest airport. Find
-        /// the VOR whose ID is "KBOS". Find the nearest airport whose name contains
-        /// "Chicago".
+        /// * Find the nearest navaid on this frequency.
+        /// * Find the nearest airport.
+        /// * Find the VOR whose ID is "KBOS".
+        /// * Find the nearest airport whose name contains "Chicago".
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -342,7 +325,6 @@ namespace XP.SDK.XPLM.Internal
         /// <summary>
         /// <para>
         /// This routine changes which entry the FMS is showing to the index specified.
-        /// *
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -374,13 +356,23 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// This routine returns information about a given FMS entry.  A reference to a
-        /// navaid can be returned allowing you to find additional information (such as
-        /// a frequency, ILS heading, name, etc.).  Some information is available
-        /// immediately.  For a lat/lon entry, the lat/lon is returned by this routine
-        /// but the navaid cannot be looked up (and the reference will be
-        /// XPLM_NAV_NOT_FOUND. FMS name entry buffers should be at least 256 chars in
-        /// length.
+        /// This routine returns information about a given FMS entry. If the entry is
+        /// an airport or navaid, a reference to a nav entry can be returned allowing
+        /// you to find additional information (such as a frequency, ILS heading, name,
+        /// etc.). Note that this reference can be XPLM_NAV_NOT_FOUND until the
+        /// information has been looked up asynchronously, so after flightplan changes,
+        /// it might take up to a second for this field to become populated. The other
+        /// information is available immediately. For a lat/lon entry, the lat/lon is
+        /// returned by this routine but the navaid cannot be looked up (and the
+        /// reference will be XPLM_NAV_NOT_FOUND). FMS name entry buffers should be at
+        /// least 256 chars in length.
+        /// </para>
+        /// <para>
+        /// WARNING: Due to a bug in X-Plane prior to 11.31, the navaid reference will
+        /// not be set to XPLM_NAV_NOT_FOUND while no data is available, and instead
+        /// just remain the value of the variable that you passed the pointer to.
+        /// Therefore, always initialize the variable to XPLM_NAV_NOT_FOUND before
+        /// passing the pointer to this function.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

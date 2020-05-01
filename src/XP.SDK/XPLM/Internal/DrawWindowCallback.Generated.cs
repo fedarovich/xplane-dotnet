@@ -13,9 +13,9 @@ namespace XP.SDK.XPLM.Internal
     /// window drawing.
     /// </para>
     /// <para>
-    /// NOTE: Because you are drawing your window over a background, you can make a
-    /// translucent window easily by simply not filling in your entire window's
-    /// bounds.
+    /// **Note**: Because you are drawing your window over a background, you can
+    /// make a translucent window easily by simply not filling in your entire
+    /// window's bounds.
     /// </para>
     /// </summary>
     [UnmanagedFunctionPointerAttribute(CallingConvention.Cdecl, BestFitMapping = false, SetLastError = false)]

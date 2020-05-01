@@ -32,7 +32,13 @@ namespace XP.SDK.XPLM.Internal
         /// <summary>
         /// <para>
         /// This routine returns the elapsed time since the sim started up in decimal
-        /// seconds.
+        /// seconds. This is a wall timer; it keeps counting upward even if the sim is
+        /// pasued.
+        /// </para>
+        /// <para>
+        /// __WARNING__: XPLMGetElapsedTime is not a very good timer!  It lacks
+        /// precision in both its data type and its source.  Do not attempt to use it
+        /// for timing critical applications like network multiplayer.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -88,6 +94,10 @@ namespace XP.SDK.XPLM.Internal
         /// be called (e.g. pass -1 to be called at the next cylcle). Pass 0 to not be
         /// called; your callback will be inactive.
         /// </para>
+        /// <para>
+        /// (This legacy function only installs pre-flight-loop callbacks; use
+        /// XPLMCreateFlightLoop for more control.)
+        /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void RegisterFlightLoopCallback(FlightLoopCallback inFlightLoop, float inInterval, void* inRefcon)
@@ -115,6 +125,10 @@ namespace XP.SDK.XPLM.Internal
         /// This routine unregisters your flight loop callback. Do NOT call it from
         /// your flight loop callback. Once your flight loop callback is unregistered,
         /// it will not be called again.
+        /// </para>
+        /// <para>
+        /// Only use this on flight loops registered via
+        /// XPLMRegisterFlightLoopCallback.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -187,7 +201,8 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// This routine destroys a flight loop callback by ID.
+        /// This routine destroys a flight loop callback by ID. Only call it on flight
+        /// loops created with the newer XPLMCreateFlightLoop API.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -212,32 +227,6 @@ namespace XP.SDK.XPLM.Internal
         /// If inRelativeToNow is true, ties are interpretted relative to the time this
         /// routine is called; otherwise they are relative to the last call time or the
         /// time the flight loop was registered (if never called).
-        /// </para>
-        /// <para>
-        /// THREAD SAFETY: it is legal to call this routine from any thread under the
-        /// following conditions:
-        /// </para>
-        /// <para>
-        /// 1. The call must be between the beginning of an XPLMEnable and the end of
-        /// an XPLMDisable sequence. (That is, you must not call this routine from
-        /// thread activity when your plugin was supposed to be disabled. Since plugins
-        /// are only enabled while loaded, this also implies you cannot run this
-        /// routine outside an XPLMStart/XPLMStop sequence.)
-        /// </para>
-        /// <para>
-        /// 2. You may not call this routine re-entrantly for a single flight loop ID.
-        /// (That is, you can't enable from multiple threads at the same time.)
-        /// </para>
-        /// <para>
-        /// 3. You must call this routine between the time after XPLMCreateFlightLoop
-        /// returns a value and the time you call XPLMDestroyFlightLoop. (That is, you
-        /// must ensure that your threaded activity is within the life of the object.
-        /// The SDK does not check this for you, nor does it synchronize destruction of
-        /// the object.)
-        /// </para>
-        /// <para>
-        /// 4. The object must be unscheduled if this routine is to be called from a
-        /// thread other than the main thread.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]

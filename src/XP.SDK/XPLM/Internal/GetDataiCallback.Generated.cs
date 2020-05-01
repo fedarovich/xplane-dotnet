@@ -11,7 +11,7 @@ namespace XP.SDK.XPLM.Internal
     /// <para>
     /// These define the function pointers you provide to get or set data. Note
     /// that you are passed a generic pointer for each one. This is the same
-    /// pointer you pass in your register routine; you can use it to find global
+    /// pointer you pass in your register routine; you can use it to locate plugin
     /// variables, etc.
     /// </para>
     /// <para>

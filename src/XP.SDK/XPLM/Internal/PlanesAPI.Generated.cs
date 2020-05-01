@@ -17,8 +17,6 @@ namespace XP.SDK.XPLM.Internal
         private static IntPtr SetActiveAircraftCountPtr;
         private static IntPtr SetAircraftModelPtr;
         private static IntPtr DisableAIForPlanePtr;
-        private static IntPtr DrawAircraftPtr;
-        private static IntPtr ReinitUsersPlanePtr;
 
         static PlanesAPI()
         {
@@ -32,8 +30,6 @@ namespace XP.SDK.XPLM.Internal
             SetActiveAircraftCountPtr = Lib.GetExport("XPLMSetActiveAircraftCount");
             SetAircraftModelPtr = Lib.GetExport("XPLMSetAircraftModel");
             DisableAIForPlanePtr = Lib.GetExport("XPLMDisableAIForPlane");
-            DrawAircraftPtr = Lib.GetExport("XPLMDrawAircraft");
-            ReinitUsersPlanePtr = Lib.GetExport("XPLMReinitUsersPlane");
         }
 
         
@@ -75,7 +71,7 @@ namespace XP.SDK.XPLM.Internal
         /// <summary>
         /// <para>
         /// This routine places the user at a given airport.  Specify the airport by
-        /// its ICAO code (e.g. 'KBOS').
+        /// its X-Plane airport ID (e.g. 'KBOS').
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -92,7 +88,7 @@ namespace XP.SDK.XPLM.Internal
         /// <summary>
         /// <para>
         /// This routine places the user at a given airport.  Specify the airport by
-        /// its ICAO code (e.g. 'KBOS').
+        /// its X-Plane airport ID (e.g. 'KBOS').
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -114,7 +110,7 @@ namespace XP.SDK.XPLM.Internal
         /// As with in-air starts initiated from the X-Plane user interface, the
         /// aircraft will always start with its engines running, regardless of the
         /// user's preferences (i.e., regardless of what the dataref
-        /// sim/operation/prefs/startup_running says).
+        /// `sim/operation/prefs/startup_running` says).
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -193,14 +189,19 @@ namespace XP.SDK.XPLM.Internal
         /// <summary>
         /// <para>
         /// XPLMAcquirePlanes grants your plugin exclusive access to the aircraft.  It
-        /// returns 1 if you gain access, 0 if you do not. inAircraft - pass in an
-        /// array of pointers to strings specifying the planes you want loaded.  For
-        /// any plane index you do not want loaded, pass a 0-length string.  Other
-        /// strings should be full paths with the .acf extension.  NULL terminates this
-        /// array, or pass NULL if there are no planes you want loaded. If you pass in
-        /// a callback and do not receive access to the planes your callback will be
-        /// called when the airplanes are available. If you do receive airplane access,
-        /// your callback will not be called.
+        /// returns 1 if you gain access, 0 if you do not.
+        /// </para>
+        /// <para>
+        /// inAircraft - pass in an array of pointers to strings specifying the planes
+        /// you want loaded.  For any plane index you do not want loaded, pass a
+        /// 0-length string.  Other strings should be full paths with the .acf
+        /// extension.  NULL terminates this array, or pass NULL if there are no planes
+        /// you want loaded.
+        /// </para>
+        /// <para>
+        /// If you pass in a callback and do not receive access to the planes your
+        /// callback will be called when the airplanes are available. If you do receive
+        /// airplane access, your callback will not be called.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -250,9 +251,9 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// This routine loads an aircraft model.  It may only be called if you  have
-        /// exclusive access to the airplane APIs.  Pass in the path of the  model with
-        /// the .acf extension.  The index is zero based, but you  may not pass in 0
+        /// This routine loads an aircraft model.  It may only be called if you have
+        /// exclusive access to the airplane APIs.  Pass in the path of the model with
+        /// the .acf extension.  The index is zero based, but you may not pass in 0
         /// (use XPLMSetUsersAircraft to load the user's aircracft).
         /// </para>
         /// </summary>
@@ -270,9 +271,9 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
-        /// This routine loads an aircraft model.  It may only be called if you  have
-        /// exclusive access to the airplane APIs.  Pass in the path of the  model with
-        /// the .acf extension.  The index is zero based, but you  may not pass in 0
+        /// This routine loads an aircraft model.  It may only be called if you have
+        /// exclusive access to the airplane APIs.  Pass in the path of the model with
+        /// the .acf extension.  The index is zero based, but you may not pass in 0
         /// (use XPLMSetUsersAircraft to load the user's aircracft).
         /// </para>
         /// </summary>
@@ -289,7 +290,7 @@ namespace XP.SDK.XPLM.Internal
         /// <summary>
         /// <para>
         /// This routine turns off X-Plane's AI for a given plane.  The plane will
-        /// continue to draw and be a real plane in X-Plane, but will not  move itself.
+        /// continue to draw and be a real plane in X-Plane, but will not move itself.
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
@@ -300,59 +301,6 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inPlaneIndex);
             IL.Push(DisableAIForPlanePtr);
             IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int)));
-        }
-
-        
-        /// <summary>
-        /// <para>
-        /// This routine draws an aircraft.  It can only be called from a 3-d drawing
-        /// callback.  Pass in the position of the plane in OpenGL local coordinates
-        /// and the orientation of the plane.  A 1 for full drawing indicates that the
-        /// whole plane must be drawn; a 0 indicates you only need the nav lights
-        /// drawn. (This saves rendering time when planes are far away.)
-        /// </para>
-        /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void DrawAircraft(int inPlaneIndex, float inX, float inY, float inZ, float inPitch, float inRoll, float inYaw, int inFullDraw, PlaneDrawState* inDrawStateInfo)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DrawAircraftPtr);
-            IL.Push(inPlaneIndex);
-            IL.Push(inX);
-            IL.Push(inY);
-            IL.Push(inZ);
-            IL.Push(inPitch);
-            IL.Push(inRoll);
-            IL.Push(inYaw);
-            IL.Push(inFullDraw);
-            IL.Push(inDrawStateInfo);
-            IL.Push(DrawAircraftPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int), typeof(float), typeof(float), typeof(float), typeof(float), typeof(float), typeof(float), typeof(int), typeof(PlaneDrawState*)));
-        }
-
-        
-        /// <summary>
-        /// <para>
-        /// This function recomputes the derived flight model data from the aircraft
-        /// structure in memory.  If you have used the data access layer to modify the
-        /// aircraft structure, use this routine to resynchronize X-Plane; since
-        /// X-Plane works at least partly from derived values, the sim will not behave
-        /// properly until this is called.
-        /// </para>
-        /// <para>
-        /// WARNING: this routine does not necessarily place the airplane at the
-        /// airport; use XPLMSetUsersAircraft to be compatible.  This routine is
-        /// provided to do special experimentation with flight models without resetting
-        /// flight.
-        /// </para>
-        /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void ReinitUsersPlane()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(ReinitUsersPlanePtr);
-            IL.Push(ReinitUsersPlanePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void)));
         }
     }
 }

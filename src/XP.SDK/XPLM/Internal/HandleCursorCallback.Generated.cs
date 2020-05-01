@@ -33,7 +33,7 @@ namespace XP.SDK.XPLM.Internal
     /// will get pixels. Legacy windows have their origin in the lower left of the
     /// main X-Plane window, while modern windows have their origin in the lower
     /// left of the global desktop space. In both cases, x increases as you move
-    /// left, and y increases as you move up.
+    /// right, and y increases as you move up.
     /// </para>
     /// </summary>
     [UnmanagedFunctionPointerAttribute(CallingConvention.Cdecl, BestFitMapping = false, SetLastError = false)]

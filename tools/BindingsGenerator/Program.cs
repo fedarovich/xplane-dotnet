@@ -68,7 +68,7 @@ namespace BindingsGenerator
 
             var parserOptions = new CppParserOptions
             {
-                Defines = {"IBM", "XPLM301", "XPLM300", "XPLM210", "XPLM200"},
+                Defines = {"IBM", "XPLM302", "XPLM301", "XPLM300", "XPLM210", "XPLM200"},
                 ParseSystemIncludes = false,
                 TargetCpu = CppTargetCpu.X86_64,
                 IncludeFolders = { xplmHeadersPath },

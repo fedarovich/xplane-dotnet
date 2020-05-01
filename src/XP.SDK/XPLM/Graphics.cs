@@ -160,17 +160,6 @@ namespace XP.SDK.XPLM
         }
 
         /// <summary>
-        /// Returns the OpenGL texture ID of an X-Plane texture based on a generic identifying code.
-        /// For example, you can get the texture for X-Plane’s UI bitmaps.
-        /// </summary>
-        [Obsolete]
-        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static int GetTexture(TextureID textureId)
-        {
-            return GraphicsAPI.GetTexture(textureId);
-        }
-
-        /// <summary>
         /// Translates coordinates from latitude, longitude, and altitude to local scene coordinates.
         /// Latitude and longitude are in decimal degrees, and altitude is in meters MSL (mean sea level).
         /// The XYZ coordinates are in meters in the local OpenGL coordinate system.
