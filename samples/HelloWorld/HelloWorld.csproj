@@ -2,15 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>hello</AssemblyName>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\XP.SDK\XP.SDK.csproj">
-      <Private>false</Private>
-    </ProjectReference>
+    <PackageReference Include="XP.SDK" Version="0.1.0" />
+    <PackageReference Include="XP.SDK.Host" Version="0.1.0" />
   </ItemGroup>
 
 </Project>
