@@ -2,7 +2,7 @@
   "profiles": {
     "XP.Tool": {
       "commandName": "Project",
-      "commandLineArgs": "publish \"c:\\Users\\Pavel\\source\\repos\\fedarovich\\xplane-dotnet\\src\\XP.HelloWorld\\XP.HelloWorld.csproj\" -o r:\\test"
+      "commandLineArgs": "publish \"c:\\Users\\Pavel\\source\\repos\\fedarovich\\xplane-dotnet\\samples\\WindowSample\\WindowSample.csproj\" -o r:\\WindowSample -p Windows,Linux"
     }
   }
 }

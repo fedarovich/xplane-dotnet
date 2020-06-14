@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
-using System.Text.Unicode;
+using HelloWorld;
 using XP.SDK;
 using XP.SDK.XPLM;
 
-[assembly: Plugin(typeof(XP.HelloWorld.Plugin))]
+[assembly: Plugin(typeof(Plugin))]
 
-namespace XP.HelloWorld
+namespace HelloWorld
 {
     public class Plugin : PluginBase
     {
