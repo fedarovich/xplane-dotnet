@@ -217,7 +217,7 @@ namespace WindowSample
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     _opengl = NativeLibrary.Load("opengl32.dll");
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                    _opengl = NativeLibrary.Load("libGL.so");
+                    _opengl = NativeLibrary.Load("libGL.so.1");
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                     _opengl = NativeLibrary.Load("/System/Library/Frameworks/OpenGL.framework/Libraries/libGL.dylib");
                 else
