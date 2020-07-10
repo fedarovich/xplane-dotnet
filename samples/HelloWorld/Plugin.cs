@@ -17,7 +17,7 @@ namespace HelloWorld
         
         protected override bool OnStart()
         {
-            var (left, top, right, bottom) = Window.ScreenBoundsGlobal;
+            var (left, top, right, bottom) = Screen.BoundsGlobal;
             var rect = new Rect(left + 50, bottom + 350, left + 250, bottom + 150);
             _window = new Window(rect, decoration: WindowDecoration.RoundRectangle);
             _window.DrawWindow += OnDrawWindow;

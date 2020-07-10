@@ -1,14 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <EnableDynamicLoading>true</EnableDynamicLoading>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>WindowSample</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Silk.NET.OpenGL.Legacy" Version="1.4.0" />
     <PackageReference Include="XP.SDK" Version="0.2.2" />
     <PackageReference Include="XP.SDK.Host" Version="0.2.2" />
+    <PackageReference Include="XP.SDK.Silk.NET" Version="0.2.2" />
   </ItemGroup>
 
 </Project>

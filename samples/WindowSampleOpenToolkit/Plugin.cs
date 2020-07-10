@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Runtime.InteropServices;
-using OpenToolkit;
 using OpenToolkit.Graphics.OpenGL;
 using WindowSample;
 using XP.SDK;
+using XP.SDK.OpenToolkit.Graphics;
 using XP.SDK.XPLM;
+using XP.SDK.XPLM.Internal;
 using Window = XP.SDK.XPLM.Window;
 
 #pragma warning disable 618
@@ -23,7 +23,7 @@ namespace WindowSample
         {
             try
             {
-                GL.LoadBindings(new XPlaneBindingsContext());
+                GL.LoadBindings(new OpenGLBindingsContext());
             }
             catch (Exception ex)
             {
@@ -31,7 +31,7 @@ namespace WindowSample
                 return false;
             }
 
-            var desktopBounds = WindowBase.ScreenBoundsGlobal;
+            var desktopBounds = Screen.BoundsGlobal;
             _window = new Window(
                 new Rect(desktopBounds.Left + 50, desktopBounds.Bottom + 450, desktopBounds.Left + 350, desktopBounds.Bottom + 150),
                 decoration: WindowDecoration.RoundRectangle);
@@ -110,7 +110,7 @@ namespace WindowSample
                 int y = (int)_popButtonRect.Bottom - 2 * charHeight;
 
                 // Display the total global desktop bounds
-                var desktopBounds = WindowBase.ScreenBoundsGlobal;
+                var desktopBounds = Screen.BoundsGlobal;
                 Graphics.DrawString(white, l, y,
                     $"Global desktop bounds: ({desktopBounds.Left}, {desktopBounds.Bottom}) to ({desktopBounds.Right}, {desktopBounds.Top})",
                     FontID.Proportional);
@@ -118,9 +118,10 @@ namespace WindowSample
                 y -= (int)(1.5 * charHeight);
 
                 // Display our bounds
-                var windowBounds = _window.Geometry;
+                
                 if (_window.IsPoppedOut)
                 {
+                    var windowBounds = _window.GeometryOS;
                     Graphics.DrawString(white, l, y,
                         $"OS Bounds: ({windowBounds.Left}, {windowBounds.Bottom}) to ({windowBounds.Right}, {windowBounds.Top})",
                         FontID.Proportional);
@@ -128,6 +129,7 @@ namespace WindowSample
                 }
                 else
                 {
+                    var windowBounds = _window.Geometry;
                     Graphics.DrawString(white, l, y,
                         $"Window Bounds: ({windowBounds.Left}, {windowBounds.Bottom}) to ({windowBounds.Right}, {windowBounds.Top})",
                         FontID.Proportional);
@@ -144,7 +146,7 @@ namespace WindowSample
 
                 // Display the mouse's position info text
                 {
-                    var (mouseX, mouseY) = WindowBase.MouseLocationGlobal;
+                    var (mouseX, mouseY) = Screen.MouseLocationGlobal;
                     Graphics.DrawString(white, l, y,
                         $"Draw mouse (global): {mouseX} {mouseY}\n",
                         FontID.Proportional);
@@ -172,13 +174,22 @@ namespace WindowSample
                     // we need to move them to the lower left of their OS's desktop space (units are pixels).
                     // On the other hand, if we're a floating window inside of X-Plane, we need
                     // to move to the lower left of the X-Plane global desktop (units are boxels).
-                    var geometry = _window.Geometry;
-                    var bounds = isPoppedOut ? WindowBase.ScreenBoundsGlobal : WindowBase.AllMonitorBoundsOS[0];
-                    _window.Geometry = new Rect(
+                    var geometry = isPoppedOut ? _window.GeometryOS : _window.Geometry;
+                    // Remember, the main monitor's origin is *not* guaranteed to be (0, 0), so we need to query for it in order to move the window to its lower left
+                    var bounds = isPoppedOut ? Screen.BoundsGlobal : Screen.AllMonitorBoundsOS[0];
+                    var newGeometry = new Rect(
                         bounds.Left,
                         bounds.Bottom + geometry.Height,
                         bounds.Left + geometry.Width,
                         bounds.Bottom);
+                    if (isPoppedOut)
+                    {
+                        _window.GeometryOS = newGeometry;
+                    }
+                    else
+                    {
+                        _window.Geometry = newGeometry;
+                    }
                 }
             }
         }
@@ -203,32 +214,8 @@ namespace WindowSample
 
         private static bool CoordInRect(float x, float y, in RectF rect) => x >= rect.Left && x < rect.Right && y < rect.Top && y >= rect.Bottom;
 
-        public override string Name => "WindowSamplePlugin";
-        public override string Signature => "com.fedarovich.xplane-dotnet.window-sample";
+        public override string Name => "WindowSampleOpenToolkitPlugin";
+        public override string Signature => "com.fedarovich.xplane-dotnet.window-sample-open-toolkit";
         public override string Description => "A test plug-in that demonstrates the X-Plane 11 GUI plugin API.";
-
-        // TODO: Move this class to a separate package.
-        private class XPlaneBindingsContext : IBindingsContext
-        {
-            private readonly IntPtr _opengl;
-
-            public XPlaneBindingsContext()
-            {
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                    _opengl = NativeLibrary.Load("opengl32.dll");
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                    _opengl = NativeLibrary.Load("libGL.so.1");
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                    _opengl = NativeLibrary.Load("/System/Library/Frameworks/OpenGL.framework/OpenGL");
-                else
-                    throw new PlatformNotSupportedException();
-            }
-
-            public IntPtr GetProcAddress(string procName)
-            {
-                NativeLibrary.TryGetExport(_opengl, procName, out var address);
-                return address;
-            }
-        }
     }
 }
