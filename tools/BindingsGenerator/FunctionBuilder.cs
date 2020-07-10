@@ -184,14 +184,19 @@ namespace BindingsGenerator
                 yield return SyntaxBuilder.DeclareResultVariable(returnTypeInfo.TypeSyntax, out result);
             }
 
+            var delegates = new Dictionary<string, string>();
             foreach (var cppParameter in cppFunction.Parameters)
             {
+                if (TypeMap.TryResolveType(cppParameter.Type, out var typeInfo) && typeInfo.IsFunction)
+                {
+                    delegates.Add(cppParameter.Name, null);
+                }
                 yield return SyntaxBuilder.EmitPush(IdentifierName(GetManagedName(cppParameter.Name)));
             }
 
             yield return SyntaxBuilder.EmitPush(functionPointer);
 
-            yield return SyntaxBuilder.EmitCalli(returnTypeInfo, cppFunction, TypeMap, new Dictionary<string, string>());
+            yield return SyntaxBuilder.EmitCalli(returnTypeInfo, cppFunction, TypeMap, delegates);
 
             if (result != null)
             {

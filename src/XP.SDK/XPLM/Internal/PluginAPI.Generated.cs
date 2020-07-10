@@ -425,7 +425,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inEnumerator);
             IL.Push(inRef);
             IL.Push(EnumerateFeaturesPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(FeatureEnumeratorCallback), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(void*)));
         }
 
         

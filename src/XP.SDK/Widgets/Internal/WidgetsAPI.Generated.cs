@@ -185,7 +185,7 @@ namespace XP.SDK.Widgets.Internal
             IL.Push(inContainer);
             IL.Push(inCallback);
             IL.Push(CreateCustomWidgetPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WidgetID), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(byte*), typeof(int), typeof(WidgetID), typeof(WidgetFuncCallback)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WidgetID), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(byte*), typeof(int), typeof(WidgetID), typeof(IntPtr)));
             IL.Pop(out result);
             return result;
         }
@@ -816,7 +816,7 @@ namespace XP.SDK.Widgets.Internal
             IL.Push(inWidget);
             IL.Push(inNewCallback);
             IL.Push(AddWidgetCallbackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetID), typeof(WidgetFuncCallback)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetID), typeof(IntPtr)));
         }
 
         

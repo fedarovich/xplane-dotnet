@@ -62,10 +62,15 @@ namespace XP.SDK.XPLM
         {
             var list = new List<string>();
             var handle = GCHandle.Alloc(list);
-            LibraryEnumeratorCallback callback = Callback;
-            SceneryAPI.LookupObjects(path, latitude, longitude, callback, GCHandle.ToIntPtr(handle).ToPointer());
-            handle.Free();
-            return list;
+            try
+            {
+                SceneryAPI.LookupObjects(path, latitude, longitude, Callback, GCHandle.ToIntPtr(handle).ToPointer());
+                return list;
+            }
+            finally
+            {
+                handle.Free();
+            }            
 
             static void Callback(byte* filePath, void* inref)
             {

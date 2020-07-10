@@ -515,7 +515,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inReadRefcon);
             IL.Push(inWriteRefcon);
             IL.Push(RegisterDataAccessorPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(DataRef), typeof(byte*), typeof(DataTypeID), typeof(int), typeof(GetDataiCallback), typeof(SetDataiCallback), typeof(GetDatafCallback), typeof(SetDatafCallback), typeof(GetDatadCallback), typeof(SetDatadCallback), typeof(GetDataviCallback), typeof(SetDataviCallback), typeof(GetDatavfCallback), typeof(SetDatavfCallback), typeof(GetDatabCallback), typeof(SetDatabCallback), typeof(void*), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(DataRef), typeof(byte*), typeof(DataTypeID), typeof(int), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(void*), typeof(void*)));
             IL.Pop(out result);
             return result;
         }
@@ -621,7 +621,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inNotificationFunc);
             IL.Push(inNotificationRefcon);
             IL.Push(ShareDataPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(DataTypeID), typeof(DataChangedCallback), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(DataTypeID), typeof(IntPtr), typeof(void*)));
             IL.Pop(out result);
             return result;
         }
@@ -700,7 +700,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inNotificationFunc);
             IL.Push(inNotificationRefcon);
             IL.Push(UnshareDataPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(DataTypeID), typeof(DataChangedCallback), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(DataTypeID), typeof(IntPtr), typeof(void*)));
             IL.Pop(out result);
             return result;
         }

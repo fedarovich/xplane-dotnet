@@ -46,12 +46,17 @@ namespace XP.SDK.XPLM
         {
             var features = new HashSet<string>();
             var handle = GCHandle.Alloc(features);
-            FeatureEnumeratorCallback callback = OnFeatureEnumeratorCallback;
-            PluginAPI.EnumerateFeatures(callback, GCHandle.ToIntPtr(handle).ToPointer());
-            GC.KeepAlive(callback);
-            return features;
+            try
+            {
+                PluginAPI.EnumerateFeatures(Callback, GCHandle.ToIntPtr(handle).ToPointer());
+                return features;
+            }
+            finally
+            {
+                handle.Free();
+            }
 
-            static void OnFeatureEnumeratorCallback(byte* infeature, void* inref) => 
+            static void Callback(byte* infeature, void* inref) => 
                 Utils.TryGetObject<HashSet<string>>(inref)?.Add(Marshal.PtrToStringUTF8(new IntPtr(infeature)));
         }
 

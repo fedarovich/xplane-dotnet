@@ -98,7 +98,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inHandler);
             IL.Push(inMenuRef);
             IL.Push(CreateMenuPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(MenuID), typeof(byte*), typeof(MenuID), typeof(int), typeof(MenuHandlerCallback), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(MenuID), typeof(byte*), typeof(MenuID), typeof(int), typeof(IntPtr), typeof(void*)));
             IL.Pop(out result);
             return result;
         }

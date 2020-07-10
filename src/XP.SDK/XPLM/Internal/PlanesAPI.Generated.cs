@@ -180,7 +180,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inCallback);
             IL.Push(inRefcon);
             IL.Push(AcquirePlanesPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte**), typeof(PlanesAvailableCallback), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte**), typeof(IntPtr), typeof(void*)));
             IL.Pop(out result);
             return result;
         }

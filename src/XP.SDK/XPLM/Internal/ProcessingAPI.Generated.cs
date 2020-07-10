@@ -81,7 +81,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inInterval);
             IL.Push(inRefcon);
             IL.Push(RegisterFlightLoopCallbackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(FlightLoopCallback), typeof(float), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(float), typeof(void*)));
         }
 
         
@@ -116,7 +116,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inFlightLoop);
             IL.Push(inRefcon);
             IL.Push(UnregisterFlightLoopCallbackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(FlightLoopCallback), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(void*)));
         }
 
         
@@ -150,7 +150,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inRelativeToNow);
             IL.Push(inRefcon);
             IL.Push(SetFlightLoopCallbackIntervalPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(FlightLoopCallback), typeof(float), typeof(int), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(float), typeof(int), typeof(void*)));
         }
 
         

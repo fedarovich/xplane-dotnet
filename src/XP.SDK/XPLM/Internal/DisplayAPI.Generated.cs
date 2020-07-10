@@ -101,7 +101,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inWantsBefore);
             IL.Push(inRefcon);
             IL.Push(RegisterDrawCallbackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(DrawCallback), typeof(DrawingPhase), typeof(int), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(IntPtr), typeof(DrawingPhase), typeof(int), typeof(void*)));
             IL.Pop(out result);
             return result;
         }
@@ -143,7 +143,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inWantsBefore);
             IL.Push(inRefcon);
             IL.Push(UnregisterDrawCallbackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(DrawCallback), typeof(DrawingPhase), typeof(int), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(IntPtr), typeof(DrawingPhase), typeof(int), typeof(void*)));
             IL.Pop(out result);
             return result;
         }
@@ -212,7 +212,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inMouseCallback);
             IL.Push(inRefcon);
             IL.Push(CreateWindowPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WindowID), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(DrawWindowCallback), typeof(HandleKeyCallback), typeof(HandleMouseClickCallback), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WindowID), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(void*)));
             IL.Pop(out result);
             return result;
         }
@@ -351,7 +351,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inMonitorBoundsCallback);
             IL.Push(inRefcon);
             IL.Push(GetAllMonitorBoundsGlobalPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(ReceiveMonitorBoundsGlobalCallback), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(void*)));
         }
 
         
@@ -397,7 +397,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inMonitorBoundsCallback);
             IL.Push(inRefcon);
             IL.Push(GetAllMonitorBoundsOSPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(ReceiveMonitorBoundsOSCallback), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(void*)));
         }
 
         
@@ -1023,7 +1023,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inBeforeWindows);
             IL.Push(inRefcon);
             IL.Push(RegisterKeySnifferPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(KeySnifferCallback), typeof(int), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(IntPtr), typeof(int), typeof(void*)));
             IL.Pop(out result);
             return result;
         }
@@ -1060,7 +1060,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inBeforeWindows);
             IL.Push(inRefcon);
             IL.Push(UnregisterKeySnifferPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(KeySnifferCallback), typeof(int), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(IntPtr), typeof(int), typeof(void*)));
             IL.Pop(out result);
             return result;
         }
@@ -1095,7 +1095,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inCallback);
             IL.Push(inRefcon);
             IL.Push(RegisterHotKeyPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(HotKeyID), typeof(byte), typeof(KeyFlags), typeof(byte*), typeof(HotKeyCallback), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(HotKeyID), typeof(byte), typeof(KeyFlags), typeof(byte*), typeof(IntPtr), typeof(void*)));
             IL.Pop(out result);
             return result;
         }

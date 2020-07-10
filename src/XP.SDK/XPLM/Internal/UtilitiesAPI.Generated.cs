@@ -499,7 +499,7 @@ namespace XP.SDK.XPLM.Internal
             Guard.NotNull(SetErrorCallbackPtr);
             IL.Push(inCallback);
             IL.Push(SetErrorCallbackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(ErrorCallback)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr)));
         }
 
         
@@ -811,7 +811,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inBefore);
             IL.Push(inRefcon);
             IL.Push(RegisterCommandHandlerPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef), typeof(CommandCallback), typeof(int), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef), typeof(IntPtr), typeof(int), typeof(void*)));
         }
 
         
@@ -847,7 +847,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inBefore);
             IL.Push(inRefcon);
             IL.Push(UnregisterCommandHandlerPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef), typeof(CommandCallback), typeof(int), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef), typeof(IntPtr), typeof(int), typeof(void*)));
         }
 
         

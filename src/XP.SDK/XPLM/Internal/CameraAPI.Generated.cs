@@ -29,7 +29,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inControlFunc);
             IL.Push(inRefcon);
             IL.Push(ControlCameraPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CameraControlDuration), typeof(CameraControlCallback), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CameraControlDuration), typeof(IntPtr), typeof(void*)));
         }
 
         

@@ -303,8 +303,15 @@ namespace XP.SDK.XPLM
             {
                 var dict = new Dictionary<int, Rect>();
                 var dictHandle = GCHandle.Alloc(dict);
-                DisplayAPI.GetAllMonitorBoundsGlobal(Callback, GCHandle.ToIntPtr(dictHandle).ToPointer());
-                return dict;
+                try
+                {
+                    DisplayAPI.GetAllMonitorBoundsGlobal(Callback, GCHandle.ToIntPtr(dictHandle).ToPointer());
+                    return dict;
+                }
+                finally
+                {
+                    dictHandle.Free();
+                }
 
                 static void Callback(int index, int left, int top, int right, int bottom, void* inrefcon)
                 {
@@ -336,9 +343,16 @@ namespace XP.SDK.XPLM
             {
                 var dict = new Dictionary<int, Rect>();
                 var dictHandle = GCHandle.Alloc(dict);
-                DisplayAPI.GetAllMonitorBoundsOS(Callback, GCHandle.ToIntPtr(dictHandle).ToPointer());
-                return dict;
-
+                try
+                {
+                    DisplayAPI.GetAllMonitorBoundsOS(Callback, GCHandle.ToIntPtr(dictHandle).ToPointer());
+                    return dict;
+                }
+                finally
+                {
+                    dictHandle.Free();
+                }
+                
                 static void Callback(int index, int left, int top, int right, int bottom, void* inrefcon)
                 {
                     var dict = (Dictionary<int, Rect>)GCHandle.FromIntPtr(new IntPtr(inrefcon)).Target;

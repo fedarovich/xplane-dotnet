@@ -90,7 +90,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(callback);
             IL.Push(refcon);
             IL.Push(RegisterMapCreationHookPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(MapCreatedCallback), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(void*)));
         }
 
         

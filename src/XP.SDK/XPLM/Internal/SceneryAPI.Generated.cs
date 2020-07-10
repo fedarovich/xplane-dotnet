@@ -237,7 +237,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(inCallback);
             IL.Push(inRefcon);
             IL.Push(LoadObjectAsyncPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*), typeof(ObjectLoadedCallback), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*), typeof(IntPtr), typeof(void*)));
         }
 
         
@@ -327,7 +327,7 @@ namespace XP.SDK.XPLM.Internal
             IL.Push(enumerator);
             IL.Push(@ref);
             IL.Push(LookupObjectsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(float), typeof(float), typeof(LibraryEnumeratorCallback), typeof(void*)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(float), typeof(float), typeof(IntPtr), typeof(void*)));
             IL.Pop(out result);
             return result;
         }
