@@ -5002,6 +5002,109 @@
             </para>
             </summary>
         </member>
+        <member name="T:XP.SDK.XPLM.Screen">
+            <summary>
+            Provides information about the screen.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.Screen.BoundsGlobal">
+            <summary>
+            This property returns the bounds of the "global" X-Plane desktop, in boxels.
+            It is multi-monitor aware. 
+            </summary>
+            <remarks>
+            <para>
+            There are three primary consequences of multimonitor awareness.
+            </para>
+            <para>
+            First, if the user is running X-Plane in full-screen on two or more
+            monitors (typically configured using one full-screen window per monitor),
+            the global desktop will be sized to include all X-Plane windows.
+            </para>
+            <para>
+            Second, the origin of the screen coordinates is not guaranteed to be (0,
+            0). Suppose the user has two displays side-by-side, both running at 1080p.
+            Suppose further that they've configured their OS to make the left display
+            their "primary" monitor, and that X-Plane is running in full-screen on
+            their right monitor only. In this case, the global desktop bounds would be
+            the rectangle from (1920, 0) to (3840, 1080). If the user later asked
+            X-Plane to draw on their primary monitor as well, the bounds would change
+            to (0, 0) to (3840, 1080).
+            </para>
+            <para>
+            Finally, if the usable area of the virtual desktop is not a perfect
+            rectangle (for instance, because the monitors have different resolutions or
+            because one monitor is configured in the operating system to be above and
+            to the right of the other), the global desktop will include any wasted
+            space. Thus, if you have two 1080p monitors, and monitor 2 is configured to
+            have its bottom left touch monitor 1's upper right, your global desktop
+            area would be the rectangle from (0, 0) to (3840, 2160).
+            </para>
+            <para>
+            Note that popped-out windows (windows drawn in their own operating system
+            windows, rather than "floating" within X-Plane) are not included in these
+            bounds.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.XPLM.Screen.AllMonitorBoundsGlobal">
+            <summary>
+            Gets the bounds (in boxels) of all full-screen X-Plane windows within the X-Plane global desktop space.
+            </summary>
+            <remarks>
+            <para>
+            Note  that if a monitor is *not* covered by an X-Plane window, you cannot get its
+            bounds this way. Likewise, monitors with only an X-Plane window (not in
+            full-screen mode) will not be included.
+            </para>
+            <para>
+            If X-Plane is running in full-screen and your monitors are of the same size
+            and configured contiguously in the OS, then the combined global bounds of
+            all full-screen monitors will match the total global desktop bounds, as
+            returned by <see cref="P:XP.SDK.XPLM.Screen.BoundsGlobal"/>. (Of course, if X-Plane is running
+            in windowed mode, this will not be the case. Likewise, if you have
+            differently sized monitors, the global desktop space will include wasted
+            space.)
+            </para>
+            <para>
+            Note that this function's monitor indices match those provided by
+            <see cref="P:XP.SDK.XPLM.Screen.AllMonitorBoundsOS"/>, but the coordinates are different (since the
+            X-Plane global desktop may not match the operating system's global desktop,
+            and one X-Plane boxel may be larger than one pixel due to 150% or 200%
+            scaling).
+            </para>
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.XPLM.Screen.AllMonitorBoundsOS">
+            <summary>
+            <para>
+            This property returns the bounds (in pixels) of each
+            monitor within the operating system's global desktop space. Note that
+            unlike <see cref="P:XP.SDK.XPLM.Screen.AllMonitorBoundsGlobal"/>, this may include monitors that have
+            no X-Plane window on them.
+            </para>
+            </summary>
+            <remarks>
+            <para>
+            Note that this function's monitor indices match those provided by
+            <see cref="P:XP.SDK.XPLM.Screen.AllMonitorBoundsGlobal"/>, but the coordinates are different (since
+            the X-Plane global desktop may not match the operating system's global
+            desktop, and one X-Plane boxel may be larger than one pixel).
+            </para>
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.XPLM.Screen.MouseLocationGlobal">
+            <summary>
+            Returns the current mouse location in global desktop boxels.
+            </summary>
+            <remarks>
+            The bottom left of the main X-Plane window is not
+            guaranteed to be (0, 0). Instead, the origin is the lower left of the
+            entire global desktop space. In addition, this routine gives the real mouse
+            location when the mouse goes to X-Plane windows other than the primary
+            display. Thus, it can be used with both pop-out windows and secondary
+            </remarks>
+        </member>
         <member name="T:XP.SDK.XPLM.TextureID">
             <summary>
             <para>
@@ -5159,111 +5262,49 @@
         </member>
         <member name="P:XP.SDK.XPLM.WindowBase.Geometry">
             <summary>
-            Gets or sets the position and size of the windows.
+            <para>Gets or sets the position and size of the windows.</para>
+            <para>The units are global desktop boxels.</para>
+            </summary>
+            <remarks>
+             <para>
+            Note that the setter only applies to "floating" windows (that is, windows that
+            are drawn within the X-Plane simulation windows, rather than being "popped
+            out" into their own first-class operating system windows). To set the
+            position of windows whose positioning mode is <see cref="F:XP.SDK.XPLM.WindowPositioningMode.PopOut"/>, you'll
+            need to instead set <see cref="P:XP.SDK.XPLM.WindowBase.GeometryOS"/>.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.XPLM.WindowBase.GeometryOS">
+            <summary>
+            <para>
+            Gets or sets the position and size of a "popped out" window
+            (i.e. a window whose positioning mode is <see cref="F:XP.SDK.XPLM.WindowPositioningMode.PopOut"/>).
+            </para>
+            <para>The unites are in operating system pixels.</para>
             </summary>
             <remarks>
             <para>
-            If the window is popped out, the values are in the OS pixels.
+            If the window is not popped out, the property returns an empty rectangle.
             </para>
             <para>
-            If the window is in virtual reality, the <see cref="P:XP.SDK.Rect.Left"/> and <see cref="P:XP.SDK.Rect.Bottom"/> are set to zero,
-            and the size is in boxels.
+            Note that when setting the value, you are responsible for ensuring that a monitor really exists at the
+            OS coordinates you provide (using XPLMGetAllMonitorBoundsOS()).
             </para>
-            <para>
-            Otherwise, the values are in boxels.
-            </para>
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.XPLM.WindowBase.GeometryVR">
+            <summary>
+            Gets or sets the size, in boxels, of a window in VR.
+            </summary>
+            <remarks>
+            <para>If the window is not in virtual reality, the property returns a zero size.</para>
             </remarks>
         </member>
         <member name="P:XP.SDK.XPLM.WindowBase.Title">
             <summary>
             Gets or sets the window title.
             </summary>
-        </member>
-        <member name="P:XP.SDK.XPLM.WindowBase.ScreenBoundsGlobal">
-            <summary>
-            This property returns the bounds of the "global" X-Plane desktop, in boxels.
-            It is multi-monitor aware. 
-            </summary>
-            <remarks>
-            <para>
-            There are three primary consequences of multimonitor awareness.
-            </para>
-            <para>
-            First, if the user is running X-Plane in full-screen on two or more
-            monitors (typically configured using one full-screen window per monitor),
-            the global desktop will be sized to include all X-Plane windows.
-            </para>
-            <para>
-            Second, the origin of the screen coordinates is not guaranteed to be (0,
-            0). Suppose the user has two displays side-by-side, both running at 1080p.
-            Suppose further that they've configured their OS to make the left display
-            their "primary" monitor, and that X-Plane is running in full-screen on
-            their right monitor only. In this case, the global desktop bounds would be
-            the rectangle from (1920, 0) to (3840, 1080). If the user later asked
-            X-Plane to draw on their primary monitor as well, the bounds would change
-            to (0, 0) to (3840, 1080).
-            </para>
-            <para>
-            Finally, if the usable area of the virtual desktop is not a perfect
-            rectangle (for instance, because the monitors have different resolutions or
-            because one monitor is configured in the operating system to be above and
-            to the right of the other), the global desktop will include any wasted
-            space. Thus, if you have two 1080p monitors, and monitor 2 is configured to
-            have its bottom left touch monitor 1's upper right, your global desktop
-            area would be the rectangle from (0, 0) to (3840, 2160).
-            </para>
-            <para>
-            Note that popped-out windows (windows drawn in their own operating system
-            windows, rather than "floating" within X-Plane) are not included in these
-            bounds.
-            </para>
-            </remarks>
-        </member>
-        <member name="P:XP.SDK.XPLM.WindowBase.AllMonitorBoundsGlobal">
-            <summary>
-            Gets the bounds (in boxels) of all full-screen X-Plane windows within the X-Plane global desktop space.
-            </summary>
-            <remarks>
-            <para>
-            Note  that if a monitor is *not* covered by an X-Plane window, you cannot get its
-            bounds this way. Likewise, monitors with only an X-Plane window (not in
-            full-screen mode) will not be included.
-            </para>
-            <para>
-            If X-Plane is running in full-screen and your monitors are of the same size
-            and configured contiguously in the OS, then the combined global bounds of
-            all full-screen monitors will match the total global desktop bounds, as
-            returned by XPLMGetScreenBoundsGlobal(). (Of course, if X-Plane is running
-            in windowed mode, this will not be the case. Likewise, if you have
-            differently sized monitors, the global desktop space will include wasted
-            space.)
-            </para>
-            <para>
-            Note that this function's monitor indices match those provided by
-            XPLMGetAllMonitorBoundsOS(), but the coordinates are different (since the
-            X-Plane global desktop may not match the operating system's global desktop,
-            and one X-Plane boxel may be larger than one pixel due to 150% or 200%
-            scaling).
-            </para>
-            </remarks>
-        </member>
-        <member name="P:XP.SDK.XPLM.WindowBase.AllMonitorBoundsOS">
-            <summary>
-            <para>
-            This property returns the bounds (in pixels) of each
-            monitor within the operating system's global desktop space. Note that
-            unlike <see cref="P:XP.SDK.XPLM.WindowBase.AllMonitorBoundsGlobal"/>, this may include monitors that have
-            no X-Plane window on them.
-            </para>
-            </summary>
-            <remarks>
-            <para>
-            Note that this function's monitor indices match those provided by
-            <see cref="P:XP.SDK.XPLM.WindowBase.AllMonitorBoundsGlobal"/>, but the coordinates are different (since
-            the X-Plane global desktop may not match the operating system's global
-            desktop, and one X-Plane boxel may be larger than one pixel).
-            </para>
-            </remarks>
         </member>
         <member name="P:XP.SDK.XPLM.WindowBase.MouseLocationGlobal">
             <summary>
@@ -5274,7 +5315,7 @@
             guaranteed to be (0, 0). Instead, the origin is the lower left of the
             entire global desktop space. In addition, this routine gives the real mouse
             location when the mouse goes to X-Plane windows other than the primary
-            DisplayAPI. Thus, it can be used with both pop-out windows and secondary
+            display. Thus, it can be used with both pop-out windows and secondary
             </remarks>
         </member>
         <member name="P:XP.SDK.XPLM.WindowBase.XPlaneHasKeyboardFocus">
@@ -5339,7 +5380,7 @@
             can pass a negative monitor index to position the window on the main
             X-Plane monitor (the screen with the X-Plane menu bar at the top). Or, if
             you have a specific monitor you want to position your window on, you can
-            pass a real monitor index as received from, e.g., <see cref="P:XP.SDK.XPLM.WindowBase.AllMonitorBoundsOS"/>.
+            pass a real monitor index as received from, e.g., <see cref="!:AllMonitorBoundsOS"/>.
             </para>
             </remarks>
         </member>
