@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>XP.SDK.Silk.NET</name>
+    </assembly>
+    <members>
+        <member name="T:XP.SDK.Silk.NET.OpenALNativeContext">
+            <summary>
+            Provides Open AL native library bindings.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Silk.NET.OpenALNativeContext.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:XP.SDK.Silk.NET.OpenALNativeContext"/>.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Silk.NET.OpenALNativeContext.GetProcAddress(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:XP.SDK.Silk.NET.OpenCLNativeContext">
+            <summary>
+            Provides Open CL native library bindings.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Silk.NET.OpenCLNativeContext.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:XP.SDK.Silk.NET.OpenCLNativeContext"/>.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Silk.NET.OpenCLNativeContext.GetProcAddress(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:XP.SDK.Silk.NET.OpenGLNativeContext">
+            <summary>
+            Provides Open GL native library bindings.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Silk.NET.OpenGLNativeContext.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:XP.SDK.Silk.NET.OpenGLNativeContext"/>.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Silk.NET.OpenGLNativeContext.GetProcAddress(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:XP.SDK.Silk.NET.SymbolLoader">
+            <summary>
+            Symbol loader.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Silk.NET.SymbolLoader.CoreLoadFunctionPointer(System.IntPtr,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:XP.SDK.Silk.NET.VulcanNativeContext">
+            <summary>
+            Provides Vulcan native library bindings.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Silk.NET.VulcanNativeContext.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:XP.SDK.Silk.NET.VulcanNativeContext"/>.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Silk.NET.VulcanNativeContext.GetProcAddress(System.String)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

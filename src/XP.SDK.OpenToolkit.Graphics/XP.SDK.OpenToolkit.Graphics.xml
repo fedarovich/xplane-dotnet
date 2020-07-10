@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>XP.SDK.OpenToolkit.Graphics</name>
+    </assembly>
+    <members>
+        <member name="T:XP.SDK.OpenToolkit.Graphics.OpenGLBindingsContext">
+            <summary>
+            <see cref="T:OpenToolkit.IBindingsContext"/> implementation that can be used to bound OpenGL functions to the OpenToolkit.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.OpenToolkit.Graphics.OpenGLBindingsContext.#ctor">
+            <summary>
+            Creates a new instance of OpenGLBindingsContext.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.OpenToolkit.Graphics.OpenGLBindingsContext.GetProcAddress(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.OpenToolkit.Graphics.OpenGLBindingsContext.Dispose">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

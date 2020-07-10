@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XP.Proxy", "XP.Proxy\XP.Pro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XP.SamplePlugin", "XP.SamplePlugin\XP.SamplePlugin.csproj", "{52C8F49E-61B8-4DDB-8748-9B0EFEB0BAF5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XP.SDK.OpenToolkit.Graphics", "XP.SDK.OpenToolkit.Graphics\XP.SDK.OpenToolkit.Graphics.csproj", "{14CFC4B0-56D1-490F-915C-BD1BD94D1BCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XP.SDK.Silk.NET", "XP.SDK.Silk.NET\XP.SDK.Silk.NET.csproj", "{FC6D9779-8924-49DD-ABDE-C0C710246C13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{52C8F49E-61B8-4DDB-8748-9B0EFEB0BAF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52C8F49E-61B8-4DDB-8748-9B0EFEB0BAF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52C8F49E-61B8-4DDB-8748-9B0EFEB0BAF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14CFC4B0-56D1-490F-915C-BD1BD94D1BCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14CFC4B0-56D1-490F-915C-BD1BD94D1BCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14CFC4B0-56D1-490F-915C-BD1BD94D1BCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14CFC4B0-56D1-490F-915C-BD1BD94D1BCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC6D9779-8924-49DD-ABDE-C0C710246C13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC6D9779-8924-49DD-ABDE-C0C710246C13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC6D9779-8924-49DD-ABDE-C0C710246C13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC6D9779-8924-49DD-ABDE-C0C710246C13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
