@@ -1,3 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Project>
+  <ItemGroup Condition=" '$(UseCollectibleContext)' != '' ">
+    <RuntimeHostConfigurationOption Include="XP.Proxy.UseCollectibleContext" Value="$(UseCollectibleContext)" />
+  </ItemGroup>
 </Project>

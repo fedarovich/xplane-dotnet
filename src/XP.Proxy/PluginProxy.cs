@@ -24,7 +24,7 @@ namespace XP.Proxy
             var pluginPath = Marshal.PtrToStringUTF8(parameters.PluginPath);
             if (string.IsNullOrEmpty(pluginPath))
             {
-                UtilitiesAPI.DebugString($"Plugin path is null.");
+                UtilitiesAPI.DebugString("Plugin path is null." + Environment.NewLine);
                 return 0;
             }
 
@@ -43,7 +43,7 @@ namespace XP.Proxy
                 var attr = assembly.GetCustomAttribute<PluginAttribute>();
                 if (attr == null)
                 {
-                    UtilitiesAPI.DebugString($"Plugin assembly {assemblyPath} does not have '{typeof(PluginAttribute).FullName}' attribute defined.");
+                    UtilitiesAPI.DebugString($"Plugin assembly {assemblyPath} does not have '{typeof(PluginAttribute).FullName}' attribute defined.{Environment.NewLine}");
                     return 0;
                 }
 
@@ -98,21 +98,33 @@ namespace XP.Proxy
 
         private static void Unload()
         {
-            var weakRef = new WeakReference(_context, true);
-            _context.Unload();
-            _context = null;
-            _plugin = null;
-            for (int i = 0; i < 10; i++)
+            if (_context.IsCollectible)
             {
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                if (!weakRef.IsAlive)
-                    return;
-            }
+                var weakRef = new WeakReference(_context, true);
+                _context.Unload();
+                _context = null;
+                _plugin = null;
+                for (int i = 0; i < 10; i++)
+                {
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    if (!weakRef.IsAlive)
+                    {
+                        UtilitiesAPI.DebugString("Unloaded the plugin assembly." + Environment.NewLine);
+                        return;
+                    }
+                }
 
-            if (weakRef.IsAlive)
+                if (weakRef.IsAlive)
+                {
+                    UtilitiesAPI.DebugString("Failed to unload the plugin assembly." + Environment.NewLine);
+                }
+            }
+            else
             {
-                UtilitiesAPI.DebugString("Failed to unload plugin assembly.");
+                _context = null;
+                _plugin = null;
+                UtilitiesAPI.DebugString("The plugin assembly context is not collectible. The plugin assembly will not be unloaded." + Environment.NewLine);
             }
         }
     }
