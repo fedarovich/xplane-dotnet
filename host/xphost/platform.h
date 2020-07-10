@@ -9,6 +9,7 @@
 	#define CH(c) L ## c
 	#define STRING(s) std::wstring(STR(s))
 	#define DIR_SEPARATOR L'\\'
+	#define ENDL "\r\n"
 #else
 	#include <dlfcn.h>
 	#include <limits.h>
@@ -18,6 +19,7 @@
 	#define STRING(s) std::string(STR(s))
 	#define DIR_SEPARATOR '/'
 	#define MAX_PATH PATH_MAX
+	#define ENDL "\n"
 #endif
 
 #include <string>

@@ -17,7 +17,7 @@
 
 void XPLMDebugString(const char* inString)
 {
-	printf("%s\n", inString);
+	printf("%s", inString);
 }
 
 #if IBM

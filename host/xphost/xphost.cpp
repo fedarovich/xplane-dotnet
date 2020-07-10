@@ -42,7 +42,7 @@ PLUGIN_API int XPluginStart(
     char* outSig,
     char* outDesc)
 {
-    XPLMDebugString("Loaded xphost.");
+    XPLMDebugString("[xphost] Loaded xphost." ENDL);
     XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
 
     auto startup_path = get_startup_path().u8string();
@@ -57,7 +57,9 @@ PLUGIN_API int XPluginStart(
     auto proxy_result = proxy::create(root_path);
     if (!proxy_result)
     {
+        XPLMDebugString("[xphost] ");
         XPLMDebugString(proxy_result.error().c_str());
+        XPLMDebugString(ENDL);
         return 0;
     }
     plugin_proxy = *proxy_result;
