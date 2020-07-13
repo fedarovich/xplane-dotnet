@@ -4888,6 +4888,121 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Menu.#ctor">
+            <summary>
+            Initializes a new top-level menu.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.Menu.Id">
+            <summary>
+            Gets the menu ID.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.Menu.Items">
+            <summary>
+            Gets the list of menu items.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.Menu.PluginsMenu">
+            <summary>
+            Gets the plug-in's menu, which is created for you at startup.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.Menu.AircraftMenu">
+            <summary>
+            Gets the aircraft menu for the currently-loaded aircraft,
+            used for showing aircraft-specific commands.
+            </summary>
+            <remarks>
+            <para>
+            The aircraft menu is created by X-Plane at startup,
+            but it remains hidden until it is populated via
+            <see cref="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.MenuItem@,XP.SDK.TypedEventHandler{XP.SDK.XPLM.MenuItem})"/>,
+            <see cref="M:XP.SDK.XPLM.Menu.AddItem(System.String,System.Action{XP.SDK.XPLM.MenuItem})"/>,
+            <see cref="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.CommandRef,XP.SDK.XPLM.MenuItem@)"/> or
+            <see cref="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.CommandRef,System.Action{XP.SDK.XPLM.MenuItem})"/>.
+            </para>
+            <para>
+            Only plugins loaded with the user's current aircraft are allowed to access
+            the aircraft menu. For all other plugins, this will return <see langword="null"/>, and any
+            attempts to add menu items to it will fail.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.MenuItem@,XP.SDK.TypedEventHandler{XP.SDK.XPLM.MenuItem})">
+            <summary>
+            Adds a new menu item to the menu.
+            </summary>
+            <param name="name">The menu item display name.</param>
+            <param name="item">The created menu item.</param>
+            <param name="onClick">An optional Click event handler.</param>
+            <returns>The current menu instance.</returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.Menu.AddItem(System.String,System.Action{XP.SDK.XPLM.MenuItem})">
+            <summary>
+            Adds a new menu item to the menu.
+            </summary>
+            <param name="name">The menu item display name.</param>
+            <param name="config">The delegate that can be used to configure the created menu item.</param>
+            <returns>The current menu instance.</returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.CommandRef,XP.SDK.XPLM.MenuItem@)">
+            <summary>
+            Adds a new menu item to the menu.
+            </summary>
+            <param name="name">The menu item display name.</param>
+            <param name="command">The command to execute on item click.</param>
+            <param name="item">The created menu item.</param>
+            <returns>The current menu instance.</returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.CommandRef,System.Action{XP.SDK.XPLM.MenuItem})">
+            <summary>
+            Adds a new menu item to the menu.
+            </summary>
+            <param name="name">The menu item display name.</param>
+            <param name="command">The command to execute on item click.</param>
+            <param name="config">The delegate that can be used to configure the created menu item.</param>
+            <returns>The current menu instance.</returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.Menu.AddSeparator(XP.SDK.XPLM.MenuItem@)">
+            <summary>
+            Adds a new menu item separator.
+            </summary>
+            <param name="item">The created separator.</param>
+            <returns>The current menu instance.</returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.Menu.AddSeparator">
+            <summary>
+            Adds a new menu item separator.
+            </summary>
+            <returns>The current menu instance.</returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.Menu.RemoveItem(System.Int32)">
+            <summary>
+            Removes the menu item by index.
+            </summary>
+            <param name="index">The index of the menu item to remove.</param>
+        </member>
+        <member name="M:XP.SDK.XPLM.Menu.RemoveItem(XP.SDK.XPLM.MenuItem)">
+            <summary>
+            Removes the menu item.
+            </summary>
+            <param name="item">The menu item to remove.</param>
+            <returns><see langword="true" /> if the item existed in the menu and was removed; <see langword="false" /> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.Menu.ClearItems">
+            <summary>
+            Removes all menu items.
+            </summary>
+        </member>
+        <member name="E:XP.SDK.XPLM.Menu.Click">
+            <summary>
+            Raised when the user clicks a menu item.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Menu.Dispose">
+            <inheritdoc />
+        </member>
         <member name="T:XP.SDK.XPLM.MenuCheck">
             <summary>
             <para>
@@ -4902,6 +5017,61 @@
             <para>
             This is a unique ID for each menu you create.
             </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.MenuItem">
+            <summary>
+            The menu item.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.MenuItem.Name">
+            <summary>
+            Gets or sets the menu item name.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.MenuItem.IsEnabled">
+            <summary>
+            Gets or sets the value indicating whether the menu item is enabled.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.MenuItem.CheckState">
+            <summary>
+            Gets or sets the check state of the menu.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.MenuItem.IsSeparator">
+            <summary>
+            Gets the value indicating whether the menu item is a separator.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.MenuItem.SubMenu">
+            <summary>
+            Gets the item's sub-menu.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.MenuItem.CreateSubMenu">
+            <summary>
+            Creates an item's sub-menu.
+            </summary>
+            <returns>The new item's sub-menu.</returns>
+            <exception cref="T:System.InvalidOperationException">The item's sub-menu already exists.</exception>
+            <exception cref="T:System.InvalidOperationException">The item is a separator.</exception>
+        </member>
+        <member name="M:XP.SDK.XPLM.MenuItem.GetOrCreateSubMenu">
+            <summary>
+            Gets or creates an item's sub-menu.
+            </summary>
+            <returns>The item's sub-menu.</returns>
+            <exception cref="T:System.InvalidOperationException">The item is a separator.</exception>
+        </member>
+        <member name="M:XP.SDK.XPLM.MenuItem.DestroySubMenu">
+            <summary>
+            Destroys the item's sub-menu.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.MenuItem.UniqueId">
+            <summary>
+            Gets the item's sub-menu.
             </summary>
         </member>
         <member name="T:XP.SDK.XPLM.MouseStatus">
