@@ -71,5 +71,10 @@ namespace XP.SDK.XPLM
         internal virtual void OnClick()
         {
         }
+
+        internal virtual void Dispose()
+        {
+            DestroySubMenu();
+        }
     }
 }

@@ -114,5 +114,11 @@ namespace XP.SDK.XPLM
         {
             Click?.Invoke(this, EventArgs.Empty);
         }
+
+        internal override void Dispose()
+        {
+            base.Dispose();
+            Click = null;
+        }
     }
 }

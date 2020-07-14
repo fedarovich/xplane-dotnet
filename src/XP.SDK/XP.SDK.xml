@@ -817,6 +817,78 @@
             </para>
             </summary>
         </member>
+        <member name="T:XP.SDK.XPLM.Command">
+            <summary>
+            The command management APIs let plugins interact with the command-system in X-Plane, the abstraction behind keyboard presses and joystick buttons.
+            This API lets you create new commands and modify the behavior (or get notification) of existing ones.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.Command.CommandRef">
+            <summary>
+            Gets the command reference.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Command.Find(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            Looks up a command by name.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Command.Create(System.ReadOnlySpan{System.Char}@,System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            Creates a new command for a given string.
+            If the command already exists, the existing command reference is returned.
+            The description may appear in user interface contexts, such as the joystick configuration screen.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Command.Once">
+            <summary>
+            This executes a given command momentarily, that is, the command begins and ends immediately.
+            This is the equivalent of calling <see cref="M:XP.SDK.XPLM.Command.Begin"/> and <see cref="M:XP.SDK.XPLM.Command.End"/> back ot back.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Command.Begin">
+            <summary>
+            <para>Starts the execution of a command.</para>
+            <para>The command is "held down" until <see cref="M:XP.SDK.XPLM.Command.End"/> is called.</para>
+            <para>You must balance each <see cref="M:XP.SDK.XPLM.Command.Begin"/> call with an <see cref="M:XP.SDK.XPLM.Command.End"/> call.</para> 
+            </summary>
+            <seealso cref="M:XP.SDK.XPLM.Command.BeginScope"/>
+            <seealso cref="M:XP.SDK.XPLM.Command.BeginScopeAllocationFree"/>
+        </member>
+        <member name="M:XP.SDK.XPLM.Command.End">
+            <summary>
+            <para>Ends the execution of a given command that was started with <see cref="M:XP.SDK.XPLM.Command.Begin"/>.</para>
+            <para>You must not issue XPLMCommandEnd for a command you did not begin.</para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Command.BeginScope">
+            <summary>
+            <para>Starts the execution of a command.</para>
+            <para>The command is "held down" until the <see cref="M:System.IDisposable.Dispose"/> of the returned object is called.</para>
+            </summary>
+            <seealso cref="M:XP.SDK.XPLM.Command.BeginScopeAllocationFree"/>
+        </member>
+        <member name="M:XP.SDK.XPLM.Command.BeginScopeAllocationFree">
+            <summary>
+            <para>Starts the execution of a command.</para>
+            <para>The command is "held down" until the <see cref="M:XP.SDK.XPLM.CommandExecutionScope.Dispose"/> of the returned object is called.</para>
+            </summary>
+            <seealso cref="M:XP.SDK.XPLM.Command.BeginScope"/>
+        </member>
+        <member name="E:XP.SDK.XPLM.Command.BeforeExecute">
+            <summary>
+            Raised before X-Plane executes the command.
+            </summary>
+            <remarks>
+            Set <see cref="F:XP.SDK.XPLM.CommandBeforeExecuteEventArgs.Handled"/> to <see langword="true"/>
+            to prevent the command from being handled by X-Plane and other plugins.
+            </remarks>
+        </member>
+        <member name="E:XP.SDK.XPLM.Command.AfterExecute">
+            <summary>
+            Raised after X-Plane has executed the command.
+            </summary>
+        </member>
         <member name="T:XP.SDK.XPLM.CommandButtonID">
             <summary>
             <para>
@@ -825,6 +897,11 @@
             setup dialog, but these enums will be stable even if they change in
             X-Plane.
             </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.CommandExecutionScope">
+            <summary>
+            Begins the command after construction and ends it on disposal.
             </summary>
         </member>
         <member name="T:XP.SDK.XPLM.CommandKeyID">
@@ -857,6 +934,13 @@
             away if the plugin that created it is unloaded.
             </para>
             </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.CommandRef.Find(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            Looks up a command by name, and returns its command
+            reference or <see langword="default"/> if the command does not exist.
+            </summary>
+            <param name="name">The command name.</param>
         </member>
         <member name="T:XP.SDK.XPLM.CursorStatus">
             <summary>
@@ -4919,8 +5003,10 @@
             but it remains hidden until it is populated via
             <see cref="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.MenuItem@,XP.SDK.TypedEventHandler{XP.SDK.XPLM.MenuItem})"/>,
             <see cref="M:XP.SDK.XPLM.Menu.AddItem(System.String,System.Action{XP.SDK.XPLM.MenuItem})"/>,
-            <see cref="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.CommandRef,XP.SDK.XPLM.MenuItem@)"/> or
-            <see cref="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.CommandRef,System.Action{XP.SDK.XPLM.MenuItem})"/>.
+            <see cref="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.CommandRef,XP.SDK.XPLM.MenuItem@)"/>,
+            <see cref="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.CommandRef,System.Action{XP.SDK.XPLM.MenuItem})"/>,
+            <see cref="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.Command,XP.SDK.XPLM.MenuItem@)"/> or
+            <see cref="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.Command,System.Action{XP.SDK.XPLM.MenuItem})"/>.
             </para>
             <para>
             Only plugins loaded with the user's current aircraft are allowed to access
@@ -4951,11 +5037,29 @@
             Adds a new menu item to the menu.
             </summary>
             <param name="name">The menu item display name.</param>
-            <param name="command">The command to execute on item click.</param>
+            <param name="commandRef">The command to execute on item click.</param>
             <param name="item">The created menu item.</param>
             <returns>The current menu instance.</returns>
         </member>
         <member name="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.CommandRef,System.Action{XP.SDK.XPLM.MenuItem})">
+            <summary>
+            Adds a new menu item to the menu.
+            </summary>
+            <param name="name">The menu item display name.</param>
+            <param name="commandRef">The command to execute on item click.</param>
+            <param name="config">The delegate that can be used to configure the created menu item.</param>
+            <returns>The current menu instance.</returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.Command,XP.SDK.XPLM.MenuItem@)">
+            <summary>
+            Adds a new menu item to the menu.
+            </summary>
+            <param name="name">The menu item display name.</param>
+            <param name="command">The command to execute on item click.</param>
+            <param name="item">The created menu item.</param>
+            <returns>The current menu instance.</returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.Menu.AddItem(System.String,XP.SDK.XPLM.Command,System.Action{XP.SDK.XPLM.MenuItem})">
             <summary>
             Adds a new menu item to the menu.
             </summary>

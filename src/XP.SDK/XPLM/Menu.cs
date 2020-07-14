@@ -151,8 +151,7 @@ namespace XP.SDK.XPLM
         /// <returns>The current menu instance.</returns>
         public Menu AddItem(string name, out MenuItem item, TypedEventHandler<MenuItem> onClick = null)
         {
-            item = new NormalMenuItem(this, name, onClick);
-            _items.Add(item);
+            item = _items.Add(new NormalMenuItem(this, name, onClick));
             return this;
         }
 
@@ -174,14 +173,12 @@ namespace XP.SDK.XPLM
         /// Adds a new menu item to the menu.
         /// </summary>
         /// <param name="name">The menu item display name.</param>
-        /// <param name="command">The command to execute on item click.</param>
+        /// <param name="commandRef">The command to execute on item click.</param>
         /// <param name="item">The created menu item.</param>
         /// <returns>The current menu instance.</returns>
-        public Menu AddItem(string name, CommandRef command, out MenuItem item)
+        public Menu AddItem(string name, CommandRef commandRef, out MenuItem item)
         {
-            item = new NormalMenuItem(this, name);
-            _items.Add(item);
-            MenusAPI.AppendMenuItemWithCommand(_id, name, command);
+            item = _items.Add(new NormalMenuItem(this, name), commandRef);
             return this;
         }
 
@@ -189,13 +186,13 @@ namespace XP.SDK.XPLM
         /// Adds a new menu item to the menu.
         /// </summary>
         /// <param name="name">The menu item display name.</param>
-        /// <param name="command">The command to execute on item click.</param>
+        /// <param name="commandRef">The command to execute on item click.</param>
         /// <param name="config">The delegate that can be used to configure the created menu item.</param>
         /// <returns>The current menu instance.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Menu AddItem(string name, CommandRef command, Action<MenuItem> config = null)
+        public Menu AddItem(string name, CommandRef commandRef, Action<MenuItem> config = null)
         {
-            AddItem(name, command, out var item);
+            AddItem(name, commandRef, out var item);
             config?.Invoke(item);
             return this;
         }
@@ -232,9 +229,7 @@ namespace XP.SDK.XPLM
         /// <returns>The current menu instance.</returns>
         public Menu AddSeparator(out MenuItem item)
         {
-            item = new SeparatorMenuItem();
-            _items.Add(item);
-            MenusAPI.AppendMenuSeparator(_id);
+            item = _items.Add(new SeparatorMenuItem());
             return this;
         }
 
@@ -277,6 +272,7 @@ namespace XP.SDK.XPLM
             if (Interlocked.CompareExchange(ref _disposed, 1, 0) == 0)
             {
                 _items.Dispose();
+                Click = null;
 
                 if (_handle.IsAllocated)
                 {

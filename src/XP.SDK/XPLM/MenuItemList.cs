@@ -29,7 +29,7 @@ namespace XP.SDK.XPLM
 
         public MenuItem this[int index] => _itemList[index];
 
-        internal unsafe void Add(MenuItem item)
+        internal unsafe MenuItem Add(NormalMenuItem item)
         {
             if (_disposed) 
                 throw new ObjectDisposedException(nameof(Menu));
@@ -37,6 +37,29 @@ namespace XP.SDK.XPLM
             _itemList.Add(item);
             MenusAPI.AppendMenuItem(_menuId, item.Name, (void*) item.UniqueId, 0);
             _lists.Add(item, this);
+            return item;
+        }
+
+        internal MenuItem Add(NormalMenuItem item, CommandRef commandRef)
+        {
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(Menu));
+
+            _itemList.Add(item);
+            MenusAPI.AppendMenuItemWithCommand(_menuId, item.Name, commandRef);
+            _lists.Add(item, this);
+            return item;
+        }
+
+        internal MenuItem Add(SeparatorMenuItem item)
+        {
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(Menu));
+
+            _itemList.Add(item);
+            MenusAPI.AppendMenuSeparator(_menuId);
+            _lists.Add(item, this);
+            return item;
         }
 
         internal void RemoveAt(int index)
@@ -45,7 +68,7 @@ namespace XP.SDK.XPLM
                 throw new ObjectDisposedException(nameof(Menu));
 
             var item = _itemList[index];
-            item.DestroySubMenu();
+            item.Dispose();
             _lists.Remove(item);
             MenusAPI.RemoveMenuItem(_menuId, index);
             _itemList.RemoveAt(index);
@@ -73,7 +96,7 @@ namespace XP.SDK.XPLM
 
             foreach (var item in _itemList)
             {
-                item.DestroySubMenu();
+                item.Dispose();
                 _lists.Remove(item);
             }
             _itemList.Clear();
