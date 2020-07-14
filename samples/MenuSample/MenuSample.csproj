@@ -1,15 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>WindowSample</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenTK" Version="4.0.0-pre9.1" />
     <PackageReference Include="XP.SDK" Version="0.3.0" />
     <PackageReference Include="XP.SDK.Host" Version="0.3.0" />
-    <PackageReference Include="XP.SDK.OpenToolkit.Graphics" Version="0.3.0-pre-9.1" />
   </ItemGroup>
 
 </Project>
