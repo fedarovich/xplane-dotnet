@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>$(DefineConstants);OPEN_TOOLKIT</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OpenToolkit.OpenAL" Version="4.0.0-pre9.1" />
+    <PackageReference Include="XP.SDK" Version="0.3.0" />
+    <PackageReference Include="XP.SDK.Host" Version="0.3.0" />
+  </ItemGroup>
+
+  <Import Project="..\AudioHelpers\AudioHelpers.projitems" Label="Shared" />
+
+</Project>

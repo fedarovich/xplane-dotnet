@@ -9,9 +9,26 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowSampleOpenToolkit", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowSampleSilkNet", "WindowSampleSilkNet\WindowSampleSilkNet.csproj", "{69D9CEB5-5DF2-4BF4-8D09-90312723EE75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MenuSample", "MenuSample\MenuSample.csproj", "{4B1CBEA3-7AB2-4EE1-A443-034D94EB1B5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuSample", "MenuSample\MenuSample.csproj", "{4B1CBEA3-7AB2-4EE1-A443-034D94EB1B5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenALSharedSilkNet", "OpenALSharedSilkNet\OpenALSharedSilkNet.csproj", "{3E3F9144-4B0D-44AA-B182-C89E9F22E490}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AudioHelpers", "AudioHelpers\AudioHelpers.shproj", "{25601E51-6DA6-4377-B081-B082D58B0DA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenALPrivateSilkNet", "OpenALPrivateSilkNet\OpenALPrivateSilkNet.csproj", "{F6397017-4308-462B-8D12-EDC6FF7609B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenALSharedOpenToolkit", "OpenALSharedOpenToolkit\OpenALSharedOpenToolkit.csproj", "{29996C64-1B7E-4923-BC79-277BCD2F2DCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenALPrivateOpenToolkit", "OpenALPrivateOpenToolkit\OpenALPrivateOpenToolkit.csproj", "{FF1D9C09-0D53-48A9-A6C3-39B983160E08}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		AudioHelpers\AudioHelpers.projitems*{25601e51-6da6-4377-b081-b082d58b0da1}*SharedItemsImports = 13
+		AudioHelpers\AudioHelpers.projitems*{29996c64-1b7e-4923-bc79-277bcd2f2dcd}*SharedItemsImports = 5
+		AudioHelpers\AudioHelpers.projitems*{3e3f9144-4b0d-44aa-b182-c89e9f22e490}*SharedItemsImports = 5
+		AudioHelpers\AudioHelpers.projitems*{f6397017-4308-462b-8d12-edc6ff7609b0}*SharedItemsImports = 5
+		AudioHelpers\AudioHelpers.projitems*{ff1d9c09-0d53-48a9-a6c3-39b983160e08}*SharedItemsImports = 5
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -33,6 +50,22 @@ Global
 		{4B1CBEA3-7AB2-4EE1-A443-034D94EB1B5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B1CBEA3-7AB2-4EE1-A443-034D94EB1B5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B1CBEA3-7AB2-4EE1-A443-034D94EB1B5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E3F9144-4B0D-44AA-B182-C89E9F22E490}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E3F9144-4B0D-44AA-B182-C89E9F22E490}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E3F9144-4B0D-44AA-B182-C89E9F22E490}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E3F9144-4B0D-44AA-B182-C89E9F22E490}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6397017-4308-462B-8D12-EDC6FF7609B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6397017-4308-462B-8D12-EDC6FF7609B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6397017-4308-462B-8D12-EDC6FF7609B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6397017-4308-462B-8D12-EDC6FF7609B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29996C64-1B7E-4923-BC79-277BCD2F2DCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29996C64-1B7E-4923-BC79-277BCD2F2DCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29996C64-1B7E-4923-BC79-277BCD2F2DCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29996C64-1B7E-4923-BC79-277BCD2F2DCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF1D9C09-0D53-48A9-A6C3-39B983160E08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF1D9C09-0D53-48A9-A6C3-39B983160E08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF1D9C09-0D53-48A9-A6C3-39B983160E08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF1D9C09-0D53-48A9-A6C3-39B983160E08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>$(DefineConstants);SILK_NET</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Silk.NET.OpenAL" Version="1.4.0" />
+    <PackageReference Include="XP.SDK" Version="0.3.0" />
+    <PackageReference Include="XP.SDK.Host" Version="0.3.0" />
+    <PackageReference Include="XP.SDK.Silk.NET" Version="0.3.0" />
+  </ItemGroup>
+
+  <Import Project="..\AudioHelpers\AudioHelpers.projitems" Label="Shared" />
+
+</Project>
