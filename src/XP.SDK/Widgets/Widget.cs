@@ -204,13 +204,8 @@ namespace XP.SDK.Widgets
             WidgetsAPI.AddWidgetCallback(Id, hook);
         }
 
-        public static WidgetFuncCallback GetWidgetClassFunction(WidgetClass widgetClass)
-        {
-            throw new NotImplementedException();
-            // TODO: Fix the WidgetsAPI.GetWidgetClassFunc to return IntPtr
-            //IntPtr funcPtr = WidgetsAPI.GetWidgetClassFunc(widgetClass);
-            //return Marshal.GetDelegateForFunctionPointer<WidgetFuncCallback>(funcPtr);
-        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static WidgetFuncCallback GetWidgetClassFunction(WidgetClass widgetClass) => WidgetsAPI.GetWidgetClassFunc(widgetClass);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Destroy(bool destroyChildren = true)

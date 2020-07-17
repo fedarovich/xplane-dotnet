@@ -859,12 +859,12 @@ namespace XP.SDK.Widgets.Internal
         {
             IL.DeclareLocals(false);
             Guard.NotNull(GetWidgetClassFuncPtr);
-            WidgetFuncCallback result;
+            IntPtr result;
             IL.Push(inWidgetClass);
             IL.Push(GetWidgetClassFuncPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WidgetFuncCallback), typeof(WidgetClass)));
+            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(IntPtr), typeof(WidgetClass)));
             IL.Pop(out result);
-            return result;
+            return Marshal.GetDelegateForFunctionPointer<WidgetFuncCallback>(result);
         }
     }
 }

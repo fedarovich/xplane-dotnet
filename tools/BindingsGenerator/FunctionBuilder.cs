@@ -181,7 +181,14 @@ namespace BindingsGenerator
             IdentifierNameSyntax result = null;
             if (!returnTypeInfo.IsVoid)
             {
-                yield return SyntaxBuilder.DeclareResultVariable(returnTypeInfo.TypeSyntax, out result);
+                if (returnTypeInfo.IsFunction)
+                {
+                    yield return SyntaxBuilder.DeclareResultVariable(SyntaxBuilder.IntPtrName, out result);
+                }
+                else
+                {
+                    yield return SyntaxBuilder.DeclareResultVariable(returnTypeInfo.TypeSyntax, out result);
+                }
             }
 
             var delegates = new Dictionary<string, string>();
@@ -201,11 +208,21 @@ namespace BindingsGenerator
             if (result != null)
             {
                 yield return SyntaxBuilder.EmitPop(result);
-            }
-
-            if (result != null)
-            {
-                yield return ReturnStatement(result);
+                if (returnTypeInfo.IsFunction)
+                {
+                    yield return ReturnStatement(
+                        InvocationExpression(
+                                MemberAccessExpression(
+                                    SyntaxKind.SimpleMemberAccessExpression,
+                                    IdentifierName(nameof(Marshal)),
+                                    GenericName(nameof(Marshal.GetDelegateForFunctionPointer))
+                                        .AddTypeArgumentListArguments(returnTypeInfo.TypeSyntax)))
+                            .AddArgumentListArguments(Argument(result)));
+                }
+                else
+                {
+                    yield return ReturnStatement(result);
+                }
             }
         }
 

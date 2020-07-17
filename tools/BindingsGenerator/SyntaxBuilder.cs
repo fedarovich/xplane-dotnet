@@ -165,7 +165,15 @@ namespace BindingsGenerator
                         IdentifierName(nameof(CallingConvention)),
                         IdentifierName(nameof(CallingConvention.Cdecl))));
 
-                yield return Argument(TypeOfExpression(returnTypeInfo.TypeSyntax));
+                if (returnTypeInfo.IsFunction)
+                {
+                    yield return Argument(TypeOfExpression(IntPtrName));
+                }
+                else
+                {
+                    yield return Argument(TypeOfExpression(returnTypeInfo.TypeSyntax));
+                }
+
                 foreach (var cppParameter in cppFunction.Parameters)
                 {
                     if (delegates.TryGetValue(cppParameter.Name, out _))
