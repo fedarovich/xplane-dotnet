@@ -36,7 +36,8 @@ namespace XP.SDK.Widgets
         }
 
 
-        protected StandardWidget(in Rect geometry, bool isVisible, string descriptor, bool isRoot, Widget? parent, WidgetClass @class) : base(isRoot, parent)
+        protected StandardWidget(in Rect geometry, string descriptor, bool isVisible, Widget? parent, bool isRoot, WidgetClass @class) 
+            : base(isRoot, parent)
         {
             var id = WidgetsAPI.CreateWidget(
                 geometry.Left,

@@ -48,7 +48,26 @@ namespace BindingsGenerator
             var project = workspace.AddProject(projectInfo);
 
             var typeMap = new TypeMap(BuildTypeCallback);
-            _enumBuilder = new EnumBuilder(workspace, projectId, outputDir, typeMap);
+            _enumBuilder = new EnumBuilder(workspace, projectId, outputDir, typeMap)
+                .Map("xpMainWindowStyle_MainWindow", "MainWindowType")
+                .Map("xpProperty_MainWindowType", "MainWindowProperty")
+                .Map("xpMessage_CloseButtonPushed", "MainWindowMessage")
+                .Map("xpSubWindowStyle_SubWindow", "SubWindowType")
+                .Map("xpProperty_SubWindowType", "SubWindowProperty")
+                .Map("xpPushButton", "ButtonType")
+                .Map("xpButtonBehaviorPushButton", "ButtonBehavior")
+                .Map("xpProperty_ButtonType", "ButtonProperty")
+                .Map("xpMsg_PushButtonPressed", "ButtonMessage")
+                .Map("xpTextEntryField", "TextFieldType")
+                .Map("xpProperty_EditFieldSelStart", "TextFieldProperty")
+                .Map("xpMsg_TextFieldChanged", "TextFieldMessage")
+                .Map("xpScrollBarTypeScrollBar", "ScrollBarType")
+                .Map("xpProperty_ScrollBarSliderPosition", "ScrollBarProperty")
+                .Map("xpMsg_ScrollBarSliderPositionChanged", "ScrollBarMessage")
+                .Map("xpProperty_CaptionLit", "CaptionProperty")
+                .Map("xpShip", "GeneralGraphicsType")
+                .Map("xpProperty_GeneralGraphicsType", "GeneralGraphicsProperty")
+                .Map("xpProperty_ProgressPosition", "ProgressBarProperty");
             _handleBuilder = new HandleBuilder(workspace, projectId, outputDir, typeMap);
             _delegateBuilder = new DelegateBuilder(workspace, projectId, outputDir, typeMap);
             _structBuilder = new StructBuilder(workspace, projectId, outputDir, typeMap);
@@ -64,7 +83,7 @@ namespace BindingsGenerator
                 throw new DirectoryNotFoundException($"Directory '{xpWidgetsHeadersPath}' does not exist.");
             var xpWidgetsHeaders = Directory.EnumerateFiles(xpWidgetsHeadersPath, "*.h");
             var headers = xmplHeaders.Concat(xpWidgetsHeaders)
-                .Where(x => Path.GetFileName(x) != "XPStandardWidgets.h");
+                /*.Where(x => Path.GetFileName(x) != "XPStandardWidgets.h")*/;
 
             var parserOptions = new CppParserOptions
             {

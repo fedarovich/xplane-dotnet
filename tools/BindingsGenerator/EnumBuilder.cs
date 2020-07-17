@@ -15,8 +15,16 @@ namespace BindingsGenerator
 {
     public class EnumBuilder : TypeBuilderBase<CppEnum>
     {
+        private readonly Dictionary<string, string> _memberToName = new Dictionary<string, string>();
+
         public EnumBuilder(AdhocWorkspace workspace, ProjectId projectId, string directory, TypeMap typeMap) : base(workspace, projectId, directory, typeMap)
         {
+        }
+
+        public EnumBuilder Map(string member, string nativeName)
+        {
+            _memberToName.Add(member, nativeName);
+            return this;
         }
 
         protected override MemberDeclarationSyntax BuildType(CppEnum cppType, string nativeName, string managedName)
@@ -41,8 +49,21 @@ namespace BindingsGenerator
             
             string PrettyItemName(string itemName)
             {
-                var parts = itemName[prefixLength..].Split("_");
-                return string.Concat(parts.Select(p => p[..1].ToUpperInvariant() + p[1..]));
+                var parts = itemName[prefixLength..].Split("_", StringSplitOptions.RemoveEmptyEntries);
+                var name = string.Concat(parts.Select(p => p[..1].ToUpperInvariant() + p[1..]));
+                if (name.StartsWith("XpMsg", StringComparison.OrdinalIgnoreCase))
+                {
+                    name = name["XpMsg".Length..];
+                }
+                else if (name.StartsWith("XpMessage", StringComparison.OrdinalIgnoreCase))
+                {
+                    name = name["XpMessage".Length..];
+                }
+                else if (name.StartsWith("XpProperty", StringComparison.OrdinalIgnoreCase))
+                {
+                    name = name["XpProperty".Length..];
+                }
+                return name;
             }
         }
 
@@ -50,6 +71,12 @@ namespace BindingsGenerator
         {
             if (!string.IsNullOrEmpty(cppEnum.Name))
                 return cppEnum.Name;
+
+            foreach (var member in cppEnum.Items.Select(e => e.Name))
+            {
+                if (_memberToName.TryGetValue(member, out var mappedName))
+                    return mappedName;
+            }
 
             var comment = cppEnum.Comment.ToString();
             if (string.IsNullOrEmpty(comment))
