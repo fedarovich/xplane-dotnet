@@ -6,6 +6,19 @@ using XP.SDK.Widgets.Internal;
 
 namespace XP.SDK.Widgets
 {
+    /// <summary>
+    /// A base class for creating custom widgets.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The inheritors must override <see cref="HandleMessage"/> method.
+    /// </para>
+    /// <para>
+    /// You can also create custom widgets by inheriting from <see cref="CustomWidgetEx"/>
+    /// which provides higher-level interface but has worse performance.
+    /// </para>
+    /// </remarks>
+    /// <seealso cref="CustomWidgetEx"/>
     public abstract class CustomWidget : Widget
     {
         private static readonly WidgetFuncCallback _customWidgetCallback;
@@ -36,7 +49,15 @@ namespace XP.SDK.Widgets
         }
 
 
-        protected CustomWidget(in Rect geometry, bool isVisible, string descriptor, bool isRoot, Widget? parent) : base(isRoot, parent)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomWidget"/> class.
+        /// </summary>
+        /// <param name="geometry">The widget geometry.</param>
+        /// <param name="descriptor">The widget descriptor.</param>
+        /// <param name="isVisible">The widget visibility.</param>
+        /// <param name="parent">The parent widget.</param>
+        /// <param name="isRoot">The value indicating whether this widget is a root one.</param>
+        protected CustomWidget(in Rect geometry, string descriptor, bool isVisible, Widget? parent, bool isRoot) : base(isRoot, parent)
         {
             var id = WidgetsAPI.CreateCustomWidget(
                 geometry.Left,
@@ -56,6 +77,13 @@ namespace XP.SDK.Widgets
             Register(this);
         }
 
+        /// <summary>
+        /// Handles widget messages.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="param1">The first message parameter.</param>
+        /// <param name="param2">The second message parameter.</param>
+        /// <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
         protected abstract bool HandleMessage(WidgetMessage message, IntPtr param1, IntPtr param2);
     }
 }

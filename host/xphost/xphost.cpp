@@ -44,6 +44,7 @@ PLUGIN_API int XPluginStart(
 {
     XPLMDebugString("[xphost] Loaded xphost." ENDL);
     XPLMEnableFeature("XPLM_USE_NATIVE_PATHS", 1);
+    XPLMEnableFeature("XPLM_USE_NATIVE_WIDGET_WINDOWS", 1);
 
     auto startup_path = get_startup_path().u8string();
     auto full_name = get_plugin_full_name().u8string();

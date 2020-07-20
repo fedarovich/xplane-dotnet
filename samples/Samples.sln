@@ -11,15 +11,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowSampleSilkNet", "Wind
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuSample", "MenuSample\MenuSample.csproj", "{4B1CBEA3-7AB2-4EE1-A443-034D94EB1B5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenALSharedSilkNet", "OpenALSharedSilkNet\OpenALSharedSilkNet.csproj", "{3E3F9144-4B0D-44AA-B182-C89E9F22E490}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenALSharedSilkNet", "OpenALSharedSilkNet\OpenALSharedSilkNet.csproj", "{3E3F9144-4B0D-44AA-B182-C89E9F22E490}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AudioHelpers", "AudioHelpers\AudioHelpers.shproj", "{25601E51-6DA6-4377-B081-B082D58B0DA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenALPrivateSilkNet", "OpenALPrivateSilkNet\OpenALPrivateSilkNet.csproj", "{F6397017-4308-462B-8D12-EDC6FF7609B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenALPrivateSilkNet", "OpenALPrivateSilkNet\OpenALPrivateSilkNet.csproj", "{F6397017-4308-462B-8D12-EDC6FF7609B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenALSharedOpenToolkit", "OpenALSharedOpenToolkit\OpenALSharedOpenToolkit.csproj", "{29996C64-1B7E-4923-BC79-277BCD2F2DCD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenALSharedOpenToolkit", "OpenALSharedOpenToolkit\OpenALSharedOpenToolkit.csproj", "{29996C64-1B7E-4923-BC79-277BCD2F2DCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenALPrivateOpenToolkit", "OpenALPrivateOpenToolkit\OpenALPrivateOpenToolkit.csproj", "{FF1D9C09-0D53-48A9-A6C3-39B983160E08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenALPrivateOpenToolkit", "OpenALPrivateOpenToolkit\OpenALPrivateOpenToolkit.csproj", "{FF1D9C09-0D53-48A9-A6C3-39B983160E08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WidgetsSample", "WidgetsSample\WidgetsSample.csproj", "{5CB3BCB9-96A3-42DA-929D-148350D53976}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -66,6 +68,10 @@ Global
 		{FF1D9C09-0D53-48A9-A6C3-39B983160E08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF1D9C09-0D53-48A9-A6C3-39B983160E08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF1D9C09-0D53-48A9-A6C3-39B983160E08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CB3BCB9-96A3-42DA-929D-148350D53976}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CB3BCB9-96A3-42DA-929D-148350D53976}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CB3BCB9-96A3-42DA-929D-148350D53976}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CB3BCB9-96A3-42DA-929D-148350D53976}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

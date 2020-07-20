@@ -4,6 +4,752 @@
         <name>XP.SDK</name>
     </assembly>
     <members>
+        <member name="T:XP.SDK.Widgets.Behavior">
+            <summary>
+            Provides a standard way to attach additional behavior to the widgets.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.Behavior.IsEnabled">
+            <summary>
+            Gets or sets the value indicating whether this behavior is enabled. If the behavior is disabled, it won't handle any messages from the widget.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Behavior.HandleMessageCore(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.WidgetID,System.IntPtr,System.IntPtr)">
+            <summary>
+            Low-level message handling routine.
+            </summary>
+            <remarks>
+            You should generally prefer overriding <see cref="M:XP.SDK.Widgets.Behavior.HandleMessage(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.Widget,System.IntPtr,System.IntPtr)"/> as it provides higher-level abstraction.
+            </remarks>
+            <param name="message">The message.</param>
+            <param name="widgetId">The widget ID.</param>
+            <param name="param1">The first message parameter.</param>
+            <param name="param2">The second message parameter.</param>
+            <returns>1 if the message was handled; 0 otherwise.</returns>
+            <seealso cref="M:XP.SDK.Widgets.Behavior.HandleMessage(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.Widget,System.IntPtr,System.IntPtr)"/>
+        </member>
+        <member name="M:XP.SDK.Widgets.Behavior.HandleMessage(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.Widget,System.IntPtr,System.IntPtr)">
+            <summary>
+            High-level message handling routine.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="widget">The widget.</param>
+            <param name="param1">The first message parameter.</param>
+            <param name="param2">The second message parameter.</param>
+            <returns><see langword="true" /> if the message was handled; <see langword="false" /> otherwise.</returns>
+            <seealso cref="M:XP.SDK.Widgets.Behavior.HandleMessageCore(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.WidgetID,System.IntPtr,System.IntPtr)"/>
+        </member>
+        <member name="T:XP.SDK.Widgets.BehaviorCollection">
+            <summary>
+            Contains the list of <see cref="T:XP.SDK.Widgets.Behavior"/>s attached to the widget.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.BehaviorCollection.Add(XP.SDK.Widgets.Behavior)">
+            <summary>
+            Adds a behavior.
+            </summary>
+            <param name="behavior">The behavior to add.</param>
+            <returns>This <see cref="T:XP.SDK.Widgets.BehaviorCollection"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="behavior"/> is <see langword="null"/>.</exception>
+        </member>
+        <member name="M:XP.SDK.Widgets.BehaviorCollection.Add``1">
+            <summary>
+            Adds a behavior.
+            </summary>
+            <typeparam name="T">The type of the behavior to add.</typeparam>
+            <returns>This <see cref="T:XP.SDK.Widgets.BehaviorCollection"/>.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.BehaviorCollection.GetOrAdd``1">
+            <summary>
+            Returns a behavior of type <typeparamref name="T"/> if it exists or creates and adds a new instance otherwise.
+            </summary>
+            <typeparam name="T">The type of the behavior to get or add.</typeparam>
+        </member>
+        <member name="M:XP.SDK.Widgets.BehaviorCollection.GetEnumerator">
+            <inheritdoc cref="M:System.Collections.Generic.IEnumerable`1.GetEnumerator" />
+        </member>
+        <member name="M:XP.SDK.Widgets.BehaviorCollection.System#Collections#IEnumerable#GetEnumerator">
+            <inheritdoc cref="M:System.Collections.IEnumerable.GetEnumerator" />
+        </member>
+        <member name="T:XP.SDK.Widgets.Behaviors.CommonEventsBehavior">
+            <summary>
+            Provides .Net events for all common widget messages.
+            </summary>
+            <seealso cref="T:XP.SDK.Widgets.WidgetExtensions"/>
+        </member>
+        <member name="M:XP.SDK.Widgets.Behaviors.CommonEventsBehavior.HandleMessage(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.Widget,System.IntPtr,System.IntPtr)">
+            <inheritdoc />
+        </member>
+        <member name="T:XP.SDK.Widgets.Behaviors.DefocusKeyboardBehavior">
+            <summary>
+            This causes a click in the widget to send keyboard focus back to X-Plane.
+            This stops editing of any text fields, etc.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Behaviors.DefocusKeyboardBehavior.#ctor">
+            <summary>
+            Initializes a new instance.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Behaviors.DefocusKeyboardBehavior.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance.
+            </summary>
+            <param name="eatClicks">Specifies whether clicks in the background should be consumed by bringing the window to the foreground.</param>
+        </member>
+        <member name="P:XP.SDK.Widgets.Behaviors.DefocusKeyboardBehavior.EatClicks">
+            <summary>
+            Gets or sets the value indicating whether clicks in the background should be consumed by bringing the window to the foreground.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Behaviors.DefocusKeyboardBehavior.HandleMessageCore(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.WidgetID,System.IntPtr,System.IntPtr)">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.Widgets.Behaviors.DefocusKeyboardBehavior.HandleMessage(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.Widget,System.IntPtr,System.IntPtr)">
+            <inheritdoc />
+        </member>
+        <member name="T:XP.SDK.Widgets.Behaviors.DragWidgetBehavior">
+            <summary>
+            Drags the widget in response to mouse clicks.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Behaviors.DragWidgetBehavior.#ctor">
+            <summary>
+            Initializes a new instance.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Behaviors.DragWidgetBehavior.#ctor(XP.SDK.Rect@)">
+            <summary>
+            Initializes a new instance.
+            </summary>
+            <param name="dragRegion">The global coordinates of the drag region, which might be a sub-region of your widget (for example, a title bar).</param>
+        </member>
+        <member name="P:XP.SDK.Widgets.Behaviors.DragWidgetBehavior.DragRegion">
+            <summary>
+            Gets or sets the global coordinates of the drag region, which might be a sub-region of your widget (for example, a title bar).
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Behaviors.DragWidgetBehavior.HandleMessageCore(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.WidgetID,System.IntPtr,System.IntPtr)">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.Widgets.Behaviors.DragWidgetBehavior.HandleMessage(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.Widget,System.IntPtr,System.IntPtr)">
+            <inheritdoc />
+        </member>
+        <member name="T:XP.SDK.Widgets.Behaviors.FixedLayoutBehavior">
+            <summary>
+            Causes the widget to maintain its children in fixed position relative to itself as it is resized. Use this on the top level 'window' widget for your window.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.Behaviors.FixedLayoutBehavior.Shared">
+            <summary>
+            Gets a shared instance of <see cref="T:XP.SDK.Widgets.Behaviors.FixedLayoutBehavior"/>.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Behaviors.FixedLayoutBehavior.HandleMessageCore(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.WidgetID,System.IntPtr,System.IntPtr)">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.Widgets.Behaviors.FixedLayoutBehavior.HandleMessage(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.Widget,System.IntPtr,System.IntPtr)">
+            <inheritdoc />
+        </member>
+        <member name="T:XP.SDK.Widgets.Behaviors.SelectIfNeededBehavior">
+            <summary>
+            Causes the widget to bring its window to the foreground if it is not already.
+            <see cref="P:XP.SDK.Widgets.Behaviors.SelectIfNeededBehavior.EatClicks"/> specifies whether clicks in the background should be consumed by bringing the window to the foreground.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Behaviors.SelectIfNeededBehavior.#ctor">
+            <summary>
+            Initializes a new instance.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Behaviors.SelectIfNeededBehavior.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance.
+            </summary>
+            <param name="eatClicks">Specifies whether clicks in the background should be consumed by bringing the window to the foreground.</param>
+        </member>
+        <member name="P:XP.SDK.Widgets.Behaviors.SelectIfNeededBehavior.EatClicks">
+            <summary>
+            Gets or sets the value indicating whether clicks in the background should be consumed by bringing the window to the foreground.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Behaviors.SelectIfNeededBehavior.HandleMessageCore(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.WidgetID,System.IntPtr,System.IntPtr)">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.Widgets.Behaviors.SelectIfNeededBehavior.HandleMessage(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.Widget,System.IntPtr,System.IntPtr)">
+            <inheritdoc />
+        </member>
+        <member name="T:XP.SDK.Widgets.Button">
+            <summary>
+            Represents a button, check box or radio button.
+            </summary>
+            <remarks>
+            <para>
+            The button class provides a number of different button styles and
+            behaviors, including push buttons, radio buttons, check boxes, etc. The
+            button label appears on or next to the button depending on the button's
+            appearance, or type.
+            </para>
+            <para>
+            The button's behavior is a separate property that dictates who it hilights
+            and what kinds of messages it sends. Since behavior and type are different,
+            you can do strange things like make check boxes that act as push buttons or
+            push buttons with radio button behavior.
+            </para>
+            </remarks>
+        </member>
+        <member name="F:XP.SDK.Widgets.Button.Class">
+            <summary>
+            The button class.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Button.#ctor(XP.SDK.Rect@,System.String,System.Boolean,XP.SDK.Widgets.Widget,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XP.SDK.Widgets.Button"/> class.
+            </summary>
+            <param name="geometry">The widget geometry.</param>
+            <param name="descriptor">The widget descriptor.</param>
+            <param name="isVisible">The widget visibility.</param>
+            <param name="parent">The parent widget.</param>
+            <param name="isRoot">The value indicating whether this widget is a root one.</param>
+        </member>
+        <member name="P:XP.SDK.Widgets.Button.Type">
+            <summary>
+            Gets or sets the button type.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.Button.ButtonBehavior">
+            <summary>
+            Gets or sets the button behavior.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.Button.IsChecked">
+            <summary>
+            Gets or sets the value indicating whether the button is checked.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Button.HandleMessage(XP.SDK.Widgets.WidgetMessage,System.IntPtr,System.IntPtr)">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.Widgets.Button.OnPressed">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.ButtonMessage.PushButtonPressed"/> message.
+            </summary>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.Button.OnIsCheckedChanged(System.Boolean)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.ButtonMessage.ButtonStateChanged"/> message.
+            </summary>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="E:XP.SDK.Widgets.Button.Pressed">
+            <summary>
+            Raised when a user completes a click and release in a button with <see cref="F:XP.SDK.Widgets.ButtonBehavior.PushButton"/> button behavior.
+            </summary>
+        </member>
+        <member name="E:XP.SDK.Widgets.Button.IsCheckedChanged">
+            <summary>
+            Raised when a button that has <see cref="F:XP.SDK.Widgets.ButtonBehavior.CheckBox"/> or <see cref="F:XP.SDK.Widgets.ButtonBehavior.RadioButton"/> behavior
+            is click and its value changes.
+            </summary>
+            <remarks>
+            If the value changes by setting <see cref="P:XP.SDK.Widgets.Button.IsChecked"/> property, this event won't be raised.
+            </remarks>
+        </member>
+        <member name="T:XP.SDK.Widgets.ButtonBehavior">
+            <summary>
+            <para>
+            Button Behavior Values
+            </para>
+            <para>
+            These define how the button responds to mouse clicks.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.ButtonMessage">
+            <summary>
+            <para>
+            Button Messages
+            </para>
+            <para>
+            These messages are sent by the button to itself and then up the widget
+            chain when the button is clicked. (You may intercept them by providing a
+            widget handler for the button itself or by providing a handler in a parent
+            widget.)
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.ButtonProperty">
+            <summary>
+            <para>
+            Button Properties
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.ButtonType">
+            <summary>
+            <para>
+            Button Types
+            </para>
+            <para>
+            These define the visual appearance of buttons but not how they respond to
+            the mouse.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.Caption">
+            <summary>
+            A caption is a simple widget that shows its descriptor as a string, useful
+            for labeling parts of a window. It always shows its descriptor as its
+            string and is otherwise transparent.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.Widgets.Caption.Class">
+            <summary>
+            The caption class.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Caption.#ctor(XP.SDK.Rect@,System.String,System.Boolean,XP.SDK.Widgets.Widget,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XP.SDK.Widgets.Caption"/> class.
+            </summary>
+            <param name="geometry">The widget geometry.</param>
+            <param name="descriptor">The widget descriptor.</param>
+            <param name="isVisible">The widget visibility.</param>
+            <param name="parent">The parent widget.</param>
+            <param name="isRoot">The value indicating whether this widget is a root one.</param>
+        </member>
+        <member name="P:XP.SDK.Widgets.Caption.IsLit">
+            <summary>
+            Gets or sets the value indicating whether the caption is lit.
+            </summary>
+            <remarks>Use lit captions against screens.</remarks>
+        </member>
+        <member name="T:XP.SDK.Widgets.CaptionProperty">
+            <summary>
+            <para>
+            Caption Properties
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.CheckBox">
+            <summary>
+            Represent a check box.
+            </summary>
+            <remarks>
+            <para>The <see cref="P:XP.SDK.Widgets.CheckBox.Type"/> property is forced to be <see cref="F:XP.SDK.Widgets.ButtonType.RadioButton"/>.</para>
+            <para>The <see cref="P:XP.SDK.Widgets.CheckBox.ButtonBehavior"/> property is forced to be <see cref="F:XP.SDK.Widgets.ButtonBehavior.CheckBox"/>.</para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.Widgets.CheckBox.#ctor(XP.SDK.Rect@,System.String,System.Boolean,XP.SDK.Widgets.Widget,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XP.SDK.Widgets.CheckBox"/> class.
+            </summary>
+            <param name="geometry">The widget geometry.</param>
+            <param name="descriptor">The widget descriptor.</param>
+            <param name="isVisible">The widget visibility.</param>
+            <param name="parent">The parent widget.</param>
+            <param name="isRoot">The value indicating whether this widget is a root one.</param>
+        </member>
+        <member name="P:XP.SDK.Widgets.CheckBox.Type">
+            <inheritdoc />
+        </member>
+        <member name="P:XP.SDK.Widgets.CheckBox.ButtonBehavior">
+            <inheritdoc />
+        </member>
+        <member name="T:XP.SDK.Widgets.CustomWidget">
+            <summary>
+            A base class for creating custom widgets.
+            </summary>
+            <remarks>
+            <para>
+            The inheritors must override <see cref="M:XP.SDK.Widgets.CustomWidget.HandleMessage(XP.SDK.Widgets.WidgetMessage,System.IntPtr,System.IntPtr)"/> method.
+            </para>
+            <para>
+            You can also create custom widgets by inheriting from <see cref="T:XP.SDK.Widgets.CustomWidgetEx"/>
+            which provides higher-level interface but has worse performance.
+            </para>
+            </remarks>
+            <seealso cref="T:XP.SDK.Widgets.CustomWidgetEx"/>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidget.#ctor(XP.SDK.Rect@,System.String,System.Boolean,XP.SDK.Widgets.Widget,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XP.SDK.Widgets.CustomWidget"/> class.
+            </summary>
+            <param name="geometry">The widget geometry.</param>
+            <param name="descriptor">The widget descriptor.</param>
+            <param name="isVisible">The widget visibility.</param>
+            <param name="parent">The parent widget.</param>
+            <param name="isRoot">The value indicating whether this widget is a root one.</param>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidget.HandleMessage(XP.SDK.Widgets.WidgetMessage,System.IntPtr,System.IntPtr)">
+            <summary>
+            Handles widget messages.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="param1">The first message parameter.</param>
+            <param name="param2">The second message parameter.</param>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="T:XP.SDK.Widgets.CustomWidgetEx">
+            <summary>
+            A base class for creating custom widgets.
+            </summary>
+            <remarks>
+            <para>
+            The inheritors should override the virtual methods for the message they actually need.
+            </para>
+            <para>
+            You can also create custom widgets by inheriting from <see cref="T:XP.SDK.Widgets.CustomWidget"/>
+            which provides lower-level interface but has better performance.
+            </para>
+            </remarks>
+            <seealso cref="T:XP.SDK.Widgets.CustomWidget"/>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.#ctor(XP.SDK.Rect@,System.String,System.Boolean,XP.SDK.Widgets.Widget,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XP.SDK.Widgets.CustomWidgetEx"/> class.
+            </summary>
+            <param name="geometry">The widget geometry.</param>
+            <param name="descriptor">The widget descriptor.</param>
+            <param name="isVisible">The widget visibility.</param>
+            <param name="parent">The parent widget.</param>
+            <param name="isRoot">The value indicating whether this widget is a root one.</param>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.HandleMessage(XP.SDK.Widgets.WidgetMessage,System.IntPtr,System.IntPtr)">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnCreated(System.Boolean)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.Create"/> message.
+            </summary>
+            <remarks>
+            <para>
+            The create message is sent once per widget that is created with your widget function and once
+            for any widget that has your widget function attached.
+            </para>
+            <para>Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.Direct"/></para>
+            </remarks>
+            <param name="isSubclass"><see langword="true"/> if you are being added as a subclass, <see langword="false"/> if the widget is first being created.</param>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnDestroyed(System.Boolean)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.Destroy"/> message.
+            </summary>
+            <remarks>
+            <para>The destroy message is sent once for each message that is destroyed that has your widget function.</para>
+            <para>Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.DirectAllCallbacks"/></para>
+            </remarks>
+            <param name="recursive"><see langword="true"/> if being deleted by a recursive delete to the parent, <see langword="false"/> for explicit deletion.</param>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnPaint">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.Paint"/> message.
+            </summary>
+            <remarks>
+            <para>
+            The paint message is sent to your widget to draw itself. The paint message is the bare-bones
+            message; in response you must draw yourself, draw your children, set up clipping and culling,
+            check for visibility, etc. If you don't want to do all of this, ignore the paint message and
+            a draw message (see below) will be sent to you.
+            </para>
+            <para>Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.Direct"/></para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnDraw">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.Draw"/> message.
+            </summary>
+            <remarks>
+            <para>
+            The draw message is sent to your widget when it is time to draw yourself. OpenGL will be set up
+            to draw in 2-d global screen coordinates, but you should use the XPLM to set up OpenGL state.
+            </para>
+            <para>Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.Direct"/></para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnKeyPress(XP.SDK.Widgets.Internal.KeyState@)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.KeyPress"/> message.
+            </summary>
+            <remarks>
+            <para>
+            The key press message is sent once per key that is pressed. The first parameter is the type of key
+            code (integer or char) and the second is the code itself. By handling this event, you consume the
+            key stroke.
+            </para>
+            <para>Handling this message 'consumes' the keystroke; not handling it passes it to your parent widget.</para>
+            <para>Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.UpChain"/></para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnTakingFocus(System.Boolean)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.KeyTakeFocus"/> message.
+            </summary>
+            <remarks>
+            <para>
+            Keyboard focus is being given to you. By handling this message you accept keyboard focus. 
+            </para>
+            <para>Handling this message accepts focus; not handling refuses focus.</para>
+            <para>Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.Direct"/></para>
+            </remarks>
+            <param name="fromChild"><see langword="true"/> if a child of yours gave up focus to you; <see langword="false"/> if someone set focus on you explicitly.</param>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnLostFocus(System.Boolean)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.KeyLoseFocus"/> message.
+            </summary>
+            <remarks>
+            <para>
+            Keyboard focus is being taken away from you.
+            </para>
+            <para>Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.Direct"/></para>
+            </remarks>
+            <param name="takenByOtherWidget"><see langword="true"/> if focus is being taken by another widget; <see langword="false"/> if code requested to remove focus.</param>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnMouseDown(XP.SDK.Widgets.Internal.MouseState@)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.MouseDown"/> message.
+            </summary>
+            <remarks>
+            <para>
+            You receive one mousedown event per click.
+            </para>
+            <para>
+            By accepting this you eat the click, otherwise your parent gets it. You will not receive drag and
+            mouse up messages if you do not accept the down message.
+            </para>
+            <para>
+            Handling this message consumes the mouse click, not handling it passes it to the next widget.
+            You can act 'transparent' as a window by never handling mouse clicks to certain areas.
+            </para>
+            <para>
+            Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.UpChain"/>. NOTE: Technically this is direct dispatched, but the widgets library will shop
+            it to each widget until one consumes the click, making it effectively "up chain".
+            </para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnMouseDrag(XP.SDK.Widgets.Internal.MouseState@)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.MouseDrag"/> message.
+            </summary>
+            <remarks>
+            <para>
+            You receive a series of mouse drag messages (typically one per frame in the sim) as the mouse is
+            moved once you have accepted a <see cref="F:XP.SDK.Widgets.WidgetMessage.MouseDown"/> message.
+            You will continue to receive these until the mouse button is released.
+            You may receive multiple mouse state messages with the same mouse position. You will receive mouse
+            drag events even if the mouse is dragged out of your current or original bounds at the time of the
+            mouse down.
+            </para>
+            <para>Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.Direct"/>.</para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnMouseUp(XP.SDK.Widgets.Internal.MouseState@)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.MouseUp"/> message.
+            </summary>
+            <remarks>
+            <para>
+            The mouseup event is sent once when the mouse button is released after a drag or click. You only
+            receive this message if you accept the <see cref="F:XP.SDK.Widgets.WidgetMessage.MouseDown"/> message.
+            </para>
+            <para>
+            Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.Direct"/>.
+            </para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnReshape(XP.SDK.Widgets.Widget,XP.SDK.Widgets.Internal.WidgetGeometryChange@)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.Reshape"/> message.
+            </summary>
+            <remarks>
+            <para>
+            Your geometry or a child's geometry is being changed.
+            </para>
+            <para>
+            Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.UpChain"/>.
+            </para>
+            </remarks>
+            <param name="originalWidget">The reshaped widget.</param>
+            <param name="change">The change.</param>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnExposedChanged">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.ExposedChanged"/> message.
+            </summary>
+            <remarks>
+            <para>
+            Your exposed area has changed.
+            </para>
+            <para>
+            Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.Direct"/>.
+            </para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnChildAdded(XP.SDK.Widgets.Widget)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.AcceptChild"/> message.
+            </summary>
+            <remarks>
+            <para>
+            A child has been added to you.
+            </para>
+            <para>
+            Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.Direct"/>.
+            </para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnChildRemoved(XP.SDK.Widgets.Widget)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.LoseChild"/> message.
+            </summary>
+            <remarks>
+            <para>
+            A child has been removed from to you.
+            </para>
+            <para>
+            Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.Direct"/>.
+            </para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnParentChanged(XP.SDK.Widgets.Widget)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.AcceptParent"/> message.
+            </summary>
+            <remarks>
+            <para>
+            You now have a new parent, or have no parent.
+            </para>
+            <para>
+            Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.Direct"/>.
+            </para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnShown(XP.SDK.Widgets.Widget)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.Shown"/> message.
+            </summary>
+            <remarks>
+            <para>
+            You or a child has been shown. 
+            </para>
+            <para>
+            Note that this does not include you being shown because your parent
+            was shown, you were put in a new parent, your root was shown, etc.
+            </para>
+            <para>
+            Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.UpChain"/>.
+            </para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnHidden(XP.SDK.Widgets.Widget)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.Hidden"/> message.
+            </summary>
+            <remarks>
+            <para>
+            You have been hidden.
+            </para>
+            <para>
+            Note that this does not include you being hidden because your parent
+            was hidden, you were put in a new parent, your root was hidden, etc.
+            </para>
+            <para>
+            Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.UpChain"/>.
+            </para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnDescriptorChanged">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.DescriptorChanged"/> message.
+            </summary>
+            <remarks>
+            <para>
+            Your descriptor has changed.
+            </para>
+            <para>
+            Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.Direct"/>.
+            </para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnPropertyChanged(System.Int32,System.IntPtr)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.PropertyChanged"/> message.
+            </summary>
+            <remarks>
+            <para>
+            A property has changed.
+            </para>
+            <para>
+            Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.Direct"/>.
+            </para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnMouseWheel(XP.SDK.Widgets.Internal.MouseState@)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.MouseWheel"/> message.
+            </summary>
+            <remarks>
+            <para>
+            The mouse wheel has moved.
+            </para>
+            <para>
+            Return <see langword="true"/> to consume the mouse wheel move, or <see langword="false"/> to pass the message to a parent.
+            </para>
+            <para>
+            Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.UpChain"/>.
+            </para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnCursorAdjust(XP.SDK.Widgets.Internal.MouseState@,XP.SDK.XPLM.CursorStatus@)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.CursorAdjust"/> message.
+            </summary>
+            <remarks>
+            <para>
+            The cursor is over your widget. If you consume this message, change the <paramref name="cursorStatus"/>
+            value to indicate the desired result.
+            </para>
+            <para>
+            Return <see langword="true"/> to consume this message, or <see langword="false"/> to pass the message to a parent.
+            </para>
+            <para>
+            Dispatching: <see cref="F:XP.SDK.Widgets.DispatchMode.UpChain"/>.
+            </para>
+            </remarks>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.CustomWidgetEx.OnCustomMessage(System.Int32,System.IntPtr,System.IntPtr)">
+            <summary>
+            Handles custom messages.
+            </summary>
+            <param name="message">The message ID.</param>
+            <param name="param1">The first message parameter.</param>
+            <param name="param2">The second message parameter.</param>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
         <member name="T:XP.SDK.Widgets.DispatchMode">
             <summary>
             <para>
@@ -26,6 +772,152 @@
             </para>
             <para>
             Scalable Axis Required Background
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.WidgetEventHandler`1">
+            <summary>
+            Generic event handler for widget message with no parameters.
+            </summary>
+            <typeparam name="TWidget">The widget type.</typeparam>
+            <param name="sender">The sender.</param>
+            <param name="handled"><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</param>
+        </member>
+        <member name="T:XP.SDK.Widgets.WidgetValueEventHandler`2">
+            <summary>
+            Generic event handler for widget message with one argument passed by value.
+            </summary>
+            <typeparam name="TWidget">The widget type.</typeparam>
+            <typeparam name="TArgs">The argument type.</typeparam>
+            <param name="sender">The sender.</param>
+            <param name="args">The argument.</param>
+            <param name="handled"><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</param>
+        </member>
+        <member name="T:XP.SDK.Widgets.WidgetInEventHandler`2">
+            <summary>
+            Generic event handler for widget message with one argument passed by read-only reference.
+            </summary>
+            <typeparam name="TWidget">The widget type.</typeparam>
+            <typeparam name="TArgs">The argument type.</typeparam>
+            <param name="sender">The sender.</param>
+            <param name="args">The argument.</param>
+            <param name="handled"><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</param>
+        </member>
+        <member name="T:XP.SDK.Widgets.WidgetRefEventHandler`2">
+            <summary>
+            Generic event handler for widget message with one argument passed by reference.
+            </summary>
+            <typeparam name="TWidget">The widget type.</typeparam>
+            <typeparam name="TArgs">The argument type.</typeparam>
+            <param name="sender">The sender.</param>
+            <param name="args">The argument.</param>
+            <param name="handled"><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</param>
+        </member>
+        <member name="T:XP.SDK.Widgets.WidgetCreatedEventHandler`1">
+            <summary>
+            Event handler for <see cref="F:XP.SDK.Widgets.WidgetMessage.Create"/> message.
+            </summary>
+            <typeparam name="TWidget">The widget type.</typeparam>
+            <param name="sender">The sender.</param>
+            <param name="isSubclass"><see langword="true"/> if you are being added as a subclass, <see langword="false"/> if the widget is first being created.</param>
+            <param name="handled"><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</param>
+        </member>
+        <member name="T:XP.SDK.Widgets.WidgetDestroyedEventHandler`1">
+            <summary>
+            Event handler for <see cref="F:XP.SDK.Widgets.WidgetMessage.Destroy"/> message.
+            </summary>
+            <typeparam name="TWidget">The widget type.</typeparam>
+            <param name="sender">The sender.</param>
+            <param name="isRecursive"><see langword="true"/> if being deleted by a recursive delete to the parent, <see langword="false"/> for explicit deletion.</param>
+            <param name="handled"><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</param>
+        </member>
+        <member name="T:XP.SDK.Widgets.WidgetTakingFocusEventHandler`1">
+            <summary>
+            Event handler for <see cref="F:XP.SDK.Widgets.WidgetMessage.KeyTakeFocus"/> message.
+            </summary>
+            <typeparam name="TWidget">The widget type.</typeparam>
+            <param name="sender">The sender.</param>
+            <param name="fromChild"><see langword="true"/> if a child of yours gave up focus to you; <see langword="false"/> if someone set focus on you explicitly.</param>
+            <param name="handled"><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</param>
+        </member>
+        <member name="T:XP.SDK.Widgets.WidgetLostFocusEventHandler`1">
+            <summary>
+            Event handler for <see cref="F:XP.SDK.Widgets.WidgetMessage.KeyLoseFocus"/> message.
+            </summary>
+            <typeparam name="TWidget">The widget type.</typeparam>
+            <param name="sender">The sender.</param>
+            <param name="takenByOtherWidget"><see langword="true"/> if focus is being taken by another widget; <see langword="false"/> if code requested to remove focus.</param>
+            <param name="handled"><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</param>
+        </member>
+        <member name="T:XP.SDK.Widgets.WidgetReshapeEventHandler`1">
+            <summary>
+            Event handler for <see cref="F:XP.SDK.Widgets.WidgetMessage.Reshape"/> message.
+            </summary>
+            <typeparam name="TWidget">The widget type.</typeparam>
+            <param name="sender">The sender.</param>
+            <param name="originalWidget">The reshaped widget.</param>
+            <param name="change">The change.</param>
+            <param name="handled"><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</param>
+        </member>
+        <member name="T:XP.SDK.Widgets.WidgetPropertyChangeEventHandler`1">
+            <summary>
+            Event handler for <see cref="F:XP.SDK.Widgets.WidgetMessage.PropertyChanged"/> message.
+            </summary>
+            <typeparam name="TWidget">The widget type.</typeparam>
+            <param name="sender">The sender.</param>
+            <param name="propertyId">The property ID.</param>
+            <param name="newValue">The new property value.</param>
+            <param name="handled"><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</param>
+        </member>
+        <member name="T:XP.SDK.Widgets.WidgetCursorAdjustEventHandler`1">
+            <summary>
+            Event handler for <see cref="F:XP.SDK.Widgets.WidgetMessage.PropertyChanged"/> message.
+            </summary>
+            <typeparam name="TWidget">The widget type.</typeparam>
+            <param name="sender">The sender.</param>
+            <param name="mouseState">The mouse state.</param>
+            <param name="cursorStatus">The cursor.</param>
+            <param name="handled"><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</param>
+        </member>
+        <member name="T:XP.SDK.Widgets.GeneralGraphics">
+            <summary>
+            The general graphics widget can show one of many icons available from X-Plane.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.Widgets.GeneralGraphics.Class">
+            <summary>
+            The general graphics class.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.GeneralGraphics.#ctor(XP.SDK.Rect@,System.String,System.Boolean,XP.SDK.Widgets.Widget,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XP.SDK.Widgets.GeneralGraphics"/> class.
+            </summary>
+            <param name="geometry">The widget geometry.</param>
+            <param name="descriptor">The widget descriptor.</param>
+            <param name="isVisible">The widget visibility.</param>
+            <param name="parent">The parent widget.</param>
+            <param name="isRoot">The value indicating whether this widget is a root one.</param>
+        </member>
+        <member name="P:XP.SDK.Widgets.GeneralGraphics.Type">
+            <summary>
+            Gets or sets the general graphics type.
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.GeneralGraphicsProperty">
+            <summary>
+            <para>
+            General Graphics Properties
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.GeneralGraphicsType">
+            <summary>
+            <para>
+            General Graphics Types Values
+            </para>
+            <para>
+            These define the icon for the general graphics.
             </para>
             </summary>
         </member>
@@ -636,6 +1528,469 @@
             </para>
             </summary>
         </member>
+        <member name="T:XP.SDK.Widgets.IWidgetCollection">
+            <summary>
+            The interface for a collection of child <see cref="T:XP.SDK.Widgets.Widget"/>s.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.IWidgetCollection.Add(XP.SDK.Widgets.Widget)">
+            <summary>
+            Adds a widget.
+            </summary>
+            <param name="widget">The widget to add.</param>
+        </member>
+        <member name="M:XP.SDK.Widgets.IWidgetCollection.Remove(XP.SDK.Widgets.Widget)">
+            <summary>
+            Removes the widget.
+            </summary>
+            <param name="widget">The widget to remove.</param>
+        </member>
+        <member name="T:XP.SDK.Widgets.MainWindow">
+            <summary>
+            The main window widget class provides a "window" as the user knows it.
+            These windows are draggable and can be selected. Use them to create floating
+            windows and non-modal dialogs.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.Widgets.MainWindow.Class">
+            <summary>
+            The main window class.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.MainWindow.#ctor(XP.SDK.Rect@,System.Boolean,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XP.SDK.Widgets.MainWindow"/> class.
+            </summary>
+            <param name="geometry">The widget geometry.</param>
+            <param name="descriptor">The widget descriptor.</param>
+            <param name="isVisible">The widget visibility.</param>
+        </member>
+        <member name="P:XP.SDK.Widgets.MainWindow.Type">
+            <summary>
+            Gets or sets the main window type.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.MainWindow.HasCloseBoxes">
+            <summary>
+            Gets or sets the value indicating whether the main window has close boxes in its corners.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.MainWindow.HandleMessage(XP.SDK.Widgets.WidgetMessage,System.IntPtr,System.IntPtr)">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.Widgets.MainWindow.OnCloseButtonPushed">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.MainWindowMessage.CloseButtonPushed"/> message.
+            </summary>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="E:XP.SDK.Widgets.MainWindow.CloseButtonPushed">
+            <summary>
+            Raised when the close buttons are pressed for your window. 
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.MainWindowMessage">
+            <summary>
+            <para>
+            MainWindow Messages
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.MainWindowProperty">
+            <summary>
+            <para>
+            Main Window Properties
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.MainWindowType">
+            <summary>
+            <para>
+            Main Window Type Values
+            </para>
+            <para>
+            These type values are used to control the appearance of a main window.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.ProgressBar">
+            <summary>
+            This widget implements a progress indicator as seen when X-Plane starts up.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.Widgets.ProgressBar.Class">
+            <summary>
+            The progress bar class.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.ProgressBar.#ctor(XP.SDK.Rect@,System.String,System.Boolean,XP.SDK.Widgets.Widget,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XP.SDK.Widgets.ProgressBar"/> class.
+            </summary>
+            <param name="geometry">The widget geometry.</param>
+            <param name="descriptor">The widget descriptor.</param>
+            <param name="isVisible">The widget visibility.</param>
+            <param name="parent">The parent widget.</param>
+            <param name="isRoot">The value indicating whether this widget is a root one.</param>
+        </member>
+        <member name="P:XP.SDK.Widgets.ProgressBar.Value">
+            <summary>
+            Gets or sets the current value.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.ProgressBar.MinValue">
+            <summary>
+            Gets or sets the minimal value.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.ProgressBar.MaxValue">
+            <summary>
+            Gets or sets the maximal value.
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.ProgressBarProperty">
+            <summary>
+            <para>
+            Progress Indicator Properties
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.PushButton">
+            <summary>
+            Represent a push button.
+            </summary>
+            <remarks>
+            <para>The <see cref="P:XP.SDK.Widgets.PushButton.Type"/> property is forced to be <see cref="F:XP.SDK.Widgets.ButtonType.PushButton"/>.</para>
+            <para>The <see cref="P:XP.SDK.Widgets.PushButton.ButtonBehavior"/> property is forced to be <see cref="F:XP.SDK.Widgets.ButtonBehavior.PushButton"/>.</para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.Widgets.PushButton.#ctor(XP.SDK.Rect@,System.String,System.Boolean,XP.SDK.Widgets.Widget,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XP.SDK.Widgets.PushButton"/> class.
+            </summary>
+            <param name="geometry">The widget geometry.</param>
+            <param name="descriptor">The widget descriptor.</param>
+            <param name="isVisible">The widget visibility.</param>
+            <param name="parent">The parent widget.</param>
+            <param name="isRoot">The value indicating whether this widget is a root one.</param>
+        </member>
+        <member name="P:XP.SDK.Widgets.PushButton.Type">
+            <inheritdoc />
+        </member>
+        <member name="P:XP.SDK.Widgets.PushButton.ButtonBehavior">
+            <inheritdoc />
+        </member>
+        <member name="T:XP.SDK.Widgets.RadioButton">
+            <summary>
+            Represent a radio button.
+            </summary>
+            <remarks>
+            <para>The <see cref="P:XP.SDK.Widgets.RadioButton.Type"/> property is forced to be <see cref="F:XP.SDK.Widgets.ButtonType.RadioButton"/>.</para>
+            <para>The <see cref="P:XP.SDK.Widgets.RadioButton.ButtonBehavior"/> property is forced to be <see cref="F:XP.SDK.Widgets.ButtonBehavior.RadioButton"/>.</para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.Widgets.RadioButton.#ctor(XP.SDK.Rect@,System.String,System.Boolean,XP.SDK.Widgets.Widget,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XP.SDK.Widgets.RadioButton"/> class.
+            </summary>
+            <param name="geometry">The widget geometry.</param>
+            <param name="descriptor">The widget descriptor.</param>
+            <param name="isVisible">The widget visibility.</param>
+            <param name="parent">The parent widget.</param>
+            <param name="isRoot">The value indicating whether this widget is a root one.</param>
+        </member>
+        <member name="P:XP.SDK.Widgets.RadioButton.Type">
+            <inheritdoc />
+        </member>
+        <member name="P:XP.SDK.Widgets.RadioButton.ButtonBehavior">
+            <inheritdoc />
+        </member>
+        <member name="T:XP.SDK.Widgets.ScrollBar">
+            <summary>
+            A standard scroll bar or slider control. The scroll bar has a minimum,
+            maximum and current value that is updated when the user drags it.The
+            scroll bar sends continuous messages as it is dragged.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.Widgets.ScrollBar.Class">
+            <summary>
+            The scroll bar class.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.ScrollBar.#ctor(XP.SDK.Rect@,System.String,System.Boolean,XP.SDK.Widgets.Widget,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XP.SDK.Widgets.ScrollBar"/> class.
+            </summary>
+            <param name="geometry">The widget geometry.</param>
+            <param name="descriptor">The widget descriptor.</param>
+            <param name="isVisible">The widget visibility.</param>
+            <param name="parent">The parent widget.</param>
+            <param name="isRoot">The value indicating whether this widget is a root one.</param>
+        </member>
+        <member name="P:XP.SDK.Widgets.ScrollBar.Type">
+            <summary>
+            Gets or sets the type of the scroll bar.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.ScrollBar.Value">
+            <summary>
+            Gets or sets the current value.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.ScrollBar.MinValue">
+            <summary>
+            Gets or sets the minimum value.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.ScrollBar.MaxValue">
+            <summary>
+            Gets or sets the maximum value.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.ScrollBar.PageSize">
+            <summary>
+            Gets or sets how many units to move the scroll bar when clicking next to the thumb.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.ScrollBar.HandleMessage(XP.SDK.Widgets.WidgetMessage,System.IntPtr,System.IntPtr)">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.Widgets.ScrollBar.OnValueChanged">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.ScrollBarMessage.ScrollBarSliderPositionChanged"/> message.
+            </summary>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="E:XP.SDK.Widgets.ScrollBar.ValueChanged">
+            <summary>
+            Raised when the slider position changes.
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.ScrollBarMessage">
+            <summary>
+            <para>
+            Scroll Bar Messages
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.ScrollBarProperty">
+            <summary>
+            <para>
+            Scroll Bar Properties
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.ScrollBarType">
+            <summary>
+            <para>
+            Scroll Bar Type Values
+            </para>
+            <para>
+            This defines how the scroll bar looks.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.StandardWidget">
+            <summary>
+            The base class for standard widgets.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.StandardWidget.#ctor(XP.SDK.Rect@,System.String,System.Boolean,XP.SDK.Widgets.Widget,System.Boolean,XP.SDK.Widgets.WidgetClass)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XP.SDK.Widgets.StandardWidget"/> class.
+            </summary>
+            <param name="geometry">The widget geometry.</param>
+            <param name="descriptor">The widget descriptor.</param>
+            <param name="isVisible">The widget visibility.</param>
+            <param name="parent">The parent widget.</param>
+            <param name="isRoot">The value indicating whether this widget is a root one.</param>
+            <param name="class">The standard widget class.</param>
+        </member>
+        <member name="M:XP.SDK.Widgets.StandardWidget.HandleMessage(XP.SDK.Widgets.WidgetMessage,System.IntPtr,System.IntPtr)">
+            <summary>
+            Handles widget messages.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="param1">The first message parameter.</param>
+            <param name="param2">The second message parameter.</param>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="T:XP.SDK.Widgets.SubWindow">
+            <summary>
+            X-Plane dialogs are divided into separate areas; the sub-window widgets
+            allow you to make these areas. Create one main window and place several
+            sub-windows inside it.Then place your controls inside the sub- windows.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.Widgets.SubWindow.Class">
+            <summary>
+            The sub-window c
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.SubWindow.#ctor(XP.SDK.Rect@,System.String,System.Boolean,XP.SDK.Widgets.Widget,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XP.SDK.Widgets.SubWindow"/> class.
+            </summary>
+            <param name="geometry">The widget geometry.</param>
+            <param name="descriptor">The widget descriptor.</param>
+            <param name="isVisible">The widget visibility.</param>
+            <param name="parent">The parent widget.</param>
+            <param name="isRoot">The value indicating whether this widget is a root one.</param>
+        </member>
+        <member name="P:XP.SDK.Widgets.SubWindow.Type">
+            <summary>
+            Gets or sets the type of the sub-window.
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.SubWindowProperty">
+            <summary>
+            <para>
+            SubWindow Properties
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.SubWindowType">
+            <summary>
+            <para>
+            SubWindow Type Values
+            </para>
+            <para>
+            These values control the appearance of the subwindow.
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.TextField">
+            <summary>
+            The text field widget provides an editable text field including mouse
+            selection and keyboard navigation.The contents of the text field are its
+            <see cref="P:XP.SDK.Widgets.Widget.Descriptor"/>.
+            </summary>
+            <remarks>
+            <para>The descriptor changes as the user types.</para>
+            <para>
+            The text field can have a number of types, that effect the visual layout of
+            the text field.The text field sends messages to itself so you may control
+            its behavior.
+            </para>
+            <para>
+            If you need to filter keystrokes, subscribe to <see cref="E:XP.SDK.Widgets.TextField.KeyPressed"/>.
+            Since key presses are passed by reference, you can modify the
+            keystroke and pass it through to the text field widget.
+            </para>
+            </remarks>
+        </member>
+        <member name="F:XP.SDK.Widgets.TextField.Class">
+            <summary>
+            The text field class.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.TextField.#ctor(XP.SDK.Rect@,System.String,System.Boolean,XP.SDK.Widgets.Widget,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:XP.SDK.Widgets.TextField"/> class.
+            </summary>
+            <param name="geometry">The widget geometry.</param>
+            <param name="descriptor">The widget descriptor.</param>
+            <param name="isVisible">The widget visibility.</param>
+            <param name="parent">The parent widget.</param>
+            <param name="isRoot">The value indicating whether this widget is a root one.</param>
+        </member>
+        <member name="P:XP.SDK.Widgets.TextField.Type">
+            <summary>
+            Gets or sets the text field type.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.TextField.SelectionStart">
+            <summary>
+            Gets or sets the character position the selection starts at, zero based.
+            </summary>
+            <remarks>
+            If it is the same as the end insertion point, the insertion point is not a selection.
+            </remarks>
+            <seealso cref="P:XP.SDK.Widgets.TextField.SelectionEnd"/>
+        </member>
+        <member name="P:XP.SDK.Widgets.TextField.SelectionEnd">
+            <summary>
+            Gets or sets the character position of the end of the selection.
+            </summary>
+            <seealso cref="P:XP.SDK.Widgets.TextField.SelectionStart"/>
+        </member>
+        <member name="P:XP.SDK.Widgets.TextField.SelectionDragStart">
+            <summary>
+            Gets the character position a drag was started at if the user is dragging to select text, or -1 if a drag is not in progress.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.TextField.IsPasswordMode">
+            <summary>
+            Gets the value indicating whether this text field is in password mode.
+            </summary>
+            <remarks>
+            In the password mode the characters will be drawn as *s even though the descriptor will contain plain-text.
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.Widgets.TextField.MaxLength">
+            <summary>
+            Gets or sets the max number of characters you can enter, if limited. Zero means unlimited.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.TextField.ScrollPosition">
+            <summary>
+            Gets or sets the first visible character on the left. This effectively scrolls the text field.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.TextField.Font">
+            <summary>
+            Gets or sets the font to draw the field's text with.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.TextField.HandleMessage(XP.SDK.Widgets.WidgetMessage,System.IntPtr,System.IntPtr)">
+            <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.Widgets.TextField.OnTextChanged">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.TextFieldMessage.TextFieldChanged"/> message.
+            </summary>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.TextField.OnKeyPressed(XP.SDK.Widgets.Internal.KeyState@)">
+            <summary>
+            Handles the <see cref="F:XP.SDK.Widgets.WidgetMessage.KeyPress"/> message.
+            </summary>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="E:XP.SDK.Widgets.TextField.TextChanged">
+            <summary>
+            Raised when the text is changed.
+            </summary>
+        </member>
+        <member name="E:XP.SDK.Widgets.TextField.KeyPressed">
+            <summary>
+            Raised when a key is pressed on the keyboard.
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.TextFieldMessage">
+            <summary>
+            <para>
+            Text Field Messages
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.TextFieldProperty">
+            <summary>
+            <para>
+            Text Field Properties
+            </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Widgets.TextFieldType">
+            <summary>
+            <para>
+            Text Field Type Values
+            </para>
+            <para>
+            These control the look of the text field.
+            </para>
+            </summary>
+        </member>
         <member name="T:XP.SDK.Widgets.TrackStyle">
             <summary>
             <para>
@@ -654,6 +2009,318 @@
             </para>
             </summary>
         </member>
+        <member name="P:XP.SDK.Widgets.Widget.IsRoot">
+            <summary>
+            Gets the value indicating whether the widget is the root one.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.Widget.Id">
+            <summary>
+            Gets the widget ID.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.Widget.Behaviors">
+            <summary>
+            Gets the widget behaviors.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.Widget.Descriptor">
+            <summary>
+            Gets or sets the widget descriptor.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.Widget.Geometry">
+            <summary>
+            Gets or sets the widget geometry.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.Widget.ExposedGeometry">
+            <summary>
+            Get the bounds of the area of a widget that is completely within its parent widgets.
+            </summary>
+            <remarks>
+            Since a widget's bounding box can be outside its
+            parent, part of its area will not be elligible for mouse clicks and should
+            not draw. Use <see cref="P:XP.SDK.Widgets.Widget.Geometry"/> to find out what area defines your
+            widget's shape, but use this routine to find out what area to actually draw
+            into. Note that the widget library does not use OpenGL clipping to keep
+            frame rates up, although you could use it internally.
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.Widgets.Widget.IsInFront">
+            <summary>
+            Gets the value indicating whether this widget's hierarchy is the front most hierarchy.                 
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.Widget.IsVisible">
+            <summary>
+            Gets or sets the value indicating whether the widget is visible.
+            </summary>
+            <remarks>
+            This property takes into consideration whether a parent is invisible.
+            Use it to tell if the user can see the widget.
+            </remarks>
+            <seealso cref="M:XP.SDK.Widgets.Widget.Show"/>
+            <seealso cref="M:XP.SDK.Widgets.Widget.Hide"/>
+        </member>
+        <member name="P:XP.SDK.Widgets.Widget.Window">
+            <summary>
+            Gets the the window (<see cref="T:XP.SDK.XPLM.WindowBase"/>) that backs your widget window.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.Widget.Children">
+            <summary>
+            Gets the child widgets.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.Widget.Parent">
+            <summary>
+            Gets or sets the parent widget.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.Widget.Root">
+            <summary>
+            Gets the root widget.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.Widget.Tag">
+            <summary>
+            Gets or sets an arbitrary object that can be associated with the current widget.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Widgets.Widget.Clip">
+            <summary>
+            If <see langword="true"/> the widget package will use OpenGL to restrict drawing to the Widget's exposed rectangle.
+            </summary>
+            <seealso cref="P:XP.SDK.Widgets.Widget.ExposedGeometry"/>
+        </member>
+        <member name="P:XP.SDK.Widgets.Widget.IsEnabled">
+            <summary>
+            Gets the value indicating whether the widget is enabled.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.Show">
+            <summary>
+            This routine makes a widget visible if it is not already. Note that if a
+            widget is not in a rooted widget hierarchy or one of its parents is not
+            visible, it will still not be visible to the user.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.Hide">
+            <summary>
+            Makes a widget invisible.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.BringRootToFront">
+            <summary>
+            This routine makes the specified widget be in the front most widget
+            hierarchy. If this widget is a root widget, its widget hierarchy comes to
+            front, otherwise the widget's root is brought to the front. If this widget
+            is not in an active widget hierarchy (e.g. there is no root widget at the
+            top of the tree), this routine does nothing.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.GetWidgetForLocation(System.Int32,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            <para>
+            Given a widget and a location, this routine returns the <see cref="T:XP.SDK.Widgets.Widget"/> of the
+            child of that widget that owns that location. If <paramref name="recursive"/> is <see langword="true" /> then
+            this will return a child of a child of a widget as it tries to find the
+            deepest widget at that location. If <paramref name="onlyVisible"/> is true, then only
+            visible widgets are considered, otherwise all widgets are considered. The
+            current widget will be returned if the location is in
+            that widget but not in a child widget. <see langword="null" /> is returned if the location is not
+            in the container.
+            </para>
+            <para>
+            NOTE: if a widget's geometry extends outside its parents geometry, it will
+            not be returned by this call for mouse locations outside the parent
+            geometry. The parent geometry limits the child's eligibility for mouse
+            location.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.Focus">
+            <summary>
+            Makes the current widget to receive keyboard strokes.
+            </summary>
+            <remarks>
+            <para>
+            Note that if the widget does not care about
+            keystrokes, they will go to the parent widget, and if no widget cares about
+            them, they go to X-Plane.
+            </para>
+            <para>
+            Keyboard focus is not changed if this widget will not accept it.
+            </para>
+            </remarks>
+            <returns>
+            The widget that ended up with keyboard focus, or <see langword="null" /> for X-Plane.
+            </returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.Focus(XP.SDK.Widgets.Widget)">
+            <summary>
+            Sets the widget than will receive keyboard strokes.
+            </summary>
+            <param name="widget">The widget to focus, or <see langword="null" /> to make X-Plane receive the focus.</param>
+            <remarks>
+            <para>
+            Note that if the widget does not care about
+            keystrokes, they will go to the parent widget, and if no widget cares about
+            them, they go to X-Plane.
+            </para>
+            <para>
+            Keyboard focus is not changed if the new widget will not accept it. For
+            setting to X-Plane, keyboard focus is always accepted.
+            </para>
+            </remarks>
+            <returns>
+            The widget that ended up with keyboard focus, or <see langword="null" /> for X-Plane.
+            </returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.LoseFocus">
+            <summary>
+            This causes the specified widget to lose focus; focus is passed to its
+            parent, or the next parent that will accept it. This routine does nothing
+            if this widget does not have focus.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.SendMessage(XP.SDK.Widgets.WidgetMessage,XP.SDK.Widgets.DispatchMode,System.IntPtr,System.IntPtr)">
+            <summary>
+            Sends a message to this widget.
+            </summary>
+            <remarks>
+            <para>
+            You should probably not go around
+            simulating the predefined messages that the widgets library defines for
+            you. You may however define custom messages for your widgets and send them
+            with this method.
+            </para>
+            <para>
+            For each widget that receives the message (see the dispatching modes), each
+            widget function from the most recently installed to the oldest one receives
+            the message in order until it is handled.
+            </para>
+            </remarks>
+            <param name="standardMessage">The message to send.</param>
+            <param name="dispatchMode">The dispatch mode.</param>
+            <param name="param1">The first message parameter.</param>
+            <param name="param2">The second message parameter.</param>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.SendMessage(System.Int32,XP.SDK.Widgets.DispatchMode,System.IntPtr,System.IntPtr)">
+            <summary>
+            Sends a message to this widget.
+            </summary>
+            <remarks>
+            <para>
+            You should probably not go around
+            simulating the predefined messages that the widgets library defines for
+            you. You may however define custom messages for your widgets and send them
+            with this method.
+            </para>
+            <para>
+            For each widget that receives the message (see the dispatching modes), each
+            widget function from the most recently installed to the oldest one receives
+            the message in order until it is handled.
+            </para>
+            </remarks>
+            <param name="customMessage">The message to send.</param>
+            <param name="dispatchMode">The dispatch mode.</param>
+            <param name="param1">The first message parameter.</param>
+            <param name="param2">The second message parameter.</param>
+            <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.TryGetProperty(XP.SDK.Widgets.WidgetPropertyID,System.IntPtr@)">
+            <summary>
+            Tries to get the property value.
+            </summary>
+            <param name="standardProperty">The property ID.</param>
+            <param name="value">The property value.</param>
+            <returns><see langword="true"/> if the property exists; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.TryGetProperty(System.Int32,System.IntPtr@)">
+            <summary>
+            Tries to get the property value.
+            </summary>
+            <param name="customProperty">The property ID.</param>
+            <param name="value">The property value.</param>
+            <returns><see langword="true"/> if the property exists; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.GetProperty(XP.SDK.Widgets.WidgetPropertyID)">
+            <summary>
+            Gets the property value.
+            </summary>
+            <param name="standardProperty">The property ID.</param>
+            <returns>The property value.</returns>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException">The property with the specified ID does not exist.</exception>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.GetProperty(System.Int32)">
+            <summary>
+            Gets the property value.
+            </summary>
+            <param name="customProperty">The property ID.</param>
+            <returns>The property value.</returns>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException">The property with the specified ID does not exist.</exception>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.SetProperty(XP.SDK.Widgets.WidgetPropertyID,System.IntPtr)">
+            <summary>
+            Sets the property value.
+            </summary>
+            <param name="standardProperty">The property ID.</param>
+            <param name="value">The value to set.</param>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.SetProperty(System.Int32,System.IntPtr)">
+            <summary>
+            Sets the property value.
+            </summary>
+            <param name="customProperty">The property ID.</param>
+            <param name="value">The value to set.</param>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.AddHook(XP.SDK.Widgets.Internal.WidgetFuncCallback)">
+            <summary>
+            Adds a widget proc hook.
+            </summary>
+            <remarks>
+            <para>
+            This hook supersedes any existing ones and will receive messages first;
+            if it does not handle messages they will go on to be handled by pre-existing widgets.
+            </para>
+            <para>
+            The widget function will remain on the widget for the life of the widget.
+            The creation message will be sent to the new callback immediately with the
+            widget ID, and the destruction message will be sent before the other widget
+            function receives a destruction message.
+            </para>
+            <para>Consider using <see cref="P:XP.SDK.Widgets.Widget.Behaviors"/> which provide higher-lever abstraction for this functionality.</para>
+            </remarks>
+            <param name="hook">The hook.</param>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.MoveBy(System.Int32,System.Int32)">
+            <summary>
+            Simply moves a widget by an amount, +x = right, +y=up, without resizing the  widget.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.GetWidgetClassFunction(XP.SDK.Widgets.WidgetClass)">
+            <summary>
+            Given a widget class, this function returns the callbacks that power that widget class.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Widget.Destroy(System.Boolean)">
+            <summary>
+            Destroys the widget.
+            </summary>
+            <param name="destroyChildren">
+            <para>If <see langword="true"/>, the widget's children will be destroyed first,
+            then this widget will be destroyed. Furthermore, the widget's children
+            will be destroyed with the inDestroyChildren flag set to 1, so the
+            destruction will recurse down the widget tree.
+            </para>
+            <para>
+            If <see langword="false"/>, the child widgets will simply end up with their parent set to <see langword="null" />. 
+            </para>
+            </param>
+        </member>
         <member name="T:XP.SDK.Widgets.WidgetClass">
             <summary>
             <para>
@@ -661,6 +2328,141 @@
             specifies from a library the widget function to be used for the widget.
             Most widgets can be made right from classes.
             </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddCreatedHandler``1(``0,XP.SDK.Widgets.WidgetCreatedEventHandler{XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.Create"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddDestroyedHandler``1(``0,XP.SDK.Widgets.WidgetDestroyedEventHandler{XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.Destroy"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddPaintHandler``1(``0,XP.SDK.Widgets.WidgetEventHandler{XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.Paint"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddDrawHandler``1(``0,XP.SDK.Widgets.WidgetEventHandler{XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.Draw"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddKeyPressedHandler``1(``0,XP.SDK.Widgets.WidgetRefEventHandler{XP.SDK.Widgets.Widget,XP.SDK.Widgets.Internal.KeyState})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.KeyPress"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddTakingFocusHandler``1(``0,XP.SDK.Widgets.WidgetTakingFocusEventHandler{XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.KeyTakeFocus"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddLostFocusHandler``1(``0,XP.SDK.Widgets.WidgetLostFocusEventHandler{XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.KeyLoseFocus"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddMouseDownHandler``1(``0,XP.SDK.Widgets.WidgetRefEventHandler{XP.SDK.Widgets.Widget,XP.SDK.Widgets.Internal.MouseState})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.MouseDown"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddMouseUpHandler``1(``0,XP.SDK.Widgets.WidgetRefEventHandler{XP.SDK.Widgets.Widget,XP.SDK.Widgets.Internal.MouseState})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.MouseUp"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddMouseDragHandler``1(``0,XP.SDK.Widgets.WidgetRefEventHandler{XP.SDK.Widgets.Widget,XP.SDK.Widgets.Internal.MouseState})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.MouseDrag"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddMouseWheelHandler``1(``0,XP.SDK.Widgets.WidgetRefEventHandler{XP.SDK.Widgets.Widget,XP.SDK.Widgets.Internal.MouseState})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.MouseWheel"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddReshapeHandler``1(``0,XP.SDK.Widgets.WidgetReshapeEventHandler{XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.Reshape"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddExposedChangedHandler``1(``0,XP.SDK.Widgets.WidgetEventHandler{XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.ExposedChanged"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddChildAddedHandler``1(``0,XP.SDK.Widgets.WidgetValueEventHandler{XP.SDK.Widgets.Widget,XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.AcceptChild"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddChildRemovedHandler``1(``0,XP.SDK.Widgets.WidgetValueEventHandler{XP.SDK.Widgets.Widget,XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.LoseChild"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddParentChangedHandler``1(``0,XP.SDK.Widgets.WidgetValueEventHandler{XP.SDK.Widgets.Widget,XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.AcceptParent"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddShownHandler``1(``0,XP.SDK.Widgets.WidgetValueEventHandler{XP.SDK.Widgets.Widget,XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.Shown"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddHiddenHandler``1(``0,XP.SDK.Widgets.WidgetValueEventHandler{XP.SDK.Widgets.Widget,XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.Hidden"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddDescriptorChangedHandler``1(``0,XP.SDK.Widgets.WidgetEventHandler{XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.DescriptorChanged"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddPropertyChangedHandler``1(``0,XP.SDK.Widgets.WidgetPropertyChangeEventHandler{XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.PropertyChanged"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddCursorAdjustHandler``1(``0,XP.SDK.Widgets.WidgetCursorAdjustEventHandler{XP.SDK.Widgets.Widget})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.CursorAdjust"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddPressedHandler``1(``0,XP.SDK.Widgets.WidgetEventHandler{XP.SDK.Widgets.Button})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.ButtonMessage.PushButtonPressed"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddIsCheckedChangedHandler``1(``0,XP.SDK.Widgets.WidgetValueEventHandler{XP.SDK.Widgets.Button,System.Boolean})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.ButtonMessage.ButtonStateChanged"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddCloseButtonPushedHandler``1(``0,XP.SDK.Widgets.WidgetEventHandler{XP.SDK.Widgets.MainWindow})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.MainWindowMessage.CloseButtonPushed"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddValueChangedHandler``1(``0,XP.SDK.Widgets.WidgetEventHandler{XP.SDK.Widgets.ScrollBar})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.ScrollBarMessage.ScrollBarSliderPositionChanged"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddTextChangedHandler``1(``0,XP.SDK.Widgets.WidgetEventHandler{XP.SDK.Widgets.TextField})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.TextFieldMessage.TextFieldChanged"/> message handler.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.WidgetExtensions.AddKeyPressedHandler``1(``0,XP.SDK.Widgets.WidgetRefEventHandler{XP.SDK.Widgets.TextField,XP.SDK.Widgets.Internal.KeyState})">
+            <summary>
+            Adds a <see cref="F:XP.SDK.Widgets.WidgetMessage.KeyPress"/> message handler.
             </summary>
         </member>
         <member name="T:XP.SDK.Widgets.WidgetID">
@@ -5654,7 +7456,7 @@
             can pass a negative monitor index to position the window on the main
             X-Plane monitor (the screen with the X-Plane menu bar at the top). Or, if
             you have a specific monitor you want to position your window on, you can
-            pass a real monitor index as received from, e.g., <see cref="!:AllMonitorBoundsOS"/>.
+            pass a real monitor index as received from, e.g., <see cref="P:XP.SDK.XPLM.Screen.AllMonitorBoundsOS"/>.
             </para>
             </remarks>
         </member>

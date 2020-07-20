@@ -355,7 +355,7 @@ namespace XP.SDK.XPLM
         /// can pass a negative monitor index to position the window on the main
         /// X-Plane monitor (the screen with the X-Plane menu bar at the top). Or, if
         /// you have a specific monitor you want to position your window on, you can
-        /// pass a real monitor index as received from, e.g., <see cref="AllMonitorBoundsOS"/>.
+        /// pass a real monitor index as received from, e.g., <see cref="Screen.AllMonitorBoundsOS"/>.
         /// </para>
         /// </remarks>
         public void SetPositioningMode(WindowPositioningMode mode, int monitorIndex = -1) => DisplayAPI.SetWindowPositioningMode(_id, mode, monitorIndex);

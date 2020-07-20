@@ -1,11 +1,12 @@
 ﻿#nullable enable
 using System;
-using System.Collections.Generic;
-using System.Text;
 using XP.SDK.Widgets.Internal;
 
 namespace XP.SDK.Widgets
 {
+    /// <summary>
+    /// The base class for standard widgets.
+    /// </summary>
     public abstract class StandardWidget : Widget
     {
         private static readonly WidgetFuncCallback _standardWidgetCallback;
@@ -36,6 +37,15 @@ namespace XP.SDK.Widgets
         }
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StandardWidget"/> class.
+        /// </summary>
+        /// <param name="geometry">The widget geometry.</param>
+        /// <param name="descriptor">The widget descriptor.</param>
+        /// <param name="isVisible">The widget visibility.</param>
+        /// <param name="parent">The parent widget.</param>
+        /// <param name="isRoot">The value indicating whether this widget is a root one.</param>
+        /// <param name="class">The standard widget class.</param>
         protected StandardWidget(in Rect geometry, string descriptor, bool isVisible, Widget? parent, bool isRoot, WidgetClass @class) 
             : base(isRoot, parent)
         {
@@ -58,9 +68,13 @@ namespace XP.SDK.Widgets
             Register(this);
         }
 
-        protected virtual bool HandleMessage(WidgetMessage message, IntPtr param1, IntPtr param2)
-        {
-            return false;
-        }
+        /// <summary>
+        /// Handles widget messages.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="param1">The first message parameter.</param>
+        /// <param name="param2">The second message parameter.</param>
+        /// <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
+        protected virtual bool HandleMessage(WidgetMessage message, IntPtr param1, IntPtr param2) => false;
     }
 }
