@@ -63,6 +63,8 @@ namespace XP.SDK.XPLM
         /// </summary>
         public abstract void DestroySubMenu();
 
+        public abstract event TypedEventHandler<MenuItem>? Click;
+
         /// <summary>
         /// Gets the item's sub-menu.
         /// </summary>

@@ -40,5 +40,11 @@ namespace XP.SDK.XPLM
         public override void DestroySubMenu()
         {
         }
+
+        public override event TypedEventHandler<MenuItem>? Click
+        {
+            add { }
+            remove { }
+        }
     }
 }

@@ -108,7 +108,7 @@ namespace XP.SDK.XPLM
             }
         }
 
-        public event TypedEventHandler<MenuItem>? Click; 
+        public override event TypedEventHandler<MenuItem>? Click; 
 
         internal override void OnClick()
         {
