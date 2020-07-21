@@ -25,7 +25,7 @@ namespace XP.SDK.Widgets
         /// <summary>
         /// The button class.
         /// </summary>
-        public const int Class = 2;
+        public const int Class = 3;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Button"/> class.

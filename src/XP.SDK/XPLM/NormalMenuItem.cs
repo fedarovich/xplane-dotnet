@@ -1,7 +1,5 @@
 ﻿#nullable enable
 using System;
-using System.Collections.Generic;
-using System.Text;
 using XP.SDK.XPLM.Internal;
 
 namespace XP.SDK.XPLM
