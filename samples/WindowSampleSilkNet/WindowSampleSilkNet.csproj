@@ -7,9 +7,9 @@
 
   <ItemGroup>
     <PackageReference Include="Silk.NET.OpenGL.Legacy" Version="1.4.0" />
-    <PackageReference Include="XP.SDK" Version="0.3.0" />
-    <PackageReference Include="XP.SDK.Host" Version="0.3.0" />
-    <PackageReference Include="XP.SDK.Silk.NET" Version="0.3.0" />
+    <PackageReference Include="XP.SDK" Version="0.4.0" />
+    <PackageReference Include="XP.SDK.Host" Version="0.4.0" />
+    <PackageReference Include="XP.SDK.Silk.NET" Version="0.4.0" />
   </ItemGroup>
 
 </Project>

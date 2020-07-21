@@ -35,16 +35,8 @@ namespace WidgetsSample
                 HasCloseBoxes = true,
                 Children =
                 {
-                    new PushButton(new Rect(40, 80, 140, 40), "Push Button")
-                    {
-                        Behaviors = { FixedLayoutBehavior.Shared },
-                        IsEnabled = true,
-                        Children =
-                        {
-                            new Caption(new Rect(50, 70, 130, 50), "Push Button")
-                        }
-                    },
-                    new Button(new Rect(160, 80, 260, 40), "Check Box") { Type = ButtonType.RadioButton, ButtonBehavior = ButtonBehavior.CheckBox },
+                    new PushButton(new Rect(40, 80, 140, 40), "Push Button"),
+                    new CheckBox(new Rect(160, 80, 260, 40), "Check Box"),
                     new RadioButton(new Rect(280, 80, 380, 40), "Radio Button 1"),
                     new RadioButton(new Rect(400, 80, 500, 40), "Radio Button 2"),
 

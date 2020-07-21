@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="OpenToolkit.OpenAL" Version="4.0.0-pre9.1" />
-    <PackageReference Include="XP.SDK" Version="0.3.0" />
-    <PackageReference Include="XP.SDK.Host" Version="0.3.0" />
+    <PackageReference Include="XP.SDK" Version="0.4.0" />
+    <PackageReference Include="XP.SDK.Host" Version="0.4.0" />
   </ItemGroup>
 
   <Import Project="..\AudioHelpers\AudioHelpers.projitems" Label="Shared" />

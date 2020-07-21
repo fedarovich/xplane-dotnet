@@ -7,9 +7,9 @@
 
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.0.0-pre9.1" />
-    <PackageReference Include="XP.SDK" Version="0.3.0" />
-    <PackageReference Include="XP.SDK.Host" Version="0.3.0" />
-    <PackageReference Include="XP.SDK.OpenToolkit.Graphics" Version="0.3.0-pre-9.1" />
+    <PackageReference Include="XP.SDK" Version="0.4.0" />
+    <PackageReference Include="XP.SDK.Host" Version="0.4.0" />
+    <PackageReference Include="XP.SDK.OpenToolkit.Graphics" Version="0.4.0-pre9.1" />
   </ItemGroup>
 
 </Project>
