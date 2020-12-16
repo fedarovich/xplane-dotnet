@@ -1,7 +1,7 @@
 
 #include "proxy.h"
 
-tl::expected<proxy, std::string> proxy::create(fs::path plugin_path) {
+tl::expected<proxy, std::string> proxy::create(fs::path plugin_path, proxy_init_parameters *params) {
     auto runtime_path = plugin_path / STR("runtime");
     
     char_t buffer[MAX_PATH];
@@ -65,31 +65,13 @@ tl::expected<proxy, std::string> proxy::create(fs::path plugin_path) {
     const char_t* proxy_type = STR("XP.Proxy.PluginProxy, xpproxy");
     void* delegate = nullptr;
     
-    result = (*get_delegate)(assembly_path.c_str(), proxy_type, STR("XPluginStart"), STR("XP.Proxy.StartDelegate, xpproxy"), nullptr, &delegate);
+    result = (*get_delegate)(assembly_path.c_str(), proxy_type, STR("Initialize"), STR("XP.Proxy.InitializeDelegate, xpproxy"), nullptr, &delegate);
     if (result != 0 || delegate == nullptr)
-        return tl::make_unexpected("Failed to get XPluginStart");
-    auto plugin_start = (StartDelegate)delegate;
+        return tl::make_unexpected("Failed to get Initialize method.");
+    auto init = (InitDelegate)delegate;
+    auto initialized = init(params);
+    if (!initialized)
+        return tl::make_unexpected("Failed to initialize the plugin proxy.");
 
-    result = (*get_delegate)(assembly_path.c_str(), proxy_type, STR("XPluginStop"), STR("XP.Proxy.StopDelegate, xpproxy"), nullptr, &delegate);
-    if (result != 0 || delegate == nullptr)
-        return tl::make_unexpected("Failed to get XPluginStop");
-    auto plugin_stop = (StopDelegate)delegate;
-
-    result = (*get_delegate)(assembly_path.c_str(), proxy_type, STR("XPluginEnable"), STR("XP.Proxy.EnableDelegate, xpproxy"), nullptr, &delegate);
-    if (result != 0 || delegate == nullptr)
-        return tl::make_unexpected("Failed to get XPluginEnable");
-    auto plugin_enable = (EnableDelegate)delegate;
-
-    result = (*get_delegate)(assembly_path.c_str(), proxy_type, STR("XPluginDisable"), STR("XP.Proxy.DisableDelegate, xpproxy"), nullptr, &delegate);
-    if (result != 0 || delegate == nullptr)
-        return tl::make_unexpected("Failed to get XPluginDisable");
-    auto plugin_disable = (DisableDelegate)delegate;
-
-    result = (*get_delegate)(assembly_path.c_str(), proxy_type, STR("XPluginReceiveMessage"), STR("XP.Proxy.ReceiveMessageDelegate, xpproxy"), nullptr, &delegate);
-    if (result != 0 || delegate == nullptr)
-        return tl::make_unexpected("Failed to get XPluginReceiveMessage");
-    auto plugin_receive_message = (ReceiveMessageDelegate)delegate;
-
-    bool success;
-    return std::move(proxy(plugin_start, plugin_stop, plugin_enable, plugin_disable, plugin_receive_message));
+    return std::move(proxy(params));
 }

@@ -7,31 +7,6 @@ namespace XP.SDK.XPLM.Internal
 {
     public static partial class GraphicsAPI
     {
-        private static IntPtr SetGraphicsStatePtr;
-        private static IntPtr BindTexture2dPtr;
-        private static IntPtr GenerateTextureNumbersPtr;
-        private static IntPtr WorldToLocalPtr;
-        private static IntPtr LocalToWorldPtr;
-        private static IntPtr DrawTranslucentDarkBoxPtr;
-        private static IntPtr DrawStringPtr;
-        private static IntPtr DrawNumberPtr;
-        private static IntPtr GetFontDimensionsPtr;
-        private static IntPtr MeasureStringPtr;
-
-        static GraphicsAPI()
-        {
-            SetGraphicsStatePtr = Lib.GetExport("XPLMSetGraphicsState");
-            BindTexture2dPtr = Lib.GetExport("XPLMBindTexture2d");
-            GenerateTextureNumbersPtr = Lib.GetExport("XPLMGenerateTextureNumbers");
-            WorldToLocalPtr = Lib.GetExport("XPLMWorldToLocal");
-            LocalToWorldPtr = Lib.GetExport("XPLMLocalToWorld");
-            DrawTranslucentDarkBoxPtr = Lib.GetExport("XPLMDrawTranslucentDarkBox");
-            DrawStringPtr = Lib.GetExport("XPLMDrawString");
-            DrawNumberPtr = Lib.GetExport("XPLMDrawNumber");
-            GetFontDimensionsPtr = Lib.GetExport("XPLMGetFontDimensions");
-            MeasureStringPtr = Lib.GetExport("XPLMMeasureString");
-        }
-
         
         /// <summary>
         /// <para>
@@ -85,21 +60,8 @@ namespace XP.SDK.XPLM.Internal
         /// XPLMSetGraphicsState should have no fog or lighting.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SetGraphicsState(int inEnableFog, int inNumberTexUnits, int inEnableLighting, int inEnableAlphaTesting, int inEnableAlphaBlending, int inEnableDepthTesting, int inEnableDepthWriting)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetGraphicsStatePtr);
-            IL.Push(inEnableFog);
-            IL.Push(inNumberTexUnits);
-            IL.Push(inEnableLighting);
-            IL.Push(inEnableAlphaTesting);
-            IL.Push(inEnableAlphaBlending);
-            IL.Push(inEnableDepthTesting);
-            IL.Push(inEnableDepthWriting);
-            IL.Push(SetGraphicsStatePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetGraphicsState", ExactSpelling = true)]
+        public static extern void SetGraphicsState(int inEnableFog, int inNumberTexUnits, int inEnableLighting, int inEnableAlphaTesting, int inEnableAlphaBlending, int inEnableDepthTesting, int inEnableDepthWriting);
 
         
         /// <summary>
@@ -121,16 +83,8 @@ namespace XP.SDK.XPLM.Internal
         /// Use this routine instead of glBindTexture(GL_TEXTURE_2D, ....);
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void BindTexture2d(int inTextureNum, int inTextureUnit)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(BindTexture2dPtr);
-            IL.Push(inTextureNum);
-            IL.Push(inTextureUnit);
-            IL.Push(BindTexture2dPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMBindTexture2d", ExactSpelling = true)]
+        public static extern void BindTexture2d(int inTextureNum, int inTextureUnit);
 
         
         /// <summary>
@@ -140,16 +94,8 @@ namespace XP.SDK.XPLM.Internal
         /// that X-Plane is reserving for its own use.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GenerateTextureNumbers(int* outTextureIDs, int inCount)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GenerateTextureNumbersPtr);
-            IL.Push(outTextureIDs);
-            IL.Push(inCount);
-            IL.Push(GenerateTextureNumbersPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int*), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGenerateTextureNumbers", ExactSpelling = true)]
+        public static extern unsafe void GenerateTextureNumbers(int* outTextureIDs, int inCount);
 
         
         /// <summary>
@@ -160,20 +106,8 @@ namespace XP.SDK.XPLM.Internal
         /// meters in the local OpenGL coordinate system.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void WorldToLocal(double inLatitude, double inLongitude, double inAltitude, double* outX, double* outY, double* outZ)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(WorldToLocalPtr);
-            IL.Push(inLatitude);
-            IL.Push(inLongitude);
-            IL.Push(inAltitude);
-            IL.Push(outX);
-            IL.Push(outY);
-            IL.Push(outZ);
-            IL.Push(WorldToLocalPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(double), typeof(double), typeof(double), typeof(double*), typeof(double*), typeof(double*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMWorldToLocal", ExactSpelling = true)]
+        public static extern unsafe void WorldToLocal(double inLatitude, double inLongitude, double inAltitude, double* outX, double* outY, double* outZ);
 
         
         /// <summary>
@@ -188,20 +122,8 @@ namespace XP.SDK.XPLM.Internal
         /// try to avoid round tripping from local to world and back.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void LocalToWorld(double inX, double inY, double inZ, double* outLatitude, double* outLongitude, double* outAltitude)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(LocalToWorldPtr);
-            IL.Push(inX);
-            IL.Push(inY);
-            IL.Push(inZ);
-            IL.Push(outLatitude);
-            IL.Push(outLongitude);
-            IL.Push(outAltitude);
-            IL.Push(LocalToWorldPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(double), typeof(double), typeof(double), typeof(double*), typeof(double*), typeof(double*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMLocalToWorld", ExactSpelling = true)]
+        public static extern unsafe void LocalToWorld(double inX, double inY, double inZ, double* outLatitude, double* outLongitude, double* outAltitude);
 
         
         /// <summary>
@@ -211,18 +133,8 @@ namespace XP.SDK.XPLM.Internal
         /// used by X-Plane to show text files and ATC info.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void DrawTranslucentDarkBox(int inLeft, int inTop, int inRight, int inBottom)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DrawTranslucentDarkBoxPtr);
-            IL.Push(inLeft);
-            IL.Push(inTop);
-            IL.Push(inRight);
-            IL.Push(inBottom);
-            IL.Push(DrawTranslucentDarkBoxPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int), typeof(int), typeof(int), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDrawTranslucentDarkBox", ExactSpelling = true)]
+        public static extern void DrawTranslucentDarkBox(int inLeft, int inTop, int inRight, int inBottom);
 
         
         /// <summary>
@@ -235,20 +147,8 @@ namespace XP.SDK.XPLM.Internal
         /// to 1.0.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void DrawString(float* inColorRGB, int inXOffset, int inYOffset, byte* inChar, int* inWordWrapWidth, FontID inFontID)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DrawStringPtr);
-            IL.Push(inColorRGB);
-            IL.Push(inXOffset);
-            IL.Push(inYOffset);
-            IL.Push(inChar);
-            IL.Push(inWordWrapWidth);
-            IL.Push(inFontID);
-            IL.Push(DrawStringPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(float*), typeof(int), typeof(int), typeof(byte*), typeof(int*), typeof(FontID)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDrawString", ExactSpelling = true)]
+        public static extern unsafe void DrawString(float* inColorRGB, int inXOffset, int inYOffset, byte* inChar, int* inWordWrapWidth, FontID inFontID);
 
         
         /// <summary>
@@ -261,22 +161,8 @@ namespace XP.SDK.XPLM.Internal
         /// string drawn.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void DrawNumber(float* inColorRGB, int inXOffset, int inYOffset, double inValue, int inDigits, int inDecimals, int inShowSign, FontID inFontID)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DrawNumberPtr);
-            IL.Push(inColorRGB);
-            IL.Push(inXOffset);
-            IL.Push(inYOffset);
-            IL.Push(inValue);
-            IL.Push(inDigits);
-            IL.Push(inDecimals);
-            IL.Push(inShowSign);
-            IL.Push(inFontID);
-            IL.Push(DrawNumberPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(float*), typeof(int), typeof(int), typeof(double), typeof(int), typeof(int), typeof(int), typeof(FontID)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDrawNumber", ExactSpelling = true)]
+        public static extern unsafe void DrawNumber(float* inColorRGB, int inXOffset, int inYOffset, double inValue, int inDigits, int inDecimals, int inShowSign, FontID inFontID);
 
         
         /// <summary>
@@ -287,18 +173,8 @@ namespace XP.SDK.XPLM.Internal
         /// will be an arbitrary, hopefully average width.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetFontDimensions(FontID inFontID, int* outCharWidth, int* outCharHeight, int* outDigitsOnly)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetFontDimensionsPtr);
-            IL.Push(inFontID);
-            IL.Push(outCharWidth);
-            IL.Push(outCharHeight);
-            IL.Push(outDigitsOnly);
-            IL.Push(GetFontDimensionsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(FontID), typeof(int*), typeof(int*), typeof(int*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetFontDimensions", ExactSpelling = true)]
+        public static extern unsafe void GetFontDimensions(FontID inFontID, int* outCharWidth, int* outCharHeight, int* outDigitsOnly);
 
         
         /// <summary>
@@ -310,20 +186,8 @@ namespace XP.SDK.XPLM.Internal
         /// for fractional pixels.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe float MeasureString(FontID inFontID, byte* inChar, int inNumChars)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(MeasureStringPtr);
-            float result;
-            IL.Push(inFontID);
-            IL.Push(inChar);
-            IL.Push(inNumChars);
-            IL.Push(MeasureStringPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(float), typeof(FontID), typeof(byte*), typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMMeasureString", ExactSpelling = true)]
+        public static extern unsafe float MeasureString(FontID inFontID, byte* inChar, int inNumChars);
 
         
         /// <summary>

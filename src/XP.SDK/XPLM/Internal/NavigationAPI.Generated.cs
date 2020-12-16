@@ -7,45 +7,6 @@ namespace XP.SDK.XPLM.Internal
 {
     public static partial class NavigationAPI
     {
-        private static IntPtr GetFirstNavAidPtr;
-        private static IntPtr GetNextNavAidPtr;
-        private static IntPtr FindFirstNavAidOfTypePtr;
-        private static IntPtr FindLastNavAidOfTypePtr;
-        private static IntPtr FindNavAidPtr;
-        private static IntPtr GetNavAidInfoPtr;
-        private static IntPtr CountFMSEntriesPtr;
-        private static IntPtr GetDisplayedFMSEntryPtr;
-        private static IntPtr GetDestinationFMSEntryPtr;
-        private static IntPtr SetDisplayedFMSEntryPtr;
-        private static IntPtr SetDestinationFMSEntryPtr;
-        private static IntPtr GetFMSEntryInfoPtr;
-        private static IntPtr SetFMSEntryInfoPtr;
-        private static IntPtr SetFMSEntryLatLonPtr;
-        private static IntPtr ClearFMSEntryPtr;
-        private static IntPtr GetGPSDestinationTypePtr;
-        private static IntPtr GetGPSDestinationPtr;
-
-        static NavigationAPI()
-        {
-            GetFirstNavAidPtr = Lib.GetExport("XPLMGetFirstNavAid");
-            GetNextNavAidPtr = Lib.GetExport("XPLMGetNextNavAid");
-            FindFirstNavAidOfTypePtr = Lib.GetExport("XPLMFindFirstNavAidOfType");
-            FindLastNavAidOfTypePtr = Lib.GetExport("XPLMFindLastNavAidOfType");
-            FindNavAidPtr = Lib.GetExport("XPLMFindNavAid");
-            GetNavAidInfoPtr = Lib.GetExport("XPLMGetNavAidInfo");
-            CountFMSEntriesPtr = Lib.GetExport("XPLMCountFMSEntries");
-            GetDisplayedFMSEntryPtr = Lib.GetExport("XPLMGetDisplayedFMSEntry");
-            GetDestinationFMSEntryPtr = Lib.GetExport("XPLMGetDestinationFMSEntry");
-            SetDisplayedFMSEntryPtr = Lib.GetExport("XPLMSetDisplayedFMSEntry");
-            SetDestinationFMSEntryPtr = Lib.GetExport("XPLMSetDestinationFMSEntry");
-            GetFMSEntryInfoPtr = Lib.GetExport("XPLMGetFMSEntryInfo");
-            SetFMSEntryInfoPtr = Lib.GetExport("XPLMSetFMSEntryInfo");
-            SetFMSEntryLatLonPtr = Lib.GetExport("XPLMSetFMSEntryLatLon");
-            ClearFMSEntryPtr = Lib.GetExport("XPLMClearFMSEntry");
-            GetGPSDestinationTypePtr = Lib.GetExport("XPLMGetGPSDestinationType");
-            GetGPSDestinationPtr = Lib.GetExport("XPLMGetGPSDestination");
-        }
-
         
         /// <summary>
         /// <para>
@@ -54,17 +15,8 @@ namespace XP.SDK.XPLM.Internal
         /// empty.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static NavRef GetFirstNavAid()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetFirstNavAidPtr);
-            NavRef result;
-            IL.Push(GetFirstNavAidPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(NavRef)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetFirstNavAid", ExactSpelling = true)]
+        public static extern NavRef GetFirstNavAid();
 
         
         /// <summary>
@@ -75,18 +27,8 @@ namespace XP.SDK.XPLM.Internal
         /// iterate across all like-typed navaids or the entire database.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static NavRef GetNextNavAid(NavRef inNavAidRef)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetNextNavAidPtr);
-            NavRef result;
-            IL.Push(inNavAidRef);
-            IL.Push(GetNextNavAidPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(NavRef), typeof(NavRef)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetNextNavAid", ExactSpelling = true)]
+        public static extern NavRef GetNextNavAid(NavRef inNavAidRef);
 
         
         /// <summary>
@@ -96,18 +38,8 @@ namespace XP.SDK.XPLM.Internal
         /// database.  You must pass exactly one nav aid type to this routine.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static NavRef FindFirstNavAidOfType(NavType inType)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(FindFirstNavAidOfTypePtr);
-            NavRef result;
-            IL.Push(inType);
-            IL.Push(FindFirstNavAidOfTypePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(NavRef), typeof(NavType)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMFindFirstNavAidOfType", ExactSpelling = true)]
+        public static extern NavRef FindFirstNavAidOfType(NavType inType);
 
         
         /// <summary>
@@ -117,18 +49,8 @@ namespace XP.SDK.XPLM.Internal
         /// database.  You must pass exactly one nav aid type to this routine.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static NavRef FindLastNavAidOfType(NavType inType)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(FindLastNavAidOfTypePtr);
-            NavRef result;
-            IL.Push(inType);
-            IL.Push(FindLastNavAidOfTypePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(NavRef), typeof(NavType)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMFindLastNavAidOfType", ExactSpelling = true)]
+        public static extern NavRef FindLastNavAidOfType(NavType inType);
 
         
         /// <summary>
@@ -163,23 +85,8 @@ namespace XP.SDK.XPLM.Internal
         /// * Find the nearest airport whose name contains "Chicago".
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe NavRef FindNavAid(byte* inNameFragment, byte* inIDFragment, float* inLat, float* inLon, int* inFrequency, NavType inType)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(FindNavAidPtr);
-            NavRef result;
-            IL.Push(inNameFragment);
-            IL.Push(inIDFragment);
-            IL.Push(inLat);
-            IL.Push(inLon);
-            IL.Push(inFrequency);
-            IL.Push(inType);
-            IL.Push(FindNavAidPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(NavRef), typeof(byte*), typeof(byte*), typeof(float*), typeof(float*), typeof(int*), typeof(NavType)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMFindNavAid", ExactSpelling = true)]
+        public static extern unsafe NavRef FindNavAid(byte* inNameFragment, byte* inIDFragment, float* inLat, float* inLon, int* inFrequency, NavType inType);
 
         
         /// <summary>
@@ -248,24 +155,8 @@ namespace XP.SDK.XPLM.Internal
         /// string.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetNavAidInfo(NavRef inRef, NavType* outType, float* outLatitude, float* outLongitude, float* outHeight, int* outFrequency, float* outHeading, byte* outID, byte* outName, byte* outReg)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetNavAidInfoPtr);
-            IL.Push(inRef);
-            IL.Push(outType);
-            IL.Push(outLatitude);
-            IL.Push(outLongitude);
-            IL.Push(outHeight);
-            IL.Push(outFrequency);
-            IL.Push(outHeading);
-            IL.Push(outID);
-            IL.Push(outName);
-            IL.Push(outReg);
-            IL.Push(GetNavAidInfoPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(NavRef), typeof(NavType*), typeof(float*), typeof(float*), typeof(float*), typeof(int*), typeof(float*), typeof(byte*), typeof(byte*), typeof(byte*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetNavAidInfo", ExactSpelling = true)]
+        public static extern unsafe void GetNavAidInfo(NavRef inRef, NavType* outType, float* outLatitude, float* outLongitude, float* outHeight, int* outFrequency, float* outHeading, byte* outID, byte* outName, byte* outReg);
 
         
         /// <summary>
@@ -273,17 +164,8 @@ namespace XP.SDK.XPLM.Internal
         /// This routine returns the number of entries in the FMS.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int CountFMSEntries()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CountFMSEntriesPtr);
-            int result;
-            IL.Push(CountFMSEntriesPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCountFMSEntries", ExactSpelling = true)]
+        public static extern int CountFMSEntries();
 
         
         /// <summary>
@@ -291,17 +173,8 @@ namespace XP.SDK.XPLM.Internal
         /// This routine returns the index of the entry the pilot is viewing.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int GetDisplayedFMSEntry()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetDisplayedFMSEntryPtr);
-            int result;
-            IL.Push(GetDisplayedFMSEntryPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetDisplayedFMSEntry", ExactSpelling = true)]
+        public static extern int GetDisplayedFMSEntry();
 
         
         /// <summary>
@@ -309,17 +182,8 @@ namespace XP.SDK.XPLM.Internal
         /// This routine returns the index of the entry the FMS is flying to.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int GetDestinationFMSEntry()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetDestinationFMSEntryPtr);
-            int result;
-            IL.Push(GetDestinationFMSEntryPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetDestinationFMSEntry", ExactSpelling = true)]
+        public static extern int GetDestinationFMSEntry();
 
         
         /// <summary>
@@ -327,15 +191,8 @@ namespace XP.SDK.XPLM.Internal
         /// This routine changes which entry the FMS is showing to the index specified.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SetDisplayedFMSEntry(int inIndex)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetDisplayedFMSEntryPtr);
-            IL.Push(inIndex);
-            IL.Push(SetDisplayedFMSEntryPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetDisplayedFMSEntry", ExactSpelling = true)]
+        public static extern void SetDisplayedFMSEntry(int inIndex);
 
         
         /// <summary>
@@ -343,15 +200,8 @@ namespace XP.SDK.XPLM.Internal
         /// This routine changes which entry the FMS is flying the aircraft toward.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SetDestinationFMSEntry(int inIndex)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetDestinationFMSEntryPtr);
-            IL.Push(inIndex);
-            IL.Push(SetDestinationFMSEntryPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetDestinationFMSEntry", ExactSpelling = true)]
+        public static extern void SetDestinationFMSEntry(int inIndex);
 
         
         /// <summary>
@@ -375,21 +225,8 @@ namespace XP.SDK.XPLM.Internal
         /// passing the pointer to this function.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetFMSEntryInfo(int inIndex, NavType* outType, byte* outID, NavRef* outRef, int* outAltitude, float* outLat, float* outLon)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetFMSEntryInfoPtr);
-            IL.Push(inIndex);
-            IL.Push(outType);
-            IL.Push(outID);
-            IL.Push(outRef);
-            IL.Push(outAltitude);
-            IL.Push(outLat);
-            IL.Push(outLon);
-            IL.Push(GetFMSEntryInfoPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int), typeof(NavType*), typeof(byte*), typeof(NavRef*), typeof(int*), typeof(float*), typeof(float*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetFMSEntryInfo", ExactSpelling = true)]
+        public static extern unsafe void GetFMSEntryInfo(int inIndex, NavType* outType, byte* outID, NavRef* outRef, int* outAltitude, float* outLat, float* outLon);
 
         
         /// <summary>
@@ -400,17 +237,8 @@ namespace XP.SDK.XPLM.Internal
         /// support VORs and NDBs. Use the routines below to clear or fly to a lat/lon.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SetFMSEntryInfo(int inIndex, NavRef inRef, int inAltitude)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetFMSEntryInfoPtr);
-            IL.Push(inIndex);
-            IL.Push(inRef);
-            IL.Push(inAltitude);
-            IL.Push(SetFMSEntryInfoPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int), typeof(NavRef), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetFMSEntryInfo", ExactSpelling = true)]
+        public static extern void SetFMSEntryInfo(int inIndex, NavRef inRef, int inAltitude);
 
         
         /// <summary>
@@ -419,18 +247,8 @@ namespace XP.SDK.XPLM.Internal
         /// coordinates.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SetFMSEntryLatLon(int inIndex, float inLat, float inLon, int inAltitude)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetFMSEntryLatLonPtr);
-            IL.Push(inIndex);
-            IL.Push(inLat);
-            IL.Push(inLon);
-            IL.Push(inAltitude);
-            IL.Push(SetFMSEntryLatLonPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int), typeof(float), typeof(float), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetFMSEntryLatLon", ExactSpelling = true)]
+        public static extern void SetFMSEntryLatLon(int inIndex, float inLat, float inLon, int inAltitude);
 
         
         /// <summary>
@@ -439,15 +257,8 @@ namespace XP.SDK.XPLM.Internal
         /// plan.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void ClearFMSEntry(int inIndex)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(ClearFMSEntryPtr);
-            IL.Push(inIndex);
-            IL.Push(ClearFMSEntryPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMClearFMSEntry", ExactSpelling = true)]
+        public static extern void ClearFMSEntry(int inIndex);
 
         
         /// <summary>
@@ -456,17 +267,8 @@ namespace XP.SDK.XPLM.Internal
         /// one of fix, airport, VOR or NDB.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static NavType GetGPSDestinationType()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetGPSDestinationTypePtr);
-            NavType result;
-            IL.Push(GetGPSDestinationTypePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(NavType)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetGPSDestinationType", ExactSpelling = true)]
+        public static extern NavType GetGPSDestinationType();
 
         
         /// <summary>
@@ -474,16 +276,7 @@ namespace XP.SDK.XPLM.Internal
         /// This routine returns the current GPS destination.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static NavRef GetGPSDestination()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetGPSDestinationPtr);
-            NavRef result;
-            IL.Push(GetGPSDestinationPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(NavRef)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetGPSDestination", ExactSpelling = true)]
+        public static extern NavRef GetGPSDestination();
     }
 }

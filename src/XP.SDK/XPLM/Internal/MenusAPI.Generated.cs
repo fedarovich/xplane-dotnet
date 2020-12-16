@@ -7,37 +7,6 @@ namespace XP.SDK.XPLM.Internal
 {
     public static partial class MenusAPI
     {
-        private static IntPtr FindPluginsMenuPtr;
-        private static IntPtr FindAircraftMenuPtr;
-        private static IntPtr CreateMenuPtr;
-        private static IntPtr DestroyMenuPtr;
-        private static IntPtr ClearAllMenuItemsPtr;
-        private static IntPtr AppendMenuItemPtr;
-        private static IntPtr AppendMenuItemWithCommandPtr;
-        private static IntPtr AppendMenuSeparatorPtr;
-        private static IntPtr SetMenuItemNamePtr;
-        private static IntPtr CheckMenuItemPtr;
-        private static IntPtr CheckMenuItemStatePtr;
-        private static IntPtr EnableMenuItemPtr;
-        private static IntPtr RemoveMenuItemPtr;
-
-        static MenusAPI()
-        {
-            FindPluginsMenuPtr = Lib.GetExport("XPLMFindPluginsMenu");
-            FindAircraftMenuPtr = Lib.GetExport("XPLMFindAircraftMenu");
-            CreateMenuPtr = Lib.GetExport("XPLMCreateMenu");
-            DestroyMenuPtr = Lib.GetExport("XPLMDestroyMenu");
-            ClearAllMenuItemsPtr = Lib.GetExport("XPLMClearAllMenuItems");
-            AppendMenuItemPtr = Lib.GetExport("XPLMAppendMenuItem");
-            AppendMenuItemWithCommandPtr = Lib.GetExport("XPLMAppendMenuItemWithCommand");
-            AppendMenuSeparatorPtr = Lib.GetExport("XPLMAppendMenuSeparator");
-            SetMenuItemNamePtr = Lib.GetExport("XPLMSetMenuItemName");
-            CheckMenuItemPtr = Lib.GetExport("XPLMCheckMenuItem");
-            CheckMenuItemStatePtr = Lib.GetExport("XPLMCheckMenuItemState");
-            EnableMenuItemPtr = Lib.GetExport("XPLMEnableMenuItem");
-            RemoveMenuItemPtr = Lib.GetExport("XPLMRemoveMenuItem");
-        }
-
         
         /// <summary>
         /// <para>
@@ -45,17 +14,8 @@ namespace XP.SDK.XPLM.Internal
         /// at startup.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static MenuID FindPluginsMenu()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(FindPluginsMenuPtr);
-            MenuID result;
-            IL.Push(FindPluginsMenuPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(MenuID)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMFindPluginsMenu", ExactSpelling = true)]
+        public static extern MenuID FindPluginsMenu();
 
         
         /// <summary>
@@ -74,34 +34,10 @@ namespace XP.SDK.XPLM.Internal
         /// attempts to add menu items to it will fail.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static MenuID FindAircraftMenu()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(FindAircraftMenuPtr);
-            MenuID result;
-            IL.Push(FindAircraftMenuPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(MenuID)));
-            IL.Pop(out result);
-            return result;
-        }
-
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe MenuID CreateMenuPrivate(byte* inName, MenuID inParentMenu, int inParentItem, IntPtr inHandler, void* inMenuRef)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CreateMenuPtr);
-            MenuID result;
-            IL.Push(inName);
-            IL.Push(inParentMenu);
-            IL.Push(inParentItem);
-            IL.Push(inHandler);
-            IL.Push(inMenuRef);
-            IL.Push(CreateMenuPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(MenuID), typeof(byte*), typeof(MenuID), typeof(int), typeof(IntPtr), typeof(void*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMFindAircraftMenu", ExactSpelling = true)]
+        public static extern MenuID FindAircraftMenu();
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCreateMenu", ExactSpelling = true)]
+        private static extern unsafe MenuID CreateMenuPrivate(byte* inName, MenuID inParentMenu, int inParentItem, IntPtr inHandler, void* inMenuRef);
 
         
         /// <summary>
@@ -161,15 +97,8 @@ namespace XP.SDK.XPLM.Internal
         /// submenu if necessary.  (Normally this function will not be necessary.)
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void DestroyMenu(MenuID inMenuID)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DestroyMenuPtr);
-            IL.Push(inMenuID);
-            IL.Push(DestroyMenuPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(MenuID)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDestroyMenu", ExactSpelling = true)]
+        public static extern void DestroyMenu(MenuID inMenuID);
 
         
         /// <summary>
@@ -178,15 +107,8 @@ namespace XP.SDK.XPLM.Internal
         /// it.  Use this function if you need to change the number of items on a menu.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void ClearAllMenuItems(MenuID inMenuID)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(ClearAllMenuItemsPtr);
-            IL.Push(inMenuID);
-            IL.Push(ClearAllMenuItemsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(MenuID)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMClearAllMenuItems", ExactSpelling = true)]
+        public static extern void ClearAllMenuItems(MenuID inMenuID);
 
         
         /// <summary>
@@ -209,21 +131,8 @@ namespace XP.SDK.XPLM.Internal
         /// plugin.)
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int AppendMenuItem(MenuID inMenu, byte* inItemName, void* inItemRef, int inDeprecatedAndIgnored)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(AppendMenuItemPtr);
-            int result;
-            IL.Push(inMenu);
-            IL.Push(inItemName);
-            IL.Push(inItemRef);
-            IL.Push(inDeprecatedAndIgnored);
-            IL.Push(AppendMenuItemPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(MenuID), typeof(byte*), typeof(void*), typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMAppendMenuItem", ExactSpelling = true)]
+        public static extern unsafe int AppendMenuItem(MenuID inMenu, byte* inItemName, void* inItemRef, int inDeprecatedAndIgnored);
 
         
         /// <summary>
@@ -273,20 +182,8 @@ namespace XP.SDK.XPLM.Internal
         /// menus only.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int AppendMenuItemWithCommand(MenuID inMenu, byte* inItemName, CommandRef inCommandToExecute)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(AppendMenuItemWithCommandPtr);
-            int result;
-            IL.Push(inMenu);
-            IL.Push(inItemName);
-            IL.Push(inCommandToExecute);
-            IL.Push(AppendMenuItemWithCommandPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(MenuID), typeof(byte*), typeof(CommandRef)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMAppendMenuItemWithCommand", ExactSpelling = true)]
+        public static extern unsafe int AppendMenuItemWithCommand(MenuID inMenu, byte* inItemName, CommandRef inCommandToExecute);
 
         
         /// <summary>
@@ -325,15 +222,8 @@ namespace XP.SDK.XPLM.Internal
         /// menu argument).
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void AppendMenuSeparator(MenuID inMenu)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(AppendMenuSeparatorPtr);
-            IL.Push(inMenu);
-            IL.Push(AppendMenuSeparatorPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(MenuID)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMAppendMenuSeparator", ExactSpelling = true)]
+        public static extern void AppendMenuSeparator(MenuID inMenu);
 
         
         /// <summary>
@@ -342,18 +232,8 @@ namespace XP.SDK.XPLM.Internal
         /// ID and the index of the menu item.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetMenuItemName(MenuID inMenu, int inIndex, byte* inItemName, int inDeprecatedAndIgnored)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetMenuItemNamePtr);
-            IL.Push(inMenu);
-            IL.Push(inIndex);
-            IL.Push(inItemName);
-            IL.Push(inDeprecatedAndIgnored);
-            IL.Push(SetMenuItemNamePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(MenuID), typeof(int), typeof(byte*), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetMenuItemName", ExactSpelling = true)]
+        public static extern unsafe void SetMenuItemName(MenuID inMenu, int inIndex, byte* inItemName, int inDeprecatedAndIgnored);
 
         
         /// <summary>
@@ -377,17 +257,8 @@ namespace XP.SDK.XPLM.Internal
         /// Set whether a menu item is checked.  Pass in the menu ID and item index.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void CheckMenuItem(MenuID inMenu, int index, MenuCheck inCheck)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CheckMenuItemPtr);
-            IL.Push(inMenu);
-            IL.Push(index);
-            IL.Push(inCheck);
-            IL.Push(CheckMenuItemPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(MenuID), typeof(int), typeof(MenuCheck)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCheckMenuItem", ExactSpelling = true)]
+        public static extern void CheckMenuItem(MenuID inMenu, int index, MenuCheck inCheck);
 
         
         /// <summary>
@@ -396,17 +267,8 @@ namespace XP.SDK.XPLM.Internal
         /// check mark may be on or off, or a menu may not have an icon at all.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void CheckMenuItemState(MenuID inMenu, int index, MenuCheck* outCheck)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CheckMenuItemStatePtr);
-            IL.Push(inMenu);
-            IL.Push(index);
-            IL.Push(outCheck);
-            IL.Push(CheckMenuItemStatePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(MenuID), typeof(int), typeof(MenuCheck*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCheckMenuItemState", ExactSpelling = true)]
+        public static extern unsafe void CheckMenuItemState(MenuID inMenu, int index, MenuCheck* outCheck);
 
         
         /// <summary>
@@ -414,17 +276,8 @@ namespace XP.SDK.XPLM.Internal
         /// Sets whether this menu item is enabled.  Items start out enabled.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void EnableMenuItem(MenuID inMenu, int index, int enabled)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(EnableMenuItemPtr);
-            IL.Push(inMenu);
-            IL.Push(index);
-            IL.Push(enabled);
-            IL.Push(EnableMenuItemPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(MenuID), typeof(int), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMEnableMenuItem", ExactSpelling = true)]
+        public static extern void EnableMenuItem(MenuID inMenu, int index, int enabled);
 
         
         /// <summary>
@@ -433,15 +286,7 @@ namespace XP.SDK.XPLM.Internal
         /// one; your plugin must track the change in index numbers.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void RemoveMenuItem(MenuID inMenu, int inIndex)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(RemoveMenuItemPtr);
-            IL.Push(inMenu);
-            IL.Push(inIndex);
-            IL.Push(RemoveMenuItemPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(MenuID), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRemoveMenuItem", ExactSpelling = true)]
+        public static extern void RemoveMenuItem(MenuID inMenu, int inIndex);
     }
 }

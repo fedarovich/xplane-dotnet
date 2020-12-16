@@ -7,49 +7,14 @@ namespace XP.SDK.XPLM.Internal
 {
     public static partial class SceneryAPI
     {
-        private static IntPtr CreateProbePtr;
-        private static IntPtr DestroyProbePtr;
-        private static IntPtr ProbeTerrainXYZPtr;
-        private static IntPtr GetMagneticVariationPtr;
-        private static IntPtr DegTrueToDegMagneticPtr;
-        private static IntPtr DegMagneticToDegTruePtr;
-        private static IntPtr LoadObjectPtr;
-        private static IntPtr LoadObjectAsyncPtr;
-        private static IntPtr UnloadObjectPtr;
-        private static IntPtr LookupObjectsPtr;
-
-        static SceneryAPI()
-        {
-            CreateProbePtr = Lib.GetExport("XPLMCreateProbe");
-            DestroyProbePtr = Lib.GetExport("XPLMDestroyProbe");
-            ProbeTerrainXYZPtr = Lib.GetExport("XPLMProbeTerrainXYZ");
-            GetMagneticVariationPtr = Lib.GetExport("XPLMGetMagneticVariation");
-            DegTrueToDegMagneticPtr = Lib.GetExport("XPLMDegTrueToDegMagnetic");
-            DegMagneticToDegTruePtr = Lib.GetExport("XPLMDegMagneticToDegTrue");
-            LoadObjectPtr = Lib.GetExport("XPLMLoadObject");
-            LoadObjectAsyncPtr = Lib.GetExport("XPLMLoadObjectAsync");
-            UnloadObjectPtr = Lib.GetExport("XPLMUnloadObject");
-            LookupObjectsPtr = Lib.GetExport("XPLMLookupObjects");
-        }
-
         
         /// <summary>
         /// <para>
         /// Creates a new probe object of a given type and returns.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static ProbeRef CreateProbe(ProbeType inProbeType)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CreateProbePtr);
-            ProbeRef result;
-            IL.Push(inProbeType);
-            IL.Push(CreateProbePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(ProbeRef), typeof(ProbeType)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCreateProbe", ExactSpelling = true)]
+        public static extern ProbeRef CreateProbe(ProbeType inProbeType);
 
         
         /// <summary>
@@ -57,15 +22,8 @@ namespace XP.SDK.XPLM.Internal
         /// Deallocates an existing probe object.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void DestroyProbe(ProbeRef inProbe)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DestroyProbePtr);
-            IL.Push(inProbe);
-            IL.Push(DestroyProbePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(ProbeRef)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDestroyProbe", ExactSpelling = true)]
+        public static extern void DestroyProbe(ProbeRef inProbe);
 
         
         /// <summary>
@@ -76,22 +34,8 @@ namespace XP.SDK.XPLM.Internal
         /// is returned.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe ProbeResult ProbeTerrainXYZ(ProbeRef inProbe, float inX, float inY, float inZ, ProbeInfo* outInfo)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(ProbeTerrainXYZPtr);
-            ProbeResult result;
-            IL.Push(inProbe);
-            IL.Push(inX);
-            IL.Push(inY);
-            IL.Push(inZ);
-            IL.Push(outInfo);
-            IL.Push(ProbeTerrainXYZPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(ProbeResult), typeof(ProbeRef), typeof(float), typeof(float), typeof(float), typeof(ProbeInfo*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMProbeTerrainXYZ", ExactSpelling = true)]
+        public static extern unsafe ProbeResult ProbeTerrainXYZ(ProbeRef inProbe, float inX, float inY, float inZ, ProbeInfo* outInfo);
 
         
         /// <summary>
@@ -100,19 +44,8 @@ namespace XP.SDK.XPLM.Internal
         /// indication latitude and longitude.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static float GetMagneticVariation(double latitude, double longitude)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetMagneticVariationPtr);
-            float result;
-            IL.Push(latitude);
-            IL.Push(longitude);
-            IL.Push(GetMagneticVariationPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(float), typeof(double), typeof(double)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetMagneticVariation", ExactSpelling = true)]
+        public static extern float GetMagneticVariation(double latitude, double longitude);
 
         
         /// <summary>
@@ -121,18 +54,8 @@ namespace XP.SDK.XPLM.Internal
         /// to magnetic north at the user's current location.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static float DegTrueToDegMagnetic(float headingDegreesTrue)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DegTrueToDegMagneticPtr);
-            float result;
-            IL.Push(headingDegreesTrue);
-            IL.Push(DegTrueToDegMagneticPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(float), typeof(float)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDegTrueToDegMagnetic", ExactSpelling = true)]
+        public static extern float DegTrueToDegMagnetic(float headingDegreesTrue);
 
         
         /// <summary>
@@ -141,18 +64,8 @@ namespace XP.SDK.XPLM.Internal
         /// current location into a value relative to true north.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static float DegMagneticToDegTrue(float headingDegreesMagnetic)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DegMagneticToDegTruePtr);
-            float result;
-            IL.Push(headingDegreesMagnetic);
-            IL.Push(DegMagneticToDegTruePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(float), typeof(float)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDegMagneticToDegTrue", ExactSpelling = true)]
+        public static extern float DegMagneticToDegTrue(float headingDegreesMagnetic);
 
         
         /// <summary>
@@ -180,18 +93,8 @@ namespace XP.SDK.XPLM.Internal
         /// defer object loading until the sim has fully started.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe ObjectRef LoadObject(byte* inPath)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(LoadObjectPtr);
-            ObjectRef result;
-            IL.Push(inPath);
-            IL.Push(LoadObjectPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(ObjectRef), typeof(byte*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMLoadObject", ExactSpelling = true)]
+        public static extern unsafe ObjectRef LoadObject(byte* inPath);
 
         
         /// <summary>
@@ -228,17 +131,8 @@ namespace XP.SDK.XPLM.Internal
             return LoadObject(inPathPtr);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe void LoadObjectAsyncPrivate(byte* inPath, IntPtr inCallback, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(LoadObjectAsyncPtr);
-            IL.Push(inPath);
-            IL.Push(inCallback);
-            IL.Push(inRefcon);
-            IL.Push(LoadObjectAsyncPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*), typeof(IntPtr), typeof(void*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMLoadObjectAsync", ExactSpelling = true)]
+        private static extern unsafe void LoadObjectAsyncPrivate(byte* inPath, IntPtr inCallback, void* inRefcon);
 
         
         /// <summary>
@@ -305,32 +199,10 @@ namespace XP.SDK.XPLM.Internal
         /// successful call to XPLMLoadObject.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void UnloadObject(ObjectRef inObject)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(UnloadObjectPtr);
-            IL.Push(inObject);
-            IL.Push(UnloadObjectPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(ObjectRef)));
-        }
-
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe int LookupObjectsPrivate(byte* inPath, float inLatitude, float inLongitude, IntPtr enumerator, void* @ref)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(LookupObjectsPtr);
-            int result;
-            IL.Push(inPath);
-            IL.Push(inLatitude);
-            IL.Push(inLongitude);
-            IL.Push(enumerator);
-            IL.Push(@ref);
-            IL.Push(LookupObjectsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(float), typeof(float), typeof(IntPtr), typeof(void*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnloadObject", ExactSpelling = true)]
+        public static extern void UnloadObject(ObjectRef inObject);
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMLookupObjects", ExactSpelling = true)]
+        private static extern unsafe int LookupObjectsPrivate(byte* inPath, float inLatitude, float inLongitude, IntPtr enumerator, void* @ref);
 
         
         /// <summary>

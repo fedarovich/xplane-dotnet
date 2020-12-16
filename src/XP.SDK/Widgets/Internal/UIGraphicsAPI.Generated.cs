@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using InlineIL;
 
@@ -7,25 +6,6 @@ namespace XP.SDK.Widgets.Internal
 {
     public static partial class UIGraphicsAPI
     {
-        private static IntPtr DrawWindowPtr;
-        private static IntPtr GetWindowDefaultDimensionsPtr;
-        private static IntPtr DrawElementPtr;
-        private static IntPtr GetElementDefaultDimensionsPtr;
-        private static IntPtr DrawTrackPtr;
-        private static IntPtr GetTrackDefaultDimensionsPtr;
-        private static IntPtr GetTrackMetricsPtr;
-
-        static UIGraphicsAPI()
-        {
-            DrawWindowPtr = Lib.GetExport("XPDrawWindow");
-            GetWindowDefaultDimensionsPtr = Lib.GetExport("XPGetWindowDefaultDimensions");
-            DrawElementPtr = Lib.GetExport("XPDrawElement");
-            GetElementDefaultDimensionsPtr = Lib.GetExport("XPGetElementDefaultDimensions");
-            DrawTrackPtr = Lib.GetExport("XPDrawTrack");
-            GetTrackDefaultDimensionsPtr = Lib.GetExport("XPGetTrackDefaultDimensions");
-            GetTrackMetricsPtr = Lib.GetExport("XPGetTrackMetrics");
-        }
-
         
         /// <summary>
         /// <para>
@@ -35,19 +15,8 @@ namespace XP.SDK.Widgets.Internal
         /// appropriate to the style.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void DrawWindow(int inX1, int inY1, int inX2, int inY2, WindowStyle inStyle)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DrawWindowPtr);
-            IL.Push(inX1);
-            IL.Push(inY1);
-            IL.Push(inX2);
-            IL.Push(inY2);
-            IL.Push(inStyle);
-            IL.Push(DrawWindowPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int), typeof(int), typeof(int), typeof(int), typeof(WindowStyle)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPDrawWindow", ExactSpelling = true)]
+        public static extern void DrawWindow(int inX1, int inY1, int inX2, int inY2, WindowStyle inStyle);
 
         
         /// <summary>
@@ -56,17 +25,8 @@ namespace XP.SDK.Widgets.Internal
         /// a minimum or fixed value depending on whether the window is scalable.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetWindowDefaultDimensions(WindowStyle inStyle, int* outWidth, int* outHeight)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetWindowDefaultDimensionsPtr);
-            IL.Push(inStyle);
-            IL.Push(outWidth);
-            IL.Push(outHeight);
-            IL.Push(GetWindowDefaultDimensionsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WindowStyle), typeof(int*), typeof(int*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPGetWindowDefaultDimensions", ExactSpelling = true)]
+        public static extern unsafe void GetWindowDefaultDimensions(WindowStyle inStyle, int* outWidth, int* outHeight);
 
         
         /// <summary>
@@ -79,20 +39,8 @@ namespace XP.SDK.Widgets.Internal
         /// this is ignored.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void DrawElement(int inX1, int inY1, int inX2, int inY2, ElementStyle inStyle, int inLit)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DrawElementPtr);
-            IL.Push(inX1);
-            IL.Push(inY1);
-            IL.Push(inX2);
-            IL.Push(inY2);
-            IL.Push(inStyle);
-            IL.Push(inLit);
-            IL.Push(DrawElementPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int), typeof(int), typeof(int), typeof(int), typeof(ElementStyle), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPDrawElement", ExactSpelling = true)]
+        public static extern void DrawElement(int inX1, int inY1, int inX2, int inY2, ElementStyle inStyle, int inLit);
 
         
         /// <summary>
@@ -102,18 +50,8 @@ namespace XP.SDK.Widgets.Internal
         /// state. Pass `NULL` to not receive any of these parameters.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetElementDefaultDimensions(ElementStyle inStyle, int* outWidth, int* outHeight, int* outCanBeLit)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetElementDefaultDimensionsPtr);
-            IL.Push(inStyle);
-            IL.Push(outWidth);
-            IL.Push(outHeight);
-            IL.Push(outCanBeLit);
-            IL.Push(GetElementDefaultDimensionsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(ElementStyle), typeof(int*), typeof(int*), typeof(int*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPGetElementDefaultDimensions", ExactSpelling = true)]
+        public static extern unsafe void GetElementDefaultDimensions(ElementStyle inStyle, int* outWidth, int* outHeight, int* outCanBeLit);
 
         
         /// <summary>
@@ -125,23 +63,8 @@ namespace XP.SDK.Widgets.Internal
         /// not.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void DrawTrack(int inX1, int inY1, int inX2, int inY2, int inMin, int inMax, int inValue, TrackStyle inTrackStyle, int inLit)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DrawTrackPtr);
-            IL.Push(inX1);
-            IL.Push(inY1);
-            IL.Push(inX2);
-            IL.Push(inY2);
-            IL.Push(inMin);
-            IL.Push(inMax);
-            IL.Push(inValue);
-            IL.Push(inTrackStyle);
-            IL.Push(inLit);
-            IL.Push(DrawTrackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(TrackStyle), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPDrawTrack", ExactSpelling = true)]
+        public static extern void DrawTrack(int inX1, int inY1, int inX2, int inY2, int inMin, int inMax, int inValue, TrackStyle inTrackStyle, int inLit);
 
         
         /// <summary>
@@ -151,17 +74,8 @@ namespace XP.SDK.Widgets.Internal
         /// lit.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetTrackDefaultDimensions(TrackStyle inStyle, int* outWidth, int* outCanBeLit)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetTrackDefaultDimensionsPtr);
-            IL.Push(inStyle);
-            IL.Push(outWidth);
-            IL.Push(outCanBeLit);
-            IL.Push(GetTrackDefaultDimensionsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(TrackStyle), typeof(int*), typeof(int*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPGetTrackDefaultDimensions", ExactSpelling = true)]
+        public static extern unsafe void GetTrackDefaultDimensions(TrackStyle inStyle, int* outWidth, int* outCanBeLit);
 
         
         /// <summary>
@@ -181,27 +95,7 @@ namespace XP.SDK.Widgets.Internal
         /// button decreases; for vertical scrollers, the top button decreases.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetTrackMetrics(int inX1, int inY1, int inX2, int inY2, int inMin, int inMax, int inValue, TrackStyle inTrackStyle, int* outIsVertical, int* outDownBtnSize, int* outDownPageSize, int* outThumbSize, int* outUpPageSize, int* outUpBtnSize)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetTrackMetricsPtr);
-            IL.Push(inX1);
-            IL.Push(inY1);
-            IL.Push(inX2);
-            IL.Push(inY2);
-            IL.Push(inMin);
-            IL.Push(inMax);
-            IL.Push(inValue);
-            IL.Push(inTrackStyle);
-            IL.Push(outIsVertical);
-            IL.Push(outDownBtnSize);
-            IL.Push(outDownPageSize);
-            IL.Push(outThumbSize);
-            IL.Push(outUpPageSize);
-            IL.Push(outUpBtnSize);
-            IL.Push(GetTrackMetricsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(TrackStyle), typeof(int*), typeof(int*), typeof(int*), typeof(int*), typeof(int*), typeof(int*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPGetTrackMetrics", ExactSpelling = true)]
+        public static extern unsafe void GetTrackMetrics(int inX1, int inY1, int inX2, int inY2, int inMin, int inMax, int inValue, TrackStyle inTrackStyle, int* outIsVertical, int* outDownBtnSize, int* outDownPageSize, int* outThumbSize, int* outUpPageSize, int* outUpBtnSize);
     }
 }

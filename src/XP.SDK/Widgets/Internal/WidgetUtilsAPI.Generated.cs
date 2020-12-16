@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using InlineIL;
 
@@ -7,23 +6,6 @@ namespace XP.SDK.Widgets.Internal
 {
     public static partial class WidgetUtilsAPI
     {
-        private static IntPtr CreateWidgetsPtr;
-        private static IntPtr MoveWidgetByPtr;
-        private static IntPtr FixedLayoutPtr;
-        private static IntPtr SelectIfNeededPtr;
-        private static IntPtr DefocusKeyboardPtr;
-        private static IntPtr DragWidgetPtr;
-
-        static WidgetUtilsAPI()
-        {
-            CreateWidgetsPtr = Lib.GetExport("XPUCreateWidgets");
-            MoveWidgetByPtr = Lib.GetExport("XPUMoveWidgetBy");
-            FixedLayoutPtr = Lib.GetExport("XPUFixedLayout");
-            SelectIfNeededPtr = Lib.GetExport("XPUSelectIfNeeded");
-            DefocusKeyboardPtr = Lib.GetExport("XPUDefocusKeyboard");
-            DragWidgetPtr = Lib.GetExport("XPUDragWidget");
-        }
-
         
         /// <summary>
         /// <para>
@@ -43,18 +25,8 @@ namespace XP.SDK.Widgets.Internal
         /// XPUCreateWidgets in a widget created previously.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void CreateWidgets(WidgetCreate* inWidgetDefs, int inCount, WidgetID inParamParent, WidgetID* ioWidgets)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CreateWidgetsPtr);
-            IL.Push(inWidgetDefs);
-            IL.Push(inCount);
-            IL.Push(inParamParent);
-            IL.Push(ioWidgets);
-            IL.Push(CreateWidgetsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetCreate*), typeof(int), typeof(WidgetID), typeof(WidgetID*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPUCreateWidgets", ExactSpelling = true)]
+        public static extern unsafe void CreateWidgets(WidgetCreate* inWidgetDefs, int inCount, WidgetID inParamParent, WidgetID* ioWidgets);
 
         
         /// <summary>
@@ -63,17 +35,8 @@ namespace XP.SDK.Widgets.Internal
         /// widget.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void MoveWidgetBy(WidgetID inWidget, int inDeltaX, int inDeltaY)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(MoveWidgetByPtr);
-            IL.Push(inWidget);
-            IL.Push(inDeltaX);
-            IL.Push(inDeltaY);
-            IL.Push(MoveWidgetByPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetID), typeof(int), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPUMoveWidgetBy", ExactSpelling = true)]
+        public static extern void MoveWidgetBy(WidgetID inWidget, int inDeltaX, int inDeltaY);
 
         
         /// <summary>
@@ -83,21 +46,8 @@ namespace XP.SDK.Widgets.Internal
         /// widget for your window.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int FixedLayout(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(FixedLayoutPtr);
-            int result;
-            IL.Push(inMessage);
-            IL.Push(inWidget);
-            IL.Push(inParam1);
-            IL.Push(inParam2);
-            IL.Push(FixedLayoutPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(WidgetMessage), typeof(WidgetID), typeof(IntPtr), typeof(IntPtr)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPUFixedLayout", ExactSpelling = true)]
+        public static extern int FixedLayout(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2);
 
         
         /// <summary>
@@ -107,22 +57,8 @@ namespace XP.SDK.Widgets.Internal
         /// consumed by bringin the window to the foreground.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int SelectIfNeeded(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2, int inEatClick)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SelectIfNeededPtr);
-            int result;
-            IL.Push(inMessage);
-            IL.Push(inWidget);
-            IL.Push(inParam1);
-            IL.Push(inParam2);
-            IL.Push(inEatClick);
-            IL.Push(SelectIfNeededPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(WidgetMessage), typeof(WidgetID), typeof(IntPtr), typeof(IntPtr), typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPUSelectIfNeeded", ExactSpelling = true)]
+        public static extern int SelectIfNeeded(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2, int inEatClick);
 
         
         /// <summary>
@@ -131,22 +67,8 @@ namespace XP.SDK.Widgets.Internal
         /// This stops editing of any text fields, etc.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int DefocusKeyboard(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2, int inEatClick)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DefocusKeyboardPtr);
-            int result;
-            IL.Push(inMessage);
-            IL.Push(inWidget);
-            IL.Push(inParam1);
-            IL.Push(inParam2);
-            IL.Push(inEatClick);
-            IL.Push(DefocusKeyboardPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(WidgetMessage), typeof(WidgetID), typeof(IntPtr), typeof(IntPtr), typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPUDefocusKeyboard", ExactSpelling = true)]
+        public static extern int DefocusKeyboard(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2, int inEatClick);
 
         
         /// <summary>
@@ -156,24 +78,7 @@ namespace XP.SDK.Widgets.Internal
         /// be a sub-region of your widget (for example, a title bar).
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int DragWidget(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2, int inLeft, int inTop, int inRight, int inBottom)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DragWidgetPtr);
-            int result;
-            IL.Push(inMessage);
-            IL.Push(inWidget);
-            IL.Push(inParam1);
-            IL.Push(inParam2);
-            IL.Push(inLeft);
-            IL.Push(inTop);
-            IL.Push(inRight);
-            IL.Push(inBottom);
-            IL.Push(DragWidgetPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(WidgetMessage), typeof(WidgetID), typeof(IntPtr), typeof(IntPtr), typeof(int), typeof(int), typeof(int), typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPUDragWidget", ExactSpelling = true)]
+        public static extern int DragWidget(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2, int inLeft, int inTop, int inRight, int inBottom);
     }
 }

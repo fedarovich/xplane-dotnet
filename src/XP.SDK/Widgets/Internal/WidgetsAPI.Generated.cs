@@ -8,67 +8,6 @@ namespace XP.SDK.Widgets.Internal
 {
     public static partial class WidgetsAPI
     {
-        private static IntPtr CreateWidgetPtr;
-        private static IntPtr CreateCustomWidgetPtr;
-        private static IntPtr DestroyWidgetPtr;
-        private static IntPtr SendMessageToWidgetPtr;
-        private static IntPtr PlaceWidgetWithinPtr;
-        private static IntPtr CountChildWidgetsPtr;
-        private static IntPtr GetNthChildWidgetPtr;
-        private static IntPtr GetParentWidgetPtr;
-        private static IntPtr ShowWidgetPtr;
-        private static IntPtr HideWidgetPtr;
-        private static IntPtr IsWidgetVisiblePtr;
-        private static IntPtr FindRootWidgetPtr;
-        private static IntPtr BringRootWidgetToFrontPtr;
-        private static IntPtr IsWidgetInFrontPtr;
-        private static IntPtr GetWidgetGeometryPtr;
-        private static IntPtr SetWidgetGeometryPtr;
-        private static IntPtr GetWidgetForLocationPtr;
-        private static IntPtr GetWidgetExposedGeometryPtr;
-        private static IntPtr SetWidgetDescriptorPtr;
-        private static IntPtr GetWidgetDescriptorPtr;
-        private static IntPtr GetWidgetUnderlyingWindowPtr;
-        private static IntPtr SetWidgetPropertyPtr;
-        private static IntPtr GetWidgetPropertyPtr;
-        private static IntPtr SetKeyboardFocusPtr;
-        private static IntPtr LoseKeyboardFocusPtr;
-        private static IntPtr GetWidgetWithFocusPtr;
-        private static IntPtr AddWidgetCallbackPtr;
-        private static IntPtr GetWidgetClassFuncPtr;
-
-        static WidgetsAPI()
-        {
-            CreateWidgetPtr = Lib.GetExport("XPCreateWidget");
-            CreateCustomWidgetPtr = Lib.GetExport("XPCreateCustomWidget");
-            DestroyWidgetPtr = Lib.GetExport("XPDestroyWidget");
-            SendMessageToWidgetPtr = Lib.GetExport("XPSendMessageToWidget");
-            PlaceWidgetWithinPtr = Lib.GetExport("XPPlaceWidgetWithin");
-            CountChildWidgetsPtr = Lib.GetExport("XPCountChildWidgets");
-            GetNthChildWidgetPtr = Lib.GetExport("XPGetNthChildWidget");
-            GetParentWidgetPtr = Lib.GetExport("XPGetParentWidget");
-            ShowWidgetPtr = Lib.GetExport("XPShowWidget");
-            HideWidgetPtr = Lib.GetExport("XPHideWidget");
-            IsWidgetVisiblePtr = Lib.GetExport("XPIsWidgetVisible");
-            FindRootWidgetPtr = Lib.GetExport("XPFindRootWidget");
-            BringRootWidgetToFrontPtr = Lib.GetExport("XPBringRootWidgetToFront");
-            IsWidgetInFrontPtr = Lib.GetExport("XPIsWidgetInFront");
-            GetWidgetGeometryPtr = Lib.GetExport("XPGetWidgetGeometry");
-            SetWidgetGeometryPtr = Lib.GetExport("XPSetWidgetGeometry");
-            GetWidgetForLocationPtr = Lib.GetExport("XPGetWidgetForLocation");
-            GetWidgetExposedGeometryPtr = Lib.GetExport("XPGetWidgetExposedGeometry");
-            SetWidgetDescriptorPtr = Lib.GetExport("XPSetWidgetDescriptor");
-            GetWidgetDescriptorPtr = Lib.GetExport("XPGetWidgetDescriptor");
-            GetWidgetUnderlyingWindowPtr = Lib.GetExport("XPGetWidgetUnderlyingWindow");
-            SetWidgetPropertyPtr = Lib.GetExport("XPSetWidgetProperty");
-            GetWidgetPropertyPtr = Lib.GetExport("XPGetWidgetProperty");
-            SetKeyboardFocusPtr = Lib.GetExport("XPSetKeyboardFocus");
-            LoseKeyboardFocusPtr = Lib.GetExport("XPLoseKeyboardFocus");
-            GetWidgetWithFocusPtr = Lib.GetExport("XPGetWidgetWithFocus");
-            AddWidgetCallbackPtr = Lib.GetExport("XPAddWidgetCallback");
-            GetWidgetClassFuncPtr = Lib.GetExport("XPGetWidgetClassFunc");
-        }
-
         
         /// <summary>
         /// <para>
@@ -104,26 +43,8 @@ namespace XP.SDK.Widgets.Internal
         /// into root widgets later to activate them if you wish.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe WidgetID CreateWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, byte* inDescriptor, int inIsRoot, WidgetID inContainer, WidgetClass inClass)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CreateWidgetPtr);
-            WidgetID result;
-            IL.Push(inLeft);
-            IL.Push(inTop);
-            IL.Push(inRight);
-            IL.Push(inBottom);
-            IL.Push(inVisible);
-            IL.Push(inDescriptor);
-            IL.Push(inIsRoot);
-            IL.Push(inContainer);
-            IL.Push(inClass);
-            IL.Push(CreateWidgetPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WidgetID), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(byte*), typeof(int), typeof(WidgetID), typeof(WidgetClass)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPCreateWidget", ExactSpelling = true)]
+        public static extern unsafe WidgetID CreateWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, byte* inDescriptor, int inIsRoot, WidgetID inContainer, WidgetClass inClass);
 
         
         /// <summary>
@@ -169,26 +90,8 @@ namespace XP.SDK.Widgets.Internal
             return CreateWidget(inLeft, inTop, inRight, inBottom, inVisible, inDescriptorPtr, inIsRoot, inContainer, inClass);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe WidgetID CreateCustomWidgetPrivate(int inLeft, int inTop, int inRight, int inBottom, int inVisible, byte* inDescriptor, int inIsRoot, WidgetID inContainer, IntPtr inCallback)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CreateCustomWidgetPtr);
-            WidgetID result;
-            IL.Push(inLeft);
-            IL.Push(inTop);
-            IL.Push(inRight);
-            IL.Push(inBottom);
-            IL.Push(inVisible);
-            IL.Push(inDescriptor);
-            IL.Push(inIsRoot);
-            IL.Push(inContainer);
-            IL.Push(inCallback);
-            IL.Push(CreateCustomWidgetPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WidgetID), typeof(int), typeof(int), typeof(int), typeof(int), typeof(int), typeof(byte*), typeof(int), typeof(WidgetID), typeof(IntPtr)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPCreateCustomWidget", ExactSpelling = true)]
+        private static extern unsafe WidgetID CreateCustomWidgetPrivate(int inLeft, int inTop, int inRight, int inBottom, int inVisible, byte* inDescriptor, int inIsRoot, WidgetID inContainer, IntPtr inCallback);
 
         
         /// <summary>
@@ -240,16 +143,8 @@ namespace XP.SDK.Widgets.Internal
         /// flag, the child widgets will simply end up with their parent set to 0.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void DestroyWidget(WidgetID inWidget, int inDestroyChildren)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DestroyWidgetPtr);
-            IL.Push(inWidget);
-            IL.Push(inDestroyChildren);
-            IL.Push(DestroyWidgetPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetID), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPDestroyWidget", ExactSpelling = true)]
+        public static extern void DestroyWidget(WidgetID inWidget, int inDestroyChildren);
 
         
         /// <summary>
@@ -270,22 +165,8 @@ namespace XP.SDK.Widgets.Internal
         /// the message in order until it is handled.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int SendMessageToWidget(WidgetID inWidget, WidgetMessage inMessage, DispatchMode inMode, IntPtr inParam1, IntPtr inParam2)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SendMessageToWidgetPtr);
-            int result;
-            IL.Push(inWidget);
-            IL.Push(inMessage);
-            IL.Push(inMode);
-            IL.Push(inParam1);
-            IL.Push(inParam2);
-            IL.Push(SendMessageToWidgetPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(WidgetID), typeof(WidgetMessage), typeof(DispatchMode), typeof(IntPtr), typeof(IntPtr)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPSendMessageToWidget", ExactSpelling = true)]
+        public static extern int SendMessageToWidget(WidgetID inWidget, WidgetMessage inMessage, DispatchMode inMode, IntPtr inParam1, IntPtr inParam2);
 
         
         /// <summary>
@@ -306,16 +187,8 @@ namespace XP.SDK.Widgets.Internal
         /// SetWidgetGeometry.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void PlaceWidgetWithin(WidgetID inSubWidget, WidgetID inContainer)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(PlaceWidgetWithinPtr);
-            IL.Push(inSubWidget);
-            IL.Push(inContainer);
-            IL.Push(PlaceWidgetWithinPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetID), typeof(WidgetID)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPPlaceWidgetWithin", ExactSpelling = true)]
+        public static extern void PlaceWidgetWithin(WidgetID inSubWidget, WidgetID inContainer);
 
         
         /// <summary>
@@ -323,18 +196,8 @@ namespace XP.SDK.Widgets.Internal
         /// This routine returns the number of widgets another widget contains.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int CountChildWidgets(WidgetID inWidget)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CountChildWidgetsPtr);
-            int result;
-            IL.Push(inWidget);
-            IL.Push(CountChildWidgetsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(WidgetID)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPCountChildWidgets", ExactSpelling = true)]
+        public static extern int CountChildWidgets(WidgetID inWidget);
 
         
         /// <summary>
@@ -344,19 +207,8 @@ namespace XP.SDK.Widgets.Internal
         /// inclusive. If the index is invalid, 0 is returned.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static WidgetID GetNthChildWidget(WidgetID inWidget, int inIndex)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetNthChildWidgetPtr);
-            WidgetID result;
-            IL.Push(inWidget);
-            IL.Push(inIndex);
-            IL.Push(GetNthChildWidgetPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WidgetID), typeof(WidgetID), typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPGetNthChildWidget", ExactSpelling = true)]
+        public static extern WidgetID GetNthChildWidget(WidgetID inWidget, int inIndex);
 
         
         /// <summary>
@@ -365,18 +217,8 @@ namespace XP.SDK.Widgets.Internal
         /// widgets never have parents and therefore always return 0.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static WidgetID GetParentWidget(WidgetID inWidget)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetParentWidgetPtr);
-            WidgetID result;
-            IL.Push(inWidget);
-            IL.Push(GetParentWidgetPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WidgetID), typeof(WidgetID)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPGetParentWidget", ExactSpelling = true)]
+        public static extern WidgetID GetParentWidget(WidgetID inWidget);
 
         
         /// <summary>
@@ -386,15 +228,8 @@ namespace XP.SDK.Widgets.Internal
         /// visible, it will still not be visible to the user.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void ShowWidget(WidgetID inWidget)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(ShowWidgetPtr);
-            IL.Push(inWidget);
-            IL.Push(ShowWidgetPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetID)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPShowWidget", ExactSpelling = true)]
+        public static extern void ShowWidget(WidgetID inWidget);
 
         
         /// <summary>
@@ -403,15 +238,8 @@ namespace XP.SDK.Widgets.Internal
         /// widget might not be visible despite its own visibility state.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void HideWidget(WidgetID inWidget)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(HideWidgetPtr);
-            IL.Push(inWidget);
-            IL.Push(HideWidgetPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetID)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPHideWidget", ExactSpelling = true)]
+        public static extern void HideWidget(WidgetID inWidget);
 
         
         /// <summary>
@@ -421,18 +249,8 @@ namespace XP.SDK.Widgets.Internal
         /// routine to tell if the user can see the widget.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int IsWidgetVisible(WidgetID inWidget)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(IsWidgetVisiblePtr);
-            int result;
-            IL.Push(inWidget);
-            IL.Push(IsWidgetVisiblePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(WidgetID)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPIsWidgetVisible", ExactSpelling = true)]
+        public static extern int IsWidgetVisible(WidgetID inWidget);
 
         
         /// <summary>
@@ -441,18 +259,8 @@ namespace XP.SDK.Widgets.Internal
         /// or NULL if the passed in widget is not in a rooted hierarchy.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static WidgetID FindRootWidget(WidgetID inWidget)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(FindRootWidgetPtr);
-            WidgetID result;
-            IL.Push(inWidget);
-            IL.Push(FindRootWidgetPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WidgetID), typeof(WidgetID)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPFindRootWidget", ExactSpelling = true)]
+        public static extern WidgetID FindRootWidget(WidgetID inWidget);
 
         
         /// <summary>
@@ -464,15 +272,8 @@ namespace XP.SDK.Widgets.Internal
         /// top of the tree), this routine does nothing.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void BringRootWidgetToFront(WidgetID inWidget)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(BringRootWidgetToFrontPtr);
-            IL.Push(inWidget);
-            IL.Push(BringRootWidgetToFrontPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetID)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPBringRootWidgetToFront", ExactSpelling = true)]
+        public static extern void BringRootWidgetToFront(WidgetID inWidget);
 
         
         /// <summary>
@@ -482,18 +283,8 @@ namespace XP.SDK.Widgets.Internal
         /// if the widget is not in a rooted hierarchy.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int IsWidgetInFront(WidgetID inWidget)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(IsWidgetInFrontPtr);
-            int result;
-            IL.Push(inWidget);
-            IL.Push(IsWidgetInFrontPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(WidgetID)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPIsWidgetInFront", ExactSpelling = true)]
+        public static extern int IsWidgetInFront(WidgetID inWidget);
 
         
         /// <summary>
@@ -502,19 +293,8 @@ namespace XP.SDK.Widgets.Internal
         /// Pass NULL for any parameter you are not interested in.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetWidgetGeometry(WidgetID inWidget, int* outLeft, int* outTop, int* outRight, int* outBottom)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetWidgetGeometryPtr);
-            IL.Push(inWidget);
-            IL.Push(outLeft);
-            IL.Push(outTop);
-            IL.Push(outRight);
-            IL.Push(outBottom);
-            IL.Push(GetWidgetGeometryPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetID), typeof(int*), typeof(int*), typeof(int*), typeof(int*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPGetWidgetGeometry", ExactSpelling = true)]
+        public static extern unsafe void GetWidgetGeometry(WidgetID inWidget, int* outLeft, int* outTop, int* outRight, int* outBottom);
 
         
         /// <summary>
@@ -522,19 +302,8 @@ namespace XP.SDK.Widgets.Internal
         /// This function changes the bounding box of a widget.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SetWidgetGeometry(WidgetID inWidget, int inLeft, int inTop, int inRight, int inBottom)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetWidgetGeometryPtr);
-            IL.Push(inWidget);
-            IL.Push(inLeft);
-            IL.Push(inTop);
-            IL.Push(inRight);
-            IL.Push(inBottom);
-            IL.Push(SetWidgetGeometryPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetID), typeof(int), typeof(int), typeof(int), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPSetWidgetGeometry", ExactSpelling = true)]
+        public static extern void SetWidgetGeometry(WidgetID inWidget, int inLeft, int inTop, int inRight, int inBottom);
 
         
         /// <summary>
@@ -555,22 +324,8 @@ namespace XP.SDK.Widgets.Internal
         /// location.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static WidgetID GetWidgetForLocation(WidgetID inContainer, int inXOffset, int inYOffset, int inRecursive, int inVisibleOnly)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetWidgetForLocationPtr);
-            WidgetID result;
-            IL.Push(inContainer);
-            IL.Push(inXOffset);
-            IL.Push(inYOffset);
-            IL.Push(inRecursive);
-            IL.Push(inVisibleOnly);
-            IL.Push(GetWidgetForLocationPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WidgetID), typeof(WidgetID), typeof(int), typeof(int), typeof(int), typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPGetWidgetForLocation", ExactSpelling = true)]
+        public static extern WidgetID GetWidgetForLocation(WidgetID inContainer, int inXOffset, int inYOffset, int inRecursive, int inVisibleOnly);
 
         
         /// <summary>
@@ -584,19 +339,8 @@ namespace XP.SDK.Widgets.Internal
         /// frame rates up, although you could use it internally.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetWidgetExposedGeometry(WidgetID inWidgetID, int* outLeft, int* outTop, int* outRight, int* outBottom)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetWidgetExposedGeometryPtr);
-            IL.Push(inWidgetID);
-            IL.Push(outLeft);
-            IL.Push(outTop);
-            IL.Push(outRight);
-            IL.Push(outBottom);
-            IL.Push(GetWidgetExposedGeometryPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetID), typeof(int*), typeof(int*), typeof(int*), typeof(int*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPGetWidgetExposedGeometry", ExactSpelling = true)]
+        public static extern unsafe void GetWidgetExposedGeometry(WidgetID inWidgetID, int* outLeft, int* outTop, int* outRight, int* outBottom);
 
         
         /// <summary>
@@ -610,16 +354,8 @@ namespace XP.SDK.Widgets.Internal
         /// descriptor, many do.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetWidgetDescriptor(WidgetID inWidget, byte* inDescriptor)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetWidgetDescriptorPtr);
-            IL.Push(inWidget);
-            IL.Push(inDescriptor);
-            IL.Push(SetWidgetDescriptorPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetID), typeof(byte*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPSetWidgetDescriptor", ExactSpelling = true)]
+        public static extern unsafe void SetWidgetDescriptor(WidgetID inWidget, byte* inDescriptor);
 
         
         /// <summary>
@@ -654,20 +390,8 @@ namespace XP.SDK.Widgets.Internal
         /// terminated (this routine has 'strncpy' semantics).
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int GetWidgetDescriptor(WidgetID inWidget, byte* outDescriptor, int inMaxDescLength)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetWidgetDescriptorPtr);
-            int result;
-            IL.Push(inWidget);
-            IL.Push(outDescriptor);
-            IL.Push(inMaxDescLength);
-            IL.Push(GetWidgetDescriptorPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(WidgetID), typeof(byte*), typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPGetWidgetDescriptor", ExactSpelling = true)]
+        public static extern unsafe int GetWidgetDescriptor(WidgetID inWidget, byte* outDescriptor, int inMaxDescLength);
 
         
         /// <summary>
@@ -680,18 +404,8 @@ namespace XP.SDK.Widgets.Internal
         /// into VR.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static WindowID GetWidgetUnderlyingWindow(WidgetID inWidget)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetWidgetUnderlyingWindowPtr);
-            WindowID result;
-            IL.Push(inWidget);
-            IL.Push(GetWidgetUnderlyingWindowPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WindowID), typeof(WidgetID)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPGetWidgetUnderlyingWindow", ExactSpelling = true)]
+        public static extern WindowID GetWidgetUnderlyingWindow(WidgetID inWidget);
 
         
         /// <summary>
@@ -700,17 +414,8 @@ namespace XP.SDK.Widgets.Internal
         /// associated by a widget by ID.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SetWidgetProperty(WidgetID inWidget, WidgetPropertyID inProperty, IntPtr inValue)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetWidgetPropertyPtr);
-            IL.Push(inWidget);
-            IL.Push(inProperty);
-            IL.Push(inValue);
-            IL.Push(SetWidgetPropertyPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetID), typeof(WidgetPropertyID), typeof(IntPtr)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPSetWidgetProperty", ExactSpelling = true)]
+        public static extern void SetWidgetProperty(WidgetID inWidget, WidgetPropertyID inProperty, IntPtr inValue);
 
         
         /// <summary>
@@ -722,20 +427,8 @@ namespace XP.SDK.Widgets.Internal
         /// information.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe IntPtr GetWidgetProperty(WidgetID inWidget, WidgetPropertyID inProperty, int* inExists)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetWidgetPropertyPtr);
-            IntPtr result;
-            IL.Push(inWidget);
-            IL.Push(inProperty);
-            IL.Push(inExists);
-            IL.Push(GetWidgetPropertyPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(IntPtr), typeof(WidgetID), typeof(WidgetPropertyID), typeof(int*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPGetWidgetProperty", ExactSpelling = true)]
+        public static extern unsafe IntPtr GetWidgetProperty(WidgetID inWidget, WidgetPropertyID inProperty, int* inExists);
 
         
         /// <summary>
@@ -757,18 +450,8 @@ namespace XP.SDK.Widgets.Internal
         /// setting to X-Plane, keyboard focus is always accepted.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static WidgetID SetKeyboardFocus(WidgetID inWidget)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetKeyboardFocusPtr);
-            WidgetID result;
-            IL.Push(inWidget);
-            IL.Push(SetKeyboardFocusPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WidgetID), typeof(WidgetID)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPSetKeyboardFocus", ExactSpelling = true)]
+        public static extern WidgetID SetKeyboardFocus(WidgetID inWidget);
 
         
         /// <summary>
@@ -778,15 +461,8 @@ namespace XP.SDK.Widgets.Internal
         /// if this widget does not have focus.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void LoseKeyboardFocus(WidgetID inWidget)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(LoseKeyboardFocusPtr);
-            IL.Push(inWidget);
-            IL.Push(LoseKeyboardFocusPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetID)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLoseKeyboardFocus", ExactSpelling = true)]
+        public static extern void LoseKeyboardFocus(WidgetID inWidget);
 
         
         /// <summary>
@@ -796,28 +472,10 @@ namespace XP.SDK.Widgets.Internal
         /// has focus.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static WidgetID GetWidgetWithFocus()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetWidgetWithFocusPtr);
-            WidgetID result;
-            IL.Push(GetWidgetWithFocusPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(WidgetID)));
-            IL.Pop(out result);
-            return result;
-        }
-
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static void AddWidgetCallbackPrivate(WidgetID inWidget, IntPtr inNewCallback)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(AddWidgetCallbackPtr);
-            IL.Push(inWidget);
-            IL.Push(inNewCallback);
-            IL.Push(AddWidgetCallbackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(WidgetID), typeof(IntPtr)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPGetWidgetWithFocus", ExactSpelling = true)]
+        public static extern WidgetID GetWidgetWithFocus();
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPAddWidgetCallback", ExactSpelling = true)]
+        private static extern void AddWidgetCallbackPrivate(WidgetID inWidget, IntPtr inNewCallback);
 
         
         /// <summary>
@@ -854,17 +512,7 @@ namespace XP.SDK.Widgets.Internal
         /// widget class.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static WidgetFuncCallback GetWidgetClassFunc(WidgetClass inWidgetClass)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetWidgetClassFuncPtr);
-            IntPtr result;
-            IL.Push(inWidgetClass);
-            IL.Push(GetWidgetClassFuncPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(IntPtr), typeof(WidgetClass)));
-            IL.Pop(out result);
-            return Marshal.GetDelegateForFunctionPointer<WidgetFuncCallback>(result);
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPGetWidgetClassFunc", ExactSpelling = true)]
+        public static extern WidgetFuncCallback GetWidgetClassFunc(WidgetClass inWidgetClass);
     }
 }

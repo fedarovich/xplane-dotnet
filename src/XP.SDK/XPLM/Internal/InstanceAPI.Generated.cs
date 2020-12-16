@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using InlineIL;
 
@@ -7,17 +6,6 @@ namespace XP.SDK.XPLM.Internal
 {
     public static partial class InstanceAPI
     {
-        private static IntPtr CreateInstancePtr;
-        private static IntPtr DestroyInstancePtr;
-        private static IntPtr InstanceSetPositionPtr;
-
-        static InstanceAPI()
-        {
-            CreateInstancePtr = Lib.GetExport("XPLMCreateInstance");
-            DestroyInstancePtr = Lib.GetExport("XPLMDestroyInstance");
-            InstanceSetPositionPtr = Lib.GetExport("XPLMInstanceSetPosition");
-        }
-
         
         /// <summary>
         /// <para>
@@ -41,19 +29,8 @@ namespace XP.SDK.XPLM.Internal
         /// pass null for this.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe InstanceRef CreateInstance(ObjectRef obj, byte** datarefs)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CreateInstancePtr);
-            InstanceRef result;
-            IL.Push(obj);
-            IL.Push(datarefs);
-            IL.Push(CreateInstancePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(InstanceRef), typeof(ObjectRef), typeof(byte**)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCreateInstance", ExactSpelling = true)]
+        public static extern unsafe InstanceRef CreateInstance(ObjectRef obj, byte** datarefs);
 
         
         /// <summary>
@@ -67,15 +44,8 @@ namespace XP.SDK.XPLM.Internal
         /// the OBJ and the object OBJ be deallocated when the instance is destroyed.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void DestroyInstance(InstanceRef instance)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DestroyInstancePtr);
-            IL.Push(instance);
-            IL.Push(DestroyInstancePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(InstanceRef)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDestroyInstance", ExactSpelling = true)]
+        public static extern void DestroyInstance(InstanceRef instance);
 
         
         /// <summary>
@@ -99,16 +69,7 @@ namespace XP.SDK.XPLM.Internal
         /// still pass a valid pointer for data and not null.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void InstanceSetPosition(InstanceRef instance, DrawInfo* new_position, float* data)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(InstanceSetPositionPtr);
-            IL.Push(instance);
-            IL.Push(new_position);
-            IL.Push(data);
-            IL.Push(InstanceSetPositionPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(InstanceRef), typeof(DrawInfo*), typeof(float*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMInstanceSetPosition", ExactSpelling = true)]
+        public static extern unsafe void InstanceSetPosition(InstanceRef instance, DrawInfo* new_position, float* data);
     }
 }

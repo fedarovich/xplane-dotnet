@@ -7,31 +7,6 @@ namespace XP.SDK.XPLM.Internal
 {
     public static partial class PlanesAPI
     {
-        private static IntPtr SetUsersAircraftPtr;
-        private static IntPtr PlaceUserAtAirportPtr;
-        private static IntPtr PlaceUserAtLocationPtr;
-        private static IntPtr CountAircraftPtr;
-        private static IntPtr GetNthAircraftModelPtr;
-        private static IntPtr AcquirePlanesPtr;
-        private static IntPtr ReleasePlanesPtr;
-        private static IntPtr SetActiveAircraftCountPtr;
-        private static IntPtr SetAircraftModelPtr;
-        private static IntPtr DisableAIForPlanePtr;
-
-        static PlanesAPI()
-        {
-            SetUsersAircraftPtr = Lib.GetExport("XPLMSetUsersAircraft");
-            PlaceUserAtAirportPtr = Lib.GetExport("XPLMPlaceUserAtAirport");
-            PlaceUserAtLocationPtr = Lib.GetExport("XPLMPlaceUserAtLocation");
-            CountAircraftPtr = Lib.GetExport("XPLMCountAircraft");
-            GetNthAircraftModelPtr = Lib.GetExport("XPLMGetNthAircraftModel");
-            AcquirePlanesPtr = Lib.GetExport("XPLMAcquirePlanes");
-            ReleasePlanesPtr = Lib.GetExport("XPLMReleasePlanes");
-            SetActiveAircraftCountPtr = Lib.GetExport("XPLMSetActiveAircraftCount");
-            SetAircraftModelPtr = Lib.GetExport("XPLMSetAircraftModel");
-            DisableAIForPlanePtr = Lib.GetExport("XPLMDisableAIForPlane");
-        }
-
         
         /// <summary>
         /// <para>
@@ -40,15 +15,8 @@ namespace XP.SDK.XPLM.Internal
         /// (hard drive and everything including the .acf extension) to the .acf file.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetUsersAircraft(byte* inAircraftPath)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetUsersAircraftPtr);
-            IL.Push(inAircraftPath);
-            IL.Push(SetUsersAircraftPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetUsersAircraft", ExactSpelling = true)]
+        public static extern unsafe void SetUsersAircraft(byte* inAircraftPath);
 
         
         /// <summary>
@@ -74,15 +42,8 @@ namespace XP.SDK.XPLM.Internal
         /// its X-Plane airport ID (e.g. 'KBOS').
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void PlaceUserAtAirport(byte* inAirportCode)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(PlaceUserAtAirportPtr);
-            IL.Push(inAirportCode);
-            IL.Push(PlaceUserAtAirportPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMPlaceUserAtAirport", ExactSpelling = true)]
+        public static extern unsafe void PlaceUserAtAirport(byte* inAirportCode);
 
         
         /// <summary>
@@ -113,19 +74,8 @@ namespace XP.SDK.XPLM.Internal
         /// `sim/operation/prefs/startup_running` says).
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void PlaceUserAtLocation(double latitudeDegrees, double longitudeDegrees, float elevationMetersMSL, float headingDegreesTrue, float speedMetersPerSecond)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(PlaceUserAtLocationPtr);
-            IL.Push(latitudeDegrees);
-            IL.Push(longitudeDegrees);
-            IL.Push(elevationMetersMSL);
-            IL.Push(headingDegreesTrue);
-            IL.Push(speedMetersPerSecond);
-            IL.Push(PlaceUserAtLocationPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(double), typeof(double), typeof(float), typeof(float), typeof(float)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMPlaceUserAtLocation", ExactSpelling = true)]
+        public static extern void PlaceUserAtLocation(double latitudeDegrees, double longitudeDegrees, float elevationMetersMSL, float headingDegreesTrue, float speedMetersPerSecond);
 
         
         /// <summary>
@@ -137,17 +87,8 @@ namespace XP.SDK.XPLM.Internal
         /// aircraft the user has enabled in the rendering options window.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void CountAircraft(int* outTotalAircraft, int* outActiveAircraft, PluginID* outController)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CountAircraftPtr);
-            IL.Push(outTotalAircraft);
-            IL.Push(outActiveAircraft);
-            IL.Push(outController);
-            IL.Push(CountAircraftPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int*), typeof(int*), typeof(PluginID*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCountAircraft", ExactSpelling = true)]
+        public static extern unsafe void CountAircraft(int* outTotalAircraft, int* outActiveAircraft, PluginID* outController);
 
         
         /// <summary>
@@ -158,32 +99,10 @@ namespace XP.SDK.XPLM.Internal
         /// length.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetNthAircraftModel(int inIndex, byte* outFileName, byte* outPath)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetNthAircraftModelPtr);
-            IL.Push(inIndex);
-            IL.Push(outFileName);
-            IL.Push(outPath);
-            IL.Push(GetNthAircraftModelPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int), typeof(byte*), typeof(byte*)));
-        }
-
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe int AcquirePlanesPrivate(byte** inAircraft, IntPtr inCallback, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(AcquirePlanesPtr);
-            int result;
-            IL.Push(inAircraft);
-            IL.Push(inCallback);
-            IL.Push(inRefcon);
-            IL.Push(AcquirePlanesPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte**), typeof(IntPtr), typeof(void*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetNthAircraftModel", ExactSpelling = true)]
+        public static extern unsafe void GetNthAircraftModel(int inIndex, byte* outFileName, byte* outPath);
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMAcquirePlanes", ExactSpelling = true)]
+        private static extern unsafe int AcquirePlanesPrivate(byte** inAircraft, IntPtr inCallback, void* inRefcon);
 
         
         /// <summary>
@@ -221,14 +140,8 @@ namespace XP.SDK.XPLM.Internal
         /// disabled, access to planes is released for you and you must reacquire it.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void ReleasePlanes()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(ReleasePlanesPtr);
-            IL.Push(ReleasePlanesPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMReleasePlanes", ExactSpelling = true)]
+        public static extern void ReleasePlanes();
 
         
         /// <summary>
@@ -238,15 +151,8 @@ namespace XP.SDK.XPLM.Internal
         /// planes available is actually used.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SetActiveAircraftCount(int inCount)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetActiveAircraftCountPtr);
-            IL.Push(inCount);
-            IL.Push(SetActiveAircraftCountPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetActiveAircraftCount", ExactSpelling = true)]
+        public static extern void SetActiveAircraftCount(int inCount);
 
         
         /// <summary>
@@ -257,16 +163,8 @@ namespace XP.SDK.XPLM.Internal
         /// (use XPLMSetUsersAircraft to load the user's aircracft).
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetAircraftModel(int inIndex, byte* inAircraftPath)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetAircraftModelPtr);
-            IL.Push(inIndex);
-            IL.Push(inAircraftPath);
-            IL.Push(SetAircraftModelPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int), typeof(byte*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetAircraftModel", ExactSpelling = true)]
+        public static extern unsafe void SetAircraftModel(int inIndex, byte* inAircraftPath);
 
         
         /// <summary>
@@ -293,14 +191,7 @@ namespace XP.SDK.XPLM.Internal
         /// continue to draw and be a real plane in X-Plane, but will not move itself.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void DisableAIForPlane(int inPlaneIndex)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DisableAIForPlanePtr);
-            IL.Push(inPlaneIndex);
-            IL.Push(DisableAIForPlanePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDisableAIForPlane", ExactSpelling = true)]
+        public static extern void DisableAIForPlane(int inPlaneIndex);
     }
 }

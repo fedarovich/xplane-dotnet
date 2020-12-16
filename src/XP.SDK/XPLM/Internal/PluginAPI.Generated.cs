@@ -7,41 +7,6 @@ namespace XP.SDK.XPLM.Internal
 {
     public static partial class PluginAPI
     {
-        private static IntPtr GetMyIDPtr;
-        private static IntPtr CountPluginsPtr;
-        private static IntPtr GetNthPluginPtr;
-        private static IntPtr FindPluginByPathPtr;
-        private static IntPtr FindPluginBySignaturePtr;
-        private static IntPtr GetPluginInfoPtr;
-        private static IntPtr IsPluginEnabledPtr;
-        private static IntPtr EnablePluginPtr;
-        private static IntPtr DisablePluginPtr;
-        private static IntPtr ReloadPluginsPtr;
-        private static IntPtr SendMessageToPluginPtr;
-        private static IntPtr HasFeaturePtr;
-        private static IntPtr IsFeatureEnabledPtr;
-        private static IntPtr EnableFeaturePtr;
-        private static IntPtr EnumerateFeaturesPtr;
-
-        static PluginAPI()
-        {
-            GetMyIDPtr = Lib.GetExport("XPLMGetMyID");
-            CountPluginsPtr = Lib.GetExport("XPLMCountPlugins");
-            GetNthPluginPtr = Lib.GetExport("XPLMGetNthPlugin");
-            FindPluginByPathPtr = Lib.GetExport("XPLMFindPluginByPath");
-            FindPluginBySignaturePtr = Lib.GetExport("XPLMFindPluginBySignature");
-            GetPluginInfoPtr = Lib.GetExport("XPLMGetPluginInfo");
-            IsPluginEnabledPtr = Lib.GetExport("XPLMIsPluginEnabled");
-            EnablePluginPtr = Lib.GetExport("XPLMEnablePlugin");
-            DisablePluginPtr = Lib.GetExport("XPLMDisablePlugin");
-            ReloadPluginsPtr = Lib.GetExport("XPLMReloadPlugins");
-            SendMessageToPluginPtr = Lib.GetExport("XPLMSendMessageToPlugin");
-            HasFeaturePtr = Lib.GetExport("XPLMHasFeature");
-            IsFeatureEnabledPtr = Lib.GetExport("XPLMIsFeatureEnabled");
-            EnableFeaturePtr = Lib.GetExport("XPLMEnableFeature");
-            EnumerateFeaturesPtr = Lib.GetExport("XPLMEnumerateFeatures");
-        }
-
         
         /// <summary>
         /// <para>
@@ -49,17 +14,8 @@ namespace XP.SDK.XPLM.Internal
         /// get your own ID.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static PluginID GetMyID()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetMyIDPtr);
-            PluginID result;
-            IL.Push(GetMyIDPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(PluginID)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetMyID", ExactSpelling = true)]
+        public static extern PluginID GetMyID();
 
         
         /// <summary>
@@ -68,17 +24,8 @@ namespace XP.SDK.XPLM.Internal
         /// disabled and enabled.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int CountPlugins()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CountPluginsPtr);
-            int result;
-            IL.Push(CountPluginsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCountPlugins", ExactSpelling = true)]
+        public static extern int CountPlugins();
 
         
         /// <summary>
@@ -88,18 +35,8 @@ namespace XP.SDK.XPLM.Internal
         /// order.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static PluginID GetNthPlugin(int inIndex)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetNthPluginPtr);
-            PluginID result;
-            IL.Push(inIndex);
-            IL.Push(GetNthPluginPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(PluginID), typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetNthPlugin", ExactSpelling = true)]
+        public static extern PluginID GetNthPlugin(int inIndex);
 
         
         /// <summary>
@@ -109,18 +46,8 @@ namespace XP.SDK.XPLM.Internal
         /// path does not point to a currently loaded plug-in.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe PluginID FindPluginByPath(byte* inPath)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(FindPluginByPathPtr);
-            PluginID result;
-            IL.Push(inPath);
-            IL.Push(FindPluginByPathPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(PluginID), typeof(byte*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMFindPluginByPath", ExactSpelling = true)]
+        public static extern unsafe PluginID FindPluginByPath(byte* inPath);
 
         
         /// <summary>
@@ -150,18 +77,8 @@ namespace XP.SDK.XPLM.Internal
         /// locate another plugin that your plugin interoperates with
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe PluginID FindPluginBySignature(byte* inSignature)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(FindPluginBySignaturePtr);
-            PluginID result;
-            IL.Push(inSignature);
-            IL.Push(FindPluginBySignaturePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(PluginID), typeof(byte*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMFindPluginBySignature", ExactSpelling = true)]
+        public static extern unsafe PluginID FindPluginBySignature(byte* inSignature);
 
         
         /// <summary>
@@ -197,19 +114,8 @@ namespace XP.SDK.XPLM.Internal
         /// human-readable description of this plug-in.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetPluginInfo(PluginID inPlugin, byte* outName, byte* outFilePath, byte* outSignature, byte* outDescription)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetPluginInfoPtr);
-            IL.Push(inPlugin);
-            IL.Push(outName);
-            IL.Push(outFilePath);
-            IL.Push(outSignature);
-            IL.Push(outDescription);
-            IL.Push(GetPluginInfoPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(PluginID), typeof(byte*), typeof(byte*), typeof(byte*), typeof(byte*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetPluginInfo", ExactSpelling = true)]
+        public static extern unsafe void GetPluginInfo(PluginID inPlugin, byte* outName, byte* outFilePath, byte* outSignature, byte* outDescription);
 
         
         /// <summary>
@@ -217,18 +123,8 @@ namespace XP.SDK.XPLM.Internal
         /// Returns whether the specified plug-in is enabled for running.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int IsPluginEnabled(PluginID inPluginID)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(IsPluginEnabledPtr);
-            int result;
-            IL.Push(inPluginID);
-            IL.Push(IsPluginEnabledPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(PluginID)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMIsPluginEnabled", ExactSpelling = true)]
+        public static extern int IsPluginEnabled(PluginID inPluginID);
 
         
         /// <summary>
@@ -239,18 +135,8 @@ namespace XP.SDK.XPLM.Internal
         /// by returning 0 from their XPluginEnable callback.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int EnablePlugin(PluginID inPluginID)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(EnablePluginPtr);
-            int result;
-            IL.Push(inPluginID);
-            IL.Push(EnablePluginPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(PluginID)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMEnablePlugin", ExactSpelling = true)]
+        public static extern int EnablePlugin(PluginID inPluginID);
 
         
         /// <summary>
@@ -258,15 +144,8 @@ namespace XP.SDK.XPLM.Internal
         /// This routine disableds an enabled plug-in.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void DisablePlugin(PluginID inPluginID)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DisablePluginPtr);
-            IL.Push(inPluginID);
-            IL.Push(DisablePluginPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(PluginID)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDisablePlugin", ExactSpelling = true)]
+        public static extern void DisablePlugin(PluginID inPluginID);
 
         
         /// <summary>
@@ -278,14 +157,8 @@ namespace XP.SDK.XPLM.Internal
         /// up.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void ReloadPlugins()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(ReloadPluginsPtr);
-            IL.Push(ReloadPluginsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMReloadPlugins", ExactSpelling = true)]
+        public static extern void ReloadPlugins();
 
         
         /// <summary>
@@ -295,17 +168,8 @@ namespace XP.SDK.XPLM.Internal
         /// a message receive function receive the message.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SendMessageToPlugin(PluginID inPlugin, int inMessage, void* inParam)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SendMessageToPluginPtr);
-            IL.Push(inPlugin);
-            IL.Push(inMessage);
-            IL.Push(inParam);
-            IL.Push(SendMessageToPluginPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(PluginID), typeof(int), typeof(void*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSendMessageToPlugin", ExactSpelling = true)]
+        public static extern unsafe void SendMessageToPlugin(PluginID inPlugin, int inMessage, void* inParam);
 
         
         /// <summary>
@@ -314,18 +178,8 @@ namespace XP.SDK.XPLM.Internal
         /// 0 if it does not.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int HasFeature(byte* inFeature)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(HasFeaturePtr);
-            int result;
-            IL.Push(inFeature);
-            IL.Push(HasFeaturePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMHasFeature", ExactSpelling = true)]
+        public static extern unsafe int HasFeature(byte* inFeature);
 
         
         /// <summary>
@@ -351,18 +205,8 @@ namespace XP.SDK.XPLM.Internal
         /// feature.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int IsFeatureEnabled(byte* inFeature)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(IsFeatureEnabledPtr);
-            int result;
-            IL.Push(inFeature);
-            IL.Push(IsFeatureEnabledPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMIsFeatureEnabled", ExactSpelling = true)]
+        public static extern unsafe int IsFeatureEnabled(byte* inFeature);
 
         
         /// <summary>
@@ -389,16 +233,8 @@ namespace XP.SDK.XPLM.Internal
         /// depending on the feature.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void EnableFeature(byte* inFeature, int inEnable)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(EnableFeaturePtr);
-            IL.Push(inFeature);
-            IL.Push(inEnable);
-            IL.Push(EnableFeaturePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMEnableFeature", ExactSpelling = true)]
+        public static extern unsafe void EnableFeature(byte* inFeature, int inEnable);
 
         
         /// <summary>
@@ -417,16 +253,8 @@ namespace XP.SDK.XPLM.Internal
             EnableFeature(inFeaturePtr, inEnable);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe void EnumerateFeaturesPrivate(IntPtr inEnumerator, void* inRef)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(EnumerateFeaturesPtr);
-            IL.Push(inEnumerator);
-            IL.Push(inRef);
-            IL.Push(EnumerateFeaturesPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(void*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMEnumerateFeatures", ExactSpelling = true)]
+        private static extern unsafe void EnumerateFeaturesPrivate(IntPtr inEnumerator, void* inRef);
 
         
         /// <summary>

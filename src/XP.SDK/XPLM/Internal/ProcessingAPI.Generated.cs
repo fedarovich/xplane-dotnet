@@ -7,27 +7,6 @@ namespace XP.SDK.XPLM.Internal
 {
     public static partial class ProcessingAPI
     {
-        private static IntPtr GetElapsedTimePtr;
-        private static IntPtr GetCycleNumberPtr;
-        private static IntPtr RegisterFlightLoopCallbackPtr;
-        private static IntPtr UnregisterFlightLoopCallbackPtr;
-        private static IntPtr SetFlightLoopCallbackIntervalPtr;
-        private static IntPtr CreateFlightLoopPtr;
-        private static IntPtr DestroyFlightLoopPtr;
-        private static IntPtr ScheduleFlightLoopPtr;
-
-        static ProcessingAPI()
-        {
-            GetElapsedTimePtr = Lib.GetExport("XPLMGetElapsedTime");
-            GetCycleNumberPtr = Lib.GetExport("XPLMGetCycleNumber");
-            RegisterFlightLoopCallbackPtr = Lib.GetExport("XPLMRegisterFlightLoopCallback");
-            UnregisterFlightLoopCallbackPtr = Lib.GetExport("XPLMUnregisterFlightLoopCallback");
-            SetFlightLoopCallbackIntervalPtr = Lib.GetExport("XPLMSetFlightLoopCallbackInterval");
-            CreateFlightLoopPtr = Lib.GetExport("XPLMCreateFlightLoop");
-            DestroyFlightLoopPtr = Lib.GetExport("XPLMDestroyFlightLoop");
-            ScheduleFlightLoopPtr = Lib.GetExport("XPLMScheduleFlightLoop");
-        }
-
         
         /// <summary>
         /// <para>
@@ -41,17 +20,8 @@ namespace XP.SDK.XPLM.Internal
         /// for timing critical applications like network multiplayer.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static float GetElapsedTime()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetElapsedTimePtr);
-            float result;
-            IL.Push(GetElapsedTimePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(float)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetElapsedTime", ExactSpelling = true)]
+        public static extern float GetElapsedTime();
 
         
         /// <summary>
@@ -60,29 +30,10 @@ namespace XP.SDK.XPLM.Internal
         /// computed/video frame rendered.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int GetCycleNumber()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetCycleNumberPtr);
-            int result;
-            IL.Push(GetCycleNumberPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
-
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe void RegisterFlightLoopCallbackPrivate(IntPtr inFlightLoop, float inInterval, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(RegisterFlightLoopCallbackPtr);
-            IL.Push(inFlightLoop);
-            IL.Push(inInterval);
-            IL.Push(inRefcon);
-            IL.Push(RegisterFlightLoopCallbackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(float), typeof(void*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetCycleNumber", ExactSpelling = true)]
+        public static extern int GetCycleNumber();
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterFlightLoopCallback", ExactSpelling = true)]
+        private static extern unsafe void RegisterFlightLoopCallbackPrivate(IntPtr inFlightLoop, float inInterval, void* inRefcon);
 
         
         /// <summary>
@@ -108,16 +59,8 @@ namespace XP.SDK.XPLM.Internal
             GC.KeepAlive(inFlightLoop);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe void UnregisterFlightLoopCallbackPrivate(IntPtr inFlightLoop, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(UnregisterFlightLoopCallbackPtr);
-            IL.Push(inFlightLoop);
-            IL.Push(inRefcon);
-            IL.Push(UnregisterFlightLoopCallbackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(void*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterFlightLoopCallback", ExactSpelling = true)]
+        private static extern unsafe void UnregisterFlightLoopCallbackPrivate(IntPtr inFlightLoop, void* inRefcon);
 
         
         /// <summary>
@@ -140,18 +83,8 @@ namespace XP.SDK.XPLM.Internal
             GC.KeepAlive(inFlightLoop);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe void SetFlightLoopCallbackIntervalPrivate(IntPtr inFlightLoop, float inInterval, int inRelativeToNow, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetFlightLoopCallbackIntervalPtr);
-            IL.Push(inFlightLoop);
-            IL.Push(inInterval);
-            IL.Push(inRelativeToNow);
-            IL.Push(inRefcon);
-            IL.Push(SetFlightLoopCallbackIntervalPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(float), typeof(int), typeof(void*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetFlightLoopCallbackInterval", ExactSpelling = true)]
+        private static extern unsafe void SetFlightLoopCallbackIntervalPrivate(IntPtr inFlightLoop, float inInterval, int inRelativeToNow, void* inRefcon);
 
         
         /// <summary>
@@ -185,18 +118,8 @@ namespace XP.SDK.XPLM.Internal
         /// unscheduled.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe FlightLoopID CreateFlightLoop(CreateFlightLoop* inParams)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CreateFlightLoopPtr);
-            FlightLoopID result;
-            IL.Push(inParams);
-            IL.Push(CreateFlightLoopPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(FlightLoopID), typeof(CreateFlightLoop*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCreateFlightLoop", ExactSpelling = true)]
+        public static extern unsafe FlightLoopID CreateFlightLoop(CreateFlightLoop* inParams);
 
         
         /// <summary>
@@ -205,15 +128,8 @@ namespace XP.SDK.XPLM.Internal
         /// loops created with the newer XPLMCreateFlightLoop API.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void DestroyFlightLoop(FlightLoopID inFlightLoopID)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DestroyFlightLoopPtr);
-            IL.Push(inFlightLoopID);
-            IL.Push(DestroyFlightLoopPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(FlightLoopID)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDestroyFlightLoop", ExactSpelling = true)]
+        public static extern void DestroyFlightLoop(FlightLoopID inFlightLoopID);
 
         
         /// <summary>
@@ -229,16 +145,7 @@ namespace XP.SDK.XPLM.Internal
         /// time the flight loop was registered (if never called).
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void ScheduleFlightLoop(FlightLoopID inFlightLoopID, float inInterval, int inRelativeToNow)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(ScheduleFlightLoopPtr);
-            IL.Push(inFlightLoopID);
-            IL.Push(inInterval);
-            IL.Push(inRelativeToNow);
-            IL.Push(ScheduleFlightLoopPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(FlightLoopID), typeof(float), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMScheduleFlightLoop", ExactSpelling = true)]
+        public static extern void ScheduleFlightLoop(FlightLoopID inFlightLoopID, float inInterval, int inRelativeToNow);
     }
 }

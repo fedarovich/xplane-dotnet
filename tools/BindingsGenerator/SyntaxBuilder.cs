@@ -39,7 +39,7 @@ namespace BindingsGenerator
             NameSyntax argumentType = IdentifierName(nameof(MethodImplOptions));
             if (fullyQualified)
             {
-                attributeType = QualifiedName(CompilerServices, (IdentifierNameSyntax) argumentType);
+                attributeType = QualifiedName(CompilerServices, (IdentifierNameSyntax) attributeType);
                 argumentType = QualifiedName(CompilerServices, (IdentifierNameSyntax) argumentType);
             }
 
@@ -51,6 +51,30 @@ namespace BindingsGenerator
                                 argumentType,
                                 IdentifierName(nameof(MethodImplOptions.AggressiveInlining))))))))
                 .WithAdditionalAnnotations(new SyntaxAnnotation(Annotations.Namespace, CompilerServices.ToFullString()));
+        }
+
+        public static T AddDllImport<T>(this T member, string entryPoint, bool fullyQualified = false) where T : MemberDeclarationSyntax
+        {
+            NameSyntax attributeType = IdentifierName(nameof(DllImportAttribute));
+            if (fullyQualified)
+            {
+                attributeType = QualifiedName(InteropServices, (IdentifierNameSyntax) attributeType);
+            }
+
+            return (T)member.AddAttributeLists(
+                    AttributeList(SingletonSeparatedList(
+                        Attribute(attributeType)
+                            .AddArgumentListArguments(
+                                AttributeArgument(MemberAccessExpression(
+                                    SyntaxKind.SimpleMemberAccessExpression,
+                                    IdentifierName("Lib"),
+                                    IdentifierName("Name"))),
+                                AttributeArgument(LiteralExpression(SyntaxKind.StringLiteralExpression, Literal(entryPoint)))
+                                    .WithNameEquals(NameEquals(nameof(DllImportAttribute.EntryPoint))),
+                                AttributeArgument(LiteralExpression(SyntaxKind.TrueLiteralExpression))
+                                    .WithNameEquals(NameEquals(nameof(DllImportAttribute.ExactSpelling)))
+                            ))))
+                .WithAdditionalAnnotations(new SyntaxAnnotation(Annotations.Namespace, InteropServices.ToFullString()));
         }
 
         public static T AddManagedTypeAttribute<T>(this T member, TypeSyntax type) where T : MemberDeclarationSyntax

@@ -7,55 +7,6 @@ namespace XP.SDK.XPLM.Internal
 {
     public static partial class UtilitiesAPI
     {
-        private static IntPtr GetSystemPathPtr;
-        private static IntPtr GetPrefsPathPtr;
-        private static IntPtr GetDirectorySeparatorPtr;
-        private static IntPtr ExtractFileAndPathPtr;
-        private static IntPtr GetDirectoryContentsPtr;
-        private static IntPtr LoadDataFilePtr;
-        private static IntPtr SaveDataFilePtr;
-        private static IntPtr GetVersionsPtr;
-        private static IntPtr GetLanguagePtr;
-        private static IntPtr FindSymbolPtr;
-        private static IntPtr SetErrorCallbackPtr;
-        private static IntPtr DebugStringPtr;
-        private static IntPtr SpeakStringPtr;
-        private static IntPtr GetVirtualKeyDescriptionPtr;
-        private static IntPtr ReloadSceneryPtr;
-        private static IntPtr FindCommandPtr;
-        private static IntPtr CommandBeginPtr;
-        private static IntPtr CommandEndPtr;
-        private static IntPtr CommandOncePtr;
-        private static IntPtr CreateCommandPtr;
-        private static IntPtr RegisterCommandHandlerPtr;
-        private static IntPtr UnregisterCommandHandlerPtr;
-
-        static UtilitiesAPI()
-        {
-            GetSystemPathPtr = Lib.GetExport("XPLMGetSystemPath");
-            GetPrefsPathPtr = Lib.GetExport("XPLMGetPrefsPath");
-            GetDirectorySeparatorPtr = Lib.GetExport("XPLMGetDirectorySeparator");
-            ExtractFileAndPathPtr = Lib.GetExport("XPLMExtractFileAndPath");
-            GetDirectoryContentsPtr = Lib.GetExport("XPLMGetDirectoryContents");
-            LoadDataFilePtr = Lib.GetExport("XPLMLoadDataFile");
-            SaveDataFilePtr = Lib.GetExport("XPLMSaveDataFile");
-            GetVersionsPtr = Lib.GetExport("XPLMGetVersions");
-            GetLanguagePtr = Lib.GetExport("XPLMGetLanguage");
-            FindSymbolPtr = Lib.GetExport("XPLMFindSymbol");
-            SetErrorCallbackPtr = Lib.GetExport("XPLMSetErrorCallback");
-            DebugStringPtr = Lib.GetExport("XPLMDebugString");
-            SpeakStringPtr = Lib.GetExport("XPLMSpeakString");
-            GetVirtualKeyDescriptionPtr = Lib.GetExport("XPLMGetVirtualKeyDescription");
-            ReloadSceneryPtr = Lib.GetExport("XPLMReloadScenery");
-            FindCommandPtr = Lib.GetExport("XPLMFindCommand");
-            CommandBeginPtr = Lib.GetExport("XPLMCommandBegin");
-            CommandEndPtr = Lib.GetExport("XPLMCommandEnd");
-            CommandOncePtr = Lib.GetExport("XPLMCommandOnce");
-            CreateCommandPtr = Lib.GetExport("XPLMCreateCommand");
-            RegisterCommandHandlerPtr = Lib.GetExport("XPLMRegisterCommandHandler");
-            UnregisterCommandHandlerPtr = Lib.GetExport("XPLMUnregisterCommandHandler");
-        }
-
         
         /// <summary>
         /// <para>
@@ -67,15 +18,8 @@ namespace XP.SDK.XPLM.Internal
         /// returned using the current native or OS path conventions.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetSystemPath(byte* outSystemPath)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetSystemPathPtr);
-            IL.Push(outSystemPath);
-            IL.Push(GetSystemPathPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetSystemPath", ExactSpelling = true)]
+        public static extern unsafe void GetSystemPath(byte* outSystemPath);
 
         
         /// <summary>
@@ -90,15 +34,8 @@ namespace XP.SDK.XPLM.Internal
         /// returned using the current native or OS path conventions.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetPrefsPath(byte* outPrefsPath)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetPrefsPathPtr);
-            IL.Push(outPrefsPath);
-            IL.Push(GetPrefsPathPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetPrefsPath", ExactSpelling = true)]
+        public static extern unsafe void GetPrefsPath(byte* outPrefsPath);
 
         
         /// <summary>
@@ -109,17 +46,8 @@ namespace XP.SDK.XPLM.Internal
         /// platform. The character returned will reflect the current file path mode.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe byte* GetDirectorySeparator()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetDirectorySeparatorPtr);
-            byte* result;
-            IL.Push(GetDirectorySeparatorPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(byte*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetDirectorySeparator", ExactSpelling = true)]
+        public static extern unsafe byte* GetDirectorySeparator();
 
         
         /// <summary>
@@ -133,18 +61,8 @@ namespace XP.SDK.XPLM.Internal
         /// with the path and is null terminated with no trailing separator.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe byte* ExtractFileAndPath(byte* inFullPath)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(ExtractFileAndPathPtr);
-            byte* result;
-            IL.Push(inFullPath);
-            IL.Push(ExtractFileAndPathPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(byte*), typeof(byte*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMExtractFileAndPath", ExactSpelling = true)]
+        public static extern unsafe byte* ExtractFileAndPath(byte* inFullPath);
 
         
         /// <summary>
@@ -200,25 +118,8 @@ namespace XP.SDK.XPLM.Internal
         /// 6 compatibility is needed, use your own code to iterate directories.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int GetDirectoryContents(byte* inDirectoryPath, int inFirstReturn, byte* outFileNames, int inFileNameBufSize, byte** outIndices, int inIndexCount, int* outTotalFiles, int* outReturnedFiles)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetDirectoryContentsPtr);
-            int result;
-            IL.Push(inDirectoryPath);
-            IL.Push(inFirstReturn);
-            IL.Push(outFileNames);
-            IL.Push(inFileNameBufSize);
-            IL.Push(outIndices);
-            IL.Push(inIndexCount);
-            IL.Push(outTotalFiles);
-            IL.Push(outReturnedFiles);
-            IL.Push(GetDirectoryContentsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(int), typeof(byte*), typeof(int), typeof(byte**), typeof(int), typeof(int*), typeof(int*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetDirectoryContents", ExactSpelling = true)]
+        public static extern unsafe int GetDirectoryContents(byte* inDirectoryPath, int inFirstReturn, byte* outFileNames, int inFileNameBufSize, byte** outIndices, int inIndexCount, int* outTotalFiles, int* outReturnedFiles);
 
         
         /// <summary>
@@ -291,19 +192,8 @@ namespace XP.SDK.XPLM.Internal
         /// replay movies, not sit files).
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int LoadDataFile(DataFileType inFileType, byte* inFilePath)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(LoadDataFilePtr);
-            int result;
-            IL.Push(inFileType);
-            IL.Push(inFilePath);
-            IL.Push(LoadDataFilePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(DataFileType), typeof(byte*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMLoadDataFile", ExactSpelling = true)]
+        public static extern unsafe int LoadDataFile(DataFileType inFileType, byte* inFilePath);
 
         
         /// <summary>
@@ -329,19 +219,8 @@ namespace XP.SDK.XPLM.Internal
         /// folder.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int SaveDataFile(DataFileType inFileType, byte* inFilePath)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SaveDataFilePtr);
-            int result;
-            IL.Push(inFileType);
-            IL.Push(inFilePath);
-            IL.Push(SaveDataFilePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(DataFileType), typeof(byte*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSaveDataFile", ExactSpelling = true)]
+        public static extern unsafe int SaveDataFile(DataFileType inFileType, byte* inFilePath);
 
         
         /// <summary>
@@ -372,17 +251,8 @@ namespace XP.SDK.XPLM.Internal
         /// version-specific behavior.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetVersions(int* outXPlaneVersion, int* outXPLMVersion, HostApplicationID* outHostID)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetVersionsPtr);
-            IL.Push(outXPlaneVersion);
-            IL.Push(outXPLMVersion);
-            IL.Push(outHostID);
-            IL.Push(GetVersionsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(int*), typeof(int*), typeof(HostApplicationID*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetVersions", ExactSpelling = true)]
+        public static extern unsafe void GetVersions(int* outXPlaneVersion, int* outXPLMVersion, HostApplicationID* outHostID);
 
         
         /// <summary>
@@ -390,17 +260,8 @@ namespace XP.SDK.XPLM.Internal
         /// This routine returns the langauge the sim is running in.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static LanguageCode GetLanguage()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetLanguagePtr);
-            LanguageCode result;
-            IL.Push(GetLanguagePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(LanguageCode)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetLanguage", ExactSpelling = true)]
+        public static extern LanguageCode GetLanguage();
 
         
         /// <summary>
@@ -436,18 +297,8 @@ namespace XP.SDK.XPLM.Internal
         /// the correct type.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void* FindSymbol(byte* inString)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(FindSymbolPtr);
-            void* result;
-            IL.Push(inString);
-            IL.Push(FindSymbolPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void*), typeof(byte*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMFindSymbol", ExactSpelling = true)]
+        public static extern unsafe void* FindSymbol(byte* inString);
 
         
         /// <summary>
@@ -492,15 +343,8 @@ namespace XP.SDK.XPLM.Internal
             return FindSymbol(inStringPtr);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static void SetErrorCallbackPrivate(IntPtr inCallback)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetErrorCallbackPtr);
-            IL.Push(inCallback);
-            IL.Push(SetErrorCallbackPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetErrorCallback", ExactSpelling = true)]
+        private static extern void SetErrorCallbackPrivate(IntPtr inCallback);
 
         
         /// <summary>
@@ -554,15 +398,8 @@ namespace XP.SDK.XPLM.Internal
         /// parts of the system.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void DebugString(byte* inString)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DebugStringPtr);
-            IL.Push(inString);
-            IL.Push(DebugStringPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDebugString", ExactSpelling = true)]
+        public static extern unsafe void DebugString(byte* inString);
 
         
         /// <summary>
@@ -597,15 +434,8 @@ namespace XP.SDK.XPLM.Internal
         /// may not speak or print depending on user preferences.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SpeakString(byte* inString)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SpeakStringPtr);
-            IL.Push(inString);
-            IL.Push(SpeakStringPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(byte*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSpeakString", ExactSpelling = true)]
+        public static extern unsafe void SpeakString(byte* inString);
 
         
         /// <summary>
@@ -634,18 +464,8 @@ namespace XP.SDK.XPLM.Internal
         /// read 'unknown' or be a blank or NULL string if the virtual key is unknown.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe byte* GetVirtualKeyDescription(byte inVirtualKey)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetVirtualKeyDescriptionPtr);
-            byte* result;
-            IL.Push(inVirtualKey);
-            IL.Push(GetVirtualKeyDescriptionPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(byte*), typeof(byte)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetVirtualKeyDescription", ExactSpelling = true)]
+        public static extern unsafe byte* GetVirtualKeyDescription(byte inVirtualKey);
 
         
         /// <summary>
@@ -658,14 +478,8 @@ namespace XP.SDK.XPLM.Internal
         /// scenery" from the developer menu.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void ReloadScenery()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(ReloadSceneryPtr);
-            IL.Push(ReloadSceneryPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMReloadScenery", ExactSpelling = true)]
+        public static extern void ReloadScenery();
 
         
         /// <summary>
@@ -674,18 +488,8 @@ namespace XP.SDK.XPLM.Internal
         /// reference or NULL if the command does not exist.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe CommandRef FindCommand(byte* inName)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(FindCommandPtr);
-            CommandRef result;
-            IL.Push(inName);
-            IL.Push(FindCommandPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(CommandRef), typeof(byte*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMFindCommand", ExactSpelling = true)]
+        public static extern unsafe CommandRef FindCommand(byte* inName);
 
         
         /// <summary>
@@ -712,15 +516,8 @@ namespace XP.SDK.XPLM.Internal
         /// call.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void CommandBegin(CommandRef inCommand)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CommandBeginPtr);
-            IL.Push(inCommand);
-            IL.Push(CommandBeginPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCommandBegin", ExactSpelling = true)]
+        public static extern void CommandBegin(CommandRef inCommand);
 
         
         /// <summary>
@@ -730,15 +527,8 @@ namespace XP.SDK.XPLM.Internal
         /// not begin.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void CommandEnd(CommandRef inCommand)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CommandEndPtr);
-            IL.Push(inCommand);
-            IL.Push(CommandEndPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCommandEnd", ExactSpelling = true)]
+        public static extern void CommandEnd(CommandRef inCommand);
 
         
         /// <summary>
@@ -748,15 +538,8 @@ namespace XP.SDK.XPLM.Internal
         /// XPLMCommandEnd() back ot back.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void CommandOnce(CommandRef inCommand)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CommandOncePtr);
-            IL.Push(inCommand);
-            IL.Push(CommandOncePtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCommandOnce", ExactSpelling = true)]
+        public static extern void CommandOnce(CommandRef inCommand);
 
         
         /// <summary>
@@ -767,19 +550,8 @@ namespace XP.SDK.XPLM.Internal
         /// screen.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe CommandRef CreateCommand(byte* inName, byte* inDescription)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CreateCommandPtr);
-            CommandRef result;
-            IL.Push(inName);
-            IL.Push(inDescription);
-            IL.Push(CreateCommandPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(CommandRef), typeof(byte*), typeof(byte*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCreateCommand", ExactSpelling = true)]
+        public static extern unsafe CommandRef CreateCommand(byte* inName, byte* inDescription);
 
         
         /// <summary>
@@ -801,18 +573,8 @@ namespace XP.SDK.XPLM.Internal
             return CreateCommand(inNamePtr, inDescriptionPtr);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe void RegisterCommandHandlerPrivate(CommandRef inComand, IntPtr inHandler, int inBefore, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(RegisterCommandHandlerPtr);
-            IL.Push(inComand);
-            IL.Push(inHandler);
-            IL.Push(inBefore);
-            IL.Push(inRefcon);
-            IL.Push(RegisterCommandHandlerPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef), typeof(IntPtr), typeof(int), typeof(void*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterCommandHandler", ExactSpelling = true)]
+        private static extern unsafe void RegisterCommandHandlerPrivate(CommandRef inComand, IntPtr inHandler, int inBefore, void* inRefcon);
 
         
         /// <summary>
@@ -837,18 +599,8 @@ namespace XP.SDK.XPLM.Internal
             GC.KeepAlive(inHandler);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe void UnregisterCommandHandlerPrivate(CommandRef inComand, IntPtr inHandler, int inBefore, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(UnregisterCommandHandlerPtr);
-            IL.Push(inComand);
-            IL.Push(inHandler);
-            IL.Push(inBefore);
-            IL.Push(inRefcon);
-            IL.Push(UnregisterCommandHandlerPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CommandRef), typeof(IntPtr), typeof(int), typeof(void*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterCommandHandler", ExactSpelling = true)]
+        private static extern unsafe void UnregisterCommandHandlerPrivate(CommandRef inComand, IntPtr inHandler, int inBefore, void* inRefcon);
 
         
         /// <summary>

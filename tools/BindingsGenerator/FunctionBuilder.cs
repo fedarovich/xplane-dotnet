@@ -32,8 +32,8 @@ namespace BindingsGenerator
             {
                 var @class = ClassDeclaration(className)
                     .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.PartialKeyword))
-                    .AddMembers(cppFunctions.Select(BuildFunctionPointer).ToArray())
-                    .AddMembers(BuildStaticConstructor(className, cppFunctions))
+                    //.AddMembers(cppFunctions.Select(BuildFunctionPointer).ToArray())
+                    //.AddMembers(BuildStaticConstructor(className, cppFunctions))
                     .AddMembers(cppFunctions.SelectMany(BuildFunctions).ToArray());
 
                 await BuildDocumentAsync(GetRelativeNamespace(firstFunction), @class, className);
@@ -88,11 +88,13 @@ namespace BindingsGenerator
             if (HasFunctionParameters(cppFunction))
             {
                 method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name) + "Private")
-                    .AddModifiers(Token(SyntaxKind.PrivateKeyword), Token(SyntaxKind.StaticKeyword))
+                    .AddModifiers(Token(SyntaxKind.PrivateKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.ExternKeyword))
                     .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, false, true)).ToArray())
-                    .AddAggressiveInlining()
-                    .WithBody(Block(BuildBaseMethodBody(cppFunction, returnTypeInfo)))
-                    .AddUnsafeIfNeeded();
+                    //.AddAggressiveInlining()
+                    //.WithBody(Block(BuildBaseMethodBody(cppFunction, returnTypeInfo)))
+                    .AddDllImport(cppFunction.Name)
+                    .AddUnsafeIfNeeded()
+                    .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
                 
                 yield return method;
 
@@ -102,15 +104,18 @@ namespace BindingsGenerator
                     .AddAggressiveInlining()
                     .WithBody(Block(BuildDelegateBody(cppFunction, returnTypeInfo)))
                     .AddUnsafeIfNeeded();
+                    
             }
             else
             {
                 method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
-                    .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword))
+                    .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.ExternKeyword))
                     .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, false)).ToArray())
-                    .AddAggressiveInlining()
-                    .WithBody(Block(BuildBaseMethodBody(cppFunction, returnTypeInfo)))
-                    .AddUnsafeIfNeeded();
+                    //.AddAggressiveInlining()
+                    //.WithBody(Block(BuildBaseMethodBody(cppFunction, returnTypeInfo)))
+                    .AddDllImport(cppFunction.Name)
+                    .AddUnsafeIfNeeded()
+                    .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
             }
 
             method = method.AddDocumentationComments(cppFunction.Comment, cppFunction.Name);

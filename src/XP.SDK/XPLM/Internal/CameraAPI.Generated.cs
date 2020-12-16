@@ -7,30 +7,8 @@ namespace XP.SDK.XPLM.Internal
 {
     public static partial class CameraAPI
     {
-        private static IntPtr ControlCameraPtr;
-        private static IntPtr DontControlCameraPtr;
-        private static IntPtr IsCameraBeingControlledPtr;
-        private static IntPtr ReadCameraPositionPtr;
-
-        static CameraAPI()
-        {
-            ControlCameraPtr = Lib.GetExport("XPLMControlCamera");
-            DontControlCameraPtr = Lib.GetExport("XPLMDontControlCamera");
-            IsCameraBeingControlledPtr = Lib.GetExport("XPLMIsCameraBeingControlled");
-            ReadCameraPositionPtr = Lib.GetExport("XPLMReadCameraPosition");
-        }
-
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe void ControlCameraPrivate(CameraControlDuration inHowLong, IntPtr inControlFunc, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(ControlCameraPtr);
-            IL.Push(inHowLong);
-            IL.Push(inControlFunc);
-            IL.Push(inRefcon);
-            IL.Push(ControlCameraPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CameraControlDuration), typeof(IntPtr), typeof(void*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMControlCamera", ExactSpelling = true)]
+        private static extern unsafe void ControlCameraPrivate(CameraControlDuration inHowLong, IntPtr inControlFunc, void* inRefcon);
 
         
         /// <summary>
@@ -61,14 +39,8 @@ namespace XP.SDK.XPLM.Internal
         /// posession of the camera.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void DontControlCamera()
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DontControlCameraPtr);
-            IL.Push(DontControlCameraPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDontControlCamera", ExactSpelling = true)]
+        public static extern void DontControlCamera();
 
         
         /// <summary>
@@ -78,18 +50,8 @@ namespace XP.SDK.XPLM.Internal
         /// current control duration will be returned.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int IsCameraBeingControlled(CameraControlDuration* outCameraControlDuration)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(IsCameraBeingControlledPtr);
-            int result;
-            IL.Push(outCameraControlDuration);
-            IL.Push(IsCameraBeingControlledPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(CameraControlDuration*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMIsCameraBeingControlled", ExactSpelling = true)]
+        public static extern unsafe int IsCameraBeingControlled(CameraControlDuration* outCameraControlDuration);
 
         
         /// <summary>
@@ -97,14 +59,7 @@ namespace XP.SDK.XPLM.Internal
         /// This function reads the current camera position.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void ReadCameraPosition(CameraPosition* outCameraPosition)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(ReadCameraPositionPtr);
-            IL.Push(outCameraPosition);
-            IL.Push(ReadCameraPositionPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(CameraPosition*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMReadCameraPosition", ExactSpelling = true)]
+        public static extern unsafe void ReadCameraPosition(CameraPosition* outCameraPosition);
     }
 }

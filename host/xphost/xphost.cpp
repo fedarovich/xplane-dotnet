@@ -3,7 +3,7 @@
 
 #include "xphost.h"
 
-#ifndef XPLM301
+#ifndef XPLM303
 	#error This is made to be compiled against the XPLM301 SDK
 #endif
 
@@ -55,7 +55,19 @@ PLUGIN_API int XPluginStart(
         return 0;
     }
     
-    auto proxy_result = proxy::create(root_path);
+    proxy_init_parameters params
+    {
+        &XPLMDebugString,
+        startup_path.c_str(),
+
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr,
+        nullptr
+    };
+
+    auto proxy_result = proxy::create(root_path, &params);
     if (!proxy_result)
     {
         XPLMDebugString("[xphost] ");
@@ -65,15 +77,7 @@ PLUGIN_API int XPluginStart(
     }
     plugin_proxy = *proxy_result;
 
-    start_parameters params {
-        outName,
-        outSig,
-        outDesc,
-        startup_path.c_str(),
-        full_name.c_str()
-    };
-        
-    auto result = plugin_proxy->start(&params);
+    auto result = plugin_proxy->start(outName, outSig, outDesc);
     return result;
 }
 

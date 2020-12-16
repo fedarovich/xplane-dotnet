@@ -20,7 +20,7 @@ elseif (CMAKE_SYSTEM_NAME MATCHES "Darwin")
 	add_compile_definitions(APL=1)
 endif ()
 
-add_compile_definitions(XPLM200 XPLM210 XPLM300 XPLM301)
+add_compile_definitions(XPLM200 XPLM210 XPLM300 XPLM301 XPLM302 XPLM303)
 
 # Include sub-projects.
 add_subdirectory ("xphost")

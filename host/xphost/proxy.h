@@ -8,52 +8,53 @@
 
 #include "platform.h"
 
-struct start_parameters
+typedef void (*DebugStringFunc)(const char* str);
+typedef int (*StartFunc)(char* outName, char* outSig, char* outDesc);
+typedef int (*EnableFunc)(void);
+typedef void (*ReceiveMessageFunc)(XPLMPluginID inFrom, int inMsg, void* inParam);
+typedef void (*DisableFunc)(void);
+typedef void (*StopFunc)(void);
+
+struct proxy_init_parameters
 {
-    char* name;
-    char* sig;
-    char* desc;
-    const char* startup_path;
-    const char* plugin_path;
+    DebugStringFunc in_debug;
+    const char* in_startup_path;
+
+    StartFunc out_start;
+    EnableFunc out_enable;
+    ReceiveMessageFunc out_receive_message;
+    DisableFunc out_disable;
+    StopFunc out_stop;
 };
 
-typedef int (*StartDelegate)(start_parameters* params);
-typedef int (*EnableDelegate)(void);
-typedef void (*DisableDelegate)(void);
-typedef void (*StopDelegate)(void);
-typedef void (*ReceiveMessageDelegate)(XPLMPluginID inFrom, int inMsg, void* inParam);
+typedef int (*InitDelegate)(proxy_init_parameters* params);
 
 class proxy
 {
 private:
-    StartDelegate plugin_start;
-    StopDelegate plugin_stop;
-    EnableDelegate plugin_enable;
-    DisableDelegate plugin_disable;
-    ReceiveMessageDelegate plugin_receive_message;
+    StartFunc plugin_start;
+    EnableFunc plugin_enable;
+    ReceiveMessageFunc plugin_receive_message;
+    DisableFunc plugin_disable;
+    StopFunc plugin_stop;
 
-    proxy(
-        StartDelegate plugin_start,
-        StopDelegate plugin_stop,
-        EnableDelegate plugin_enable,
-        DisableDelegate plugin_disable,
-        ReceiveMessageDelegate plugin_receive_message)
+    proxy(const proxy_init_parameters *const params)
         :
-        plugin_start(plugin_start),
-        plugin_stop(plugin_stop),
-        plugin_enable(plugin_enable),
-        plugin_disable(plugin_disable),
-        plugin_receive_message(plugin_receive_message)
+        plugin_start(params->out_start),
+        plugin_enable(params->out_enable),
+        plugin_receive_message(params->out_receive_message),
+        plugin_disable(params->out_disable),
+        plugin_stop(params->out_stop)
     {
     }
 
     
 public:
-    static tl::expected<proxy, std::string> create(fs::path plugin_path);
+    static tl::expected<proxy, std::string> create(fs::path plugin_path, proxy_init_parameters *params);
 
-    int start(start_parameters* params)
+    int start(char* outName, char* outSig, char* outDesc)
     {
-        return plugin_start(params);
+        return plugin_start(outName, outSig, outDesc);
     }
 
     void stop()

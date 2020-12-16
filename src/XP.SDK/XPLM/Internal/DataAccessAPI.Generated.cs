@@ -7,51 +7,6 @@ namespace XP.SDK.XPLM.Internal
 {
     public static partial class DataAccessAPI
     {
-        private static IntPtr FindDataRefPtr;
-        private static IntPtr CanWriteDataRefPtr;
-        private static IntPtr IsDataRefGoodPtr;
-        private static IntPtr GetDataRefTypesPtr;
-        private static IntPtr GetDataiPtr;
-        private static IntPtr SetDataiPtr;
-        private static IntPtr GetDatafPtr;
-        private static IntPtr SetDatafPtr;
-        private static IntPtr GetDatadPtr;
-        private static IntPtr SetDatadPtr;
-        private static IntPtr GetDataviPtr;
-        private static IntPtr SetDataviPtr;
-        private static IntPtr GetDatavfPtr;
-        private static IntPtr SetDatavfPtr;
-        private static IntPtr GetDatabPtr;
-        private static IntPtr SetDatabPtr;
-        private static IntPtr RegisterDataAccessorPtr;
-        private static IntPtr UnregisterDataAccessorPtr;
-        private static IntPtr ShareDataPtr;
-        private static IntPtr UnshareDataPtr;
-
-        static DataAccessAPI()
-        {
-            FindDataRefPtr = Lib.GetExport("XPLMFindDataRef");
-            CanWriteDataRefPtr = Lib.GetExport("XPLMCanWriteDataRef");
-            IsDataRefGoodPtr = Lib.GetExport("XPLMIsDataRefGood");
-            GetDataRefTypesPtr = Lib.GetExport("XPLMGetDataRefTypes");
-            GetDataiPtr = Lib.GetExport("XPLMGetDatai");
-            SetDataiPtr = Lib.GetExport("XPLMSetDatai");
-            GetDatafPtr = Lib.GetExport("XPLMGetDataf");
-            SetDatafPtr = Lib.GetExport("XPLMSetDataf");
-            GetDatadPtr = Lib.GetExport("XPLMGetDatad");
-            SetDatadPtr = Lib.GetExport("XPLMSetDatad");
-            GetDataviPtr = Lib.GetExport("XPLMGetDatavi");
-            SetDataviPtr = Lib.GetExport("XPLMSetDatavi");
-            GetDatavfPtr = Lib.GetExport("XPLMGetDatavf");
-            SetDatavfPtr = Lib.GetExport("XPLMSetDatavf");
-            GetDatabPtr = Lib.GetExport("XPLMGetDatab");
-            SetDatabPtr = Lib.GetExport("XPLMSetDatab");
-            RegisterDataAccessorPtr = Lib.GetExport("XPLMRegisterDataAccessor");
-            UnregisterDataAccessorPtr = Lib.GetExport("XPLMUnregisterDataAccessor");
-            ShareDataPtr = Lib.GetExport("XPLMShareData");
-            UnshareDataPtr = Lib.GetExport("XPLMUnshareData");
-        }
-
         
         /// <summary>
         /// <para>
@@ -68,18 +23,8 @@ namespace XP.SDK.XPLM.Internal
         /// every time you need to read or write it.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe DataRef FindDataRef(byte* inDataRefName)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(FindDataRefPtr);
-            DataRef result;
-            IL.Push(inDataRefName);
-            IL.Push(FindDataRefPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(DataRef), typeof(byte*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMFindDataRef", ExactSpelling = true)]
+        public static extern unsafe DataRef FindDataRef(byte* inDataRefName);
 
         
         /// <summary>
@@ -119,18 +64,8 @@ namespace XP.SDK.XPLM.Internal
         /// separate "override" dataref to 1 to stop X-Plane from writing it.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int CanWriteDataRef(DataRef inDataRef)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CanWriteDataRefPtr);
-            int result;
-            IL.Push(inDataRef);
-            IL.Push(CanWriteDataRefPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(DataRef)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCanWriteDataRef", ExactSpelling = true)]
+        public static extern int CanWriteDataRef(DataRef inDataRef);
 
         
         /// <summary>
@@ -148,18 +83,8 @@ namespace XP.SDK.XPLM.Internal
         /// it has a perormance cost.)
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int IsDataRefGood(DataRef inDataRef)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(IsDataRefGoodPtr);
-            int result;
-            IL.Push(inDataRef);
-            IL.Push(IsDataRefGoodPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(DataRef)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMIsDataRefGood", ExactSpelling = true)]
+        public static extern int IsDataRefGood(DataRef inDataRef);
 
         
         /// <summary>
@@ -169,18 +94,8 @@ namespace XP.SDK.XPLM.Internal
         /// will be returned.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static DataTypeID GetDataRefTypes(DataRef inDataRef)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetDataRefTypesPtr);
-            DataTypeID result;
-            IL.Push(inDataRef);
-            IL.Push(GetDataRefTypesPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(DataTypeID), typeof(DataRef)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetDataRefTypes", ExactSpelling = true)]
+        public static extern DataTypeID GetDataRefTypes(DataRef inDataRef);
 
         
         /// <summary>
@@ -189,18 +104,8 @@ namespace XP.SDK.XPLM.Internal
         /// dataref value or 0 if the dataref is NULL or the plugin is disabled.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int GetDatai(DataRef inDataRef)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetDataiPtr);
-            int result;
-            IL.Push(inDataRef);
-            IL.Push(GetDataiPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(DataRef)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetDatai", ExactSpelling = true)]
+        public static extern int GetDatai(DataRef inDataRef);
 
         
         /// <summary>
@@ -210,16 +115,8 @@ namespace XP.SDK.XPLM.Internal
         /// dataref is not writable.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SetDatai(DataRef inDataRef, int inValue)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetDataiPtr);
-            IL.Push(inDataRef);
-            IL.Push(inValue);
-            IL.Push(SetDataiPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(DataRef), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetDatai", ExactSpelling = true)]
+        public static extern void SetDatai(DataRef inDataRef, int inValue);
 
         
         /// <summary>
@@ -229,18 +126,8 @@ namespace XP.SDK.XPLM.Internal
         /// plugin is disabled.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static float GetDataf(DataRef inDataRef)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetDatafPtr);
-            float result;
-            IL.Push(inDataRef);
-            IL.Push(GetDatafPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(float), typeof(DataRef)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetDataf", ExactSpelling = true)]
+        public static extern float GetDataf(DataRef inDataRef);
 
         
         /// <summary>
@@ -250,16 +137,8 @@ namespace XP.SDK.XPLM.Internal
         /// dataref is NULL, or the dataref is not writable.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SetDataf(DataRef inDataRef, float inValue)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetDatafPtr);
-            IL.Push(inDataRef);
-            IL.Push(inValue);
-            IL.Push(SetDatafPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(DataRef), typeof(float)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetDataf", ExactSpelling = true)]
+        public static extern void SetDataf(DataRef inDataRef, float inValue);
 
         
         /// <summary>
@@ -269,18 +148,8 @@ namespace XP.SDK.XPLM.Internal
         /// plugin is disabled.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static double GetDatad(DataRef inDataRef)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetDatadPtr);
-            double result;
-            IL.Push(inDataRef);
-            IL.Push(GetDatadPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(double), typeof(DataRef)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetDatad", ExactSpelling = true)]
+        public static extern double GetDatad(DataRef inDataRef);
 
         
         /// <summary>
@@ -290,16 +159,8 @@ namespace XP.SDK.XPLM.Internal
         /// dataref is NULL, or the dataref is not writable.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SetDatad(DataRef inDataRef, double inValue)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetDatadPtr);
-            IL.Push(inDataRef);
-            IL.Push(inValue);
-            IL.Push(SetDatadPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(DataRef), typeof(double)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetDatad", ExactSpelling = true)]
+        public static extern void SetDatad(DataRef inDataRef, double inValue);
 
         
         /// <summary>
@@ -320,21 +181,8 @@ namespace XP.SDK.XPLM.Internal
         /// plugin may have different behavior.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int GetDatavi(DataRef inDataRef, int* outValues, int inOffset, int inMax)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetDataviPtr);
-            int result;
-            IL.Push(inDataRef);
-            IL.Push(outValues);
-            IL.Push(inOffset);
-            IL.Push(inMax);
-            IL.Push(GetDataviPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(DataRef), typeof(int*), typeof(int), typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetDatavi", ExactSpelling = true)]
+        public static extern unsafe int GetDatavi(DataRef inDataRef, int* outValues, int inOffset, int inMax);
 
         
         /// <summary>
@@ -351,18 +199,8 @@ namespace XP.SDK.XPLM.Internal
         /// plugin may have different behavior.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetDatavi(DataRef inDataRef, int* inValues, int inoffset, int inCount)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetDataviPtr);
-            IL.Push(inDataRef);
-            IL.Push(inValues);
-            IL.Push(inoffset);
-            IL.Push(inCount);
-            IL.Push(SetDataviPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(DataRef), typeof(int*), typeof(int), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetDatavi", ExactSpelling = true)]
+        public static extern unsafe void SetDatavi(DataRef inDataRef, int* inValues, int inoffset, int inCount);
 
         
         /// <summary>
@@ -384,21 +222,8 @@ namespace XP.SDK.XPLM.Internal
         /// plugin may have different behavior.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int GetDatavf(DataRef inDataRef, float* outValues, int inOffset, int inMax)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetDatavfPtr);
-            int result;
-            IL.Push(inDataRef);
-            IL.Push(outValues);
-            IL.Push(inOffset);
-            IL.Push(inMax);
-            IL.Push(GetDatavfPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(DataRef), typeof(float*), typeof(int), typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetDatavf", ExactSpelling = true)]
+        public static extern unsafe int GetDatavf(DataRef inDataRef, float* outValues, int inOffset, int inMax);
 
         
         /// <summary>
@@ -415,18 +240,8 @@ namespace XP.SDK.XPLM.Internal
         /// plugin may have different behavior.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetDatavf(DataRef inDataRef, float* inValues, int inoffset, int inCount)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetDatavfPtr);
-            IL.Push(inDataRef);
-            IL.Push(inValues);
-            IL.Push(inoffset);
-            IL.Push(inCount);
-            IL.Push(SetDatavfPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(DataRef), typeof(float*), typeof(int), typeof(int)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetDatavf", ExactSpelling = true)]
+        public static extern unsafe void SetDatavf(DataRef inDataRef, float* inValues, int inoffset, int inCount);
 
         
         /// <summary>
@@ -447,21 +262,8 @@ namespace XP.SDK.XPLM.Internal
         /// plugin may have different behavior.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int GetDatab(DataRef inDataRef, void* outValue, int inOffset, int inMaxBytes)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(GetDatabPtr);
-            int result;
-            IL.Push(inDataRef);
-            IL.Push(outValue);
-            IL.Push(inOffset);
-            IL.Push(inMaxBytes);
-            IL.Push(GetDatabPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(DataRef), typeof(void*), typeof(int), typeof(int)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetDatab", ExactSpelling = true)]
+        public static extern unsafe int GetDatab(DataRef inDataRef, void* outValue, int inOffset, int inMaxBytes);
 
         
         /// <summary>
@@ -478,47 +280,10 @@ namespace XP.SDK.XPLM.Internal
         /// plugin may have different behavior.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetDatab(DataRef inDataRef, void* inValue, int inOffset, int inLength)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(SetDatabPtr);
-            IL.Push(inDataRef);
-            IL.Push(inValue);
-            IL.Push(inOffset);
-            IL.Push(inLength);
-            IL.Push(SetDatabPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(DataRef), typeof(void*), typeof(int), typeof(int)));
-        }
-
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe DataRef RegisterDataAccessorPrivate(byte* inDataName, DataTypeID inDataType, int inIsWritable, IntPtr inReadInt, IntPtr inWriteInt, IntPtr inReadFloat, IntPtr inWriteFloat, IntPtr inReadDouble, IntPtr inWriteDouble, IntPtr inReadIntArray, IntPtr inWriteIntArray, IntPtr inReadFloatArray, IntPtr inWriteFloatArray, IntPtr inReadData, IntPtr inWriteData, void* inReadRefcon, void* inWriteRefcon)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(RegisterDataAccessorPtr);
-            DataRef result;
-            IL.Push(inDataName);
-            IL.Push(inDataType);
-            IL.Push(inIsWritable);
-            IL.Push(inReadInt);
-            IL.Push(inWriteInt);
-            IL.Push(inReadFloat);
-            IL.Push(inWriteFloat);
-            IL.Push(inReadDouble);
-            IL.Push(inWriteDouble);
-            IL.Push(inReadIntArray);
-            IL.Push(inWriteIntArray);
-            IL.Push(inReadFloatArray);
-            IL.Push(inWriteFloatArray);
-            IL.Push(inReadData);
-            IL.Push(inWriteData);
-            IL.Push(inReadRefcon);
-            IL.Push(inWriteRefcon);
-            IL.Push(RegisterDataAccessorPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(DataRef), typeof(byte*), typeof(DataTypeID), typeof(int), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(IntPtr), typeof(void*), typeof(void*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetDatab", ExactSpelling = true)]
+        public static extern unsafe void SetDatab(DataRef inDataRef, void* inValue, int inOffset, int inLength);
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterDataAccessor", ExactSpelling = true)]
+        private static extern unsafe DataRef RegisterDataAccessorPrivate(byte* inDataName, DataTypeID inDataType, int inIsWritable, IntPtr inReadInt, IntPtr inWriteInt, IntPtr inReadFloat, IntPtr inWriteFloat, IntPtr inReadDouble, IntPtr inWriteDouble, IntPtr inReadIntArray, IntPtr inWriteIntArray, IntPtr inReadFloatArray, IntPtr inWriteFloatArray, IntPtr inReadData, IntPtr inWriteData, void* inReadRefcon, void* inWriteRefcon);
 
         
         /// <summary>
@@ -600,31 +365,10 @@ namespace XP.SDK.XPLM.Internal
         /// not be called anymore.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void UnregisterDataAccessor(DataRef inDataRef)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(UnregisterDataAccessorPtr);
-            IL.Push(inDataRef);
-            IL.Push(UnregisterDataAccessorPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(DataRef)));
-        }
-
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe int ShareDataPrivate(byte* inDataName, DataTypeID inDataType, IntPtr inNotificationFunc, void* inNotificationRefcon)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(ShareDataPtr);
-            int result;
-            IL.Push(inDataName);
-            IL.Push(inDataType);
-            IL.Push(inNotificationFunc);
-            IL.Push(inNotificationRefcon);
-            IL.Push(ShareDataPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(DataTypeID), typeof(IntPtr), typeof(void*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterDataAccessor", ExactSpelling = true)]
+        public static extern void UnregisterDataAccessor(DataRef inDataRef);
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMShareData", ExactSpelling = true)]
+        private static extern unsafe int ShareDataPrivate(byte* inDataName, DataTypeID inDataType, IntPtr inNotificationFunc, void* inNotificationRefcon);
 
         
         /// <summary>
@@ -689,21 +433,8 @@ namespace XP.SDK.XPLM.Internal
             return ShareData(inDataNamePtr, inDataType, inNotificationFunc, inNotificationRefcon);
         }
 
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe int UnshareDataPrivate(byte* inDataName, DataTypeID inDataType, IntPtr inNotificationFunc, void* inNotificationRefcon)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(UnshareDataPtr);
-            int result;
-            IL.Push(inDataName);
-            IL.Push(inDataType);
-            IL.Push(inNotificationFunc);
-            IL.Push(inNotificationRefcon);
-            IL.Push(UnshareDataPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*), typeof(DataTypeID), typeof(IntPtr), typeof(void*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnshareData", ExactSpelling = true)]
+        private static extern unsafe int UnshareDataPrivate(byte* inDataName, DataTypeID inDataType, IntPtr inNotificationFunc, void* inNotificationRefcon);
 
         
         /// <summary>

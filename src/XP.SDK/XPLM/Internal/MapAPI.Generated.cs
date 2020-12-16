@@ -7,31 +7,6 @@ namespace XP.SDK.XPLM.Internal
 {
     public static partial class MapAPI
     {
-        private static IntPtr CreateMapLayerPtr;
-        private static IntPtr DestroyMapLayerPtr;
-        private static IntPtr RegisterMapCreationHookPtr;
-        private static IntPtr MapExistsPtr;
-        private static IntPtr DrawMapIconFromSheetPtr;
-        private static IntPtr DrawMapLabelPtr;
-        private static IntPtr MapProjectPtr;
-        private static IntPtr MapUnprojectPtr;
-        private static IntPtr MapScaleMeterPtr;
-        private static IntPtr MapGetNorthHeadingPtr;
-
-        static MapAPI()
-        {
-            CreateMapLayerPtr = Lib.GetExport("XPLMCreateMapLayer");
-            DestroyMapLayerPtr = Lib.GetExport("XPLMDestroyMapLayer");
-            RegisterMapCreationHookPtr = Lib.GetExport("XPLMRegisterMapCreationHook");
-            MapExistsPtr = Lib.GetExport("XPLMMapExists");
-            DrawMapIconFromSheetPtr = Lib.GetExport("XPLMDrawMapIconFromSheet");
-            DrawMapLabelPtr = Lib.GetExport("XPLMDrawMapLabel");
-            MapProjectPtr = Lib.GetExport("XPLMMapProject");
-            MapUnprojectPtr = Lib.GetExport("XPLMMapUnproject");
-            MapScaleMeterPtr = Lib.GetExport("XPLMMapScaleMeter");
-            MapGetNorthHeadingPtr = Lib.GetExport("XPLMMapGetNorthHeading");
-        }
-
         
         /// <summary>
         /// <para>
@@ -48,18 +23,8 @@ namespace XP.SDK.XPLM.Internal
         /// opened in X-Plane, at which time you can create layers in it.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe MapLayerID CreateMapLayer(CreateMapLayer* inParams)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(CreateMapLayerPtr);
-            MapLayerID result;
-            IL.Push(inParams);
-            IL.Push(CreateMapLayerPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(MapLayerID), typeof(CreateMapLayer*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCreateMapLayer", ExactSpelling = true)]
+        public static extern unsafe MapLayerID CreateMapLayer(CreateMapLayer* inParams);
 
         
         /// <summary>
@@ -69,29 +34,10 @@ namespace XP.SDK.XPLM.Internal
         /// took place.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static int DestroyMapLayer(MapLayerID inLayer)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DestroyMapLayerPtr);
-            int result;
-            IL.Push(inLayer);
-            IL.Push(DestroyMapLayerPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(MapLayerID)));
-            IL.Pop(out result);
-            return result;
-        }
-
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        private static unsafe void RegisterMapCreationHookPrivate(IntPtr callback, void* refcon)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(RegisterMapCreationHookPtr);
-            IL.Push(callback);
-            IL.Push(refcon);
-            IL.Push(RegisterMapCreationHookPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(IntPtr), typeof(void*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDestroyMapLayer", ExactSpelling = true)]
+        public static extern int DestroyMapLayer(MapLayerID inLayer);
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterMapCreationHook", ExactSpelling = true)]
+        private static extern unsafe void RegisterMapCreationHookPrivate(IntPtr callback, void* refcon);
 
         
         /// <summary>
@@ -122,18 +68,8 @@ namespace XP.SDK.XPLM.Internal
         /// that your layer should be added to that map.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int MapExists(byte* mapIdentifier)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(MapExistsPtr);
-            int result;
-            IL.Push(mapIdentifier);
-            IL.Push(MapExistsPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(int), typeof(byte*)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMMapExists", ExactSpelling = true)]
+        public static extern unsafe int MapExists(byte* mapIdentifier);
 
         
         /// <summary>
@@ -190,25 +126,8 @@ namespace XP.SDK.XPLM.Internal
         /// callback).
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void DrawMapIconFromSheet(MapLayerID layer, byte* inPngPath, int s, int t, int ds, int dt, float mapX, float mapY, MapOrientation orientation, float rotationDegrees, float mapWidth)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DrawMapIconFromSheetPtr);
-            IL.Push(layer);
-            IL.Push(inPngPath);
-            IL.Push(s);
-            IL.Push(t);
-            IL.Push(ds);
-            IL.Push(dt);
-            IL.Push(mapX);
-            IL.Push(mapY);
-            IL.Push(orientation);
-            IL.Push(rotationDegrees);
-            IL.Push(mapWidth);
-            IL.Push(DrawMapIconFromSheetPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(MapLayerID), typeof(byte*), typeof(int), typeof(int), typeof(int), typeof(int), typeof(float), typeof(float), typeof(MapOrientation), typeof(float), typeof(float)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDrawMapIconFromSheet", ExactSpelling = true)]
+        public static extern unsafe void DrawMapIconFromSheet(MapLayerID layer, byte* inPngPath, int s, int t, int ds, int dt, float mapX, float mapY, MapOrientation orientation, float rotationDegrees, float mapWidth);
 
         
         /// <summary>
@@ -266,20 +185,8 @@ namespace XP.SDK.XPLM.Internal
         /// text labels to be drawn from within your callback).
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void DrawMapLabel(MapLayerID layer, byte* inText, float mapX, float mapY, MapOrientation orientation, float rotationDegrees)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(DrawMapLabelPtr);
-            IL.Push(layer);
-            IL.Push(inText);
-            IL.Push(mapX);
-            IL.Push(mapY);
-            IL.Push(orientation);
-            IL.Push(rotationDegrees);
-            IL.Push(DrawMapLabelPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(MapLayerID), typeof(byte*), typeof(float), typeof(float), typeof(MapOrientation), typeof(float)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDrawMapLabel", ExactSpelling = true)]
+        public static extern unsafe void DrawMapLabel(MapLayerID layer, byte* inText, float mapX, float mapY, MapOrientation orientation, float rotationDegrees);
 
         
         /// <summary>
@@ -311,19 +218,8 @@ namespace XP.SDK.XPLM.Internal
         /// XPLMMapIconDrawingCallback_f, or XPLMMapLabelDrawingCallback_f.)
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void MapProject(MapProjectionID projection, double latitude, double longitude, float* outX, float* outY)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(MapProjectPtr);
-            IL.Push(projection);
-            IL.Push(latitude);
-            IL.Push(longitude);
-            IL.Push(outX);
-            IL.Push(outY);
-            IL.Push(MapProjectPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(MapProjectionID), typeof(double), typeof(double), typeof(float*), typeof(float*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMMapProject", ExactSpelling = true)]
+        public static extern unsafe void MapProject(MapProjectionID projection, double latitude, double longitude, float* outX, float* outY);
 
         
         /// <summary>
@@ -337,19 +233,8 @@ namespace XP.SDK.XPLM.Internal
         /// XPLMMapIconDrawingCallback_f, or XPLMMapLabelDrawingCallback_f.)
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void MapUnproject(MapProjectionID projection, float mapX, float mapY, double* outLatitude, double* outLongitude)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(MapUnprojectPtr);
-            IL.Push(projection);
-            IL.Push(mapX);
-            IL.Push(mapY);
-            IL.Push(outLatitude);
-            IL.Push(outLongitude);
-            IL.Push(MapUnprojectPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(void), typeof(MapProjectionID), typeof(float), typeof(float), typeof(double*), typeof(double*)));
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMMapUnproject", ExactSpelling = true)]
+        public static extern unsafe void MapUnproject(MapProjectionID projection, float mapX, float mapY, double* outLatitude, double* outLongitude);
 
         
         /// <summary>
@@ -363,20 +248,8 @@ namespace XP.SDK.XPLM.Internal
         /// XPLMMapIconDrawingCallback_f, or XPLMMapLabelDrawingCallback_f.)
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static float MapScaleMeter(MapProjectionID projection, float mapX, float mapY)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(MapScaleMeterPtr);
-            float result;
-            IL.Push(projection);
-            IL.Push(mapX);
-            IL.Push(mapY);
-            IL.Push(MapScaleMeterPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(float), typeof(MapProjectionID), typeof(float), typeof(float)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMMapScaleMeter", ExactSpelling = true)]
+        public static extern float MapScaleMeter(MapProjectionID projection, float mapX, float mapY);
 
         
         /// <summary>
@@ -397,19 +270,7 @@ namespace XP.SDK.XPLM.Internal
         /// XPLMMapIconDrawingCallback_f, or XPLMMapLabelDrawingCallback_f.)
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static float MapGetNorthHeading(MapProjectionID projection, float mapX, float mapY)
-        {
-            IL.DeclareLocals(false);
-            Guard.NotNull(MapGetNorthHeadingPtr);
-            float result;
-            IL.Push(projection);
-            IL.Push(mapX);
-            IL.Push(mapY);
-            IL.Push(MapGetNorthHeadingPtr);
-            IL.Emit.Calli(new StandAloneMethodSig(CallingConvention.Cdecl, typeof(float), typeof(MapProjectionID), typeof(float), typeof(float)));
-            IL.Pop(out result);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMMapGetNorthHeading", ExactSpelling = true)]
+        public static extern float MapGetNorthHeading(MapProjectionID projection, float mapX, float mapY);
     }
 }
