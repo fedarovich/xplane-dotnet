@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace XP.SDK
 {
@@ -12,9 +10,11 @@ namespace XP.SDK
             Height = height;
         }
 
-        public int Width { get; }
+        public Size(in Size other) => this = other;
+        
+        public int Width { get; init; }
 
-        public int Height { get; }
+        public int Height { get; init; }
 
         public bool Equals(Size other) => Width == other.Width && Height == other.Height;
 

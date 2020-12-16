@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace XP.SDK
 {
@@ -14,13 +12,15 @@ namespace XP.SDK
             Bottom = bottom;
         }
 
-        public int Left { get; }
+        public Rect(in Rect other) => this = other;
+        
+        public int Left { get; init; }
 
-        public int Top { get; }
+        public int Top { get; init; }
 
-        public int Right { get; }
+        public int Right { get; init; }
 
-        public int Bottom { get; }
+        public int Bottom { get; init; }
 
         public int Width => Right - Left;
 

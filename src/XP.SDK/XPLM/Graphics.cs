@@ -243,9 +243,9 @@ namespace XP.SDK.XPLM
             int digits, int decimals, bool showSign,
             FontID fontId)
         {
-            fixed (float* r = &color.R)
+            fixed (void* r = &color)
             {
-                GraphicsAPI.DrawNumber(r, xOffset, yOffset, value, digits, decimals, showSign.ToInt(), fontId);
+                GraphicsAPI.DrawNumber((float*) r, xOffset, yOffset, value, digits, decimals, showSign.ToInt(), fontId);
             }
         }
 

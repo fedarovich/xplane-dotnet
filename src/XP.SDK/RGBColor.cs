@@ -11,9 +11,9 @@ namespace XP.SDK
             B = b;
         }
 
-        public readonly float R;
-        public readonly float G;
-        public readonly float B;
+        public float R { get; init; }
+        public float G { get; init; }
+        public float B { get; init; }
 
         public bool Equals(RGBColor other) => R.Equals(other.R) && G.Equals(other.G) && B.Equals(other.B);
 

@@ -22,9 +22,9 @@ namespace XP.SDK.XPLM.Internal
             IL.DeclareLocals(false);
             Span<byte> inCharUtf8 = stackalloc byte[(inChar.Length << 1) | 1];
             var inCharPtr = Utils.ToUtf8Unsafe(inChar, inCharUtf8);
-            fixed (float* color = &inColorRGB.R)
+            fixed (void* color = &inColorRGB)
             {
-                DrawString(color, inXOffset, inYOffset, inCharPtr, inWordWrapWidth, inFontID);
+                DrawString((float*) color, inXOffset, inYOffset, inCharPtr, inWordWrapWidth, inFontID);
             }
         }
     }

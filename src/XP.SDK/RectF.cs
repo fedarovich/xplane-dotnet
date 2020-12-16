@@ -1,33 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace XP.SDK
 {
     [StructLayout(LayoutKind.Sequential)]
     public readonly struct RectF : IEquatable<Rect>
     {
-        private readonly float _left;
-        private readonly float _top;
-        private readonly float _right;
-        private readonly float _bottom;
-
         public RectF(float left, float top, float right, float bottom)
         {
-            _left = left;
-            _top = top;
-            _right = right;
-            _bottom = bottom;
+            Left = left;
+            Top = top;
+            Right = right;
+            Bottom = bottom;
         }
 
-        public float Left => _left;
+        public RectF(in RectF other) => this = other;
+        
+        public float Left { get; init; }
 
-        public float Top => _top;
+        public float Top { get; init; }
 
-        public float Right => _right;
+        public float Right { get; init; }
 
-        public float Bottom => _bottom;
+        public float Bottom { get; init; }
 
         public float Width => Right - Left;
 
