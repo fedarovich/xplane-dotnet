@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using XP.SDK.XPLM.Internal;
 
@@ -43,7 +42,7 @@ namespace XP.SDK.XPLM
                 Guid.NewGuid().ToString("N"),
                 default,
                 default,
-                _menuCallback,
+                &OnMenuCallback,
                 GCHandle.ToIntPtr(_handle).ToPointer());
             _items = new MenuItemList(_id);
         }
@@ -59,7 +58,7 @@ namespace XP.SDK.XPLM
                 Guid.NewGuid().ToString("N"),
                 parentItem.ParentMenu.Id,
                 index.Value,
-                _menuCallback,
+                &OnMenuCallback,
                 GCHandle.ToIntPtr(_handle).ToPointer());
             _items = new MenuItemList(_id);
         }
@@ -68,6 +67,16 @@ namespace XP.SDK.XPLM
         {
             _id = id;
             _items = new MenuItemList(id);
+        }
+
+        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+        static unsafe void OnMenuCallback(void* inMenuRef, void* inItemRef)
+        {
+            var menu = Utils.TryGetObject<Menu>(inMenuRef);
+            var uniqueId = (long)inItemRef;
+            var item = menu._items.FindByUniqueId(uniqueId);
+            item?.OnClick();
+            menu.Click?.Invoke(menu, item);
         }
 
         /// <summary>

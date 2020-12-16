@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using XP.SDK.XPLM.Internal;
 
@@ -21,16 +20,6 @@ namespace XP.SDK.XPLM
         /// X-Plane, or whomever is down stream.  Return <see langword="false"/> to consume the key.
         /// </returns>
         public delegate bool Callback(byte @char, KeyFlags flags, byte virtualKey);
-
-        private static readonly KeySnifferCallback _keySnifferCallback;
-
-        static unsafe KeySniffer()
-        {
-            _keySnifferCallback = HandleKeySnifferCallback;
-
-            static int HandleKeySnifferCallback(byte inchar, KeyFlags inflags, byte invirtualkey, void* inrefcon) =>
-                (Utils.TryGetObject<Callback>(inrefcon)?.Invoke(inchar, inflags, invirtualkey) == true).ToInt();
-        }
 
         /// <summary>
         /// <para>
@@ -53,7 +42,7 @@ namespace XP.SDK.XPLM
 
             GCHandle handle = GCHandle.Alloc(callback);
             int result = DisplayAPI.RegisterKeySniffer(
-                _keySnifferCallback, 
+                &OnKeySnifferCallback, 
                 beforeWindows.ToInt(),
                 GCHandle.ToIntPtr(handle).ToPointer());
             if (result == 1)
@@ -82,12 +71,17 @@ namespace XP.SDK.XPLM
                 if (Interlocked.CompareExchange(ref _disposed, 1, 0) == 0)
                 {
                     DisplayAPI.UnregisterKeySniffer(
-                        _keySnifferCallback, 
+                        &OnKeySnifferCallback, 
                         _beforeWindows.ToInt(), 
                         GCHandle.ToIntPtr(_handle).ToPointer());
                     _handle.Free();
                 }
             }
         }
+
+        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+        static unsafe int OnKeySnifferCallback(byte inchar, KeyFlags inflags, byte invirtualkey, void* inrefcon) =>
+            (Utils.TryGetObject<Callback>(inrefcon)?.Invoke(inchar, inflags, invirtualkey) == true).ToInt();
+
     }
 }

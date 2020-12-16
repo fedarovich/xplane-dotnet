@@ -1,10 +1,8 @@
 ﻿#nullable enable
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using XP.SDK.XPLM.Internal;
 
 namespace XP.SDK.XPLM
@@ -17,42 +15,10 @@ namespace XP.SDK.XPLM
     {
         private static readonly Dictionary<CommandRef, Command> _commandCache = new Dictionary<CommandRef, Command>();
 
-        private static readonly CommandCallback _beforeExecuteCallback;
-        private static readonly CommandCallback _afterExecuteCallback;
-
         private RefStructEventHandler<Command, CommandBeforeExecuteEventArgs>? _beforeExecute;
         private InStructEventHandler<Command, CommandAfterExecuteEventArgs>? _afterExecute;
 
         private readonly CommandRef _commandRef;
-
-        static unsafe Command()
-        {
-            _beforeExecuteCallback = BeforeExecuteCallback;
-            _afterExecuteCallback = AfterExecuteCallback;
-
-            static int BeforeExecuteCallback(CommandRef incommand, CommandPhase inphase, void* inrefcon)
-            {
-                if (_commandCache.TryGetValue(incommand, out var command) && command != null)
-                {
-                    var args = new CommandBeforeExecuteEventArgs(inphase);
-                    command._beforeExecute?.Invoke(command, ref args);
-                    return args.Handled ? 0 : 1;
-                }
-
-                return 1;
-            }
-
-            static int AfterExecuteCallback(CommandRef incommand, CommandPhase inphase, void* inrefcon)
-            {
-                if (_commandCache.TryGetValue(incommand, out var command) && command != null)
-                {
-                    var args = new CommandAfterExecuteEventArgs(inphase);
-                    command._afterExecute?.Invoke(command, in args);
-                }
-
-                return 1;
-            }
-        }
 
         private Command(CommandRef commandRef)
         {
@@ -156,7 +122,7 @@ namespace XP.SDK.XPLM
                 _beforeExecute += value;
                 if (mustRegister)
                 {
-                    UtilitiesAPI.RegisterCommandHandler(_commandRef, _beforeExecuteCallback, 1, null);
+                    UtilitiesAPI.RegisterCommandHandler(_commandRef, &BeforeExecuteCallback, 1, null);
                 }
             }
             remove
@@ -166,7 +132,7 @@ namespace XP.SDK.XPLM
                     _beforeExecute -= value;
                     if (_beforeExecute == null)
                     {
-                        UtilitiesAPI.UnregisterCommandHandler(_commandRef, _beforeExecuteCallback, 1, null);
+                        UtilitiesAPI.UnregisterCommandHandler(_commandRef, &BeforeExecuteCallback, 1, null);
                     }
                 }
             }
@@ -186,7 +152,7 @@ namespace XP.SDK.XPLM
                 _afterExecute += value;
                 if (mustRegister)
                 {
-                    UtilitiesAPI.RegisterCommandHandler(_commandRef, _afterExecuteCallback, 0, null);
+                    UtilitiesAPI.RegisterCommandHandler(_commandRef, &AfterExecuteCallback, 0, null);
                 }
             }
             remove
@@ -196,10 +162,35 @@ namespace XP.SDK.XPLM
                     _afterExecute -= value;
                     if (_afterExecute == null)
                     {
-                        UtilitiesAPI.UnregisterCommandHandler(_commandRef, _afterExecuteCallback, 0, null);
+                        UtilitiesAPI.UnregisterCommandHandler(_commandRef, &AfterExecuteCallback, 0, null);
                     }
                 }
             }
+        }
+
+        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static unsafe int BeforeExecuteCallback(CommandRef incommand, CommandPhase inphase, void* inrefcon)
+        {
+            if (_commandCache.TryGetValue(incommand, out var command) && command != null)
+            {
+                var args = new CommandBeforeExecuteEventArgs(inphase);
+                command._beforeExecute?.Invoke(command, ref args);
+                return args.Handled ? 0 : 1;
+            }
+
+            return 1;
+        }
+
+        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static unsafe int AfterExecuteCallback(CommandRef incommand, CommandPhase inphase, void* inrefcon)
+        {
+            if (_commandCache.TryGetValue(incommand, out var command) && command != null)
+            {
+                var args = new CommandAfterExecuteEventArgs(inphase);
+                command._afterExecute?.Invoke(command, in args);
+            }
+
+            return 1;
         }
 
         private class CommandDisposableScope : IDisposable

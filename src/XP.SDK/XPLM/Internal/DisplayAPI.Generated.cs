@@ -7,9 +7,6 @@ namespace XP.SDK.XPLM.Internal
 {
     public static partial class DisplayAPI
     {
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterDrawCallback", ExactSpelling = true)]
-        private static extern unsafe int RegisterDrawCallbackPrivate(IntPtr inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon);
-
         
         /// <summary>
         /// <para>
@@ -26,18 +23,8 @@ namespace XP.SDK.XPLM.Internal
         /// future-proof drawing of 3-D objects.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int RegisterDrawCallback(DrawCallback inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
-            int result = RegisterDrawCallbackPrivate(inCallbackPtr, inPhase, inWantsBefore, inRefcon);
-            GC.KeepAlive(inCallback);
-            return result;
-        }
-
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterDrawCallback", ExactSpelling = true)]
-        private static extern unsafe int UnregisterDrawCallbackPrivate(IntPtr inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon);
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterDrawCallback", ExactSpelling = true)]
+        public static extern unsafe int RegisterDrawCallback(delegate* unmanaged[Cdecl]<DrawingPhase, int, void*, int> inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon);
 
         
         /// <summary>
@@ -53,15 +40,8 @@ namespace XP.SDK.XPLM.Internal
         /// future-proof drawing of 3-D objects.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int UnregisterDrawCallback(DrawCallback inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
-            int result = UnregisterDrawCallbackPrivate(inCallbackPtr, inPhase, inWantsBefore, inRefcon);
-            GC.KeepAlive(inCallback);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterDrawCallback", ExactSpelling = true)]
+        public static extern unsafe int UnregisterDrawCallback(delegate* unmanaged[Cdecl]<DrawingPhase, int, void*, int> inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon);
 
         
         /// <summary>
@@ -76,8 +56,6 @@ namespace XP.SDK.XPLM.Internal
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCreateWindowEx", ExactSpelling = true)]
         public static extern unsafe WindowID CreateWindowEx(CreateWindow* inParams);
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCreateWindow", ExactSpelling = true)]
-        private static extern unsafe WindowID CreateWindowPrivate(int inLeft, int inTop, int inRight, int inBottom, int inIsVisible, IntPtr inDrawCallback, IntPtr inKeyCallback, IntPtr inMouseCallback, void* inRefcon);
 
         
         /// <summary>
@@ -104,19 +82,8 @@ namespace XP.SDK.XPLM.Internal
         /// routines which make this easy.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe WindowID CreateWindow(int inLeft, int inTop, int inRight, int inBottom, int inIsVisible, DrawWindowCallback inDrawCallback, HandleKeyCallback inKeyCallback, HandleMouseClickCallback inMouseCallback, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inDrawCallbackPtr = inDrawCallback != null ? Marshal.GetFunctionPointerForDelegate(inDrawCallback) : default;
-            IntPtr inKeyCallbackPtr = inKeyCallback != null ? Marshal.GetFunctionPointerForDelegate(inKeyCallback) : default;
-            IntPtr inMouseCallbackPtr = inMouseCallback != null ? Marshal.GetFunctionPointerForDelegate(inMouseCallback) : default;
-            WindowID result = CreateWindowPrivate(inLeft, inTop, inRight, inBottom, inIsVisible, inDrawCallbackPtr, inKeyCallbackPtr, inMouseCallbackPtr, inRefcon);
-            GC.KeepAlive(inMouseCallback);
-            GC.KeepAlive(inKeyCallback);
-            GC.KeepAlive(inDrawCallback);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCreateWindow", ExactSpelling = true)]
+        public static extern unsafe WindowID CreateWindow(int inLeft, int inTop, int inRight, int inBottom, int inIsVisible, delegate* unmanaged[Cdecl]<WindowID, void*, void> inDrawCallback, delegate* unmanaged[Cdecl]<WindowID, byte, KeyFlags, byte, void*, int, void> inKeyCallback, delegate* unmanaged[Cdecl]<WindowID, int, int, MouseStatus, void*, int> inMouseCallback, void* inRefcon);
 
         
         /// <summary>
@@ -179,8 +146,6 @@ namespace XP.SDK.XPLM.Internal
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetScreenBoundsGlobal", ExactSpelling = true)]
         public static extern unsafe void GetScreenBoundsGlobal(int* outLeft, int* outTop, int* outRight, int* outBottom);
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetAllMonitorBoundsGlobal", ExactSpelling = true)]
-        private static extern unsafe void GetAllMonitorBoundsGlobalPrivate(IntPtr inMonitorBoundsCallback, void* inRefcon);
 
         
         /// <summary>
@@ -208,17 +173,8 @@ namespace XP.SDK.XPLM.Internal
         /// scaling).
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetAllMonitorBoundsGlobal(ReceiveMonitorBoundsGlobalCallback inMonitorBoundsCallback, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inMonitorBoundsCallbackPtr = inMonitorBoundsCallback != null ? Marshal.GetFunctionPointerForDelegate(inMonitorBoundsCallback) : default;
-            GetAllMonitorBoundsGlobalPrivate(inMonitorBoundsCallbackPtr, inRefcon);
-            GC.KeepAlive(inMonitorBoundsCallback);
-        }
-
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetAllMonitorBoundsOS", ExactSpelling = true)]
-        private static extern unsafe void GetAllMonitorBoundsOSPrivate(IntPtr inMonitorBoundsCallback, void* inRefcon);
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetAllMonitorBoundsGlobal", ExactSpelling = true)]
+        public static extern unsafe void GetAllMonitorBoundsGlobal(delegate* unmanaged[Cdecl]<int, int, int, int, int, void*, void> inMonitorBoundsCallback, void* inRefcon);
 
         
         /// <summary>
@@ -235,14 +191,8 @@ namespace XP.SDK.XPLM.Internal
         /// desktop, and one X-Plane boxel may be larger than one pixel).
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void GetAllMonitorBoundsOS(ReceiveMonitorBoundsOSCallback inMonitorBoundsCallback, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inMonitorBoundsCallbackPtr = inMonitorBoundsCallback != null ? Marshal.GetFunctionPointerForDelegate(inMonitorBoundsCallback) : default;
-            GetAllMonitorBoundsOSPrivate(inMonitorBoundsCallbackPtr, inRefcon);
-            GC.KeepAlive(inMonitorBoundsCallback);
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetAllMonitorBoundsOS", ExactSpelling = true)]
+        public static extern unsafe void GetAllMonitorBoundsOS(delegate* unmanaged[Cdecl]<int, int, int, int, int, void*, void> inMonitorBoundsCallback, void* inRefcon);
 
         
         /// <summary>
@@ -625,8 +575,6 @@ namespace XP.SDK.XPLM.Internal
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMIsWindowInFront", ExactSpelling = true)]
         public static extern int IsWindowInFront(WindowID inWindow);
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterKeySniffer", ExactSpelling = true)]
-        private static extern unsafe int RegisterKeySnifferPrivate(IntPtr inCallback, int inBeforeWindows, void* inRefcon);
 
         
         /// <summary>
@@ -640,18 +588,8 @@ namespace XP.SDK.XPLM.Internal
         /// 1 if successful.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int RegisterKeySniffer(KeySnifferCallback inCallback, int inBeforeWindows, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
-            int result = RegisterKeySnifferPrivate(inCallbackPtr, inBeforeWindows, inRefcon);
-            GC.KeepAlive(inCallback);
-            return result;
-        }
-
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterKeySniffer", ExactSpelling = true)]
-        private static extern unsafe int UnregisterKeySnifferPrivate(IntPtr inCallback, int inBeforeWindows, void* inRefcon);
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterKeySniffer", ExactSpelling = true)]
+        public static extern unsafe int RegisterKeySniffer(delegate* unmanaged[Cdecl]<byte, KeyFlags, byte, void*, int> inCallback, int inBeforeWindows, void* inRefcon);
 
         
         /// <summary>
@@ -661,18 +599,22 @@ namespace XP.SDK.XPLM.Internal
         /// if successful.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int UnregisterKeySniffer(KeySnifferCallback inCallback, int inBeforeWindows, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
-            int result = UnregisterKeySnifferPrivate(inCallbackPtr, inBeforeWindows, inRefcon);
-            GC.KeepAlive(inCallback);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterKeySniffer", ExactSpelling = true)]
+        public static extern unsafe int UnregisterKeySniffer(delegate* unmanaged[Cdecl]<byte, KeyFlags, byte, void*, int> inCallback, int inBeforeWindows, void* inRefcon);
 
+        
+        /// <summary>
+        /// <para>
+        /// This routine registers a hot key.  You specify your preferred key stroke
+        /// virtual key/flag combination, a description of what your callback does (so
+        /// other plug-ins can describe the plug-in to the user for remapping) and a
+        /// callback function and opaque pointer to pass in).  A new hot key ID is
+        /// returned.  During execution, the actual key associated with your hot key
+        /// may change, but you are insulated from this.
+        /// </para>
+        /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterHotKey", ExactSpelling = true)]
-        private static extern unsafe HotKeyID RegisterHotKeyPrivate(byte inVirtualKey, KeyFlags inFlags, byte* inDescription, IntPtr inCallback, void* inRefcon);
+        public static extern unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, byte* inDescription, delegate* unmanaged[Cdecl]<void*, void> inCallback, void* inRefcon);
 
         
         /// <summary>
@@ -686,28 +628,7 @@ namespace XP.SDK.XPLM.Internal
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, byte* inDescription, HotKeyCallback inCallback, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
-            HotKeyID result = RegisterHotKeyPrivate(inVirtualKey, inFlags, inDescription, inCallbackPtr, inRefcon);
-            GC.KeepAlive(inCallback);
-            return result;
-        }
-
-        
-        /// <summary>
-        /// <para>
-        /// This routine registers a hot key.  You specify your preferred key stroke
-        /// virtual key/flag combination, a description of what your callback does (so
-        /// other plug-ins can describe the plug-in to the user for remapping) and a
-        /// callback function and opaque pointer to pass in).  A new hot key ID is
-        /// returned.  During execution, the actual key associated with your hot key
-        /// may change, but you are insulated from this.
-        /// </para>
-        /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, in ReadOnlySpan<char> inDescription, HotKeyCallback inCallback, void* inRefcon)
+        public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, in ReadOnlySpan<char> inDescription, delegate* unmanaged[Cdecl]<void*, void> inCallback, void* inRefcon)
         {
             IL.DeclareLocals(false);
             Span<byte> inDescriptionUtf8 = stackalloc byte[(inDescription.Length << 1) | 1];

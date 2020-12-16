@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace XP.Proxy
+﻿namespace XP.Proxy
 {
     internal unsafe struct InitializeParameters
     {
+#pragma warning disable 649
         public readonly delegate* unmanaged[Cdecl]<byte*, void> DebugString;
 
         public readonly nint StartupPath;
+#pragma warning restore 649
 
         public delegate* unmanaged[Cdecl]<byte*, byte*, byte*, int> XPluginStart;
 

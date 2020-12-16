@@ -16,7 +16,7 @@ namespace XP.SDK.XPLM.Internal
         public int structSize;
         public FlightLoopPhaseType phase;
         [ManagedTypeAttribute(typeof(FlightLoopCallback))]
-        public IntPtr callbackFunc;
+        public delegate* unmanaged[Cdecl]<float, float, int, void*, float> callbackFunc;
         public void* refcon;
     }
 }

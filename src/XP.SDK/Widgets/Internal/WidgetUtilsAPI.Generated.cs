@@ -47,7 +47,7 @@ namespace XP.SDK.Widgets.Internal
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPUFixedLayout", ExactSpelling = true)]
-        public static extern int FixedLayout(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2);
+        public static extern int FixedLayout(WidgetMessage inMessage, WidgetID inWidget, nint inParam1, nint inParam2);
 
         
         /// <summary>
@@ -58,7 +58,7 @@ namespace XP.SDK.Widgets.Internal
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPUSelectIfNeeded", ExactSpelling = true)]
-        public static extern int SelectIfNeeded(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2, int inEatClick);
+        public static extern int SelectIfNeeded(WidgetMessage inMessage, WidgetID inWidget, nint inParam1, nint inParam2, int inEatClick);
 
         
         /// <summary>
@@ -68,7 +68,7 @@ namespace XP.SDK.Widgets.Internal
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPUDefocusKeyboard", ExactSpelling = true)]
-        public static extern int DefocusKeyboard(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2, int inEatClick);
+        public static extern int DefocusKeyboard(WidgetMessage inMessage, WidgetID inWidget, nint inParam1, nint inParam2, int inEatClick);
 
         
         /// <summary>
@@ -79,6 +79,6 @@ namespace XP.SDK.Widgets.Internal
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPUDragWidget", ExactSpelling = true)]
-        public static extern int DragWidget(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2, int inLeft, int inTop, int inRight, int inBottom);
+        public static extern int DragWidget(WidgetMessage inMessage, WidgetID inWidget, nint inParam1, nint inParam2, int inLeft, int inTop, int inRight, int inBottom);
     }
 }

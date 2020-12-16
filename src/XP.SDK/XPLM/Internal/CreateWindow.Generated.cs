@@ -47,19 +47,19 @@ namespace XP.SDK.XPLM.Internal
         public int bottom;
         public int visible;
         [ManagedTypeAttribute(typeof(DrawWindowCallback))]
-        public IntPtr drawWindowFunc;
+        public delegate* unmanaged[Cdecl]<WindowID, void*, void> drawWindowFunc;
         [ManagedTypeAttribute(typeof(HandleMouseClickCallback))]
-        public IntPtr handleMouseClickFunc;
+        public delegate* unmanaged[Cdecl]<WindowID, int, int, MouseStatus, void*, int> handleMouseClickFunc;
         [ManagedTypeAttribute(typeof(HandleKeyCallback))]
-        public IntPtr handleKeyFunc;
+        public delegate* unmanaged[Cdecl]<WindowID, byte, KeyFlags, byte, void*, int, void> handleKeyFunc;
         [ManagedTypeAttribute(typeof(HandleCursorCallback))]
-        public IntPtr handleCursorFunc;
+        public delegate* unmanaged[Cdecl]<WindowID, int, int, void*, CursorStatus> handleCursorFunc;
         [ManagedTypeAttribute(typeof(HandleMouseWheelCallback))]
-        public IntPtr handleMouseWheelFunc;
+        public delegate* unmanaged[Cdecl]<WindowID, int, int, int, int, void*, int> handleMouseWheelFunc;
         public void* refcon;
         public WindowDecoration decorateAsFloatingWindow;
         public WindowLayer layer;
         [ManagedTypeAttribute(typeof(HandleMouseClickCallback))]
-        public IntPtr handleRightClickFunc;
+        public delegate* unmanaged[Cdecl]<WindowID, int, int, MouseStatus, void*, int> handleRightClickFunc;
     }
 }

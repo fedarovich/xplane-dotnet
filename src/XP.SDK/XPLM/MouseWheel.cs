@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace XP.SDK.XPLM
+﻿namespace XP.SDK.XPLM
 {
     public enum MouseWheel : int
     {

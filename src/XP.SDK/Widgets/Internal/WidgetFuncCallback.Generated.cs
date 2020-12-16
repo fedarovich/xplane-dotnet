@@ -15,5 +15,5 @@ namespace XP.SDK.Widgets.Internal
     /// </para>
     /// </summary>
     [UnmanagedFunctionPointerAttribute(CallingConvention.Cdecl, BestFitMapping = false, SetLastError = false)]
-    public delegate int WidgetFuncCallback(WidgetMessage inMessage, WidgetID inWidget, IntPtr inParam1, IntPtr inParam2);
+    public delegate int WidgetFuncCallback(WidgetMessage inMessage, WidgetID inWidget, nint inParam1, nint inParam2);
 }

@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using InlineIL;
 
@@ -32,8 +31,6 @@ namespace XP.SDK.XPLM.Internal
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetCycleNumber", ExactSpelling = true)]
         public static extern int GetCycleNumber();
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterFlightLoopCallback", ExactSpelling = true)]
-        private static extern unsafe void RegisterFlightLoopCallbackPrivate(IntPtr inFlightLoop, float inInterval, void* inRefcon);
 
         
         /// <summary>
@@ -50,17 +47,8 @@ namespace XP.SDK.XPLM.Internal
         /// XPLMCreateFlightLoop for more control.)
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void RegisterFlightLoopCallback(FlightLoopCallback inFlightLoop, float inInterval, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inFlightLoopPtr = inFlightLoop != null ? Marshal.GetFunctionPointerForDelegate(inFlightLoop) : default;
-            RegisterFlightLoopCallbackPrivate(inFlightLoopPtr, inInterval, inRefcon);
-            GC.KeepAlive(inFlightLoop);
-        }
-
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterFlightLoopCallback", ExactSpelling = true)]
-        private static extern unsafe void UnregisterFlightLoopCallbackPrivate(IntPtr inFlightLoop, void* inRefcon);
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterFlightLoopCallback", ExactSpelling = true)]
+        public static extern unsafe void RegisterFlightLoopCallback(delegate* unmanaged[Cdecl]<float, float, int, void*, float> inFlightLoop, float inInterval, void* inRefcon);
 
         
         /// <summary>
@@ -74,17 +62,8 @@ namespace XP.SDK.XPLM.Internal
         /// XPLMRegisterFlightLoopCallback.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void UnregisterFlightLoopCallback(FlightLoopCallback inFlightLoop, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inFlightLoopPtr = inFlightLoop != null ? Marshal.GetFunctionPointerForDelegate(inFlightLoop) : default;
-            UnregisterFlightLoopCallbackPrivate(inFlightLoopPtr, inRefcon);
-            GC.KeepAlive(inFlightLoop);
-        }
-
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetFlightLoopCallbackInterval", ExactSpelling = true)]
-        private static extern unsafe void SetFlightLoopCallbackIntervalPrivate(IntPtr inFlightLoop, float inInterval, int inRelativeToNow, void* inRefcon);
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterFlightLoopCallback", ExactSpelling = true)]
+        public static extern unsafe void UnregisterFlightLoopCallback(delegate* unmanaged[Cdecl]<float, float, int, void*, float> inFlightLoop, void* inRefcon);
 
         
         /// <summary>
@@ -101,14 +80,8 @@ namespace XP.SDK.XPLM.Internal
         /// it was registered if it has never been called.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetFlightLoopCallbackInterval(FlightLoopCallback inFlightLoop, float inInterval, int inRelativeToNow, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inFlightLoopPtr = inFlightLoop != null ? Marshal.GetFunctionPointerForDelegate(inFlightLoop) : default;
-            SetFlightLoopCallbackIntervalPrivate(inFlightLoopPtr, inInterval, inRelativeToNow, inRefcon);
-            GC.KeepAlive(inFlightLoop);
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetFlightLoopCallbackInterval", ExactSpelling = true)]
+        public static extern unsafe void SetFlightLoopCallbackInterval(delegate* unmanaged[Cdecl]<float, float, int, void*, float> inFlightLoop, float inInterval, int inRelativeToNow, void* inRefcon);
 
         
         /// <summary>

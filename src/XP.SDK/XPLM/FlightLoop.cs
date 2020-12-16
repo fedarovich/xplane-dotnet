@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using XP.SDK.XPLM.Internal;
 
@@ -11,20 +10,9 @@ namespace XP.SDK.XPLM
 {
     public abstract class FlightLoop : IDisposable
     {
-        private static readonly FlightLoopCallback _flightLoopCallback;
-
         private volatile int _disposed;
         private FlightLoopID _id;
         private GCHandle _handle;
-
-        static unsafe FlightLoop()
-        {
-            _flightLoopCallback = FlightLoopCallback;
-
-            static float FlightLoopCallback(float inelapsedsincelastcall, float inelapsedtimesincelastflightloop, int incounter, void* inrefcon) =>
-                Utils.TryGetObject<FlightLoop>(inrefcon)?.OnFlightLoopCallback(
-                    inelapsedsincelastcall, inelapsedtimesincelastflightloop, incounter) ?? 0;
-        }
 
         protected unsafe FlightLoop(FlightLoopPhaseType phase)
         {
@@ -33,10 +21,15 @@ namespace XP.SDK.XPLM
             {
                 structSize = sizeof(CreateFlightLoop),
                 phase = phase,
-                callbackFunc = Marshal.GetFunctionPointerForDelegate(_flightLoopCallback),
+                callbackFunc = &FlightLoopCallback,
                 refcon = GCHandle.ToIntPtr(_handle).ToPointer()
             };
             _id = ProcessingAPI.CreateFlightLoop(&parameters);
+
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl)})]
+            static float FlightLoopCallback(float inelapsedsincelastcall, float inelapsedtimesincelastflightloop, int incounter, void* inrefcon) =>
+                Utils.TryGetObject<FlightLoop>(inrefcon)?.OnFlightLoopCallback(
+                    inelapsedsincelastcall, inelapsedtimesincelastflightloop, incounter) ?? 0;
         }
 
         public static FlightLoop Create(FlightLoopPhaseType phase, Callback callback)

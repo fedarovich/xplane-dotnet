@@ -23,15 +23,15 @@ namespace XP.SDK.XPLM.Internal
         public byte* mapToCreateLayerIn;
         public MapLayerType layerType;
         [ManagedTypeAttribute(typeof(MapWillBeDeletedCallback))]
-        public IntPtr willBeDeletedCallback;
+        public delegate* unmanaged[Cdecl]<MapLayerID, void*, void> willBeDeletedCallback;
         [ManagedTypeAttribute(typeof(MapPrepareCacheCallback))]
-        public IntPtr prepCacheCallback;
+        public delegate* unmanaged[Cdecl]<MapLayerID, float*, MapProjectionID, void*, void> prepCacheCallback;
         [ManagedTypeAttribute(typeof(MapDrawingCallback))]
-        public IntPtr drawCallback;
+        public delegate* unmanaged[Cdecl]<MapLayerID, float*, float, float, MapStyle, MapProjectionID, void*, void> drawCallback;
         [ManagedTypeAttribute(typeof(MapIconDrawingCallback))]
-        public IntPtr iconCallback;
+        public delegate* unmanaged[Cdecl]<MapLayerID, float*, float, float, MapStyle, MapProjectionID, void*, void> iconCallback;
         [ManagedTypeAttribute(typeof(MapLabelDrawingCallback))]
-        public IntPtr labelCallback;
+        public delegate* unmanaged[Cdecl]<MapLayerID, float*, float, float, MapStyle, MapProjectionID, void*, void> labelCallback;
         public int showUiToggle;
         public byte* layerName;
         public void* refcon;

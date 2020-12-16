@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using XP.SDK.Widgets.Internal;
 using XP.SDK.XPLM;
 
@@ -459,10 +458,11 @@ namespace XP.SDK.Widgets
         /// <para>Consider using <see cref="Behaviors"/> which provide higher-lever abstraction for this functionality.</para>
         /// </remarks>
         /// <param name="hook">The hook.</param>
-        public void AddHook(WidgetFuncCallback hook)
+        public unsafe void AddHook(WidgetFuncCallback hook)
         {
             (_hooks ??= new List<WidgetFuncCallback>()).Add(hook);
-            WidgetsAPI.AddWidgetCallback(Id, hook);
+            var hookPtr = (delegate* unmanaged[Cdecl]<WidgetMessage, WidgetID, IntPtr, IntPtr, int>) Marshal.GetFunctionPointerForDelegate(hook);
+            WidgetsAPI.AddWidgetCallback(Id, hookPtr);
         }
 
         /// <summary>

@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using CppAst;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace BindingsGenerator
 {
@@ -44,7 +39,7 @@ namespace BindingsGenerator
                 var type = BuildType(cppType, nativeName, managedName);
                 if (type != null)
                 {
-                    TypeMap.RegisterType(cppType, nativeName, managedName, GetFullNamespace(cppType));
+                    TypeMap.RegisterType(cppType, nativeName, managedName, GetFullNamespace(cppType), GetFunctionPointerTypeSyntax(cppType));
                     Log.WriteLine("Done.", ConsoleColor.Green);
                 }
                 else
@@ -60,5 +55,10 @@ namespace BindingsGenerator
         protected virtual bool IsSameType(TypeInfo typeInfo, T cppType) => typeInfo.IsSame(cppType);
 
         protected abstract MemberDeclarationSyntax BuildType(T cppType, string nativeName, string managedName);
+
+        protected virtual FunctionPointerTypeSyntax GetFunctionPointerTypeSyntax(CppType cppType)
+        {
+            return null;
+        }
     }
 }

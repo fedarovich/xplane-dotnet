@@ -1,5 +1,7 @@
 ﻿#nullable enable
 using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using XP.SDK.Widgets.Internal;
 
 namespace XP.SDK.Widgets
@@ -9,34 +11,6 @@ namespace XP.SDK.Widgets
     /// </summary>
     public abstract class StandardWidget : Widget
     {
-        private static readonly WidgetFuncCallback _standardWidgetCallback;
-
-        static StandardWidget()
-        {
-            _standardWidgetCallback = StandardWidgetCallback;
-
-            static int StandardWidgetCallback(WidgetMessage inmessage, WidgetID inwidget, IntPtr inparam1, IntPtr inparam2)
-            {
-                try
-                {
-                    if (TryGetById(inwidget, out var widget) && widget is StandardWidget standardWidget)
-                    {
-                        return standardWidget.HandleMessage(inmessage, inparam1, inparam2).ToInt();
-                    }
-                }
-                finally
-                {
-                    if (inmessage == WidgetMessage.Destroy)
-                    {
-                        Unregister(inwidget);
-                    }
-                }
-
-                return 0;
-            }
-        }
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="StandardWidget"/> class.
         /// </summary>
@@ -46,7 +20,7 @@ namespace XP.SDK.Widgets
         /// <param name="parent">The parent widget.</param>
         /// <param name="isRoot">The value indicating whether this widget is a root one.</param>
         /// <param name="class">The standard widget class.</param>
-        protected StandardWidget(in Rect geometry, string descriptor, bool isVisible, Widget? parent, bool isRoot, WidgetClass @class) 
+        protected unsafe StandardWidget(in Rect geometry, string descriptor, bool isVisible, Widget? parent, bool isRoot, WidgetClass @class) 
             : base(isRoot, parent)
         {
             var id = WidgetsAPI.CreateWidget(
@@ -64,7 +38,7 @@ namespace XP.SDK.Widgets
                 throw new InvalidOperationException("Failed to create widget.");
 
             Id = id;
-            WidgetsAPI.AddWidgetCallback(id, _standardWidgetCallback);
+            WidgetsAPI.AddWidgetCallback(id, &StandardWidgetCallback);
             Register(this);
         }
 
@@ -76,5 +50,26 @@ namespace XP.SDK.Widgets
         /// <param name="param2">The second message parameter.</param>
         /// <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
         protected virtual bool HandleMessage(WidgetMessage message, IntPtr param1, IntPtr param2) => false;
+
+        [UnmanagedCallersOnly(CallConvs = new [] { typeof(CallConvCdecl)})]
+        private static int StandardWidgetCallback(WidgetMessage inmessage, WidgetID inwidget, IntPtr inparam1, IntPtr inparam2)
+        {
+            try
+            {
+                if (TryGetById(inwidget, out var widget) && widget is StandardWidget standardWidget)
+                {
+                    return standardWidget.HandleMessage(inmessage, inparam1, inparam2).ToInt();
+                }
+            }
+            finally
+            {
+                if (inmessage == WidgetMessage.Destroy)
+                {
+                    Unregister(inwidget);
+                }
+            }
+
+            return 0;
+        }
     }
 }

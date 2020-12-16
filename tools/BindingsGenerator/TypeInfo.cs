@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using CppAst;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -17,12 +14,20 @@ namespace BindingsGenerator
             IsStandard = isStandard;
         }
 
+        public TypeInfo(string name, CppType cppType, TypeSyntax typeSyntax, FunctionPointerTypeSyntax functionPointerTypeSyntax)
+            : this(name, cppType, typeSyntax)
+        {
+            FunctionPointerTypeSyntax = functionPointerTypeSyntax;
+        }
+
         public string Name { get; }
 
         public CppType CppType { get; }
         
         public TypeSyntax TypeSyntax { get; }
 
+        public FunctionPointerTypeSyntax FunctionPointerTypeSyntax { get; }
+        
         public bool IsStandard { get; }
 
         public bool IsPrimitive => CppType is CppPrimitiveType;
@@ -31,6 +36,7 @@ namespace BindingsGenerator
 
         public bool IsVoid => CppType is CppPrimitiveType { Kind: CppPrimitiveKind.Void };
 
+        
         public bool IsFunction
         {
             get

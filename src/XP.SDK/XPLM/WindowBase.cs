@@ -82,24 +82,44 @@ namespace XP.SDK.XPLM
                 right = bounds.Right,
                 bottom = bounds.Bottom,
                 visible = visible.ToInt(),
-                drawWindowFunc = Marshal.GetFunctionPointerForDelegate(_drawWindowCallback),
-                handleMouseClickFunc = (mouseHandlers & MouseHandlers.LeftClick) != default 
-                    ? Marshal.GetFunctionPointerForDelegate(_handleLeftClickCallback) 
-                    : IntPtr.Zero,
-                handleKeyFunc = Marshal.GetFunctionPointerForDelegate(_handleKeyCallback),
-                handleCursorFunc = Marshal.GetFunctionPointerForDelegate(_handleCursorCallback),
-                handleMouseWheelFunc = Marshal.GetFunctionPointerForDelegate(_handleMouseWheelCallback),
+                drawWindowFunc = &DrawWindow,
+                handleMouseClickFunc = (mouseHandlers & MouseHandlers.LeftClick) != default ? &HandleMouseLeftClick : null,
+                handleKeyFunc = &HandleKey,
+                handleCursorFunc = &HandleCursor,
+                handleMouseWheelFunc = &HandleMouseWheel,
                 refcon = GCHandle.ToIntPtr(_handle).ToPointer(),
                 decorateAsFloatingWindow = decoration,
                 layer = layer,
-                handleRightClickFunc = (mouseHandlers & MouseHandlers.RightClick) != default
-                   ? Marshal.GetFunctionPointerForDelegate(_handleRightClickCallback)
-                   : IntPtr.Zero
+                handleRightClickFunc = (mouseHandlers & MouseHandlers.RightClick) != default ? &HandleMouseRightClick : null
             };
 
             _id = DisplayAPI.CreateWindowEx(&parameters);
 
             // TODO: Register window in global context or plugin base
+
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            static void DrawWindow(WindowID inwindowid, void* inrefcon) =>
+                Utils.TryGetObject<WindowBase>(inrefcon)?.OnDrawWindow();
+
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            static int HandleMouseLeftClick(WindowID inwindowid, int x, int y, MouseStatus inmouse, void* inrefcon) =>
+                (Utils.TryGetObject<WindowBase>(inrefcon)?.OnMouseLeftButtonEvent(x, y, inmouse) == true).ToInt();
+
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            static int HandleMouseRightClick(WindowID inwindowid, int x, int y, MouseStatus inmouse, void* inrefcon) =>
+                (Utils.TryGetObject<WindowBase>(inrefcon)?.OnMouseRightButtonEvent(x, y, inmouse) == true).ToInt();
+
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            static int HandleMouseWheel(WindowID inwindowid, int x, int y, int wheel, int clicks, void* inrefcon) =>
+                (Utils.TryGetObject<WindowBase>(inrefcon)?.OnMouseWheelEvent(x, y, (MouseWheel)wheel, clicks) == true).ToInt();
+
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            static void HandleKey(WindowID inwindowid, byte inkey, KeyFlags inflags, byte invirtualkey, void* inrefcon, int losingfocus) =>
+                Utils.TryGetObject<WindowBase>(inrefcon)?.OnKeyEvent(inkey, inflags, invirtualkey, losingfocus == 1);
+
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            static CursorStatus HandleCursor(WindowID inwindowid, int x, int y, void* inrefcon) =>
+                Utils.TryGetObject<WindowBase>(inrefcon)?.OnCursorRequested(x, y) ?? CursorStatus.Default;
         }
 
         private WindowBase(WindowID windowId)

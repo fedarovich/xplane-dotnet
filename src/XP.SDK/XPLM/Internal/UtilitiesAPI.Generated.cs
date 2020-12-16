@@ -343,9 +343,6 @@ namespace XP.SDK.XPLM.Internal
             return FindSymbol(inStringPtr);
         }
 
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetErrorCallback", ExactSpelling = true)]
-        private static extern void SetErrorCallbackPrivate(IntPtr inCallback);
-
         
         /// <summary>
         /// <para>
@@ -374,14 +371,8 @@ namespace XP.SDK.XPLM.Internal
         /// the field".
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void SetErrorCallback(ErrorCallback inCallback)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
-            SetErrorCallbackPrivate(inCallbackPtr);
-            GC.KeepAlive(inCallback);
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetErrorCallback", ExactSpelling = true)]
+        public static extern unsafe void SetErrorCallback(delegate* unmanaged[Cdecl]<byte*, void> inCallback);
 
         
         /// <summary>
@@ -573,9 +564,6 @@ namespace XP.SDK.XPLM.Internal
             return CreateCommand(inNamePtr, inDescriptionPtr);
         }
 
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterCommandHandler", ExactSpelling = true)]
-        private static extern unsafe void RegisterCommandHandlerPrivate(CommandRef inComand, IntPtr inHandler, int inBefore, void* inRefcon);
-
         
         /// <summary>
         /// <para>
@@ -590,17 +578,8 @@ namespace XP.SDK.XPLM.Internal
         /// before and after a command.)
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void RegisterCommandHandler(CommandRef inComand, CommandCallback inHandler, int inBefore, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inHandlerPtr = inHandler != null ? Marshal.GetFunctionPointerForDelegate(inHandler) : default;
-            RegisterCommandHandlerPrivate(inComand, inHandlerPtr, inBefore, inRefcon);
-            GC.KeepAlive(inHandler);
-        }
-
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterCommandHandler", ExactSpelling = true)]
-        private static extern unsafe void UnregisterCommandHandlerPrivate(CommandRef inComand, IntPtr inHandler, int inBefore, void* inRefcon);
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterCommandHandler", ExactSpelling = true)]
+        public static extern unsafe void RegisterCommandHandler(CommandRef inComand, delegate* unmanaged[Cdecl]<CommandRef, CommandPhase, void*, int> inHandler, int inBefore, void* inRefcon);
 
         
         /// <summary>
@@ -609,13 +588,7 @@ namespace XP.SDK.XPLM.Internal
         /// XPLMRegisterCommandHandler.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void UnregisterCommandHandler(CommandRef inComand, CommandCallback inHandler, int inBefore, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inHandlerPtr = inHandler != null ? Marshal.GetFunctionPointerForDelegate(inHandler) : default;
-            UnregisterCommandHandlerPrivate(inComand, inHandlerPtr, inBefore, inRefcon);
-            GC.KeepAlive(inHandler);
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterCommandHandler", ExactSpelling = true)]
+        public static extern unsafe void UnregisterCommandHandler(CommandRef inComand, delegate* unmanaged[Cdecl]<CommandRef, CommandPhase, void*, int> inHandler, int inBefore, void* inRefcon);
     }
 }

@@ -36,8 +36,6 @@ namespace XP.SDK.XPLM.Internal
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMDestroyMapLayer", ExactSpelling = true)]
         public static extern int DestroyMapLayer(MapLayerID inLayer);
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterMapCreationHook", ExactSpelling = true)]
-        private static extern unsafe void RegisterMapCreationHookPrivate(IntPtr callback, void* refcon);
 
         
         /// <summary>
@@ -51,14 +49,8 @@ namespace XP.SDK.XPLM.Internal
         /// can use XPLMMapExists() to check for maps that were created previously.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void RegisterMapCreationHook(MapCreatedCallback callback, void* refcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr callbackPtr = callback != null ? Marshal.GetFunctionPointerForDelegate(callback) : default;
-            RegisterMapCreationHookPrivate(callbackPtr, refcon);
-            GC.KeepAlive(callback);
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterMapCreationHook", ExactSpelling = true)]
+        public static extern unsafe void RegisterMapCreationHook(delegate* unmanaged[Cdecl]<byte*, void*, void> callback, void* refcon);
 
         
         /// <summary>

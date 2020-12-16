@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -151,14 +150,15 @@ namespace XP.SDK.XPLM
         /// </summary>
         [Obsolete("This method will cause performance issues and should not be used in Release builds. Use " 
                   + nameof(SetErrorCallbackForDebugBuild) + " method instead, if needed.")]
-        public static void SetErrorCallback(Action<string> callback)
+        public static unsafe void SetErrorCallback(Action<string> callback)
         {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback));
 
             if (Interlocked.Exchange(ref _errorCallback, callback) == null)
             {
-                UtilitiesAPI.SetErrorCallback(ErrorCallback);
+                var callbackPtr = (delegate* unmanaged[Cdecl]<byte*, void>) Marshal.GetFunctionPointerForDelegate(ErrorCallback);
+                UtilitiesAPI.SetErrorCallback(callbackPtr);
             }
         }
 

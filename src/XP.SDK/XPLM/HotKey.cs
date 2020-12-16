@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -19,20 +16,6 @@ namespace XP.SDK.XPLM
 
         #region Constructors
 
-        private static class CallbackHolder
-        {
-            public static readonly HotKeyCallback HotKeyCallback;
-
-            static unsafe CallbackHolder()
-            {
-                HotKeyCallback = OnHotKey;
-            }
-
-            private static unsafe void OnHotKey(void* inrefcon) =>
-                Utils.TryGetObject<HotKey>(inrefcon)?.OnHotKey();
-
-        }
-
         private HotKey(Action<HotKey> action)
         {
             _action = action ?? throw new ArgumentNullException(nameof(action));
@@ -46,9 +29,13 @@ namespace XP.SDK.XPLM
                 virtualKey, 
                 keyFlags, 
                 description,
-                CallbackHolder.HotKeyCallback,
+                &OnHotKey,
                 GCHandle.ToIntPtr(hotKey._handle).ToPointer());
             return hotKey;
+
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            static void OnHotKey(void* inrefcon) =>
+                Utils.TryGetObject<HotKey>(inrefcon)?.OnHotKey();
         }
 
         #endregion

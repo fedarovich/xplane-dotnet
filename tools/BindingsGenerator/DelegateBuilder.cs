@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using CppAst;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -46,7 +44,9 @@ namespace BindingsGenerator
 
             if (TypeMap.TryResolveType(cppParameter.Type, out var typeInfo))
             {
-                return Parameter(name).WithType(typeInfo.TypeSyntax);
+                return typeInfo.IsFunction
+                    ? Parameter(name).WithType(typeInfo.FunctionPointerTypeSyntax)
+                    : Parameter(name).WithType(typeInfo.TypeSyntax);
             }
 
             if (Debugger.IsAttached)
@@ -78,7 +78,38 @@ namespace BindingsGenerator
 
         protected override bool CanProcess(CppTypedef cppElement)
         {
-            return cppElement.ElementType is CppPointerType cppPointerType && cppPointerType.ElementType is CppFunctionType;
+            return cppElement.ElementType is CppPointerType {ElementType: CppFunctionType};
+        }
+
+        protected override FunctionPointerTypeSyntax GetFunctionPointerTypeSyntax(CppType cppType)
+        {
+            if (cppType is not CppTypedef {ElementType: CppPointerType {ElementType: CppFunctionType function}})
+                return null;
+                
+            var returnType = TypeMap.GetType(function.ReturnType.GetDisplayName()).TypeSyntax;
+
+                return FunctionPointerType()
+                .WithCdeclCallingConvention()
+                .AddParameterListParameters(BuildFunctionPointerParameterList());
+
+            FunctionPointerParameterSyntax[] BuildFunctionPointerParameterList()
+            {
+                var parameters = new FunctionPointerParameterSyntax[function.Parameters.Count + 1];
+
+                for (int i = 0; i < function.Parameters.Count; i++)
+                {
+                    if (TypeMap.TryResolveType(function.Parameters[i].Type, out var paramTypeInfo))
+                    { 
+                        parameters[i] = FunctionPointerParameter(paramTypeInfo.IsFunction
+                            ? paramTypeInfo.FunctionPointerTypeSyntax
+                            : paramTypeInfo.TypeSyntax);
+
+                    }
+                }
+                
+                parameters[^1] = FunctionPointerParameter(returnType);
+                return parameters;
+            }
         }
     }
 }

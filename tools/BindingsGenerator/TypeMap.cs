@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using CppAst;
 using Microsoft.CodeAnalysis;
@@ -37,23 +36,23 @@ namespace BindingsGenerator
             RegisterStandardTypedef("int16_t", CppPrimitiveType.Short, SyntaxKind.ShortKeyword);
             RegisterStandardTypedef("int32_t", CppPrimitiveType.Int, SyntaxKind.IntKeyword);
             RegisterStandardTypedef("int64_t", CppPrimitiveType.LongLong, SyntaxKind.LongKeyword);
-            RegisterStandardTypedef("intptr_t", CppPrimitiveType.LongLong, "IntPtr");
+            RegisterStandardTypedef("intptr_t", CppPrimitiveType.LongLong, "nint");
 
             RegisterStandardTypedef("uint8_t", CppPrimitiveType.UnsignedChar, SyntaxKind.ByteKeyword);
             RegisterStandardTypedef("uint16_t", CppPrimitiveType.UnsignedShort, SyntaxKind.UShortKeyword);
             RegisterStandardTypedef("uint32_t", CppPrimitiveType.UnsignedInt, SyntaxKind.UIntKeyword);
             RegisterStandardTypedef("uint64_t", CppPrimitiveType.UnsignedLongLong, SyntaxKind.ULongKeyword);
-            RegisterStandardTypedef("uintptr_t", CppPrimitiveType.UnsignedLongLong, "UIntPtr");
+            RegisterStandardTypedef("uintptr_t", CppPrimitiveType.UnsignedLongLong, "nuint");
 
-            RegisterStandardTypedef("ptrdiff_t", CppPrimitiveType.LongLong, "IntPtr");
-            RegisterStandardTypedef("size_t", CppPrimitiveType.UnsignedLongLong, "UIntPtr");
+            RegisterStandardTypedef("ptrdiff_t", CppPrimitiveType.LongLong, "nint");
+            RegisterStandardTypedef("size_t", CppPrimitiveType.UnsignedLongLong, "nuint");
         }
 
-        public TypeInfo RegisterType(CppType cppType, string nativeName, string managedName, string @namespace)
+        public TypeInfo RegisterType(CppType cppType, string nativeName, string managedName, string @namespace, FunctionPointerTypeSyntax functionPointerTypeSyntax)
         {
             var typeSyntax = IdentifierName(managedName)
                 .WithAdditionalAnnotations(new SyntaxAnnotation(Annotations.Namespace, @namespace));
-            var typeInfo = new TypeInfo(nativeName, cppType, typeSyntax);
+            var typeInfo = new TypeInfo(nativeName, cppType, typeSyntax, functionPointerTypeSyntax);
             _nativeMap.Add(nativeName, typeInfo);
             _managedMap.Add(managedName, typeInfo);
             return typeInfo;

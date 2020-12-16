@@ -36,8 +36,25 @@ namespace XP.SDK.XPLM.Internal
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMFindAircraftMenu", ExactSpelling = true)]
         public static extern MenuID FindAircraftMenu();
+
+        
+        /// <summary>
+        /// <para>
+        /// This function creates a new menu and returns its ID.  It returns NULL if
+        /// the menu cannot be created.  Pass in a parent menu ID and an item index to
+        /// create a submenu, or NULL for the parent menu to put the menu in the menu
+        /// bar.  The menu's name is only used if the menu is in the menubar.  You also
+        /// pass a handler function and a menu reference value. Pass NULL for the
+        /// handler if you do not need callbacks from the menu (for example, if it only
+        /// contains submenus).
+        /// </para>
+        /// <para>
+        /// Important: you must pass a valid, non-empty menu title even if the menu is
+        /// a submenu where the title is not visible.
+        /// </para>
+        /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCreateMenu", ExactSpelling = true)]
-        private static extern unsafe MenuID CreateMenuPrivate(byte* inName, MenuID inParentMenu, int inParentItem, IntPtr inHandler, void* inMenuRef);
+        public static extern unsafe MenuID CreateMenu(byte* inName, MenuID inParentMenu, int inParentItem, delegate* unmanaged[Cdecl]<void*, void*, void> inHandler, void* inMenuRef);
 
         
         /// <summary>
@@ -56,33 +73,7 @@ namespace XP.SDK.XPLM.Internal
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe MenuID CreateMenu(byte* inName, MenuID inParentMenu, int inParentItem, MenuHandlerCallback inHandler, void* inMenuRef)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inHandlerPtr = inHandler != null ? Marshal.GetFunctionPointerForDelegate(inHandler) : default;
-            MenuID result = CreateMenuPrivate(inName, inParentMenu, inParentItem, inHandlerPtr, inMenuRef);
-            GC.KeepAlive(inHandler);
-            return result;
-        }
-
-        
-        /// <summary>
-        /// <para>
-        /// This function creates a new menu and returns its ID.  It returns NULL if
-        /// the menu cannot be created.  Pass in a parent menu ID and an item index to
-        /// create a submenu, or NULL for the parent menu to put the menu in the menu
-        /// bar.  The menu's name is only used if the menu is in the menubar.  You also
-        /// pass a handler function and a menu reference value. Pass NULL for the
-        /// handler if you do not need callbacks from the menu (for example, if it only
-        /// contains submenus).
-        /// </para>
-        /// <para>
-        /// Important: you must pass a valid, non-empty menu title even if the menu is
-        /// a submenu where the title is not visible.
-        /// </para>
-        /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe MenuID CreateMenu(in ReadOnlySpan<char> inName, MenuID inParentMenu, int inParentItem, MenuHandlerCallback inHandler, void* inMenuRef)
+        public static unsafe MenuID CreateMenu(in ReadOnlySpan<char> inName, MenuID inParentMenu, int inParentItem, delegate* unmanaged[Cdecl]<void*, void*, void> inHandler, void* inMenuRef)
         {
             IL.DeclareLocals(false);
             Span<byte> inNameUtf8 = stackalloc byte[(inName.Length << 1) | 1];

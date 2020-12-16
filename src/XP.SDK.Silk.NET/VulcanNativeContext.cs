@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 using Silk.NET.Core.Contexts;
 
 namespace XP.SDK.Silk.NET

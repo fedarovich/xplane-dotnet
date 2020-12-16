@@ -106,6 +106,16 @@ namespace BindingsGenerator
                         InteropServices.ToFullString())));
         }
 
+        public static FunctionPointerTypeSyntax WithCdeclCallingConvention(this FunctionPointerTypeSyntax functionPointerTypeSyntax)
+        {
+            return functionPointerTypeSyntax
+                .WithCallingConvention(
+                    FunctionPointerCallingConvention(Token(SyntaxKind.UnmanagedKeyword))
+                        .AddUnmanagedCallingConventionListCallingConventions(
+                            FunctionPointerUnmanagedCallingConvention(Identifier("Cdecl")))
+                );
+        }
+
         public static ExpressionStatementSyntax DeclareLocals(bool localsInit)
         {
             return ExpressionStatement(
@@ -295,7 +305,7 @@ namespace BindingsGenerator
 
         public static T AddUnsafeIfNeeded<T>(this T method) where T : BaseMethodDeclarationSyntax
         {
-            if (method.DescendantNodes().OfType<PointerTypeSyntax>().Any())
+            if (method.DescendantNodes().OfType<PointerTypeSyntax>().Any() || method.DescendantNodes().OfType<FunctionPointerTypeSyntax>().Any())
             {
                 method = (T)method.AddModifiers(Token(SyntaxKind.UnsafeKeyword));
             }

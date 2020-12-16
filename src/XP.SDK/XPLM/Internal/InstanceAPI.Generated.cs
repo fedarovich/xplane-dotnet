@@ -70,6 +70,6 @@ namespace XP.SDK.XPLM.Internal
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMInstanceSetPosition", ExactSpelling = true)]
-        public static extern unsafe void InstanceSetPosition(InstanceRef instance, DrawInfo* new_position, float* data);
+        public static extern unsafe void InstanceSetPosition(InstanceRef instance, DrawInfo* new_position, float* @data);
     }
 }

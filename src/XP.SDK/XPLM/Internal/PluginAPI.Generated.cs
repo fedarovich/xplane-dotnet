@@ -253,9 +253,6 @@ namespace XP.SDK.XPLM.Internal
             EnableFeature(inFeaturePtr, inEnable);
         }
 
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMEnumerateFeatures", ExactSpelling = true)]
-        private static extern unsafe void EnumerateFeaturesPrivate(IntPtr inEnumerator, void* inRef);
-
         
         /// <summary>
         /// <para>
@@ -264,13 +261,7 @@ namespace XP.SDK.XPLM.Internal
         /// the features that X-Plane can support.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void EnumerateFeatures(FeatureEnumeratorCallback inEnumerator, void* inRef)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inEnumeratorPtr = inEnumerator != null ? Marshal.GetFunctionPointerForDelegate(inEnumerator) : default;
-            EnumerateFeaturesPrivate(inEnumeratorPtr, inRef);
-            GC.KeepAlive(inEnumerator);
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMEnumerateFeatures", ExactSpelling = true)]
+        public static extern unsafe void EnumerateFeatures(delegate* unmanaged[Cdecl]<byte*, void*, void> inEnumerator, void* inRef);
     }
 }

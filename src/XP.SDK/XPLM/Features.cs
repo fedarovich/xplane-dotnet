@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using XP.SDK.XPLM.Internal;
 
 namespace XP.SDK.XPLM
@@ -48,7 +48,7 @@ namespace XP.SDK.XPLM
             var handle = GCHandle.Alloc(features);
             try
             {
-                PluginAPI.EnumerateFeatures(Callback, GCHandle.ToIntPtr(handle).ToPointer());
+                PluginAPI.EnumerateFeatures(&Callback, GCHandle.ToIntPtr(handle).ToPointer());
                 return features;
             }
             finally
@@ -56,6 +56,7 @@ namespace XP.SDK.XPLM
                 handle.Free();
             }
 
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static void Callback(byte* infeature, void* inref) => 
                 Utils.TryGetObject<HashSet<string>>(inref)?.Add(Marshal.PtrToStringUTF8(new IntPtr(infeature)));
         }

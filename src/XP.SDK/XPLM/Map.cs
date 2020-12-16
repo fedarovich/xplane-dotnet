@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text.Unicode;
-using System.Threading;
 using XP.SDK.XPLM.Internal;
 
 namespace XP.SDK.XPLM
@@ -16,8 +16,6 @@ namespace XP.SDK.XPLM
 
         internal static readonly ReadOnlyMemory<byte> InstructorOperatorStationUtf8;
 
-        private static readonly MapCreatedCallback _mapCreatedCallback;
-
         static unsafe Map()
         {
             var userInterfaceUtf8 = new byte[UserInterface.Length + 1];
@@ -27,11 +25,6 @@ namespace XP.SDK.XPLM
             var instructorOperatorStationUtf8 = new byte[InstructorOperatorStationUtf8.Length + 1];
             Utf8.FromUtf16(InstructorOperatorStation, instructorOperatorStationUtf8, out _, out _);
             InstructorOperatorStationUtf8 = instructorOperatorStationUtf8;
-
-            _mapCreatedCallback = OnMapCreated;
-
-            static void OnMapCreated(byte* mapidentifier, void* refcon) => 
-                Utils.TryGetObject<MapCreationHook>(refcon)?.Invoke(mapidentifier);
         }
 
         public static unsafe void RegisterMapCreationHook(Action<string> callback)
@@ -39,8 +32,12 @@ namespace XP.SDK.XPLM
             var hook = new MapCreationHook(callback);
             PluginBase.RegisterObject(hook);
             MapAPI.RegisterMapCreationHook(
-                _mapCreatedCallback,
+                &OnMapCreated,
                 GCHandle.ToIntPtr(hook.Handle).ToPointer());
+
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            static void OnMapCreated(byte* mapidentifier, void* refcon) =>
+                Utils.TryGetObject<MapCreationHook>(refcon)?.Invoke(mapidentifier);
         }
 
         public static bool Exists(string mapIdentifier)

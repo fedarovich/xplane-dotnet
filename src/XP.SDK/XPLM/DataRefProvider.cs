@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Reflection;
-using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using XP.SDK.XPLM.Internal;
@@ -9,41 +8,39 @@ namespace XP.SDK.XPLM
 {
     public abstract class DataRefSource : IDisposable
     {
-        private static readonly GetDataiCallback _getDatai;
-        private static readonly SetDataiCallback _setDatai;
-        private static readonly GetDatafCallback _getDataf;
-        private static readonly SetDatafCallback _setDataf;
-        private static readonly GetDatadCallback _getDatad;
-        private static readonly SetDatadCallback _setDatad;
-        private static readonly GetDataviCallback _getDatavi;
-        private static readonly SetDataviCallback _setDatavi;
-        private static readonly GetDatavfCallback _getDatavf;
-        private static readonly SetDatavfCallback _setDatavf;
-        private static readonly GetDatabCallback _getDatab;
-        private static readonly SetDatabCallback _setDatab;
-
         private GCHandle _handle;
         private DataRef _dataRef;
         private int _disposed;
 
-        static unsafe DataRefSource()
+        protected unsafe DataRefSource(string name, DataTypeID dataTypes, bool isWriteable)
         {
-            _getDatai = GetDatai;
-            _setDatai = SetDatai;
-            _getDataf = GetDataf;
-            _setDataf = SetDataf;
-            _getDatad = GetDatad;
-            _setDatad = SetDatad;
-            _getDatavi = GetDatavi;
-            _setDatavi = SetDatavi;
-            _getDatavf = GetDatavf;
-            _setDatavf = SetDatavf;
-            _getDatab = GetDatab;
-            _setDatab = SetDatab;
+            _handle = GCHandle.Alloc(this);
+            void* refcon = GCHandle.ToIntPtr(_handle).ToPointer();
 
+            _dataRef = DataAccessAPI.RegisterDataAccessor(
+                name,
+                dataTypes,
+                isWriteable.ToInt(),
+                dataTypes.HasFlag(DataTypeID.Int) ? &GetDatai : null,
+                dataTypes.HasFlag(DataTypeID.Int) && isWriteable ? &SetDatai : null,
+                dataTypes.HasFlag(DataTypeID.Float) ? &GetDataf : null,
+                dataTypes.HasFlag(DataTypeID.Float) && isWriteable ? &SetDataf : null,
+                dataTypes.HasFlag(DataTypeID.Double) ? &GetDatad : null,
+                dataTypes.HasFlag(DataTypeID.Double) && isWriteable ? &SetDatad : null,
+                dataTypes.HasFlag(DataTypeID.IntArray) ? &GetDatavi : null,
+                dataTypes.HasFlag(DataTypeID.IntArray) && isWriteable ? &SetDatavi : null,
+                dataTypes.HasFlag(DataTypeID.FloatArray) ? &GetDatavf : null,
+                dataTypes.HasFlag(DataTypeID.FloatArray) && isWriteable ? &SetDatavf : null,
+                dataTypes.HasFlag(DataTypeID.Data) ? &GetDatab : null,
+                dataTypes.HasFlag(DataTypeID.Data) && isWriteable ? &SetDatab : null,
+                refcon,
+                isWriteable ? refcon : null);
+
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static int GetDatai(void* inrefcon) =>
                 Utils.TryGetObject<DataRefSource>(inrefcon)?.Int32Value ?? default;
 
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static void SetDatai(void* inrefcon, int invalue)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -53,9 +50,11 @@ namespace XP.SDK.XPLM
                 }
             }
 
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static float GetDataf(void* inrefcon) =>
                 Utils.TryGetObject<DataRefSource>(inrefcon)?.SingleValue ?? default;
 
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static void SetDataf(void* inrefcon, float invalue)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -65,9 +64,11 @@ namespace XP.SDK.XPLM
                 }
             }
 
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static double GetDatad(void* inrefcon) =>
                 Utils.TryGetObject<DataRefSource>(inrefcon)?.DoubleValue ?? default;
 
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static void SetDatad(void* inrefcon, double invalue)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -77,6 +78,7 @@ namespace XP.SDK.XPLM
                 }
             }
 
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static int GetDatavi(void* inrefcon, int* outvalues, int inoffset, int inmax)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -89,6 +91,7 @@ namespace XP.SDK.XPLM
                 return 0;
             }
 
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static void SetDatavi(void* inrefcon, int* invalues, int inoffset, int incount)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -99,6 +102,7 @@ namespace XP.SDK.XPLM
                 }
             }
 
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static int GetDatavf(void* inrefcon, float* outvalues, int inoffset, int inmax)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -111,6 +115,7 @@ namespace XP.SDK.XPLM
                 return 0;
             }
 
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static void SetDatavf(void* inrefcon, float* invalues, int inoffset, int incount)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -121,6 +126,7 @@ namespace XP.SDK.XPLM
                 }
             }
 
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static int GetDatab(void* inrefcon, void* outvalues, int inoffset, int inmax)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -133,6 +139,7 @@ namespace XP.SDK.XPLM
                 return 0;
             }
 
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
             static void SetDatab(void* inrefcon, void* invalues, int inoffset, int incount)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -142,35 +149,6 @@ namespace XP.SDK.XPLM
                     obj.WriteValues(buffer, inoffset);
                 }
             }
-        }
-
-        protected unsafe DataRefSource(string name, DataTypeID dataTypes, bool isWriteable)
-        {
-            _handle = GCHandle.Alloc(this);
-            void* refcon = GCHandle.ToIntPtr(_handle).ToPointer();
-
-            _dataRef = DataAccessAPI.RegisterDataAccessor(
-                name,
-                dataTypes,
-                isWriteable.ToInt(),
-                Getter(DataTypeID.Int, _getDatai),
-                Setter(DataTypeID.Int, _setDatai),
-                Getter(DataTypeID.Float, _getDataf),
-                Setter(DataTypeID.Float, _setDataf),
-                Getter(DataTypeID.Double, _getDatad),
-                Setter(DataTypeID.Double, _setDatad),
-                Getter(DataTypeID.IntArray, _getDatavi),
-                Setter(DataTypeID.IntArray, _setDatavi),
-                Getter(DataTypeID.FloatArray, _getDatavf),
-                Setter(DataTypeID.FloatArray, _setDatavf),
-                Getter(DataTypeID.Data, _getDatab),
-                Setter(DataTypeID.Data, _setDatab),
-                refcon,
-                isWriteable ? refcon : null);
-
-            T Getter<T>(DataTypeID type, T getter) where T : Delegate => dataTypes.HasFlag(type) ? getter : null;
-
-            T Setter<T>(DataTypeID type, T setter) where T : Delegate => (dataTypes.HasFlag(type) && isWriteable) ? setter : null;
         }
 
         protected virtual int Int32Value

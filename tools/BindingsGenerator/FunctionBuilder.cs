@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 using CppAst;
 using Microsoft.CodeAnalysis;
@@ -87,23 +86,21 @@ namespace BindingsGenerator
             MethodDeclarationSyntax method;
             if (HasFunctionParameters(cppFunction))
             {
-                method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name) + "Private")
-                    .AddModifiers(Token(SyntaxKind.PrivateKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.ExternKeyword))
+                method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
+                    .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.ExternKeyword))
                     .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, false, true)).ToArray())
-                    //.AddAggressiveInlining()
-                    //.WithBody(Block(BuildBaseMethodBody(cppFunction, returnTypeInfo)))
                     .AddDllImport(cppFunction.Name)
                     .AddUnsafeIfNeeded()
                     .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
                 
-                yield return method;
+                //yield return method;
 
-                method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
-                    .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword))
-                    .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, false)).ToArray())
-                    .AddAggressiveInlining()
-                    .WithBody(Block(BuildDelegateBody(cppFunction, returnTypeInfo)))
-                    .AddUnsafeIfNeeded();
+                //method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
+                //    .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword))
+                //    .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, false)).ToArray())
+                //    .AddAggressiveInlining()
+                //    .WithBody(Block(BuildDelegateBody(cppFunction, returnTypeInfo)))
+                //    .AddUnsafeIfNeeded();
                     
             }
             else
@@ -111,8 +108,6 @@ namespace BindingsGenerator
                 method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
                     .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.ExternKeyword))
                     .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, false)).ToArray())
-                    //.AddAggressiveInlining()
-                    //.WithBody(Block(BuildBaseMethodBody(cppFunction, returnTypeInfo)))
                     .AddDllImport(cppFunction.Name)
                     .AddUnsafeIfNeeded()
                     .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
@@ -125,7 +120,7 @@ namespace BindingsGenerator
             {
                 method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
                     .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.UnsafeKeyword))
-                    .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, true)).ToArray())
+                    .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, true, true)).ToArray())
                     .AddAggressiveInlining()
                     .WithBody(Block(BuildStringBody(cppFunction, returnTypeInfo)));
                 method = method.AddDocumentationComments(cppFunction.Comment, cppFunction.Name);
@@ -163,7 +158,7 @@ namespace BindingsGenerator
 
                 if (useFunctionPointers && typeInfo.IsFunction)
                 {
-                    return Parameter(name).WithType(SyntaxBuilder.IntPtrName);
+                    return Parameter(name).WithType(typeInfo.FunctionPointerTypeSyntax);
                 }
 
                 return Parameter(name).WithType(typeInfo.TypeSyntax);

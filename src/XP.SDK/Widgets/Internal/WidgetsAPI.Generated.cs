@@ -90,8 +90,18 @@ namespace XP.SDK.Widgets.Internal
             return CreateWidget(inLeft, inTop, inRight, inBottom, inVisible, inDescriptorPtr, inIsRoot, inContainer, inClass);
         }
 
+        
+        /// <summary>
+        /// <para>
+        /// This function is the same as XPCreateWidget except that instead of passing
+        /// a class ID, you pass your widget callback function pointer defining the
+        /// widget. Use this function to define a custom widget. All parameters are the
+        /// same as XPCreateWidget, except that the widget class has been replaced with
+        /// the widget function.
+        /// </para>
+        /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPCreateCustomWidget", ExactSpelling = true)]
-        private static extern unsafe WidgetID CreateCustomWidgetPrivate(int inLeft, int inTop, int inRight, int inBottom, int inVisible, byte* inDescriptor, int inIsRoot, WidgetID inContainer, IntPtr inCallback);
+        public static extern unsafe WidgetID CreateCustomWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, byte* inDescriptor, int inIsRoot, WidgetID inContainer, delegate* unmanaged[Cdecl]<WidgetMessage, WidgetID, nint, nint, int> inCallback);
 
         
         /// <summary>
@@ -104,27 +114,7 @@ namespace XP.SDK.Widgets.Internal
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe WidgetID CreateCustomWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, byte* inDescriptor, int inIsRoot, WidgetID inContainer, WidgetFuncCallback inCallback)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
-            WidgetID result = CreateCustomWidgetPrivate(inLeft, inTop, inRight, inBottom, inVisible, inDescriptor, inIsRoot, inContainer, inCallbackPtr);
-            GC.KeepAlive(inCallback);
-            return result;
-        }
-
-        
-        /// <summary>
-        /// <para>
-        /// This function is the same as XPCreateWidget except that instead of passing
-        /// a class ID, you pass your widget callback function pointer defining the
-        /// widget. Use this function to define a custom widget. All parameters are the
-        /// same as XPCreateWidget, except that the widget class has been replaced with
-        /// the widget function.
-        /// </para>
-        /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe WidgetID CreateCustomWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, in ReadOnlySpan<char> inDescriptor, int inIsRoot, WidgetID inContainer, WidgetFuncCallback inCallback)
+        public static unsafe WidgetID CreateCustomWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, in ReadOnlySpan<char> inDescriptor, int inIsRoot, WidgetID inContainer, delegate* unmanaged[Cdecl]<WidgetMessage, WidgetID, nint, nint, int> inCallback)
         {
             IL.DeclareLocals(false);
             Span<byte> inDescriptorUtf8 = stackalloc byte[(inDescriptor.Length << 1) | 1];
@@ -166,7 +156,7 @@ namespace XP.SDK.Widgets.Internal
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPSendMessageToWidget", ExactSpelling = true)]
-        public static extern int SendMessageToWidget(WidgetID inWidget, WidgetMessage inMessage, DispatchMode inMode, IntPtr inParam1, IntPtr inParam2);
+        public static extern int SendMessageToWidget(WidgetID inWidget, WidgetMessage inMessage, DispatchMode inMode, nint inParam1, nint inParam2);
 
         
         /// <summary>
@@ -415,7 +405,7 @@ namespace XP.SDK.Widgets.Internal
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPSetWidgetProperty", ExactSpelling = true)]
-        public static extern void SetWidgetProperty(WidgetID inWidget, WidgetPropertyID inProperty, IntPtr inValue);
+        public static extern void SetWidgetProperty(WidgetID inWidget, WidgetPropertyID inProperty, nint inValue);
 
         
         /// <summary>
@@ -428,7 +418,7 @@ namespace XP.SDK.Widgets.Internal
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPGetWidgetProperty", ExactSpelling = true)]
-        public static extern unsafe IntPtr GetWidgetProperty(WidgetID inWidget, WidgetPropertyID inProperty, int* inExists);
+        public static extern unsafe nint GetWidgetProperty(WidgetID inWidget, WidgetPropertyID inProperty, int* inExists);
 
         
         /// <summary>
@@ -474,8 +464,6 @@ namespace XP.SDK.Widgets.Internal
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPGetWidgetWithFocus", ExactSpelling = true)]
         public static extern WidgetID GetWidgetWithFocus();
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPAddWidgetCallback", ExactSpelling = true)]
-        private static extern void AddWidgetCallbackPrivate(WidgetID inWidget, IntPtr inNewCallback);
 
         
         /// <summary>
@@ -496,14 +484,8 @@ namespace XP.SDK.Widgets.Internal
         /// widget behavior.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static void AddWidgetCallback(WidgetID inWidget, WidgetFuncCallback inNewCallback)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inNewCallbackPtr = inNewCallback != null ? Marshal.GetFunctionPointerForDelegate(inNewCallback) : default;
-            AddWidgetCallbackPrivate(inWidget, inNewCallbackPtr);
-            GC.KeepAlive(inNewCallback);
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPAddWidgetCallback", ExactSpelling = true)]
+        public static extern unsafe void AddWidgetCallback(WidgetID inWidget, delegate* unmanaged[Cdecl]<WidgetMessage, WidgetID, nint, nint, int> inNewCallback);
 
         
         /// <summary>

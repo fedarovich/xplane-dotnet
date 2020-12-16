@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.Unicode;
 using System.Threading;
-using InlineIL;
 using XP.SDK.XPLM.Internal;
 
 namespace XP.SDK.XPLM

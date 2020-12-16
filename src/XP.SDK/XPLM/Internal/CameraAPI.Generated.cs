@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using InlineIL;
 
@@ -7,9 +6,6 @@ namespace XP.SDK.XPLM.Internal
 {
     public static partial class CameraAPI
     {
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMControlCamera", ExactSpelling = true)]
-        private static extern unsafe void ControlCameraPrivate(CameraControlDuration inHowLong, IntPtr inControlFunc, void* inRefcon);
-
         
         /// <summary>
         /// <para>
@@ -18,14 +14,8 @@ namespace XP.SDK.XPLM.Internal
         /// control (indefinitely or until a new view mode is set by the user).
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void ControlCamera(CameraControlDuration inHowLong, CameraControlCallback inControlFunc, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inControlFuncPtr = inControlFunc != null ? Marshal.GetFunctionPointerForDelegate(inControlFunc) : default;
-            ControlCameraPrivate(inHowLong, inControlFuncPtr, inRefcon);
-            GC.KeepAlive(inControlFunc);
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMControlCamera", ExactSpelling = true)]
+        public static extern unsafe void ControlCamera(CameraControlDuration inHowLong, delegate* unmanaged[Cdecl]<CameraPosition*, int, void*, int> inControlFunc, void* inRefcon);
 
         
         /// <summary>

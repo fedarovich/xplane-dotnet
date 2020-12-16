@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using CppAst;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -42,8 +40,8 @@ namespace BindingsGenerator
                 if (typeInfo.IsFunction)
                 {
                     return FieldDeclaration(
-                            VariableDeclaration(IdentifierName(nameof(IntPtr)))
-                                .AddVariables(VariableDeclarator(cppField.Name)))
+                         VariableDeclaration(typeInfo.FunctionPointerTypeSyntax)
+                             .AddVariables(VariableDeclarator(cppField.Name)))
                         .AddModifiers(Token(SyntaxKind.PublicKeyword))
                         .AddManagedTypeAttribute(typeInfo.TypeSyntax);
                 }

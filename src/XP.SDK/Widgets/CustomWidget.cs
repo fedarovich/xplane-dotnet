@@ -1,7 +1,7 @@
 ﻿#nullable enable
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using XP.SDK.Widgets.Internal;
 
 namespace XP.SDK.Widgets
@@ -21,34 +21,6 @@ namespace XP.SDK.Widgets
     /// <seealso cref="CustomWidgetEx"/>
     public abstract class CustomWidget : Widget
     {
-        private static readonly WidgetFuncCallback _customWidgetCallback;
-
-        static CustomWidget()
-        {
-            _customWidgetCallback = CustomWidgetCallback;
-
-            static int CustomWidgetCallback(WidgetMessage inmessage, WidgetID inwidget, IntPtr inparam1, IntPtr inparam2)
-            {
-                try
-                {
-                    if (TryGetById(inwidget, out var widget) && widget is CustomWidget customWidget)
-                    {
-                        return customWidget.HandleMessage(inmessage, inparam1, inparam2).ToInt();
-                    }
-                }
-                finally
-                {
-                    if (inmessage == WidgetMessage.Destroy)
-                    {
-                        Unregister(inwidget);
-                    }
-                }
-
-                return 0;
-            }
-        }
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomWidget"/> class.
         /// </summary>
@@ -57,7 +29,7 @@ namespace XP.SDK.Widgets
         /// <param name="isVisible">The widget visibility.</param>
         /// <param name="parent">The parent widget.</param>
         /// <param name="isRoot">The value indicating whether this widget is a root one.</param>
-        protected CustomWidget(in Rect geometry, string descriptor, bool isVisible, Widget? parent, bool isRoot) : base(isRoot, parent)
+        protected unsafe CustomWidget(in Rect geometry, string descriptor, bool isVisible, Widget? parent, bool isRoot) : base(isRoot, parent)
         {
             var id = WidgetsAPI.CreateCustomWidget(
                 geometry.Left,
@@ -68,7 +40,7 @@ namespace XP.SDK.Widgets
                 descriptor,
                 isRoot.ToInt(),
                 parent?.Id ?? default,
-                _customWidgetCallback);
+                &CustomWidgetCallback);
 
             if (id == default)
                 throw new InvalidOperationException("Failed to create widget.");
@@ -85,5 +57,26 @@ namespace XP.SDK.Widgets
         /// <param name="param2">The second message parameter.</param>
         /// <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
         protected abstract bool HandleMessage(WidgetMessage message, IntPtr param1, IntPtr param2);
+
+        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+        static int CustomWidgetCallback(WidgetMessage inmessage, WidgetID inwidget, IntPtr inparam1, IntPtr inparam2)
+        {
+            try
+            {
+                if (TryGetById(inwidget, out var widget) && widget is CustomWidget customWidget)
+                {
+                    return customWidget.HandleMessage(inmessage, inparam1, inparam2).ToInt();
+                }
+            }
+            finally
+            {
+                if (inmessage == WidgetMessage.Destroy)
+                {
+                    Unregister(inwidget);
+                }
+            }
+
+            return 0;
+        }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using XP.SDK.XPLM.Internal;
 
 namespace XP.SDK.XPLM
@@ -94,7 +94,7 @@ namespace XP.SDK.XPLM
                 var dictHandle = GCHandle.Alloc(dict);
                 try
                 {
-                    DisplayAPI.GetAllMonitorBoundsGlobal(Callback, GCHandle.ToIntPtr(dictHandle).ToPointer());
+                    DisplayAPI.GetAllMonitorBoundsGlobal(&Callback, GCHandle.ToIntPtr(dictHandle).ToPointer());
                     return dict;
                 }
                 finally
@@ -102,6 +102,7 @@ namespace XP.SDK.XPLM
                     dictHandle.Free();
                 }
 
+                [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
                 static void Callback(int index, int left, int top, int right, int bottom, void* inrefcon)
                 {
                     var dict = (Dictionary<int, Rect>)GCHandle.FromIntPtr(new IntPtr(inrefcon)).Target;
@@ -135,7 +136,7 @@ namespace XP.SDK.XPLM
                 var dictHandle = GCHandle.Alloc(dict);
                 try
                 {
-                    DisplayAPI.GetAllMonitorBoundsOS(Callback, GCHandle.ToIntPtr(dictHandle).ToPointer());
+                    DisplayAPI.GetAllMonitorBoundsOS(&Callback, GCHandle.ToIntPtr(dictHandle).ToPointer());
                     return dict;
                 }
                 finally
@@ -143,6 +144,7 @@ namespace XP.SDK.XPLM
                     dictHandle.Free();
                 }
 
+                [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
                 static void Callback(int index, int left, int top, int right, int bottom, void* inrefcon)
                 {
                     var dict = (Dictionary<int, Rect>)GCHandle.FromIntPtr(new IntPtr(inrefcon)).Target;

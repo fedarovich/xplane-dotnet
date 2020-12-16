@@ -131,8 +131,27 @@ namespace XP.SDK.XPLM.Internal
             return LoadObject(inPathPtr);
         }
 
+        
+        /// <summary>
+        /// <para>
+        /// This routine loads an object asynchronously; control is returned to you
+        /// immediately while X-Plane loads the object. The sim will not stop flying
+        /// while the object loads. For large objects, it may be several seconds before
+        /// the load finishes.
+        /// </para>
+        /// <para>
+        /// You provide a callback function that is called once the load has completed.
+        /// Note that if the object cannot be loaded, you will not find out until the
+        /// callback function is called with a NULL object handle.
+        /// </para>
+        /// <para>
+        /// There is no way to cancel an asynchronous object load; you must wait for
+        /// the load to complete and then release the object if it is no longer
+        /// desired.
+        /// </para>
+        /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMLoadObjectAsync", ExactSpelling = true)]
-        private static extern unsafe void LoadObjectAsyncPrivate(byte* inPath, IntPtr inCallback, void* inRefcon);
+        public static extern unsafe void LoadObjectAsync(byte* inPath, delegate* unmanaged[Cdecl]<ObjectRef, void*, void> inCallback, void* inRefcon);
 
         
         /// <summary>
@@ -154,35 +173,7 @@ namespace XP.SDK.XPLM.Internal
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void LoadObjectAsync(byte* inPath, ObjectLoadedCallback inCallback, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
-            LoadObjectAsyncPrivate(inPath, inCallbackPtr, inRefcon);
-            GC.KeepAlive(inCallback);
-        }
-
-        
-        /// <summary>
-        /// <para>
-        /// This routine loads an object asynchronously; control is returned to you
-        /// immediately while X-Plane loads the object. The sim will not stop flying
-        /// while the object loads. For large objects, it may be several seconds before
-        /// the load finishes.
-        /// </para>
-        /// <para>
-        /// You provide a callback function that is called once the load has completed.
-        /// Note that if the object cannot be loaded, you will not find out until the
-        /// callback function is called with a NULL object handle.
-        /// </para>
-        /// <para>
-        /// There is no way to cancel an asynchronous object load; you must wait for
-        /// the load to complete and then release the object if it is no longer
-        /// desired.
-        /// </para>
-        /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void LoadObjectAsync(in ReadOnlySpan<char> inPath, ObjectLoadedCallback inCallback, void* inRefcon)
+        public static unsafe void LoadObjectAsync(in ReadOnlySpan<char> inPath, delegate* unmanaged[Cdecl]<ObjectRef, void*, void> inCallback, void* inRefcon)
         {
             IL.DeclareLocals(false);
             Span<byte> inPathUtf8 = stackalloc byte[(inPath.Length << 1) | 1];
@@ -201,8 +192,24 @@ namespace XP.SDK.XPLM.Internal
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnloadObject", ExactSpelling = true)]
         public static extern void UnloadObject(ObjectRef inObject);
+
+        
+        /// <summary>
+        /// <para>
+        /// This routine looks up a virtual path in the library system and returns all
+        /// matching elements. You provide a callback - one virtual path may match many
+        /// objects in the library. XPLMLookupObjects returns the number of objects
+        /// found.
+        /// </para>
+        /// <para>
+        /// The latitude and longitude parameters specify the location the object will
+        /// be used. The library system allows for scenery packages to only provide
+        /// objects to certain local locations. Only objects that are allowed at the
+        /// latitude/longitude you provide will be returned.
+        /// </para>
+        /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMLookupObjects", ExactSpelling = true)]
-        private static extern unsafe int LookupObjectsPrivate(byte* inPath, float inLatitude, float inLongitude, IntPtr enumerator, void* @ref);
+        public static extern unsafe int LookupObjects(byte* inPath, float inLatitude, float inLongitude, delegate* unmanaged[Cdecl]<byte*, void*, void> enumerator, void* @ref);
 
         
         /// <summary>
@@ -220,32 +227,7 @@ namespace XP.SDK.XPLM.Internal
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int LookupObjects(byte* inPath, float inLatitude, float inLongitude, LibraryEnumeratorCallback enumerator, void* @ref)
-        {
-            IL.DeclareLocals(false);
-            IntPtr enumeratorPtr = enumerator != null ? Marshal.GetFunctionPointerForDelegate(enumerator) : default;
-            int result = LookupObjectsPrivate(inPath, inLatitude, inLongitude, enumeratorPtr, @ref);
-            GC.KeepAlive(enumerator);
-            return result;
-        }
-
-        
-        /// <summary>
-        /// <para>
-        /// This routine looks up a virtual path in the library system and returns all
-        /// matching elements. You provide a callback - one virtual path may match many
-        /// objects in the library. XPLMLookupObjects returns the number of objects
-        /// found.
-        /// </para>
-        /// <para>
-        /// The latitude and longitude parameters specify the location the object will
-        /// be used. The library system allows for scenery packages to only provide
-        /// objects to certain local locations. Only objects that are allowed at the
-        /// latitude/longitude you provide will be returned.
-        /// </para>
-        /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int LookupObjects(in ReadOnlySpan<char> inPath, float inLatitude, float inLongitude, LibraryEnumeratorCallback enumerator, void* @ref)
+        public static unsafe int LookupObjects(in ReadOnlySpan<char> inPath, float inLatitude, float inLongitude, delegate* unmanaged[Cdecl]<byte*, void*, void> enumerator, void* @ref)
         {
             IL.DeclareLocals(false);
             Span<byte> inPathUtf8 = stackalloc byte[(inPath.Length << 1) | 1];

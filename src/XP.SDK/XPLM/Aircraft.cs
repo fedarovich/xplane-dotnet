@@ -3,28 +3,14 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using InlineIL;
-using Microsoft.VisualBasic.CompilerServices;
 using XP.SDK.XPLM.Internal;
 
 namespace XP.SDK.XPLM
 {
     public static class Aircraft
     {
-        private static readonly PlanesAvailableCallback _planesAvailable;
-
         public const int UserAircraft = 0;
-
-        static unsafe Aircraft()
-        {
-            _planesAvailable = OnPlanesAvailable;
-
-            static void OnPlanesAvailable(void* inrefcon)
-            {
-                Utils.TryGetObject<ActionWrapper>(inrefcon)?.Invoke();
-            }
-        }
 
         public static unsafe (int total, int active, PluginID controller) GetCountAndController()
         {
@@ -86,7 +72,7 @@ namespace XP.SDK.XPLM
             {
                 var wrapper = new ActionWrapper(callback);
                 result = PlanesAPI.AcquirePlanes(pArray, 
-                    _planesAvailable,
+                    &OnPlanesAvailable,
                     GCHandle.ToIntPtr(wrapper.Handle).ToPointer()) != 0;
                 if (result)
                 {
@@ -111,6 +97,12 @@ namespace XP.SDK.XPLM
             }
 
             return result;
+
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            static void OnPlanesAvailable(void* inrefcon)
+            {
+                Utils.TryGetObject<ActionWrapper>(inrefcon)?.Invoke();
+            }
         }
 
         public static void ReleaseExclusiveControl()

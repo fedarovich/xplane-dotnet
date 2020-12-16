@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using XP.SDK.XPLM.Internal;
 
@@ -47,18 +45,6 @@ namespace XP.SDK.XPLM
     /// </remarks>
     public static class Camera
     {
-        private static CameraControlCallback _cameraControlCallback;
-
-        static unsafe Camera()
-        {
-            _cameraControlCallback = OnCameraCallback;
-
-            static int OnCameraCallback(CameraPosition* outcameraposition, int inislosingcontrol, void* inrefcon)
-            {
-                return Utils.TryGetObject<Controller>(inrefcon)?.OnCameraControl(outcameraposition, inislosingcontrol) ?? 0;
-            }
-        }
-
         /// <summary>
         /// This function repositions the camera on the next drawing cycle.
         /// You must pass a non-null <paramref name="controlAction"/>.
@@ -75,8 +61,14 @@ namespace XP.SDK.XPLM
             var controller = new Controller(
                 controlAction ?? throw new ArgumentNullException(nameof(controlAction)),
                 onLoosingControl);
-            CameraAPI.ControlCamera(duration, _cameraControlCallback, controller.RefCon);
+            CameraAPI.ControlCamera(duration, &OnCameraCallback, controller.RefCon);
             return controller;
+
+            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            static int OnCameraCallback(CameraPosition* outcameraposition, int inislosingcontrol, void* inrefcon)
+            {
+                return Utils.TryGetObject<Controller>(inrefcon)?.OnCameraControl(outcameraposition, inislosingcontrol) ?? 0;
+            }
         }
 
         /// <summary>

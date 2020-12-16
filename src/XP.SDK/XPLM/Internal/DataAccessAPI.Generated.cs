@@ -282,8 +282,24 @@ namespace XP.SDK.XPLM.Internal
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetDatab", ExactSpelling = true)]
         public static extern unsafe void SetDatab(DataRef inDataRef, void* inValue, int inOffset, int inLength);
+
+        
+        /// <summary>
+        /// <para>
+        /// This routine creates a new item of data that can be read and written. Pass
+        /// in the data's full name for searching, the type(s) of the data for
+        /// accessing, and whether the data can be written to. For each data type you
+        /// support, pass in a read accessor function and a write accessor function if
+        /// necessary. Pass NULL for data types you do not support or write accessors
+        /// if you are read-only.
+        /// </para>
+        /// <para>
+        /// You are returned a data ref for the new item of data created. You can use
+        /// this data ref to unregister your data later or read or write from it.
+        /// </para>
+        /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterDataAccessor", ExactSpelling = true)]
-        private static extern unsafe DataRef RegisterDataAccessorPrivate(byte* inDataName, DataTypeID inDataType, int inIsWritable, IntPtr inReadInt, IntPtr inWriteInt, IntPtr inReadFloat, IntPtr inWriteFloat, IntPtr inReadDouble, IntPtr inWriteDouble, IntPtr inReadIntArray, IntPtr inWriteIntArray, IntPtr inReadFloatArray, IntPtr inWriteFloatArray, IntPtr inReadData, IntPtr inWriteData, void* inReadRefcon, void* inWriteRefcon);
+        public static extern unsafe DataRef RegisterDataAccessor(byte* inDataName, DataTypeID inDataType, int inIsWritable, delegate* unmanaged[Cdecl]<void*, int> inReadInt, delegate* unmanaged[Cdecl]<void*, int, void> inWriteInt, delegate* unmanaged[Cdecl]<void*, float> inReadFloat, delegate* unmanaged[Cdecl]<void*, float, void> inWriteFloat, delegate* unmanaged[Cdecl]<void*, double> inReadDouble, delegate* unmanaged[Cdecl]<void*, double, void> inWriteDouble, delegate* unmanaged[Cdecl]<void*, int*, int, int, int> inReadIntArray, delegate* unmanaged[Cdecl]<void*, int*, int, int, void> inWriteIntArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, int> inReadFloatArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, void> inWriteFloatArray, delegate* unmanaged[Cdecl]<void*, void*, int, int, int> inReadData, delegate* unmanaged[Cdecl]<void*, void*, int, int, void> inWriteData, void* inReadRefcon, void* inWriteRefcon);
 
         
         /// <summary>
@@ -301,54 +317,7 @@ namespace XP.SDK.XPLM.Internal
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe DataRef RegisterDataAccessor(byte* inDataName, DataTypeID inDataType, int inIsWritable, GetDataiCallback inReadInt, SetDataiCallback inWriteInt, GetDatafCallback inReadFloat, SetDatafCallback inWriteFloat, GetDatadCallback inReadDouble, SetDatadCallback inWriteDouble, GetDataviCallback inReadIntArray, SetDataviCallback inWriteIntArray, GetDatavfCallback inReadFloatArray, SetDatavfCallback inWriteFloatArray, GetDatabCallback inReadData, SetDatabCallback inWriteData, void* inReadRefcon, void* inWriteRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inReadIntPtr = inReadInt != null ? Marshal.GetFunctionPointerForDelegate(inReadInt) : default;
-            IntPtr inWriteIntPtr = inWriteInt != null ? Marshal.GetFunctionPointerForDelegate(inWriteInt) : default;
-            IntPtr inReadFloatPtr = inReadFloat != null ? Marshal.GetFunctionPointerForDelegate(inReadFloat) : default;
-            IntPtr inWriteFloatPtr = inWriteFloat != null ? Marshal.GetFunctionPointerForDelegate(inWriteFloat) : default;
-            IntPtr inReadDoublePtr = inReadDouble != null ? Marshal.GetFunctionPointerForDelegate(inReadDouble) : default;
-            IntPtr inWriteDoublePtr = inWriteDouble != null ? Marshal.GetFunctionPointerForDelegate(inWriteDouble) : default;
-            IntPtr inReadIntArrayPtr = inReadIntArray != null ? Marshal.GetFunctionPointerForDelegate(inReadIntArray) : default;
-            IntPtr inWriteIntArrayPtr = inWriteIntArray != null ? Marshal.GetFunctionPointerForDelegate(inWriteIntArray) : default;
-            IntPtr inReadFloatArrayPtr = inReadFloatArray != null ? Marshal.GetFunctionPointerForDelegate(inReadFloatArray) : default;
-            IntPtr inWriteFloatArrayPtr = inWriteFloatArray != null ? Marshal.GetFunctionPointerForDelegate(inWriteFloatArray) : default;
-            IntPtr inReadDataPtr = inReadData != null ? Marshal.GetFunctionPointerForDelegate(inReadData) : default;
-            IntPtr inWriteDataPtr = inWriteData != null ? Marshal.GetFunctionPointerForDelegate(inWriteData) : default;
-            DataRef result = RegisterDataAccessorPrivate(inDataName, inDataType, inIsWritable, inReadIntPtr, inWriteIntPtr, inReadFloatPtr, inWriteFloatPtr, inReadDoublePtr, inWriteDoublePtr, inReadIntArrayPtr, inWriteIntArrayPtr, inReadFloatArrayPtr, inWriteFloatArrayPtr, inReadDataPtr, inWriteDataPtr, inReadRefcon, inWriteRefcon);
-            GC.KeepAlive(inWriteData);
-            GC.KeepAlive(inReadData);
-            GC.KeepAlive(inWriteFloatArray);
-            GC.KeepAlive(inReadFloatArray);
-            GC.KeepAlive(inWriteIntArray);
-            GC.KeepAlive(inReadIntArray);
-            GC.KeepAlive(inWriteDouble);
-            GC.KeepAlive(inReadDouble);
-            GC.KeepAlive(inWriteFloat);
-            GC.KeepAlive(inReadFloat);
-            GC.KeepAlive(inWriteInt);
-            GC.KeepAlive(inReadInt);
-            return result;
-        }
-
-        
-        /// <summary>
-        /// <para>
-        /// This routine creates a new item of data that can be read and written. Pass
-        /// in the data's full name for searching, the type(s) of the data for
-        /// accessing, and whether the data can be written to. For each data type you
-        /// support, pass in a read accessor function and a write accessor function if
-        /// necessary. Pass NULL for data types you do not support or write accessors
-        /// if you are read-only.
-        /// </para>
-        /// <para>
-        /// You are returned a data ref for the new item of data created. You can use
-        /// this data ref to unregister your data later or read or write from it.
-        /// </para>
-        /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe DataRef RegisterDataAccessor(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, int inIsWritable, GetDataiCallback inReadInt, SetDataiCallback inWriteInt, GetDatafCallback inReadFloat, SetDatafCallback inWriteFloat, GetDatadCallback inReadDouble, SetDatadCallback inWriteDouble, GetDataviCallback inReadIntArray, SetDataviCallback inWriteIntArray, GetDatavfCallback inReadFloatArray, SetDatavfCallback inWriteFloatArray, GetDatabCallback inReadData, SetDatabCallback inWriteData, void* inReadRefcon, void* inWriteRefcon)
+        public static unsafe DataRef RegisterDataAccessor(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, int inIsWritable, delegate* unmanaged[Cdecl]<void*, int> inReadInt, delegate* unmanaged[Cdecl]<void*, int, void> inWriteInt, delegate* unmanaged[Cdecl]<void*, float> inReadFloat, delegate* unmanaged[Cdecl]<void*, float, void> inWriteFloat, delegate* unmanaged[Cdecl]<void*, double> inReadDouble, delegate* unmanaged[Cdecl]<void*, double, void> inWriteDouble, delegate* unmanaged[Cdecl]<void*, int*, int, int, int> inReadIntArray, delegate* unmanaged[Cdecl]<void*, int*, int, int, void> inWriteIntArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, int> inReadFloatArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, void> inWriteFloatArray, delegate* unmanaged[Cdecl]<void*, void*, int, int, int> inReadData, delegate* unmanaged[Cdecl]<void*, void*, int, int, void> inWriteData, void* inReadRefcon, void* inWriteRefcon)
         {
             IL.DeclareLocals(false);
             Span<byte> inDataNameUtf8 = stackalloc byte[(inDataName.Length << 1) | 1];
@@ -367,8 +336,31 @@ namespace XP.SDK.XPLM.Internal
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterDataAccessor", ExactSpelling = true)]
         public static extern void UnregisterDataAccessor(DataRef inDataRef);
+
+        
+        /// <summary>
+        /// <para>
+        /// This routine connects a plug-in to shared data, creating the shared data if
+        /// necessary. inDataName is a standard path for the data ref, and inDataType
+        /// specifies the type. This function will create the data if it does not
+        /// exist. If the data already exists but the type does not match, an error is
+        /// returned, so it is important that plug-in authors collaborate to establish
+        /// public standards for shared data.
+        /// </para>
+        /// <para>
+        /// If a notificationFunc is passed in and is not NULL, that notification
+        /// function will be called whenever the data is modified. The notification
+        /// refcon will be passed to it. This allows your plug-in to know which shared
+        /// data was changed if multiple shared data are handled by one callback, or if
+        /// the plug-in does not use global variables.
+        /// </para>
+        /// <para>
+        /// A one is returned for successfully creating or finding the shared data; a
+        /// zero if the data already exists but is of the wrong type.
+        /// </para>
+        /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMShareData", ExactSpelling = true)]
-        private static extern unsafe int ShareDataPrivate(byte* inDataName, DataTypeID inDataType, IntPtr inNotificationFunc, void* inNotificationRefcon);
+        public static extern unsafe int ShareData(byte* inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon);
 
         
         /// <summary>
@@ -393,39 +385,7 @@ namespace XP.SDK.XPLM.Internal
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int ShareData(byte* inDataName, DataTypeID inDataType, DataChangedCallback inNotificationFunc, void* inNotificationRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inNotificationFuncPtr = inNotificationFunc != null ? Marshal.GetFunctionPointerForDelegate(inNotificationFunc) : default;
-            int result = ShareDataPrivate(inDataName, inDataType, inNotificationFuncPtr, inNotificationRefcon);
-            GC.KeepAlive(inNotificationFunc);
-            return result;
-        }
-
-        
-        /// <summary>
-        /// <para>
-        /// This routine connects a plug-in to shared data, creating the shared data if
-        /// necessary. inDataName is a standard path for the data ref, and inDataType
-        /// specifies the type. This function will create the data if it does not
-        /// exist. If the data already exists but the type does not match, an error is
-        /// returned, so it is important that plug-in authors collaborate to establish
-        /// public standards for shared data.
-        /// </para>
-        /// <para>
-        /// If a notificationFunc is passed in and is not NULL, that notification
-        /// function will be called whenever the data is modified. The notification
-        /// refcon will be passed to it. This allows your plug-in to know which shared
-        /// data was changed if multiple shared data are handled by one callback, or if
-        /// the plug-in does not use global variables.
-        /// </para>
-        /// <para>
-        /// A one is returned for successfully creating or finding the shared data; a
-        /// zero if the data already exists but is of the wrong type.
-        /// </para>
-        /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int ShareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, DataChangedCallback inNotificationFunc, void* inNotificationRefcon)
+        public static unsafe int ShareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
         {
             IL.DeclareLocals(false);
             Span<byte> inDataNameUtf8 = stackalloc byte[(inDataName.Length << 1) | 1];
@@ -433,8 +393,17 @@ namespace XP.SDK.XPLM.Internal
             return ShareData(inDataNamePtr, inDataType, inNotificationFunc, inNotificationRefcon);
         }
 
+        
+        /// <summary>
+        /// <para>
+        /// This routine removes your notification function for shared data. Call it
+        /// when done with the data to stop receiving change notifications. Arguments
+        /// must match XPLMShareData. The actual memory will not necessarily be freed,
+        /// since other plug-ins could be using it.
+        /// </para>
+        /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnshareData", ExactSpelling = true)]
-        private static extern unsafe int UnshareDataPrivate(byte* inDataName, DataTypeID inDataType, IntPtr inNotificationFunc, void* inNotificationRefcon);
+        public static extern unsafe int UnshareData(byte* inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon);
 
         
         /// <summary>
@@ -446,26 +415,7 @@ namespace XP.SDK.XPLM.Internal
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int UnshareData(byte* inDataName, DataTypeID inDataType, DataChangedCallback inNotificationFunc, void* inNotificationRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inNotificationFuncPtr = inNotificationFunc != null ? Marshal.GetFunctionPointerForDelegate(inNotificationFunc) : default;
-            int result = UnshareDataPrivate(inDataName, inDataType, inNotificationFuncPtr, inNotificationRefcon);
-            GC.KeepAlive(inNotificationFunc);
-            return result;
-        }
-
-        
-        /// <summary>
-        /// <para>
-        /// This routine removes your notification function for shared data. Call it
-        /// when done with the data to stop receiving change notifications. Arguments
-        /// must match XPLMShareData. The actual memory will not necessarily be freed,
-        /// since other plug-ins could be using it.
-        /// </para>
-        /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int UnshareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, DataChangedCallback inNotificationFunc, void* inNotificationRefcon)
+        public static unsafe int UnshareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
         {
             IL.DeclareLocals(false);
             Span<byte> inDataNameUtf8 = stackalloc byte[(inDataName.Length << 1) | 1];

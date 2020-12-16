@@ -101,8 +101,6 @@ namespace XP.SDK.XPLM.Internal
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetNthAircraftModel", ExactSpelling = true)]
         public static extern unsafe void GetNthAircraftModel(int inIndex, byte* outFileName, byte* outPath);
-        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMAcquirePlanes", ExactSpelling = true)]
-        private static extern unsafe int AcquirePlanesPrivate(byte** inAircraft, IntPtr inCallback, void* inRefcon);
 
         
         /// <summary>
@@ -123,15 +121,8 @@ namespace XP.SDK.XPLM.Internal
         /// airplane access, your callback will not be called.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int AcquirePlanes(byte** inAircraft, PlanesAvailableCallback inCallback, void* inRefcon)
-        {
-            IL.DeclareLocals(false);
-            IntPtr inCallbackPtr = inCallback != null ? Marshal.GetFunctionPointerForDelegate(inCallback) : default;
-            int result = AcquirePlanesPrivate(inAircraft, inCallbackPtr, inRefcon);
-            GC.KeepAlive(inCallback);
-            return result;
-        }
+        [DllImportAttribute(Lib.Name, EntryPoint = "XPLMAcquirePlanes", ExactSpelling = true)]
+        public static extern unsafe int AcquirePlanes(byte** inAircraft, delegate* unmanaged[Cdecl]<void*, void> inCallback, void* inRefcon);
 
         
         /// <summary>
