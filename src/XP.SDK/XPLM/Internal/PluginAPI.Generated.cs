@@ -57,10 +57,10 @@ namespace XP.SDK.XPLM.Internal
         /// path does not point to a currently loaded plug-in.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe PluginID FindPluginByPath(in ReadOnlySpan<char> inPath)
         {
-            IL.DeclareLocals(false);
             Span<byte> inPathUtf8 = stackalloc byte[(inPath.Length << 1) | 1];
             var inPathPtr = Utils.ToUtf8Unsafe(inPath, inPathUtf8);
             return FindPluginByPath(inPathPtr);
@@ -91,10 +91,10 @@ namespace XP.SDK.XPLM.Internal
         /// locate another plugin that your plugin interoperates with
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe PluginID FindPluginBySignature(in ReadOnlySpan<char> inSignature)
         {
-            IL.DeclareLocals(false);
             Span<byte> inSignatureUtf8 = stackalloc byte[(inSignature.Length << 1) | 1];
             var inSignaturePtr = Utils.ToUtf8Unsafe(inSignature, inSignatureUtf8);
             return FindPluginBySignature(inSignaturePtr);
@@ -188,10 +188,10 @@ namespace XP.SDK.XPLM.Internal
         /// 0 if it does not.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int HasFeature(in ReadOnlySpan<char> inFeature)
         {
-            IL.DeclareLocals(false);
             Span<byte> inFeatureUtf8 = stackalloc byte[(inFeature.Length << 1) | 1];
             var inFeaturePtr = Utils.ToUtf8Unsafe(inFeature, inFeatureUtf8);
             return HasFeature(inFeaturePtr);
@@ -216,10 +216,10 @@ namespace XP.SDK.XPLM.Internal
         /// feature.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int IsFeatureEnabled(in ReadOnlySpan<char> inFeature)
         {
-            IL.DeclareLocals(false);
             Span<byte> inFeatureUtf8 = stackalloc byte[(inFeature.Length << 1) | 1];
             var inFeaturePtr = Utils.ToUtf8Unsafe(inFeature, inFeatureUtf8);
             return IsFeatureEnabled(inFeaturePtr);
@@ -244,10 +244,10 @@ namespace XP.SDK.XPLM.Internal
         /// depending on the feature.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void EnableFeature(in ReadOnlySpan<char> inFeature, int inEnable)
         {
-            IL.DeclareLocals(false);
             Span<byte> inFeatureUtf8 = stackalloc byte[(inFeature.Length << 1) | 1];
             var inFeaturePtr = Utils.ToUtf8Unsafe(inFeature, inFeatureUtf8);
             EnableFeature(inFeaturePtr, inEnable);

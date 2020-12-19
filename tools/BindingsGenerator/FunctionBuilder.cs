@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using CppAst;
@@ -92,16 +93,16 @@ namespace BindingsGenerator
                     .AddDllImport(cppFunction.Name)
                     .AddUnsafeIfNeeded()
                     .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
-                
+
                 //yield return method;
 
                 //method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
                 //    .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword))
                 //    .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, false)).ToArray())
+                //    .AddSkipLocalsInitAttribute()
                 //    .AddAggressiveInlining()
                 //    .WithBody(Block(BuildDelegateBody(cppFunction, returnTypeInfo)))
                 //    .AddUnsafeIfNeeded();
-                    
             }
             else
             {
@@ -121,6 +122,7 @@ namespace BindingsGenerator
                 method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
                     .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.UnsafeKeyword))
                     .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, true, true)).ToArray())
+                    .AddSkipLocalsInitAttribute()
                     .AddAggressiveInlining()
                     .WithBody(Block(BuildStringBody(cppFunction, returnTypeInfo)));
                 method = method.AddDocumentationComments(cppFunction.Comment, cppFunction.Name);
@@ -169,61 +171,6 @@ namespace BindingsGenerator
                 Debugger.Break();
             }
             throw new NotSupportedException();
-        }
-
-        private IEnumerable<StatementSyntax> BuildBaseMethodBody(CppFunction cppFunction, TypeInfo returnTypeInfo)
-        {
-            yield return SyntaxBuilder.DeclareLocals(false);
-
-            var functionPointer = IdentifierName(GetManagedName(cppFunction.Name + "Ptr"));
-            yield return SyntaxBuilder.CallGuard(functionPointer);
-            
-            IdentifierNameSyntax result = null;
-            if (!returnTypeInfo.IsVoid)
-            {
-                if (returnTypeInfo.IsFunction)
-                {
-                    yield return SyntaxBuilder.DeclareResultVariable(SyntaxBuilder.IntPtrName, out result);
-                }
-                else
-                {
-                    yield return SyntaxBuilder.DeclareResultVariable(returnTypeInfo.TypeSyntax, out result);
-                }
-            }
-
-            var delegates = new Dictionary<string, string>();
-            foreach (var cppParameter in cppFunction.Parameters)
-            {
-                if (TypeMap.TryResolveType(cppParameter.Type, out var typeInfo) && typeInfo.IsFunction)
-                {
-                    delegates.Add(cppParameter.Name, null);
-                }
-                yield return SyntaxBuilder.EmitPush(IdentifierName(GetManagedName(cppParameter.Name)));
-            }
-
-            yield return SyntaxBuilder.EmitPush(functionPointer);
-
-            yield return SyntaxBuilder.EmitCalli(returnTypeInfo, cppFunction, TypeMap, delegates);
-
-            if (result != null)
-            {
-                yield return SyntaxBuilder.EmitPop(result);
-                if (returnTypeInfo.IsFunction)
-                {
-                    yield return ReturnStatement(
-                        InvocationExpression(
-                                MemberAccessExpression(
-                                    SyntaxKind.SimpleMemberAccessExpression,
-                                    IdentifierName(nameof(Marshal)),
-                                    GenericName(nameof(Marshal.GetDelegateForFunctionPointer))
-                                        .AddTypeArgumentListArguments(returnTypeInfo.TypeSyntax)))
-                            .AddArgumentListArguments(Argument(result)));
-                }
-                else
-                {
-                    yield return ReturnStatement(result);
-                }
-            }
         }
 
         private IEnumerable<StatementSyntax> BuildDelegateBody(CppFunction cppFunction, TypeInfo returnTypeInfo)
@@ -286,8 +233,6 @@ namespace BindingsGenerator
 
         private IEnumerable<StatementSyntax> BuildStringBody(CppFunction cppFunction, TypeInfo returnTypeInfo)
         {
-            yield return SyntaxBuilder.DeclareLocals(false);
-
             foreach (var cppParameter in cppFunction.Parameters.Where(p => p.Type.IsConstCharPtr()))
             {
                 var utf16Name = GetManagedName(cppParameter.Name);

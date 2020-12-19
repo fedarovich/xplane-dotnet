@@ -479,10 +479,10 @@ namespace XP.SDK.XPLM.Internal
         /// XPLMCreateWindowEx().
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void SetWindowTitle(WindowID inWindowID, in ReadOnlySpan<char> inWindowTitle)
         {
-            IL.DeclareLocals(false);
             Span<byte> inWindowTitleUtf8 = stackalloc byte[(inWindowTitle.Length << 1) | 1];
             var inWindowTitlePtr = Utils.ToUtf8Unsafe(inWindowTitle, inWindowTitleUtf8);
             SetWindowTitle(inWindowID, inWindowTitlePtr);
@@ -627,10 +627,10 @@ namespace XP.SDK.XPLM.Internal
         /// may change, but you are insulated from this.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, in ReadOnlySpan<char> inDescription, delegate* unmanaged[Cdecl]<void*, void> inCallback, void* inRefcon)
         {
-            IL.DeclareLocals(false);
             Span<byte> inDescriptionUtf8 = stackalloc byte[(inDescription.Length << 1) | 1];
             var inDescriptionPtr = Utils.ToUtf8Unsafe(inDescription, inDescriptionUtf8);
             return RegisterHotKey(inVirtualKey, inFlags, inDescriptionPtr, inCallback, inRefcon);

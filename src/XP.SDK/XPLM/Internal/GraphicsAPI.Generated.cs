@@ -199,10 +199,10 @@ namespace XP.SDK.XPLM.Internal
         /// for fractional pixels.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe float MeasureString(FontID inFontID, in ReadOnlySpan<char> inChar, int inNumChars)
         {
-            IL.DeclareLocals(false);
             Span<byte> inCharUtf8 = stackalloc byte[(inChar.Length << 1) | 1];
             var inCharPtr = Utils.ToUtf8Unsafe(inChar, inCharUtf8);
             return MeasureString(inFontID, inCharPtr, inNumChars);

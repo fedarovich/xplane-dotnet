@@ -72,10 +72,10 @@ namespace XP.SDK.XPLM.Internal
         /// a submenu where the title is not visible.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe MenuID CreateMenu(in ReadOnlySpan<char> inName, MenuID inParentMenu, int inParentItem, delegate* unmanaged[Cdecl]<void*, void*, void> inHandler, void* inMenuRef)
         {
-            IL.DeclareLocals(false);
             Span<byte> inNameUtf8 = stackalloc byte[(inName.Length << 1) | 1];
             var inNamePtr = Utils.ToUtf8Unsafe(inName, inNameUtf8);
             return CreateMenu(inNamePtr, inParentMenu, inParentItem, inHandler, inMenuRef);
@@ -146,10 +146,10 @@ namespace XP.SDK.XPLM.Internal
         /// plugin.)
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int AppendMenuItem(MenuID inMenu, in ReadOnlySpan<char> inItemName, void* inItemRef, int inDeprecatedAndIgnored)
         {
-            IL.DeclareLocals(false);
             Span<byte> inItemNameUtf8 = stackalloc byte[(inItemName.Length << 1) | 1];
             var inItemNamePtr = Utils.ToUtf8Unsafe(inItemName, inItemNameUtf8);
             return AppendMenuItem(inMenu, inItemNamePtr, inItemRef, inDeprecatedAndIgnored);
@@ -194,10 +194,10 @@ namespace XP.SDK.XPLM.Internal
         /// menus only.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int AppendMenuItemWithCommand(MenuID inMenu, in ReadOnlySpan<char> inItemName, CommandRef inCommandToExecute)
         {
-            IL.DeclareLocals(false);
             Span<byte> inItemNameUtf8 = stackalloc byte[(inItemName.Length << 1) | 1];
             var inItemNamePtr = Utils.ToUtf8Unsafe(inItemName, inItemNameUtf8);
             return AppendMenuItemWithCommand(inMenu, inItemNamePtr, inCommandToExecute);
@@ -233,10 +233,10 @@ namespace XP.SDK.XPLM.Internal
         /// ID and the index of the menu item.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void SetMenuItemName(MenuID inMenu, int inIndex, in ReadOnlySpan<char> inItemName, int inDeprecatedAndIgnored)
         {
-            IL.DeclareLocals(false);
             Span<byte> inItemNameUtf8 = stackalloc byte[(inItemName.Length << 1) | 1];
             var inItemNamePtr = Utils.ToUtf8Unsafe(inItemName, inItemNameUtf8);
             SetMenuItemName(inMenu, inIndex, inItemNamePtr, inDeprecatedAndIgnored);

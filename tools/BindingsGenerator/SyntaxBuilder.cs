@@ -87,6 +87,14 @@ namespace BindingsGenerator
                     .WithAdditionalAnnotations(new SyntaxAnnotation(Annotations.Namespace, CompilerServices.ToFullString())));
         }
 
+        public static T AddSkipLocalsInitAttribute<T>(this T member) where T : MemberDeclarationSyntax
+        {
+            return (T)member.AddAttributeLists(
+                AttributeList(SingletonSeparatedList(
+                    Attribute(IdentifierName(nameof(SkipLocalsInitAttribute)))))
+                    .WithAdditionalAnnotations(new SyntaxAnnotation(Annotations.Namespace, CompilerServices.ToFullString())));
+        }
+
         public static DelegateDeclarationSyntax AddUnmanagedFunctionPointerAttribute(this DelegateDeclarationSyntax member)
         {
             return member.AddAttributeLists(
@@ -159,84 +167,6 @@ namespace BindingsGenerator
                                     LiteralExpression(
                                         SyntaxKind.DefaultLiteralExpression,
                                         Token(SyntaxKind.DefaultKeyword)))))));
-        }
-
-        public static ExpressionStatementSyntax EmitPush(IdentifierNameSyntax parameter)
-        {
-            return ExpressionStatement(
-                InvocationExpression(
-                    MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        IdentifierName("IL"),
-                        IdentifierName("Push")),
-                    ArgumentList(SingletonSeparatedList(
-                        Argument(parameter)))));
-        }
-
-        public static ExpressionStatementSyntax EmitCalli(TypeInfo returnTypeInfo, CppFunction cppFunction, 
-            TypeMap typeMap, IReadOnlyDictionary<string, string> delegates)
-        {
-            return ExpressionStatement(
-                InvocationExpression(
-                    MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            IdentifierName("IL"),
-                            IdentifierName("Emit")),
-                        IdentifierName("Calli")),
-                    ArgumentList(SingletonSeparatedList(Argument(
-                        ObjectCreationExpression(
-                            IdentifierName("StandAloneMethodSig"),
-                            ArgumentList(SeparatedList(GetMethodSigParameters())),
-                            null))))));
-
-            IEnumerable<ArgumentSyntax> GetMethodSigParameters()
-            {
-                yield return Argument(
-                    MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        IdentifierName(nameof(CallingConvention)),
-                        IdentifierName(nameof(CallingConvention.Cdecl))));
-
-                if (returnTypeInfo.IsFunction)
-                {
-                    yield return Argument(TypeOfExpression(IntPtrName));
-                }
-                else
-                {
-                    yield return Argument(TypeOfExpression(returnTypeInfo.TypeSyntax));
-                }
-
-                foreach (var cppParameter in cppFunction.Parameters)
-                {
-                    if (delegates.TryGetValue(cppParameter.Name, out _))
-                    {
-                        yield return Argument(TypeOfExpression(IdentifierName(nameof(IntPtr))));
-                    }
-                    else if (typeMap.TryResolveType(cppParameter.Type, out var paramTypeInfo))
-                    {
-                        yield return Argument(TypeOfExpression(paramTypeInfo.TypeSyntax));
-                    }
-                    else
-                    {
-                        throw new ArgumentException();
-                    }
-                }
-            }
-        }
-
-        public static ExpressionStatementSyntax EmitPop(IdentifierNameSyntax result)
-        {
-            return ExpressionStatement(
-                InvocationExpression(
-                    MemberAccessExpression(
-                        SyntaxKind.SimpleMemberAccessExpression,
-                        IdentifierName("IL"),
-                        IdentifierName("Pop")),
-                    ArgumentList(SingletonSeparatedList(
-                        Argument(result)
-                            .WithRefKindKeyword(Token(SyntaxKind.OutKeyword))))));
         }
 
         public static ExpressionStatementSyntax CallKeepAlive(ExpressionSyntax parameter)

@@ -121,10 +121,10 @@ namespace XP.SDK.XPLM.Internal
         /// * Find the nearest airport whose name contains "Chicago".
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe NavRef FindNavAid(in ReadOnlySpan<char> inNameFragment, in ReadOnlySpan<char> inIDFragment, float* inLat, float* inLon, int* inFrequency, NavType inType)
         {
-            IL.DeclareLocals(false);
             Span<byte> inNameFragmentUtf8 = stackalloc byte[(inNameFragment.Length << 1) | 1];
             var inNameFragmentPtr = Utils.ToUtf8Unsafe(inNameFragment, inNameFragmentUtf8);
             Span<byte> inIDFragmentUtf8 = stackalloc byte[(inIDFragment.Length << 1) | 1];

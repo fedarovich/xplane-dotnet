@@ -175,10 +175,10 @@ namespace XP.SDK.XPLM.Internal
         /// 6 compatibility is needed, use your own code to iterate directories.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int GetDirectoryContents(in ReadOnlySpan<char> inDirectoryPath, int inFirstReturn, byte* outFileNames, int inFileNameBufSize, byte** outIndices, int inIndexCount, int* outTotalFiles, int* outReturnedFiles)
         {
-            IL.DeclareLocals(false);
             Span<byte> inDirectoryPathUtf8 = stackalloc byte[(inDirectoryPath.Length << 1) | 1];
             var inDirectoryPathPtr = Utils.ToUtf8Unsafe(inDirectoryPath, inDirectoryPathUtf8);
             return GetDirectoryContents(inDirectoryPathPtr, inFirstReturn, outFileNames, inFileNameBufSize, outIndices, inIndexCount, outTotalFiles, outReturnedFiles);
@@ -203,10 +203,10 @@ namespace XP.SDK.XPLM.Internal
         /// replay movies, not sit files).
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int LoadDataFile(DataFileType inFileType, in ReadOnlySpan<char> inFilePath)
         {
-            IL.DeclareLocals(false);
             Span<byte> inFilePathUtf8 = stackalloc byte[(inFilePath.Length << 1) | 1];
             var inFilePathPtr = Utils.ToUtf8Unsafe(inFilePath, inFilePathUtf8);
             return LoadDataFile(inFileType, inFilePathPtr);
@@ -229,10 +229,10 @@ namespace XP.SDK.XPLM.Internal
         /// folder.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int SaveDataFile(DataFileType inFileType, in ReadOnlySpan<char> inFilePath)
         {
-            IL.DeclareLocals(false);
             Span<byte> inFilePathUtf8 = stackalloc byte[(inFilePath.Length << 1) | 1];
             var inFilePathPtr = Utils.ToUtf8Unsafe(inFilePath, inFilePathUtf8);
             return SaveDataFile(inFileType, inFilePathPtr);
@@ -334,10 +334,10 @@ namespace XP.SDK.XPLM.Internal
         /// the correct type.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void* FindSymbol(in ReadOnlySpan<char> inString)
         {
-            IL.DeclareLocals(false);
             Span<byte> inStringUtf8 = stackalloc byte[(inString.Length << 1) | 1];
             var inStringPtr = Utils.ToUtf8Unsafe(inString, inStringUtf8);
             return FindSymbol(inStringPtr);
@@ -407,10 +407,10 @@ namespace XP.SDK.XPLM.Internal
         /// parts of the system.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void DebugString(in ReadOnlySpan<char> inString)
         {
-            IL.DeclareLocals(false);
             Span<byte> inStringUtf8 = stackalloc byte[(inString.Length << 1) | 1];
             var inStringPtr = Utils.ToUtf8Unsafe(inString, inStringUtf8);
             DebugString(inStringPtr);
@@ -437,10 +437,10 @@ namespace XP.SDK.XPLM.Internal
         /// may not speak or print depending on user preferences.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void SpeakString(in ReadOnlySpan<char> inString)
         {
-            IL.DeclareLocals(false);
             Span<byte> inStringUtf8 = stackalloc byte[(inString.Length << 1) | 1];
             var inStringPtr = Utils.ToUtf8Unsafe(inString, inStringUtf8);
             SpeakString(inStringPtr);
@@ -489,10 +489,10 @@ namespace XP.SDK.XPLM.Internal
         /// reference or NULL if the command does not exist.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe CommandRef FindCommand(in ReadOnlySpan<char> inName)
         {
-            IL.DeclareLocals(false);
             Span<byte> inNameUtf8 = stackalloc byte[(inName.Length << 1) | 1];
             var inNamePtr = Utils.ToUtf8Unsafe(inName, inNameUtf8);
             return FindCommand(inNamePtr);
@@ -553,10 +553,10 @@ namespace XP.SDK.XPLM.Internal
         /// screen.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe CommandRef CreateCommand(in ReadOnlySpan<char> inName, in ReadOnlySpan<char> inDescription)
         {
-            IL.DeclareLocals(false);
             Span<byte> inNameUtf8 = stackalloc byte[(inName.Length << 1) | 1];
             var inNamePtr = Utils.ToUtf8Unsafe(inName, inNameUtf8);
             Span<byte> inDescriptionUtf8 = stackalloc byte[(inDescription.Length << 1) | 1];

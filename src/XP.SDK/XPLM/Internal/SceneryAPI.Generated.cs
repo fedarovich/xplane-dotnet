@@ -122,10 +122,10 @@ namespace XP.SDK.XPLM.Internal
         /// defer object loading until the sim has fully started.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe ObjectRef LoadObject(in ReadOnlySpan<char> inPath)
         {
-            IL.DeclareLocals(false);
             Span<byte> inPathUtf8 = stackalloc byte[(inPath.Length << 1) | 1];
             var inPathPtr = Utils.ToUtf8Unsafe(inPath, inPathUtf8);
             return LoadObject(inPathPtr);
@@ -172,10 +172,10 @@ namespace XP.SDK.XPLM.Internal
         /// desired.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void LoadObjectAsync(in ReadOnlySpan<char> inPath, delegate* unmanaged[Cdecl]<ObjectRef, void*, void> inCallback, void* inRefcon)
         {
-            IL.DeclareLocals(false);
             Span<byte> inPathUtf8 = stackalloc byte[(inPath.Length << 1) | 1];
             var inPathPtr = Utils.ToUtf8Unsafe(inPath, inPathUtf8);
             LoadObjectAsync(inPathPtr, inCallback, inRefcon);
@@ -226,10 +226,10 @@ namespace XP.SDK.XPLM.Internal
         /// latitude/longitude you provide will be returned.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int LookupObjects(in ReadOnlySpan<char> inPath, float inLatitude, float inLongitude, delegate* unmanaged[Cdecl]<byte*, void*, void> enumerator, void* @ref)
         {
-            IL.DeclareLocals(false);
             Span<byte> inPathUtf8 = stackalloc byte[(inPath.Length << 1) | 1];
             var inPathPtr = Utils.ToUtf8Unsafe(inPath, inPathUtf8);
             return LookupObjects(inPathPtr, inLatitude, inLongitude, enumerator, @ref);

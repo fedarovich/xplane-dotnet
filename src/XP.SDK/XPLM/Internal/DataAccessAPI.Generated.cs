@@ -42,10 +42,10 @@ namespace XP.SDK.XPLM.Internal
         /// every time you need to read or write it.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe DataRef FindDataRef(in ReadOnlySpan<char> inDataRefName)
         {
-            IL.DeclareLocals(false);
             Span<byte> inDataRefNameUtf8 = stackalloc byte[(inDataRefName.Length << 1) | 1];
             var inDataRefNamePtr = Utils.ToUtf8Unsafe(inDataRefName, inDataRefNameUtf8);
             return FindDataRef(inDataRefNamePtr);
@@ -316,10 +316,10 @@ namespace XP.SDK.XPLM.Internal
         /// this data ref to unregister your data later or read or write from it.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe DataRef RegisterDataAccessor(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, int inIsWritable, delegate* unmanaged[Cdecl]<void*, int> inReadInt, delegate* unmanaged[Cdecl]<void*, int, void> inWriteInt, delegate* unmanaged[Cdecl]<void*, float> inReadFloat, delegate* unmanaged[Cdecl]<void*, float, void> inWriteFloat, delegate* unmanaged[Cdecl]<void*, double> inReadDouble, delegate* unmanaged[Cdecl]<void*, double, void> inWriteDouble, delegate* unmanaged[Cdecl]<void*, int*, int, int, int> inReadIntArray, delegate* unmanaged[Cdecl]<void*, int*, int, int, void> inWriteIntArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, int> inReadFloatArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, void> inWriteFloatArray, delegate* unmanaged[Cdecl]<void*, void*, int, int, int> inReadData, delegate* unmanaged[Cdecl]<void*, void*, int, int, void> inWriteData, void* inReadRefcon, void* inWriteRefcon)
         {
-            IL.DeclareLocals(false);
             Span<byte> inDataNameUtf8 = stackalloc byte[(inDataName.Length << 1) | 1];
             var inDataNamePtr = Utils.ToUtf8Unsafe(inDataName, inDataNameUtf8);
             return RegisterDataAccessor(inDataNamePtr, inDataType, inIsWritable, inReadInt, inWriteInt, inReadFloat, inWriteFloat, inReadDouble, inWriteDouble, inReadIntArray, inWriteIntArray, inReadFloatArray, inWriteFloatArray, inReadData, inWriteData, inReadRefcon, inWriteRefcon);
@@ -384,10 +384,10 @@ namespace XP.SDK.XPLM.Internal
         /// zero if the data already exists but is of the wrong type.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int ShareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
         {
-            IL.DeclareLocals(false);
             Span<byte> inDataNameUtf8 = stackalloc byte[(inDataName.Length << 1) | 1];
             var inDataNamePtr = Utils.ToUtf8Unsafe(inDataName, inDataNameUtf8);
             return ShareData(inDataNamePtr, inDataType, inNotificationFunc, inNotificationRefcon);
@@ -414,10 +414,10 @@ namespace XP.SDK.XPLM.Internal
         /// since other plug-ins could be using it.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int UnshareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
         {
-            IL.DeclareLocals(false);
             Span<byte> inDataNameUtf8 = stackalloc byte[(inDataName.Length << 1) | 1];
             var inDataNamePtr = Utils.ToUtf8Unsafe(inDataName, inDataNameUtf8);
             return UnshareData(inDataNamePtr, inDataType, inNotificationFunc, inNotificationRefcon);

@@ -26,10 +26,10 @@ namespace XP.SDK.XPLM.Internal
         /// (hard drive and everything including the .acf extension) to the .acf file.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void SetUsersAircraft(in ReadOnlySpan<char> inAircraftPath)
         {
-            IL.DeclareLocals(false);
             Span<byte> inAircraftPathUtf8 = stackalloc byte[(inAircraftPath.Length << 1) | 1];
             var inAircraftPathPtr = Utils.ToUtf8Unsafe(inAircraftPath, inAircraftPathUtf8);
             SetUsersAircraft(inAircraftPathPtr);
@@ -52,10 +52,10 @@ namespace XP.SDK.XPLM.Internal
         /// its X-Plane airport ID (e.g. 'KBOS').
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void PlaceUserAtAirport(in ReadOnlySpan<char> inAirportCode)
         {
-            IL.DeclareLocals(false);
             Span<byte> inAirportCodeUtf8 = stackalloc byte[(inAirportCode.Length << 1) | 1];
             var inAirportCodePtr = Utils.ToUtf8Unsafe(inAirportCode, inAirportCodeUtf8);
             PlaceUserAtAirport(inAirportCodePtr);
@@ -166,10 +166,10 @@ namespace XP.SDK.XPLM.Internal
         /// (use XPLMSetUsersAircraft to load the user's aircracft).
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void SetAircraftModel(int inIndex, in ReadOnlySpan<char> inAircraftPath)
         {
-            IL.DeclareLocals(false);
             Span<byte> inAircraftPathUtf8 = stackalloc byte[(inAircraftPath.Length << 1) | 1];
             var inAircraftPathPtr = Utils.ToUtf8Unsafe(inAircraftPath, inAircraftPathUtf8);
             SetAircraftModel(inIndex, inAircraftPathPtr);

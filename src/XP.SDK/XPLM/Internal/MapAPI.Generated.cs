@@ -71,10 +71,10 @@ namespace XP.SDK.XPLM.Internal
         /// that your layer should be added to that map.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int MapExists(in ReadOnlySpan<char> mapIdentifier)
         {
-            IL.DeclareLocals(false);
             Span<byte> mapIdentifierUtf8 = stackalloc byte[(mapIdentifier.Length << 1) | 1];
             var mapIdentifierPtr = Utils.ToUtf8Unsafe(mapIdentifier, mapIdentifierUtf8);
             return MapExists(mapIdentifierPtr);
@@ -159,10 +159,10 @@ namespace XP.SDK.XPLM.Internal
         /// callback).
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void DrawMapIconFromSheet(MapLayerID layer, in ReadOnlySpan<char> inPngPath, int s, int t, int ds, int dt, float mapX, float mapY, MapOrientation orientation, float rotationDegrees, float mapWidth)
         {
-            IL.DeclareLocals(false);
             Span<byte> inPngPathUtf8 = stackalloc byte[(inPngPath.Length << 1) | 1];
             var inPngPathPtr = Utils.ToUtf8Unsafe(inPngPath, inPngPathUtf8);
             DrawMapIconFromSheet(layer, inPngPathPtr, s, t, ds, dt, mapX, mapY, orientation, rotationDegrees, mapWidth);
@@ -189,10 +189,10 @@ namespace XP.SDK.XPLM.Internal
         /// text labels to be drawn from within your callback).
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void DrawMapLabel(MapLayerID layer, in ReadOnlySpan<char> inText, float mapX, float mapY, MapOrientation orientation, float rotationDegrees)
         {
-            IL.DeclareLocals(false);
             Span<byte> inTextUtf8 = stackalloc byte[(inText.Length << 1) | 1];
             var inTextPtr = Utils.ToUtf8Unsafe(inText, inTextUtf8);
             DrawMapLabel(layer, inTextPtr, mapX, mapY, orientation, rotationDegrees);

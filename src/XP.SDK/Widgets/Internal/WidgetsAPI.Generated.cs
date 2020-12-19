@@ -81,10 +81,10 @@ namespace XP.SDK.Widgets.Internal
         /// into root widgets later to activate them if you wish.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe WidgetID CreateWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, in ReadOnlySpan<char> inDescriptor, int inIsRoot, WidgetID inContainer, WidgetClass inClass)
         {
-            IL.DeclareLocals(false);
             Span<byte> inDescriptorUtf8 = stackalloc byte[(inDescriptor.Length << 1) | 1];
             var inDescriptorPtr = Utils.ToUtf8Unsafe(inDescriptor, inDescriptorUtf8);
             return CreateWidget(inLeft, inTop, inRight, inBottom, inVisible, inDescriptorPtr, inIsRoot, inContainer, inClass);
@@ -113,10 +113,10 @@ namespace XP.SDK.Widgets.Internal
         /// the widget function.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe WidgetID CreateCustomWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, in ReadOnlySpan<char> inDescriptor, int inIsRoot, WidgetID inContainer, delegate* unmanaged[Cdecl]<WidgetMessage, WidgetID, nint, nint, int> inCallback)
         {
-            IL.DeclareLocals(false);
             Span<byte> inDescriptorUtf8 = stackalloc byte[(inDescriptor.Length << 1) | 1];
             var inDescriptorPtr = Utils.ToUtf8Unsafe(inDescriptor, inDescriptorUtf8);
             return CreateCustomWidget(inLeft, inTop, inRight, inBottom, inVisible, inDescriptorPtr, inIsRoot, inContainer, inCallback);
@@ -359,10 +359,10 @@ namespace XP.SDK.Widgets.Internal
         /// descriptor, many do.
         /// </para>
         /// </summary>
+        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void SetWidgetDescriptor(WidgetID inWidget, in ReadOnlySpan<char> inDescriptor)
         {
-            IL.DeclareLocals(false);
             Span<byte> inDescriptorUtf8 = stackalloc byte[(inDescriptor.Length << 1) | 1];
             var inDescriptorPtr = Utils.ToUtf8Unsafe(inDescriptor, inDescriptorUtf8);
             SetWidgetDescriptor(inWidget, inDescriptorPtr);
