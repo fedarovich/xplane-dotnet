@@ -75,7 +75,7 @@ namespace XP.Proxy
             var assemblyPath = Path.ChangeExtension(pluginPath, ".dll");
             var currentContext = AssemblyLoadContext.GetLoadContext(Assembly.GetExecutingAssembly());
            
-            _context = new PluginContext(currentContext, assemblyPath);
+            _context = new PluginContext(currentContext!, assemblyPath);
             try
             {
                 var assembly = _context.LoadFromAssemblyPath(assemblyPath);
@@ -87,9 +87,17 @@ namespace XP.Proxy
                 }
 
                 _plugin = (PluginBase) Activator.CreateInstance(attr.PluginType);
-                WriteUtf8String(_plugin.Name, outName);
-                WriteUtf8String(_plugin.Signature, outSig);
-                WriteUtf8String(_plugin.Description, outDesc);
+                if (_plugin == null)
+                {
+                    // We should actually never get here.
+                    Log($"Failed to instantiate the plugin of type {attr.PluginType}.");
+                    return 0;
+                }
+                
+                Utf8String.FromString(_plugin.Name).CopyTo(outName);
+                Utf8String.FromString(_plugin.Signature).CopyTo(outSig);
+                Utf8String.FromString(_plugin.Description).CopyTo(outDesc);
+
                 return _plugin.Start() ? 1 : 0;
             }
             catch (Exception ex)
@@ -97,13 +105,6 @@ namespace XP.Proxy
                 Log(ex.ToString());
                 Unload();
                 return 0;
-            }
-
-            static void WriteUtf8String(string str, byte* dest, int length = 256)
-            {
-                Span<byte> buffer = new Span<byte>(dest, length);
-                Utf8.FromUtf16(str, buffer, out _, out var count);
-                buffer[count] = 0;
             }
         }
 

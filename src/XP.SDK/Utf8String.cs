@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace XP.SDK
@@ -155,7 +156,18 @@ namespace XP.SDK
         /// </summary>
         /// <param name="substring">The string to compare.</param>
         /// <returns><see langword="true"/> if substring matches the end of this string; otherwise, <see langword="false"/></returns>
-
         public bool EndsWith(in Utf8String substring) => substring.IsNullOrEmpty || Data.EndsWith(substring.Data[..^1]);
+
+        /// <summary>
+        /// Copies the data to the destination.
+        /// </summary>
+        /// <param name="destination">The destination to copy the data to. The destination buffer must be at least <c>Length + 1</c> bytes long.</param>
+        public unsafe void CopyTo(byte* destination)
+        {
+            fixed (byte* source = Data)
+            {
+                Buffer.MemoryCopy(source, destination, Data.Length, Data.Length);
+            }
+        }
     }
 }
