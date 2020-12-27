@@ -7,12 +7,15 @@ using XP.SDK.XPLM;
 namespace XP.SamplePlugin
 {
 
-    public class Plugin : PluginBase
+    public partial class Plugin : PluginBase
     {
         public override string Name => "Sample";
         public override string Signature => "com.fedarovich.xplane-dotnet.sample";
         public override string Description => "Sample plugin.";
-        
+
+        [Utf8StringLiteral("Start sample plugin.")]
+        public static partial Utf8String StartMessage();
+
         protected override bool OnStart()
         {
             XPlane.Trace.WriteLine("Start sample plugin.");

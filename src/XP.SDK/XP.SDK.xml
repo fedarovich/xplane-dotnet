@@ -714,6 +714,12 @@
             If the factory was created using the default constructor or with a pool that is not disposable or must not be disposed together with this factory, you can skip calling this method.
             </remarks>
         </member>
+        <member name="T:XP.SDK.Utf8StringLiteralAttribute">
+            <summary>
+            Mark partial method returning <see cref="T:XP.SDK.Utf8String"/> with this attribute
+            in order to automatically generate the return value from the specified literal.
+            </summary>
+        </member>
         <member name="T:XP.SDK.Widgets.Behavior">
             <summary>
             Provides a standard way to attach additional behavior to the widgets.
