@@ -9,12 +9,15 @@ namespace XP.SamplePlugin
 
     public partial class Plugin : PluginBase
     {
-        public override string Name => "Sample";
-        public override string Signature => "com.fedarovich.xplane-dotnet.sample";
-        public override string Description => "Sample plugin.";
+        [Utf8StringLiteral("Sample")]
+        public sealed override partial Utf8String GetName();
 
-        [Utf8StringLiteral("Start sample plugin.")]
-        public static partial Utf8String StartMessage();
+        public override Utf8String GetSignature() => Utf8String.FromString("com.fedarovich.xplane-dotnet.sample");
+
+        public override Utf8String GetDescription()
+        {
+            return Utf8String.FromString("Sample plugin.");
+        }
 
         protected override bool OnStart()
         {

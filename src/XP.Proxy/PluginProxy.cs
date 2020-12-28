@@ -94,9 +94,9 @@ namespace XP.Proxy
                     return 0;
                 }
                 
-                Utf8String.FromString(_plugin.Name).CopyTo(outName);
-                Utf8String.FromString(_plugin.Signature).CopyTo(outSig);
-                Utf8String.FromString(_plugin.Description).CopyTo(outDesc);
+                _plugin.GetName().CopyTo(outName);
+                _plugin.GetSignature().CopyTo(outSig);
+                _plugin.GetDescription().CopyTo(outDesc);
 
                 return _plugin.Start() ? 1 : 0;
             }

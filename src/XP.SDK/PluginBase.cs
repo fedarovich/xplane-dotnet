@@ -8,11 +8,11 @@ namespace XP.SDK
     {
         private static ConcurrentStack<object> _registeredObjects;
 
-        public abstract string Name { get; }
+        public abstract Utf8String GetName();
 
-        public abstract string Signature { get; }
+        public abstract Utf8String GetSignature();
 
-        public abstract string Description { get; }
+        public abstract Utf8String GetDescription();
 
         protected PluginInfo ThisPlugin => PluginInfo.ThisPlugin;
 

@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
+using System.Xml.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -34,6 +35,8 @@ namespace XP.SDK.Analyzers
             if (compilation.GetTypeByMetadataName("XP.SDK.Utf8String") is not { } utf8StringSymbol)
                 return;
 
+            var utf8StringSymbolDisplayString = utf8StringSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            
             var builder = new StringBuilder();
             var toolName = GetType().FullName;
             var toolVersion = Assembly.GetExecutingAssembly()
@@ -51,17 +54,14 @@ namespace XP.SDK.Analyzers
             {
                 var source = Generate(group);
                 var fileName = GetFileName(group.Key);
-                context.AddSource(fileName, SourceText.From(source, Encoding.UTF8));
+                context.AddSource(fileName, source);
             }
-
+            
             IEnumerable<(INamedTypeSymbol containingType, LiteralInfo literalInfo)> GetMethods()
             {
                 foreach (var candidate in syntaxReceiver.Candidates)
                 {
                     if (!candidate.Modifiers.Any(SyntaxKind.PartialKeyword))
-                        continue;
-                        
-                    if (!candidate.Modifiers.Any(SyntaxKind.StaticKeyword))
                         continue;
                     
                     if (candidate.ParameterList.Parameters.Any())
@@ -76,8 +76,14 @@ namespace XP.SDK.Analyzers
                         
                     if (!TryGetLiteral(methodSymbol, out var literal))
                         continue;
+
+                    Modifiers modifiers = default;
+                    if (candidate.Modifiers.Any(SyntaxKind.StaticKeyword)) modifiers |= Modifiers.Static;
+                    if (candidate.Modifiers.Any(SyntaxKind.VirtualKeyword)) modifiers |= Modifiers.Virtual;
+                    if (candidate.Modifiers.Any(SyntaxKind.OverrideKeyword)) modifiers |= Modifiers.Override;
+                    if (candidate.Modifiers.Any(SyntaxKind.SealedKeyword)) modifiers |= Modifiers.Sealed;
                     
-                    yield return (methodSymbol.ContainingType, new LiteralInfo(methodSymbol.DeclaredAccessibility, methodSymbol.Name, literal));
+                    yield return (methodSymbol.ContainingType, new LiteralInfo(methodSymbol.DeclaredAccessibility, modifiers, methodSymbol.Name, literal));
                 }
             }
 
@@ -96,11 +102,11 @@ namespace XP.SDK.Analyzers
                     if (args.Length != 1)
                         continue;
 
-                    if (args[0].Value is not string s)
-                        continue;
-                    
-                    literal = s;
-                    return true;
+                    if (args[0].Value is string || args[0].Value == null)
+                    {
+                        literal = args[0].Value as string;
+                        return true;
+                    }
                 }
 
                 literal = default;
@@ -112,78 +118,69 @@ namespace XP.SDK.Analyzers
                 var containingType = (INamedTypeSymbol) group.Key;
                 
                 builder.Clear();
-                builder
-                    .AppendLine("using global::XP.SDK;")
-                    .AppendLine();
-
-                int ident = 0;
-                var hasNamespace = !string.IsNullOrEmpty(containingType.ContainingNamespace.Name);
+                using var writer = new IndentedTextWriter(new StringWriter(builder, CultureInfo.InvariantCulture));
+                
+                var hasNamespace = !string.IsNullOrEmpty(containingType.ContainingNamespace?.Name);
                 if (hasNamespace)
                 {
-                    builder
-                        .AppendFormat("namespace {0}", containingType.ContainingNamespace.ToDisplayString())
-                        .AppendLine()
-                        .AppendLine("{");
-                    ident++;
+                    writer.WriteLine("namespace {0}", containingType.ContainingNamespace.ToDisplayString());
+                    writer.WriteLine("{");
+                    writer.Indent++;
                 }
                 
-                builder
-                    .AppendIdent(ident)
-                    .AppendFormat("[global::System.CodeDom.Compiler.GeneratedCode(\"{0}\", \"{1}\")]", 
-                        toolName, 
-                        toolVersion)
-                    .AppendLine()
-                    .AppendIdent(ident)
-                    .AppendFormat("partial {0} {1}", 
-                        containingType.IsValueType ? "struct" : "class",
-                        containingType.Name)
-                    .AppendLine()
-                    .AppendIdent(ident)
-                    .AppendLine("{");
+                writer.WriteLine("[global::System.CodeDom.Compiler.GeneratedCode(\"{0}\", \"{1}\")]", toolName, toolVersion);
+                writer.WriteLine("partial {0} {1}",
+                    containingType.IsValueType ? "struct" : "class",
+                    containingType.Name);
+                writer.WriteLine("{");
 
-                ident++;
+                writer.Indent++;
 
                 foreach (var literalInfo in group)
                 {
-                    builder
-                        .AppendIdent(ident)
-                        .Append("//")
-                        .AppendLine(literalInfo.Literal)
-                        .AppendIdent(ident)
-                        .AppendFormat("{0} static partial global::XP.SDK.Utf8String {1}() => ",
-                            AccessibilityToString(literalInfo.Accessibility),
-                            literalInfo.Name);
-
+                    writer.WriteLine("/// <returns>Null-terminated UTF-8 representation of {0}.</returns>", 
+                        literalInfo.Literal != null
+                            ? "&quot;" + new XText(literalInfo.Literal) + "&quot;"
+                            : "<see langword=\"null\" />");
+                    writer.Write("{0} {1}{2}{3}{4}partial {5} {6}() => ",
+                        AccessibilityToString(literalInfo.Accessibility),
+                        literalInfo.Modifiers.HasFlag(Modifiers.Static) ? "static " : string.Empty,
+                        literalInfo.Modifiers.HasFlag(Modifiers.Sealed) ? "sealed " : string.Empty,
+                        literalInfo.Modifiers.HasFlag(Modifiers.Virtual) ? "virtual " : string.Empty,
+                        literalInfo.Modifiers.HasFlag(Modifiers.Override) ? "override " : string.Empty,
+                        utf8StringSymbolDisplayString,
+                        literalInfo.Name);
+                    
                     if (literalInfo.Literal != null)
                     {
-                        builder.Append("new global::XP.SDK.Utf8String(new byte[] { ");
+                        writer.Write("new {0}(new byte[] {{ ", utf8StringSymbolDisplayString);
 
                         var bytes = utf8.GetBytes(literalInfo.Literal);
                         foreach (var b in bytes)
                         {
-                            builder.AppendFormat("0x{0:X2}, ", b);
+                            writer.Write("0x{0:X2}, ", b);
                         }
 
-                        builder
-                            .AppendFormat(CultureInfo.InvariantCulture, "0x00 }}, {0});", bytes.Length)
-                            .AppendLine()
-                            .AppendLine();
+                        writer.WriteLine("0x00 }}, {0});", bytes.Length);
                     }
                     else
                     {
-                        builder.AppendLine("default;").AppendLine();
+                        writer.WriteLine("default;");
                     }
+                    writer.WriteLine();
                 }
 
-                ident--;
+                writer.Indent--;
 
-                builder.AppendIdent(ident).AppendLine("}");
+                writer.WriteLine("}");
 
-                if (ident > 0)
+                if (writer.Indent > 0)
                 {
-                    builder.AppendLine("}");
+                    writer.Indent = 0;
+                    writer.WriteLine("}");
                 }
 
+                writer.Flush();
                 return builder.ToString();
             }
 
@@ -236,18 +233,31 @@ namespace XP.SDK.Analyzers
 
         private readonly struct LiteralInfo
         {
-            public LiteralInfo(Accessibility accessibility, string name, string literal)
+            public LiteralInfo(Accessibility accessibility, Modifiers modifiers, string name, string literal)
             {
                 Accessibility = accessibility;
+                Modifiers = modifiers;
                 Name = name;
                 Literal = literal;
             }
-
+            
             public readonly Accessibility Accessibility;
+            
+            public readonly Modifiers Modifiers;
 
             public readonly string Name;
 
             public readonly string Literal;
+        }
+
+        [Flags]
+        private enum Modifiers
+        {
+            None = 0,
+            Static = 1 << 0,
+            Virtual = 1 << 1,
+            Override = 1 << 2,
+            Sealed = 1 << 3,
         }
     }
 }
