@@ -187,6 +187,67 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// This routine returns a list of files in a directory (specified by a full
+        /// path, no trailing : or
+        /// \
+        /// ). The output is returned as a list of NULL
+        /// terminated strings. An index array (if specified) is filled with pointers
+        /// into the strings. The last file is indicated by a zero-length string (and
+        /// NULL in the indices). This routine will return 1 if you had capacity for
+        /// all files or 0 if you did not. You can also skip a given number of files.
+        /// </para>
+        /// <para>
+        /// * inDirectoryPath - a null terminated C string containing the full path to
+        /// the directory with no trailing directory char.
+        /// </para>
+        /// <para>
+        /// * inFirstReturn - the zero-based index of the first file in the directory
+        /// to return. (Usually zero to fetch all in one pass.)
+        /// </para>
+        /// <para>
+        /// * outFileNames - a buffer to receive a series of sequential null
+        /// terminated C-string file names. A zero-length C string will be appended
+        /// to the very end.
+        /// </para>
+        /// <para>
+        /// * inFileNameBufSize - the size of the file name buffer in bytes.
+        /// </para>
+        /// <para>
+        /// * outIndices - a pointer to an array of character pointers that will
+        /// become an index into the directory. The last file will be followed by a
+        /// NULL value. Pass NULL if you do not want indexing information.
+        /// </para>
+        /// <para>
+        /// * inIndexCount - the max size of the index in entries.
+        /// </para>
+        /// <para>
+        /// * outTotalFiles - if not NULL, this is filled in with the number of files
+        /// in the directory.
+        /// </para>
+        /// <para>
+        /// * outReturnedFiles - if not NULL, the number of files returned by this
+        /// iteration.
+        /// </para>
+        /// <para>
+        /// Return value: 1 if all info could be returned, 0 if there was a buffer
+        /// overrun.
+        /// </para>
+        /// <para>
+        /// WARNING: Before X-Plane 7 this routine did not properly iterate through
+        /// directories. If X-Plane
+        /// 6 compatibility is needed, use your own code to iterate directories.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe int GetDirectoryContents(in XP.SDK.Utf8String inDirectoryPath, int inFirstReturn, byte* outFileNames, int inFileNameBufSize, byte** outIndices, int inIndexCount, int* outTotalFiles, int* outReturnedFiles)
+        {
+            fixed (byte* inDirectoryPathPtr = inDirectoryPath)
+                return GetDirectoryContents(inDirectoryPathPtr, inFirstReturn, outFileNames, inFileNameBufSize, outIndices, inIndexCount, outTotalFiles, outReturnedFiles);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// Loads a data file of a given type. Paths must be relative to the X-System
         /// folder. To clear the replay, pass a NULL file name (this is only valid with
         /// replay movies, not sit files).
@@ -215,6 +276,21 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// Loads a data file of a given type. Paths must be relative to the X-System
+        /// folder. To clear the replay, pass a NULL file name (this is only valid with
+        /// replay movies, not sit files).
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe int LoadDataFile(DataFileType inFileType, in XP.SDK.Utf8String inFilePath)
+        {
+            fixed (byte* inFilePathPtr = inFilePath)
+                return LoadDataFile(inFileType, inFilePathPtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// Saves the current situation or replay; paths are relative to the X-System
         /// folder.
         /// </para>
@@ -236,6 +312,20 @@ namespace XP.SDK.XPLM.Internal
             Span<byte> inFilePathUtf8 = stackalloc byte[(inFilePath.Length << 1) | 1];
             var inFilePathPtr = Utils.ToUtf8Unsafe(inFilePath, inFilePathUtf8);
             return SaveDataFile(inFileType, inFilePathPtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
+        /// Saves the current situation or replay; paths are relative to the X-System
+        /// folder.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe int SaveDataFile(DataFileType inFileType, in XP.SDK.Utf8String inFilePath)
+        {
+            fixed (byte* inFilePathPtr = inFilePath)
+                return SaveDataFile(inFileType, inFilePathPtr);
         }
 
         
@@ -346,6 +436,47 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// This routine will attempt to find the symbol passed in the inString
+        /// parameter. If the symbol is found a pointer the function is returned,
+        /// othewise the function will return NULL.
+        /// </para>
+        /// <para>
+        /// You can use XPLMFindSymbol to utilize newer SDK API features without
+        /// requiring newer versions of the SDK (and X-Plane) as your minimum X-Plane
+        /// version as follows:
+        /// </para>
+        /// <para>
+        /// * Define the XPLMnnn macro to the minimum required XPLM version you will
+        /// ship with (e.g. XPLM210 for X-Plane 10 compatibility).
+        /// </para>
+        /// <para>
+        /// * Use XPLMGetVersions and XPLMFindSymbol to detect that the host sim is
+        /// new enough to use new functions and resolve function pointers.
+        /// </para>
+        /// <para>
+        /// * Conditionally use the new functions if and only if XPLMFindSymbol only
+        /// returns a non- NULL pointer.
+        /// </para>
+        /// <para>
+        /// Warning: you should always check the XPLM API version as well as the
+        /// results of XPLMFindSymbol to determine if funtionality is safe to use.
+        /// </para>
+        /// <para>
+        /// To use functionality via XPLMFindSymbol you will need to copy your own
+        /// definitions of the X-Plane API prototypes and cast the returned pointer to
+        /// the correct type.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe void* FindSymbol(in XP.SDK.Utf8String inString)
+        {
+            fixed (byte* inStringPtr = inString)
+                return FindSymbol(inStringPtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// XPLMSetErrorCallback installs an error-reporting callback for your plugin.
         /// Normally the plugin system performs minimum diagnostics to maximize
         /// performance. When you install an error callback, you will receive calls due
@@ -419,6 +550,28 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// This routine outputs a C-style string to the Log.txt file. The file is
+        /// immediately flushed so you will not lose data. (This does cause a
+        /// performance penalty.)
+        /// </para>
+        /// <para>
+        /// Please do *not* leave routine diagnostic logging enabled in your shipping
+        /// plugin. The X-Plane Log file is shared by X-Plane and every plugin in the
+        /// system, and plugins that (when functioning normally) print verbose log
+        /// output make it difficult for developers to find error conditions from other
+        /// parts of the system.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe void DebugString(in XP.SDK.Utf8String inString)
+        {
+            fixed (byte* inStringPtr = inString)
+                DebugString(inStringPtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// This function displays the string in a translucent overlay over the current
         /// display and also speaks the string if text-to-speech is enabled. The string
         /// is spoken asynchronously, this function returns immediately. This function
@@ -444,6 +597,22 @@ namespace XP.SDK.XPLM.Internal
             Span<byte> inStringUtf8 = stackalloc byte[(inString.Length << 1) | 1];
             var inStringPtr = Utils.ToUtf8Unsafe(inString, inStringUtf8);
             SpeakString(inStringPtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
+        /// This function displays the string in a translucent overlay over the current
+        /// display and also speaks the string if text-to-speech is enabled. The string
+        /// is spoken asynchronously, this function returns immediately. This function
+        /// may not speak or print depending on user preferences.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe void SpeakString(in XP.SDK.Utf8String inString)
+        {
+            fixed (byte* inStringPtr = inString)
+                SpeakString(inStringPtr);
         }
 
         
@@ -496,6 +665,20 @@ namespace XP.SDK.XPLM.Internal
             Span<byte> inNameUtf8 = stackalloc byte[(inName.Length << 1) | 1];
             var inNamePtr = Utils.ToUtf8Unsafe(inName, inNameUtf8);
             return FindCommand(inNamePtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
+        /// XPLMFindCommand looks up a command by name, and returns its command
+        /// reference or NULL if the command does not exist.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe CommandRef FindCommand(in XP.SDK.Utf8String inName)
+        {
+            fixed (byte* inNamePtr = inName)
+                return FindCommand(inNamePtr);
         }
 
         
@@ -562,6 +745,22 @@ namespace XP.SDK.XPLM.Internal
             Span<byte> inDescriptionUtf8 = stackalloc byte[(inDescription.Length << 1) | 1];
             var inDescriptionPtr = Utils.ToUtf8Unsafe(inDescription, inDescriptionUtf8);
             return CreateCommand(inNamePtr, inDescriptionPtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
+        /// XPLMCreateCommand creates a new command for a given string. If the command
+        /// already exists, the existing command reference is returned. The description
+        /// may appear in user interface contexts, such as the joystick configuration
+        /// screen.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe CommandRef CreateCommand(in XP.SDK.Utf8String inName, in XP.SDK.Utf8String inDescription)
+        {
+            fixed (byte* inNamePtr = inName, inDescriptionPtr = inDescription)
+                return CreateCommand(inNamePtr, inDescriptionPtr);
         }
 
         

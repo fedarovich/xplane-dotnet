@@ -134,6 +134,39 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// This routine loads an OBJ file and returns a handle to it. If X-Plane has
+        /// already loaded the object, the handle to the existing object is returned.
+        /// Do not assume you will get the same handle back twice, but do make sure to
+        /// call unload once for every load to avoid "leaking" objects. The object will
+        /// be purged from memory when no plugins and no scenery are using it.
+        /// </para>
+        /// <para>
+        /// The path for the object must be relative to the X-System base folder. If
+        /// the path is in the root of the X-System folder you may need to prepend ./
+        /// to it; loading objects in the root of the X-System folder is STRONGLY
+        /// discouraged - your plugin should not dump art resources in the root folder!
+        /// </para>
+        /// <para>
+        /// XPLMLoadObject will return NULL if the object cannot be loaded (either
+        /// because it is not found or the file is misformatted). This routine will
+        /// load any object that can be used in the X-Plane scenery system.
+        /// </para>
+        /// <para>
+        /// It is important that the datarefs an object uses for animation already be
+        /// loaded before you load the object. For this reason it may be necessary to
+        /// defer object loading until the sim has fully started.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe ObjectRef LoadObject(in XP.SDK.Utf8String inPath)
+        {
+            fixed (byte* inPathPtr = inPath)
+                return LoadObject(inPathPtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// This routine loads an object asynchronously; control is returned to you
         /// immediately while X-Plane loads the object. The sim will not stop flying
         /// while the object loads. For large objects, it may be several seconds before
@@ -179,6 +212,32 @@ namespace XP.SDK.XPLM.Internal
             Span<byte> inPathUtf8 = stackalloc byte[(inPath.Length << 1) | 1];
             var inPathPtr = Utils.ToUtf8Unsafe(inPath, inPathUtf8);
             LoadObjectAsync(inPathPtr, inCallback, inRefcon);
+        }
+
+        
+        /// <summary>
+        /// <para>
+        /// This routine loads an object asynchronously; control is returned to you
+        /// immediately while X-Plane loads the object. The sim will not stop flying
+        /// while the object loads. For large objects, it may be several seconds before
+        /// the load finishes.
+        /// </para>
+        /// <para>
+        /// You provide a callback function that is called once the load has completed.
+        /// Note that if the object cannot be loaded, you will not find out until the
+        /// callback function is called with a NULL object handle.
+        /// </para>
+        /// <para>
+        /// There is no way to cancel an asynchronous object load; you must wait for
+        /// the load to complete and then release the object if it is no longer
+        /// desired.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe void LoadObjectAsync(in XP.SDK.Utf8String inPath, delegate* unmanaged[Cdecl]<ObjectRef, void*, void> inCallback, void* inRefcon)
+        {
+            fixed (byte* inPathPtr = inPath)
+                LoadObjectAsync(inPathPtr, inCallback, inRefcon);
         }
 
         
@@ -233,6 +292,28 @@ namespace XP.SDK.XPLM.Internal
             Span<byte> inPathUtf8 = stackalloc byte[(inPath.Length << 1) | 1];
             var inPathPtr = Utils.ToUtf8Unsafe(inPath, inPathUtf8);
             return LookupObjects(inPathPtr, inLatitude, inLongitude, enumerator, @ref);
+        }
+
+        
+        /// <summary>
+        /// <para>
+        /// This routine looks up a virtual path in the library system and returns all
+        /// matching elements. You provide a callback - one virtual path may match many
+        /// objects in the library. XPLMLookupObjects returns the number of objects
+        /// found.
+        /// </para>
+        /// <para>
+        /// The latitude and longitude parameters specify the location the object will
+        /// be used. The library system allows for scenery packages to only provide
+        /// objects to certain local locations. Only objects that are allowed at the
+        /// latitude/longitude you provide will be returned.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe int LookupObjects(in XP.SDK.Utf8String inPath, float inLatitude, float inLongitude, delegate* unmanaged[Cdecl]<byte*, void*, void> enumerator, void* @ref)
+        {
+            fixed (byte* inPathPtr = inPath)
+                return LookupObjects(inPathPtr, inLatitude, inLongitude, enumerator, @ref);
         }
     }
 }

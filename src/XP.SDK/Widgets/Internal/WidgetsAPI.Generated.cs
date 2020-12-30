@@ -93,6 +93,48 @@ namespace XP.SDK.Widgets.Internal
         
         /// <summary>
         /// <para>
+        /// This function creates a new widget and returns the new widget's ID to you.
+        /// If the widget creation fails for some reason, it returns NULL. Widget
+        /// creation will fail either if you pass a bad class ID or if there is not
+        /// adequate memory.
+        /// </para>
+        /// <para>
+        /// Input Parameters:
+        /// </para>
+        /// <para>
+        /// - Top, left, bottom, and right in global screen coordinates defining the
+        /// widget's location on the screen.
+        /// - inVisible is 1 if the widget should be drawn, 0 to start the widget as
+        /// hidden.
+        /// - inDescriptor is a null terminated string that will become the widget's
+        /// descriptor.
+        /// - inIsRoot is 1 if this is going to be a root widget, 0 if it will not be.
+        /// - inContainer is the ID of this widget's container. It must be 0 for a root
+        /// widget. for a non-root widget, pass the widget ID of the widget to place
+        /// this widget within. If this widget is not going to start inside another
+        /// widget, pass 0; this new widget will then just be floating off in space
+        /// (and will not be drawn until it is placed in a widget.
+        /// - inClass is the class of the widget to draw. Use one of the predefined
+        /// class-IDs to create a standard widget.
+        /// </para>
+        /// <para>
+        /// A note on widget embedding: a widget is only called (and will be drawn,
+        /// etc.) if it is placed within a widget that will be called. Root widgets are
+        /// always called. So it is possible to have whole chains of widgets that are
+        /// simply not called. You can preconstruct widget trees and then place them
+        /// into root widgets later to activate them if you wish.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe WidgetID CreateWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, in XP.SDK.Utf8String inDescriptor, int inIsRoot, WidgetID inContainer, WidgetClass inClass)
+        {
+            fixed (byte* inDescriptorPtr = inDescriptor)
+                return CreateWidget(inLeft, inTop, inRight, inBottom, inVisible, inDescriptorPtr, inIsRoot, inContainer, inClass);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// This function is the same as XPCreateWidget except that instead of passing
         /// a class ID, you pass your widget callback function pointer defining the
         /// widget. Use this function to define a custom widget. All parameters are the
@@ -120,6 +162,23 @@ namespace XP.SDK.Widgets.Internal
             Span<byte> inDescriptorUtf8 = stackalloc byte[(inDescriptor.Length << 1) | 1];
             var inDescriptorPtr = Utils.ToUtf8Unsafe(inDescriptor, inDescriptorUtf8);
             return CreateCustomWidget(inLeft, inTop, inRight, inBottom, inVisible, inDescriptorPtr, inIsRoot, inContainer, inCallback);
+        }
+
+        
+        /// <summary>
+        /// <para>
+        /// This function is the same as XPCreateWidget except that instead of passing
+        /// a class ID, you pass your widget callback function pointer defining the
+        /// widget. Use this function to define a custom widget. All parameters are the
+        /// same as XPCreateWidget, except that the widget class has been replaced with
+        /// the widget function.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe WidgetID CreateCustomWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, in XP.SDK.Utf8String inDescriptor, int inIsRoot, WidgetID inContainer, delegate* unmanaged[Cdecl]<WidgetMessage, WidgetID, nint, nint, int> inCallback)
+        {
+            fixed (byte* inDescriptorPtr = inDescriptor)
+                return CreateCustomWidget(inLeft, inTop, inRight, inBottom, inVisible, inDescriptorPtr, inIsRoot, inContainer, inCallback);
         }
 
         
@@ -366,6 +425,25 @@ namespace XP.SDK.Widgets.Internal
             Span<byte> inDescriptorUtf8 = stackalloc byte[(inDescriptor.Length << 1) | 1];
             var inDescriptorPtr = Utils.ToUtf8Unsafe(inDescriptor, inDescriptorUtf8);
             SetWidgetDescriptor(inWidget, inDescriptorPtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
+        /// Every widget has a descriptor, which is a text string. What the text string
+        /// is used for varies from widget to widget; for example, a push button's text
+        /// is its descriptor, a caption shows its descriptor, and a text field's
+        /// descriptor is the text being edited. In other words, the usage for the text
+        /// varies from widget to widget, but this API provides a universal and
+        /// convenient way to get at it. While not all UI widgets need their
+        /// descriptor, many do.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe void SetWidgetDescriptor(WidgetID inWidget, in XP.SDK.Utf8String inDescriptor)
+        {
+            fixed (byte* inDescriptorPtr = inDescriptor)
+                SetWidgetDescriptor(inWidget, inDescriptorPtr);
         }
 
         

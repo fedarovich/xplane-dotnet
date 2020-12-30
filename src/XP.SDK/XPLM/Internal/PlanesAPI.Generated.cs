@@ -38,6 +38,21 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// This routine changes the user's aircraft.  Note that this will reinitialize
+        /// the user to be on the nearest airport's first runway.  Pass in a full path
+        /// (hard drive and everything including the .acf extension) to the .acf file.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe void SetUsersAircraft(in XP.SDK.Utf8String inAircraftPath)
+        {
+            fixed (byte* inAircraftPathPtr = inAircraftPath)
+                SetUsersAircraft(inAircraftPathPtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// This routine places the user at a given airport.  Specify the airport by
         /// its X-Plane airport ID (e.g. 'KBOS').
         /// </para>
@@ -59,6 +74,20 @@ namespace XP.SDK.XPLM.Internal
             Span<byte> inAirportCodeUtf8 = stackalloc byte[(inAirportCode.Length << 1) | 1];
             var inAirportCodePtr = Utils.ToUtf8Unsafe(inAirportCode, inAirportCodeUtf8);
             PlaceUserAtAirport(inAirportCodePtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
+        /// This routine places the user at a given airport.  Specify the airport by
+        /// its X-Plane airport ID (e.g. 'KBOS').
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe void PlaceUserAtAirport(in XP.SDK.Utf8String inAirportCode)
+        {
+            fixed (byte* inAirportCodePtr = inAirportCode)
+                PlaceUserAtAirport(inAirportCodePtr);
         }
 
         
@@ -173,6 +202,22 @@ namespace XP.SDK.XPLM.Internal
             Span<byte> inAircraftPathUtf8 = stackalloc byte[(inAircraftPath.Length << 1) | 1];
             var inAircraftPathPtr = Utils.ToUtf8Unsafe(inAircraftPath, inAircraftPathUtf8);
             SetAircraftModel(inIndex, inAircraftPathPtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
+        /// This routine loads an aircraft model.  It may only be called if you have
+        /// exclusive access to the airplane APIs.  Pass in the path of the model with
+        /// the .acf extension.  The index is zero based, but you may not pass in 0
+        /// (use XPLMSetUsersAircraft to load the user's aircracft).
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe void SetAircraftModel(int inIndex, in XP.SDK.Utf8String inAircraftPath)
+        {
+            fixed (byte* inAircraftPathPtr = inAircraftPath)
+                SetAircraftModel(inIndex, inAircraftPathPtr);
         }
 
         

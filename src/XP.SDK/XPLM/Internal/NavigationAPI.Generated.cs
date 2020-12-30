@@ -135,6 +135,46 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// This routine provides a number of searching capabilities for the nav
+        /// database. XPLMFindNavAid will search through every nav aid whose type is
+        /// within inType (multiple types may be added together) and return any
+        /// nav-aids found based on the following rules:
+        /// </para>
+        /// <para>
+        /// * If inLat and inLon are not NULL, the navaid nearest to that lat/lon will
+        /// be returned, otherwise the last navaid found will be returned.
+        /// </para>
+        /// <para>
+        /// * If inFrequency is not NULL, then any navaids considered must match this
+        /// frequency.  Note that this will screen out radio beacons that do not have
+        /// frequency data published (like inner markers) but not fixes and airports.
+        /// </para>
+        /// <para>
+        /// * If inNameFragment is not NULL, only navaids that contain the fragment in
+        /// their name will be returned.
+        /// </para>
+        /// <para>
+        /// * If inIDFragment is not NULL, only navaids that contain the fragment in
+        /// their IDs will be returned.
+        /// </para>
+        /// <para>
+        /// This routine provides a simple way to do a number of useful searches:
+        /// * Find the nearest navaid on this frequency.
+        /// * Find the nearest airport.
+        /// * Find the VOR whose ID is "KBOS".
+        /// * Find the nearest airport whose name contains "Chicago".
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe NavRef FindNavAid(in XP.SDK.Utf8String inNameFragment, in XP.SDK.Utf8String inIDFragment, float* inLat, float* inLon, int* inFrequency, NavType inType)
+        {
+            fixed (byte* inNameFragmentPtr = inNameFragment, inIDFragmentPtr = inIDFragment)
+                return FindNavAid(inNameFragmentPtr, inIDFragmentPtr, inLat, inLon, inFrequency, inType);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// This routine returns information about a navaid.  Any non-null field is
         /// filled out with information if it is available.
         /// </para>

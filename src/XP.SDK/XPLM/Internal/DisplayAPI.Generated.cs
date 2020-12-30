@@ -491,6 +491,22 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// Sets the name for a window. This only applies to windows that opted-in to
+        /// styling as an X-Plane 11 floating window (i.e., with styling mode
+        /// xplm_WindowDecorationRoundRectangle) when they were created using
+        /// XPLMCreateWindowEx().
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe void SetWindowTitle(WindowID inWindowID, in XP.SDK.Utf8String inWindowTitle)
+        {
+            fixed (byte* inWindowTitlePtr = inWindowTitle)
+                SetWindowTitle(inWindowID, inWindowTitlePtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// Returns a window's reference constant, the unique value you can use for
         /// your own purposes.
         /// </para>
@@ -634,6 +650,24 @@ namespace XP.SDK.XPLM.Internal
             Span<byte> inDescriptionUtf8 = stackalloc byte[(inDescription.Length << 1) | 1];
             var inDescriptionPtr = Utils.ToUtf8Unsafe(inDescription, inDescriptionUtf8);
             return RegisterHotKey(inVirtualKey, inFlags, inDescriptionPtr, inCallback, inRefcon);
+        }
+
+        
+        /// <summary>
+        /// <para>
+        /// This routine registers a hot key.  You specify your preferred key stroke
+        /// virtual key/flag combination, a description of what your callback does (so
+        /// other plug-ins can describe the plug-in to the user for remapping) and a
+        /// callback function and opaque pointer to pass in).  A new hot key ID is
+        /// returned.  During execution, the actual key associated with your hot key
+        /// may change, but you are insulated from this.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, in XP.SDK.Utf8String inDescription, delegate* unmanaged[Cdecl]<void*, void> inCallback, void* inRefcon)
+        {
+            fixed (byte* inDescriptionPtr = inDescription)
+                return RegisterHotKey(inVirtualKey, inFlags, inDescriptionPtr, inCallback, inRefcon);
         }
 
         

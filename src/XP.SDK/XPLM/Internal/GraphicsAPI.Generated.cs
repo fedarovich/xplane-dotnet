@@ -207,5 +207,22 @@ namespace XP.SDK.XPLM.Internal
             var inCharPtr = Utils.ToUtf8Unsafe(inChar, inCharUtf8);
             return MeasureString(inFontID, inCharPtr, inNumChars);
         }
+
+        
+        /// <summary>
+        /// <para>
+        /// This routine returns the width in pixels of a string using a given font.
+        /// The string is passed as a pointer plus length (and does not need to be null
+        /// terminated); this is used to allow for measuring substrings. The return
+        /// value is floating point; it is possible that future font drawing may allow
+        /// for fractional pixels.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe float MeasureString(FontID inFontID, in XP.SDK.Utf8String inChar, int inNumChars)
+        {
+            fixed (byte* inCharPtr = inChar)
+                return MeasureString(inFontID, inCharPtr, inNumChars);
+        }
     }
 }

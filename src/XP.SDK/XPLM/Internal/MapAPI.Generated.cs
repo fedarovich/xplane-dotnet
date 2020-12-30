@@ -83,6 +83,21 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// Returns 1 if the map with the specified identifier already exists in
+        /// X-Plane. In that case, you can safely call XPLMCreateMapLayer() specifying
+        /// that your layer should be added to that map.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe int MapExists(in XP.SDK.Utf8String mapIdentifier)
+        {
+            fixed (byte* mapIdentifierPtr = mapIdentifier)
+                return MapExists(mapIdentifierPtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// Enables plugin-created map layers to draw PNG icons using X-Plane's
         /// built-in icon drawing functionality. Only valid from within an
         /// XPLMIconDrawingCallback_t (but you can request an arbitrary number of icons
@@ -171,6 +186,51 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// Enables plugin-created map layers to draw PNG icons using X-Plane's
+        /// built-in icon drawing functionality. Only valid from within an
+        /// XPLMIconDrawingCallback_t (but you can request an arbitrary number of icons
+        /// to be drawn from within your callback).
+        /// </para>
+        /// <para>
+        /// X-Plane will automatically manage the memory for your texture so that it
+        /// only has to be loaded from disk once as long as you continue drawing it
+        /// per-frame. (When you stop drawing it, the memory may purged in a "garbage
+        /// collection" pass, require a load from disk in the future.)
+        /// </para>
+        /// <para>
+        /// Instead of having X-Plane draw a full PNG, this method allows you to use UV
+        /// coordinates to request a portion of the image to be drawn. This allows you
+        /// to use a single texture load (of an icon sheet, for example) to draw many
+        /// icons. Doing so is much more efficient than drawing a dozen different small
+        /// PNGs.
+        /// </para>
+        /// <para>
+        /// The UV coordinates used here treat the texture you load as being comprised
+        /// of a number of identically sized "cells." You specify the width and height
+        /// in cells (ds and dt, respectively), as well as the coordinates within the
+        /// cell grid for the sub-image you'd like to draw.
+        /// </para>
+        /// <para>
+        /// Note that you can use different ds and dt values in subsequent calls with
+        /// the same texture sheet. This enables you to use icons of different sizes in
+        /// the same sheet if you arrange them properly in the PNG.
+        /// </para>
+        /// <para>
+        /// This function is only valid from within an XPLMIconDrawingCallback_t (but
+        /// you can request an arbitrary number of icons to be drawn from within your
+        /// callback).
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe void DrawMapIconFromSheet(MapLayerID layer, in XP.SDK.Utf8String inPngPath, int s, int t, int ds, int dt, float mapX, float mapY, MapOrientation orientation, float rotationDegrees, float mapWidth)
+        {
+            fixed (byte* inPngPathPtr = inPngPath)
+                DrawMapIconFromSheet(layer, inPngPathPtr, s, t, ds, dt, mapX, mapY, orientation, rotationDegrees, mapWidth);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// Enables plugin-created map layers to draw text labels using X-Plane's
         /// built-in labeling functionality. Only valid from within an
         /// XPLMMapLabelDrawingCallback_f (but you can request an arbitrary number of
@@ -196,6 +256,22 @@ namespace XP.SDK.XPLM.Internal
             Span<byte> inTextUtf8 = stackalloc byte[(inText.Length << 1) | 1];
             var inTextPtr = Utils.ToUtf8Unsafe(inText, inTextUtf8);
             DrawMapLabel(layer, inTextPtr, mapX, mapY, orientation, rotationDegrees);
+        }
+
+        
+        /// <summary>
+        /// <para>
+        /// Enables plugin-created map layers to draw text labels using X-Plane's
+        /// built-in labeling functionality. Only valid from within an
+        /// XPLMMapLabelDrawingCallback_f (but you can request an arbitrary number of
+        /// text labels to be drawn from within your callback).
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe void DrawMapLabel(MapLayerID layer, in XP.SDK.Utf8String inText, float mapX, float mapY, MapOrientation orientation, float rotationDegrees)
+        {
+            fixed (byte* inTextPtr = inText)
+                DrawMapLabel(layer, inTextPtr, mapX, mapY, orientation, rotationDegrees);
         }
 
         

@@ -69,6 +69,21 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// This routine returns the plug-in ID of the plug-in whose file exists at the
+        /// passed in absolute file system path.  XPLM_NO_PLUGIN_ID is returned if the
+        /// path does not point to a currently loaded plug-in.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe PluginID FindPluginByPath(in XP.SDK.Utf8String inPath)
+        {
+            fixed (byte* inPathPtr = inPath)
+                return FindPluginByPath(inPathPtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// This routine returns the plug-in ID of the plug-in whose signature matches
         /// what is passed in or XPLM_NO_PLUGIN_ID if no running plug-in has this
         /// signature.  Signatures are the best way to identify another plug-in as they
@@ -98,6 +113,24 @@ namespace XP.SDK.XPLM.Internal
             Span<byte> inSignatureUtf8 = stackalloc byte[(inSignature.Length << 1) | 1];
             var inSignaturePtr = Utils.ToUtf8Unsafe(inSignature, inSignatureUtf8);
             return FindPluginBySignature(inSignaturePtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
+        /// This routine returns the plug-in ID of the plug-in whose signature matches
+        /// what is passed in or XPLM_NO_PLUGIN_ID if no running plug-in has this
+        /// signature.  Signatures are the best way to identify another plug-in as they
+        /// are independent of the file system path of a plug-in or the human-readable
+        /// plug-in name, and should be unique for all plug-ins.  Use this routine to
+        /// locate another plugin that your plugin interoperates with
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe PluginID FindPluginBySignature(in XP.SDK.Utf8String inSignature)
+        {
+            fixed (byte* inSignaturePtr = inSignature)
+                return FindPluginBySignature(inSignaturePtr);
         }
 
         
@@ -200,6 +233,20 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// This returns 1 if the given installation of X-Plane supports a feature, or
+        /// 0 if it does not.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe int HasFeature(in XP.SDK.Utf8String inFeature)
+        {
+            fixed (byte* inFeaturePtr = inFeature)
+                return HasFeature(inFeaturePtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// This returns 1 if a feature is currently enabled for your plugin, or 0 if
         /// it is not enabled.  It is an error to call this routine with an unsupported
         /// feature.
@@ -228,6 +275,21 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// This returns 1 if a feature is currently enabled for your plugin, or 0 if
+        /// it is not enabled.  It is an error to call this routine with an unsupported
+        /// feature.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe int IsFeatureEnabled(in XP.SDK.Utf8String inFeature)
+        {
+            fixed (byte* inFeaturePtr = inFeature)
+                return IsFeatureEnabled(inFeaturePtr);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// This routine enables or disables a feature for your plugin.  This will
         /// change the running behavior of X-Plane and your plugin in some way,
         /// depending on the feature.
@@ -251,6 +313,21 @@ namespace XP.SDK.XPLM.Internal
             Span<byte> inFeatureUtf8 = stackalloc byte[(inFeature.Length << 1) | 1];
             var inFeaturePtr = Utils.ToUtf8Unsafe(inFeature, inFeatureUtf8);
             EnableFeature(inFeaturePtr, inEnable);
+        }
+
+        
+        /// <summary>
+        /// <para>
+        /// This routine enables or disables a feature for your plugin.  This will
+        /// change the running behavior of X-Plane and your plugin in some way,
+        /// depending on the feature.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe void EnableFeature(in XP.SDK.Utf8String inFeature, int inEnable)
+        {
+            fixed (byte* inFeaturePtr = inFeature)
+                EnableFeature(inFeaturePtr, inEnable);
         }
 
         

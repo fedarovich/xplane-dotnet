@@ -84,6 +84,29 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// This function creates a new menu and returns its ID.  It returns NULL if
+        /// the menu cannot be created.  Pass in a parent menu ID and an item index to
+        /// create a submenu, or NULL for the parent menu to put the menu in the menu
+        /// bar.  The menu's name is only used if the menu is in the menubar.  You also
+        /// pass a handler function and a menu reference value. Pass NULL for the
+        /// handler if you do not need callbacks from the menu (for example, if it only
+        /// contains submenus).
+        /// </para>
+        /// <para>
+        /// Important: you must pass a valid, non-empty menu title even if the menu is
+        /// a submenu where the title is not visible.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe MenuID CreateMenu(in XP.SDK.Utf8String inName, MenuID inParentMenu, int inParentItem, delegate* unmanaged[Cdecl]<void*, void*, void> inHandler, void* inMenuRef)
+        {
+            fixed (byte* inNamePtr = inName)
+                return CreateMenu(inNamePtr, inParentMenu, inParentItem, inHandler, inMenuRef);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// This function destroys a menu that you have created.  Use this to remove a
         /// submenu if necessary.  (Normally this function will not be necessary.)
         /// </para>
@@ -158,6 +181,34 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// This routine appends a new menu item to the bottom of a menu and returns
+        /// its index. Pass in the menu to add the item to, the items name, and a void
+        /// * ref for this item.
+        /// </para>
+        /// <para>
+        /// Returns a negative index if the append failed (due to an invalid parent
+        /// menu argument).
+        /// </para>
+        /// <para>
+        /// Note that all menu indices returned are relative to your plugin's menus
+        /// only; if your plugin creates two sub-menus in the Plugins menu at different
+        /// times, it doesn't matter how many other plugins also create sub-menus of
+        /// Plugins in the intervening time: your sub-menus will be given menu indices
+        /// 0 and 1. (The SDK does some work in the back-end to filter out menus that
+        /// are irrelevant to your plugin in order to deliver this consistency for each
+        /// plugin.)
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe int AppendMenuItem(MenuID inMenu, in XP.SDK.Utf8String inItemName, void* inItemRef, int inDeprecatedAndIgnored)
+        {
+            fixed (byte* inItemNamePtr = inItemName)
+                return AppendMenuItem(inMenu, inItemNamePtr, inItemRef, inDeprecatedAndIgnored);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// Like XPLMAppendMenuItem(), but instead of the new menu item triggering the
         /// XPLMMenuHandler_f of the containiner menu, it will simply execute the
         /// command you pass in. Using a command for your menu item allows the user to
@@ -206,6 +257,31 @@ namespace XP.SDK.XPLM.Internal
         
         /// <summary>
         /// <para>
+        /// Like XPLMAppendMenuItem(), but instead of the new menu item triggering the
+        /// XPLMMenuHandler_f of the containiner menu, it will simply execute the
+        /// command you pass in. Using a command for your menu item allows the user to
+        /// bind a keyboard shortcut to the command and see that shortcut represented
+        /// in the menu.
+        /// </para>
+        /// <para>
+        /// Returns a negative index if the append failed (due to an invalid parent
+        /// menu argument).
+        /// </para>
+        /// <para>
+        /// Like XPLMAppendMenuItem(), all menu indices are relative to your plugin's
+        /// menus only.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe int AppendMenuItemWithCommand(MenuID inMenu, in XP.SDK.Utf8String inItemName, CommandRef inCommandToExecute)
+        {
+            fixed (byte* inItemNamePtr = inItemName)
+                return AppendMenuItemWithCommand(inMenu, inItemNamePtr, inCommandToExecute);
+        }
+
+        
+        /// <summary>
+        /// <para>
         /// This routine adds a separator to the end of a menu.
         /// </para>
         /// <para>
@@ -240,6 +316,20 @@ namespace XP.SDK.XPLM.Internal
             Span<byte> inItemNameUtf8 = stackalloc byte[(inItemName.Length << 1) | 1];
             var inItemNamePtr = Utils.ToUtf8Unsafe(inItemName, inItemNameUtf8);
             SetMenuItemName(inMenu, inIndex, inItemNamePtr, inDeprecatedAndIgnored);
+        }
+
+        
+        /// <summary>
+        /// <para>
+        /// This routine changes the name of an existing menu item.  Pass in the menu
+        /// ID and the index of the menu item.
+        /// </para>
+        /// </summary>
+        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
+        public static unsafe void SetMenuItemName(MenuID inMenu, int inIndex, in XP.SDK.Utf8String inItemName, int inDeprecatedAndIgnored)
+        {
+            fixed (byte* inItemNamePtr = inItemName)
+                SetMenuItemName(inMenu, inIndex, inItemNamePtr, inDeprecatedAndIgnored);
         }
 
         

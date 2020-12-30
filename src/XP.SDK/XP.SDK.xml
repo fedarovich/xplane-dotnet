@@ -1844,6 +1844,42 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.Widgets.Internal.WidgetsAPI.CreateWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,XP.SDK.Utf8String@,System.Int32,XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.WidgetClass)">
+            <summary>
+            <para>
+            This function creates a new widget and returns the new widget's ID to you.
+            If the widget creation fails for some reason, it returns NULL. Widget
+            creation will fail either if you pass a bad class ID or if there is not
+            adequate memory.
+            </para>
+            <para>
+            Input Parameters:
+            </para>
+            <para>
+            - Top, left, bottom, and right in global screen coordinates defining the
+            widget's location on the screen.
+            - inVisible is 1 if the widget should be drawn, 0 to start the widget as
+            hidden.
+            - inDescriptor is a null terminated string that will become the widget's
+            descriptor.
+            - inIsRoot is 1 if this is going to be a root widget, 0 if it will not be.
+            - inContainer is the ID of this widget's container. It must be 0 for a root
+            widget. for a non-root widget, pass the widget ID of the widget to place
+            this widget within. If this widget is not going to start inside another
+            widget, pass 0; this new widget will then just be floating off in space
+            (and will not be drawn until it is placed in a widget.
+            - inClass is the class of the widget to draw. Use one of the predefined
+            class-IDs to create a standard widget.
+            </para>
+            <para>
+            A note on widget embedding: a widget is only called (and will be drawn,
+            etc.) if it is placed within a widget that will be called. Root widgets are
+            always called. So it is possible to have whole chains of widgets that are
+            simply not called. You can preconstruct widget trees and then place them
+            into root widgets later to activate them if you wish.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.Widgets.Internal.WidgetsAPI.CreateCustomWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte*,System.Int32,XP.SDK.Widgets.WidgetID,)">
             <summary>
             <para>
@@ -1856,6 +1892,17 @@
             </summary>
         </member>
         <member name="M:XP.SDK.Widgets.Internal.WidgetsAPI.CreateCustomWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32,XP.SDK.Widgets.WidgetID,)">
+            <summary>
+            <para>
+            This function is the same as XPCreateWidget except that instead of passing
+            a class ID, you pass your widget callback function pointer defining the
+            widget. Use this function to define a custom widget. All parameters are the
+            same as XPCreateWidget, except that the widget class has been replaced with
+            the widget function.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Internal.WidgetsAPI.CreateCustomWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,XP.SDK.Utf8String@,System.Int32,XP.SDK.Widgets.WidgetID,)">
             <summary>
             <para>
             This function is the same as XPCreateWidget except that instead of passing
@@ -2058,6 +2105,19 @@
             </summary>
         </member>
         <member name="M:XP.SDK.Widgets.Internal.WidgetsAPI.SetWidgetDescriptor(XP.SDK.Widgets.WidgetID,System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            <para>
+            Every widget has a descriptor, which is a text string. What the text string
+            is used for varies from widget to widget; for example, a push button's text
+            is its descriptor, a caption shows its descriptor, and a text field's
+            descriptor is the text being edited. In other words, the usage for the text
+            varies from widget to widget, but this API provides a universal and
+            convenient way to get at it. While not all UI widgets need their
+            descriptor, many do.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Widgets.Internal.WidgetsAPI.SetWidgetDescriptor(XP.SDK.Widgets.WidgetID,XP.SDK.Utf8String@)">
             <summary>
             <para>
             Every widget has a descriptor, which is a text string. What the text string
@@ -3965,6 +4025,23 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.DataAccessAPI.FindDataRef(XP.SDK.Utf8String@)">
+            <summary>
+            <para>
+            Given a c-style string that names the data ref, this routine looks up the
+            actual opaque XPLMDataRef that you use to read and write the data. The
+            string names for datarefs are published on the X-Plane SDK web site.
+            </para>
+            <para>
+            This function returns NULL if the data ref cannot be found.
+            </para>
+            <para>
+            NOTE: this function is relatively expensive; save the XPLMDataRef this
+            function returns for future use. Do not look up your data ref by string
+            every time you need to read or write it.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.DataAccessAPI.CanWriteDataRef(XP.SDK.XPLM.DataRef)">
             <summary>
             <para>
@@ -4199,6 +4276,22 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.DataAccessAPI.RegisterDataAccessor(XP.SDK.Utf8String@,XP.SDK.XPLM.DataTypeID,System.Int32,,,,,,,,,,,,,System.Void*,System.Void*)">
+            <summary>
+            <para>
+            This routine creates a new item of data that can be read and written. Pass
+            in the data's full name for searching, the type(s) of the data for
+            accessing, and whether the data can be written to. For each data type you
+            support, pass in a read accessor function and a write accessor function if
+            necessary. Pass NULL for data types you do not support or write accessors
+            if you are read-only.
+            </para>
+            <para>
+            You are returned a data ref for the new item of data created. You can use
+            this data ref to unregister your data later or read or write from it.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.DataAccessAPI.UnregisterDataAccessor(XP.SDK.XPLM.DataRef)">
             <summary>
             <para>
@@ -4255,6 +4348,29 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.DataAccessAPI.ShareData(XP.SDK.Utf8String@,XP.SDK.XPLM.DataTypeID,,System.Void*)">
+            <summary>
+            <para>
+            This routine connects a plug-in to shared data, creating the shared data if
+            necessary. inDataName is a standard path for the data ref, and inDataType
+            specifies the type. This function will create the data if it does not
+            exist. If the data already exists but the type does not match, an error is
+            returned, so it is important that plug-in authors collaborate to establish
+            public standards for shared data.
+            </para>
+            <para>
+            If a notificationFunc is passed in and is not NULL, that notification
+            function will be called whenever the data is modified. The notification
+            refcon will be passed to it. This allows your plug-in to know which shared
+            data was changed if multiple shared data are handled by one callback, or if
+            the plug-in does not use global variables.
+            </para>
+            <para>
+            A one is returned for successfully creating or finding the shared data; a
+            zero if the data already exists but is of the wrong type.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.DataAccessAPI.UnshareData(System.Byte*,XP.SDK.XPLM.DataTypeID,,System.Void*)">
             <summary>
             <para>
@@ -4266,6 +4382,16 @@
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.DataAccessAPI.UnshareData(System.ReadOnlySpan{System.Char}@,XP.SDK.XPLM.DataTypeID,,System.Void*)">
+            <summary>
+            <para>
+            This routine removes your notification function for shared data. Call it
+            when done with the data to stop receiving change notifications. Arguments
+            must match XPLMShareData. The actual memory will not necessarily be freed,
+            since other plug-ins could be using it.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.DataAccessAPI.UnshareData(XP.SDK.Utf8String@,XP.SDK.XPLM.DataTypeID,,System.Void*)">
             <summary>
             <para>
             This routine removes your notification function for shared data. Call it
@@ -4708,6 +4834,16 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.DisplayAPI.SetWindowTitle(XP.SDK.XPLM.WindowID,XP.SDK.Utf8String@)">
+            <summary>
+            <para>
+            Sets the name for a window. This only applies to windows that opted-in to
+            styling as an X-Plane 11 floating window (i.e., with styling mode
+            xplm_WindowDecorationRoundRectangle) when they were created using
+            XPLMCreateWindowEx().
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.DisplayAPI.GetWindowRefCon(XP.SDK.XPLM.WindowID)">
             <summary>
             <para>
@@ -4819,6 +4955,18 @@
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.DisplayAPI.RegisterHotKey(System.Byte,XP.SDK.XPLM.KeyFlags,System.ReadOnlySpan{System.Char}@,,System.Void*)">
+            <summary>
+            <para>
+            This routine registers a hot key.  You specify your preferred key stroke
+            virtual key/flag combination, a description of what your callback does (so
+            other plug-ins can describe the plug-in to the user for remapping) and a
+            callback function and opaque pointer to pass in).  A new hot key ID is
+            returned.  During execution, the actual key associated with your hot key
+            may change, but you are insulated from this.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.DisplayAPI.RegisterHotKey(System.Byte,XP.SDK.XPLM.KeyFlags,XP.SDK.Utf8String@,,System.Void*)">
             <summary>
             <para>
             This routine registers a hot key.  You specify your preferred key stroke
@@ -5196,6 +5344,17 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.GraphicsAPI.MeasureString(XP.SDK.XPLM.FontID,XP.SDK.Utf8String@,System.Int32)">
+            <summary>
+            <para>
+            This routine returns the width in pixels of a string using a given font.
+            The string is passed as a pointer plus length (and does not need to be null
+            terminated); this is used to allow for measuring substrings. The return
+            value is floating point; it is possible that future font drawing may allow
+            for fractional pixels.
+            </para>
+            </summary>
+        </member>
         <member name="T:XP.SDK.XPLM.Internal.HandleCursorCallback">
             <summary>
             <para>
@@ -5457,6 +5616,15 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.MapAPI.MapExists(XP.SDK.Utf8String@)">
+            <summary>
+            <para>
+            Returns 1 if the map with the specified identifier already exists in
+            X-Plane. In that case, you can safely call XPLMCreateMapLayer() specifying
+            that your layer should be added to that map.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.MapAPI.DrawMapIconFromSheet(XP.SDK.XPLM.MapLayerID,System.Byte*,System.Int32,System.Int32,System.Int32,System.Int32,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single,System.Single)">
             <summary>
             <para>
@@ -5535,6 +5703,45 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.MapAPI.DrawMapIconFromSheet(XP.SDK.XPLM.MapLayerID,XP.SDK.Utf8String@,System.Int32,System.Int32,System.Int32,System.Int32,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single,System.Single)">
+            <summary>
+            <para>
+            Enables plugin-created map layers to draw PNG icons using X-Plane's
+            built-in icon drawing functionality. Only valid from within an
+            XPLMIconDrawingCallback_t (but you can request an arbitrary number of icons
+            to be drawn from within your callback).
+            </para>
+            <para>
+            X-Plane will automatically manage the memory for your texture so that it
+            only has to be loaded from disk once as long as you continue drawing it
+            per-frame. (When you stop drawing it, the memory may purged in a "garbage
+            collection" pass, require a load from disk in the future.)
+            </para>
+            <para>
+            Instead of having X-Plane draw a full PNG, this method allows you to use UV
+            coordinates to request a portion of the image to be drawn. This allows you
+            to use a single texture load (of an icon sheet, for example) to draw many
+            icons. Doing so is much more efficient than drawing a dozen different small
+            PNGs.
+            </para>
+            <para>
+            The UV coordinates used here treat the texture you load as being comprised
+            of a number of identically sized "cells." You specify the width and height
+            in cells (ds and dt, respectively), as well as the coordinates within the
+            cell grid for the sub-image you'd like to draw.
+            </para>
+            <para>
+            Note that you can use different ds and dt values in subsequent calls with
+            the same texture sheet. This enables you to use icons of different sizes in
+            the same sheet if you arrange them properly in the PNG.
+            </para>
+            <para>
+            This function is only valid from within an XPLMIconDrawingCallback_t (but
+            you can request an arbitrary number of icons to be drawn from within your
+            callback).
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.MapAPI.DrawMapLabel(XP.SDK.XPLM.MapLayerID,System.Byte*,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single)">
             <summary>
             <para>
@@ -5546,6 +5753,16 @@
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.MapAPI.DrawMapLabel(XP.SDK.XPLM.MapLayerID,System.ReadOnlySpan{System.Char}@,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single)">
+            <summary>
+            <para>
+            Enables plugin-created map layers to draw text labels using X-Plane's
+            built-in labeling functionality. Only valid from within an
+            XPLMMapLabelDrawingCallback_f (but you can request an arbitrary number of
+            text labels to be drawn from within your callback).
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.MapAPI.DrawMapLabel(XP.SDK.XPLM.MapLayerID,XP.SDK.Utf8String@,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single)">
             <summary>
             <para>
             Enables plugin-created map layers to draw text labels using X-Plane's
@@ -5785,6 +6002,23 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.MenusAPI.CreateMenu(XP.SDK.Utf8String@,XP.SDK.XPLM.MenuID,System.Int32,,System.Void*)">
+            <summary>
+            <para>
+            This function creates a new menu and returns its ID.  It returns NULL if
+            the menu cannot be created.  Pass in a parent menu ID and an item index to
+            create a submenu, or NULL for the parent menu to put the menu in the menu
+            bar.  The menu's name is only used if the menu is in the menubar.  You also
+            pass a handler function and a menu reference value. Pass NULL for the
+            handler if you do not need callbacks from the menu (for example, if it only
+            contains submenus).
+            </para>
+            <para>
+            Important: you must pass a valid, non-empty menu title even if the menu is
+            a submenu where the title is not visible.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.MenusAPI.DestroyMenu(XP.SDK.XPLM.MenuID)">
             <summary>
             <para>
@@ -5845,6 +6079,28 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.MenusAPI.AppendMenuItem(XP.SDK.XPLM.MenuID,XP.SDK.Utf8String@,System.Void*,System.Int32)">
+            <summary>
+            <para>
+            This routine appends a new menu item to the bottom of a menu and returns
+            its index. Pass in the menu to add the item to, the items name, and a void
+            * ref for this item.
+            </para>
+            <para>
+            Returns a negative index if the append failed (due to an invalid parent
+            menu argument).
+            </para>
+            <para>
+            Note that all menu indices returned are relative to your plugin's menus
+            only; if your plugin creates two sub-menus in the Plugins menu at different
+            times, it doesn't matter how many other plugins also create sub-menus of
+            Plugins in the intervening time: your sub-menus will be given menu indices
+            0 and 1. (The SDK does some work in the back-end to filter out menus that
+            are irrelevant to your plugin in order to deliver this consistency for each
+            plugin.)
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.MenusAPI.AppendMenuItemWithCommand(XP.SDK.XPLM.MenuID,System.Byte*,XP.SDK.XPLM.CommandRef)">
             <summary>
             <para>
@@ -5883,6 +6139,25 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.MenusAPI.AppendMenuItemWithCommand(XP.SDK.XPLM.MenuID,XP.SDK.Utf8String@,XP.SDK.XPLM.CommandRef)">
+            <summary>
+            <para>
+            Like XPLMAppendMenuItem(), but instead of the new menu item triggering the
+            XPLMMenuHandler_f of the containiner menu, it will simply execute the
+            command you pass in. Using a command for your menu item allows the user to
+            bind a keyboard shortcut to the command and see that shortcut represented
+            in the menu.
+            </para>
+            <para>
+            Returns a negative index if the append failed (due to an invalid parent
+            menu argument).
+            </para>
+            <para>
+            Like XPLMAppendMenuItem(), all menu indices are relative to your plugin's
+            menus only.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.MenusAPI.AppendMenuSeparator(XP.SDK.XPLM.MenuID)">
             <summary>
             <para>
@@ -5903,6 +6178,14 @@
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.MenusAPI.SetMenuItemName(XP.SDK.XPLM.MenuID,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32)">
+            <summary>
+            <para>
+            This routine changes the name of an existing menu item.  Pass in the menu
+            ID and the index of the menu item.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.MenusAPI.SetMenuItemName(XP.SDK.XPLM.MenuID,System.Int32,XP.SDK.Utf8String@,System.Int32)">
             <summary>
             <para>
             This routine changes the name of an existing menu item.  Pass in the menu
@@ -6012,6 +6295,40 @@
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.NavigationAPI.FindNavAid(System.ReadOnlySpan{System.Char}@,System.ReadOnlySpan{System.Char}@,System.Single*,System.Single*,System.Int32*,XP.SDK.XPLM.NavType)">
+            <summary>
+            <para>
+            This routine provides a number of searching capabilities for the nav
+            database. XPLMFindNavAid will search through every nav aid whose type is
+            within inType (multiple types may be added together) and return any
+            nav-aids found based on the following rules:
+            </para>
+            <para>
+            * If inLat and inLon are not NULL, the navaid nearest to that lat/lon will
+            be returned, otherwise the last navaid found will be returned.
+            </para>
+            <para>
+            * If inFrequency is not NULL, then any navaids considered must match this
+            frequency.  Note that this will screen out radio beacons that do not have
+            frequency data published (like inner markers) but not fixes and airports.
+            </para>
+            <para>
+            * If inNameFragment is not NULL, only navaids that contain the fragment in
+            their name will be returned.
+            </para>
+            <para>
+            * If inIDFragment is not NULL, only navaids that contain the fragment in
+            their IDs will be returned.
+            </para>
+            <para>
+            This routine provides a simple way to do a number of useful searches:
+            * Find the nearest navaid on this frequency.
+            * Find the nearest airport.
+            * Find the VOR whose ID is "KBOS".
+            * Find the nearest airport whose name contains "Chicago".
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.NavigationAPI.FindNavAid(XP.SDK.Utf8String@,XP.SDK.Utf8String@,System.Single*,System.Single*,System.Int32*,XP.SDK.XPLM.NavType)">
             <summary>
             <para>
             This routine provides a number of searching capabilities for the nav
@@ -6220,6 +6537,15 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.PlanesAPI.SetUsersAircraft(XP.SDK.Utf8String@)">
+            <summary>
+            <para>
+            This routine changes the user's aircraft.  Note that this will reinitialize
+            the user to be on the nearest airport's first runway.  Pass in a full path
+            (hard drive and everything including the .acf extension) to the .acf file.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.PlanesAPI.PlaceUserAtAirport(System.Byte*)">
             <summary>
             <para>
@@ -6229,6 +6555,14 @@
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.PlanesAPI.PlaceUserAtAirport(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            <para>
+            This routine places the user at a given airport.  Specify the airport by
+            its X-Plane airport ID (e.g. 'KBOS').
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.PlanesAPI.PlaceUserAtAirport(XP.SDK.Utf8String@)">
             <summary>
             <para>
             This routine places the user at a given airport.  Specify the airport by
@@ -6328,6 +6662,16 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.PlanesAPI.SetAircraftModel(System.Int32,XP.SDK.Utf8String@)">
+            <summary>
+            <para>
+            This routine loads an aircraft model.  It may only be called if you have
+            exclusive access to the airplane APIs.  Pass in the path of the model with
+            the .acf extension.  The index is zero based, but you may not pass in 0
+            (use XPLMSetUsersAircraft to load the user's aircracft).
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.PlanesAPI.DisableAIForPlane(System.Int32)">
             <summary>
             <para>
@@ -6388,6 +6732,15 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.PluginAPI.FindPluginByPath(XP.SDK.Utf8String@)">
+            <summary>
+            <para>
+            This routine returns the plug-in ID of the plug-in whose file exists at the
+            passed in absolute file system path.  XPLM_NO_PLUGIN_ID is returned if the
+            path does not point to a currently loaded plug-in.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.PluginAPI.FindPluginBySignature(System.Byte*)">
             <summary>
             <para>
@@ -6401,6 +6754,18 @@
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.PluginAPI.FindPluginBySignature(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            <para>
+            This routine returns the plug-in ID of the plug-in whose signature matches
+            what is passed in or XPLM_NO_PLUGIN_ID if no running plug-in has this
+            signature.  Signatures are the best way to identify another plug-in as they
+            are independent of the file system path of a plug-in or the human-readable
+            plug-in name, and should be unique for all plug-ins.  Use this routine to
+            locate another plugin that your plugin interoperates with
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.PluginAPI.FindPluginBySignature(XP.SDK.Utf8String@)">
             <summary>
             <para>
             This routine returns the plug-in ID of the plug-in whose signature matches
@@ -6487,6 +6852,14 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.PluginAPI.HasFeature(XP.SDK.Utf8String@)">
+            <summary>
+            <para>
+            This returns 1 if the given installation of X-Plane supports a feature, or
+            0 if it does not.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.PluginAPI.IsFeatureEnabled(System.Byte*)">
             <summary>
             <para>
@@ -6505,6 +6878,15 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.PluginAPI.IsFeatureEnabled(XP.SDK.Utf8String@)">
+            <summary>
+            <para>
+            This returns 1 if a feature is currently enabled for your plugin, or 0 if
+            it is not enabled.  It is an error to call this routine with an unsupported
+            feature.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.PluginAPI.EnableFeature(System.Byte*,System.Int32)">
             <summary>
             <para>
@@ -6515,6 +6897,15 @@
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.PluginAPI.EnableFeature(System.ReadOnlySpan{System.Char}@,System.Int32)">
+            <summary>
+            <para>
+            This routine enables or disables a feature for your plugin.  This will
+            change the running behavior of X-Plane and your plugin in some way,
+            depending on the feature.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.PluginAPI.EnableFeature(XP.SDK.Utf8String@,System.Int32)">
             <summary>
             <para>
             This routine enables or disables a feature for your plugin.  This will
@@ -6762,6 +7153,33 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.SceneryAPI.LoadObject(XP.SDK.Utf8String@)">
+            <summary>
+            <para>
+            This routine loads an OBJ file and returns a handle to it. If X-Plane has
+            already loaded the object, the handle to the existing object is returned.
+            Do not assume you will get the same handle back twice, but do make sure to
+            call unload once for every load to avoid "leaking" objects. The object will
+            be purged from memory when no plugins and no scenery are using it.
+            </para>
+            <para>
+            The path for the object must be relative to the X-System base folder. If
+            the path is in the root of the X-System folder you may need to prepend ./
+            to it; loading objects in the root of the X-System folder is STRONGLY
+            discouraged - your plugin should not dump art resources in the root folder!
+            </para>
+            <para>
+            XPLMLoadObject will return NULL if the object cannot be loaded (either
+            because it is not found or the file is misformatted). This routine will
+            load any object that can be used in the X-Plane scenery system.
+            </para>
+            <para>
+            It is important that the datarefs an object uses for animation already be
+            loaded before you load the object. For this reason it may be necessary to
+            defer object loading until the sim has fully started.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.SceneryAPI.LoadObjectAsync(System.Byte*,,System.Void*)">
             <summary>
             <para>
@@ -6783,6 +7201,26 @@
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.SceneryAPI.LoadObjectAsync(System.ReadOnlySpan{System.Char}@,,System.Void*)">
+            <summary>
+            <para>
+            This routine loads an object asynchronously; control is returned to you
+            immediately while X-Plane loads the object. The sim will not stop flying
+            while the object loads. For large objects, it may be several seconds before
+            the load finishes.
+            </para>
+            <para>
+            You provide a callback function that is called once the load has completed.
+            Note that if the object cannot be loaded, you will not find out until the
+            callback function is called with a NULL object handle.
+            </para>
+            <para>
+            There is no way to cancel an asynchronous object load; you must wait for
+            the load to complete and then release the object if it is no longer
+            desired.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.SceneryAPI.LoadObjectAsync(XP.SDK.Utf8String@,,System.Void*)">
             <summary>
             <para>
             This routine loads an object asynchronously; control is returned to you
@@ -6829,6 +7267,22 @@
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.SceneryAPI.LookupObjects(System.ReadOnlySpan{System.Char}@,System.Single,System.Single,,System.Void*)">
+            <summary>
+            <para>
+            This routine looks up a virtual path in the library system and returns all
+            matching elements. You provide a callback - one virtual path may match many
+            objects in the library. XPLMLookupObjects returns the number of objects
+            found.
+            </para>
+            <para>
+            The latitude and longitude parameters specify the location the object will
+            be used. The library system allows for scenery packages to only provide
+            objects to certain local locations. Only objects that are allowed at the
+            latitude/longitude you provide will be returned.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.SceneryAPI.LookupObjects(XP.SDK.Utf8String@,System.Single,System.Single,,System.Void*)">
             <summary>
             <para>
             This routine looks up a virtual path in the library system and returns all
@@ -7027,6 +7481,61 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.GetDirectoryContents(XP.SDK.Utf8String@,System.Int32,System.Byte*,System.Int32,System.Byte**,System.Int32,System.Int32*,System.Int32*)">
+            <summary>
+            <para>
+            This routine returns a list of files in a directory (specified by a full
+            path, no trailing : or
+            \
+            ). The output is returned as a list of NULL
+            terminated strings. An index array (if specified) is filled with pointers
+            into the strings. The last file is indicated by a zero-length string (and
+            NULL in the indices). This routine will return 1 if you had capacity for
+            all files or 0 if you did not. You can also skip a given number of files.
+            </para>
+            <para>
+            * inDirectoryPath - a null terminated C string containing the full path to
+            the directory with no trailing directory char.
+            </para>
+            <para>
+            * inFirstReturn - the zero-based index of the first file in the directory
+            to return. (Usually zero to fetch all in one pass.)
+            </para>
+            <para>
+            * outFileNames - a buffer to receive a series of sequential null
+            terminated C-string file names. A zero-length C string will be appended
+            to the very end.
+            </para>
+            <para>
+            * inFileNameBufSize - the size of the file name buffer in bytes.
+            </para>
+            <para>
+            * outIndices - a pointer to an array of character pointers that will
+            become an index into the directory. The last file will be followed by a
+            NULL value. Pass NULL if you do not want indexing information.
+            </para>
+            <para>
+            * inIndexCount - the max size of the index in entries.
+            </para>
+            <para>
+            * outTotalFiles - if not NULL, this is filled in with the number of files
+            in the directory.
+            </para>
+            <para>
+            * outReturnedFiles - if not NULL, the number of files returned by this
+            iteration.
+            </para>
+            <para>
+            Return value: 1 if all info could be returned, 0 if there was a buffer
+            overrun.
+            </para>
+            <para>
+            WARNING: Before X-Plane 7 this routine did not properly iterate through
+            directories. If X-Plane
+            6 compatibility is needed, use your own code to iterate directories.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.LoadDataFile(XP.SDK.XPLM.DataFileType,System.Byte*)">
             <summary>
             <para>
@@ -7045,6 +7554,15 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.LoadDataFile(XP.SDK.XPLM.DataFileType,XP.SDK.Utf8String@)">
+            <summary>
+            <para>
+            Loads a data file of a given type. Paths must be relative to the X-System
+            folder. To clear the replay, pass a NULL file name (this is only valid with
+            replay movies, not sit files).
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.SaveDataFile(XP.SDK.XPLM.DataFileType,System.Byte*)">
             <summary>
             <para>
@@ -7054,6 +7572,14 @@
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.SaveDataFile(XP.SDK.XPLM.DataFileType,System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            <para>
+            Saves the current situation or replay; paths are relative to the X-System
+            folder.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.SaveDataFile(XP.SDK.XPLM.DataFileType,XP.SDK.Utf8String@)">
             <summary>
             <para>
             Saves the current situation or replay; paths are relative to the X-System
@@ -7152,6 +7678,41 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.FindSymbol(XP.SDK.Utf8String@)">
+            <summary>
+            <para>
+            This routine will attempt to find the symbol passed in the inString
+            parameter. If the symbol is found a pointer the function is returned,
+            othewise the function will return NULL.
+            </para>
+            <para>
+            You can use XPLMFindSymbol to utilize newer SDK API features without
+            requiring newer versions of the SDK (and X-Plane) as your minimum X-Plane
+            version as follows:
+            </para>
+            <para>
+            * Define the XPLMnnn macro to the minimum required XPLM version you will
+            ship with (e.g. XPLM210 for X-Plane 10 compatibility).
+            </para>
+            <para>
+            * Use XPLMGetVersions and XPLMFindSymbol to detect that the host sim is
+            new enough to use new functions and resolve function pointers.
+            </para>
+            <para>
+            * Conditionally use the new functions if and only if XPLMFindSymbol only
+            returns a non- NULL pointer.
+            </para>
+            <para>
+            Warning: you should always check the XPLM API version as well as the
+            results of XPLMFindSymbol to determine if funtionality is safe to use.
+            </para>
+            <para>
+            To use functionality via XPLMFindSymbol you will need to copy your own
+            definitions of the X-Plane API prototypes and cast the returned pointer to
+            the correct type.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.SetErrorCallback()">
             <summary>
             <para>
@@ -7213,6 +7774,22 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.DebugString(XP.SDK.Utf8String@)">
+            <summary>
+            <para>
+            This routine outputs a C-style string to the Log.txt file. The file is
+            immediately flushed so you will not lose data. (This does cause a
+            performance penalty.)
+            </para>
+            <para>
+            Please do *not* leave routine diagnostic logging enabled in your shipping
+            plugin. The X-Plane Log file is shared by X-Plane and every plugin in the
+            system, and plugins that (when functioning normally) print verbose log
+            output make it difficult for developers to find error conditions from other
+            parts of the system.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.SpeakString(System.Byte*)">
             <summary>
             <para>
@@ -7224,6 +7801,16 @@
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.SpeakString(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            <para>
+            This function displays the string in a translucent overlay over the current
+            display and also speaks the string if text-to-speech is enabled. The string
+            is spoken asynchronously, this function returns immediately. This function
+            may not speak or print depending on user preferences.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.SpeakString(XP.SDK.Utf8String@)">
             <summary>
             <para>
             This function displays the string in a translucent overlay over the current
@@ -7271,6 +7858,14 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.FindCommand(XP.SDK.Utf8String@)">
+            <summary>
+            <para>
+            XPLMFindCommand looks up a command by name, and returns its command
+            reference or NULL if the command does not exist.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.CommandBegin(XP.SDK.XPLM.CommandRef)">
             <summary>
             <para>
@@ -7310,6 +7905,16 @@
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.CreateCommand(System.ReadOnlySpan{System.Char}@,System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            <para>
+            XPLMCreateCommand creates a new command for a given string. If the command
+            already exists, the existing command reference is returned. The description
+            may appear in user interface contexts, such as the joystick configuration
+            screen.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Internal.UtilitiesAPI.CreateCommand(XP.SDK.Utf8String@,XP.SDK.Utf8String@)">
             <summary>
             <para>
             XPLMCreateCommand creates a new command for a given string. If the command

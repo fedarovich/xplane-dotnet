@@ -20,6 +20,7 @@ namespace BindingsGenerator
         internal static readonly NameSyntax InteropServices = BuildQualifiedName("System.Runtime.InteropServices");
 
         internal static readonly NameSyntax IntPtrName = IdentifierName(nameof(IntPtr));
+        internal static readonly NameSyntax Utf8StringName = BuildQualifiedName("XP.SDK.Utf8String");
 
         internal static readonly IReadOnlyCollection<string> Keywords;
 

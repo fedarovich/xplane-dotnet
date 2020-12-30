@@ -89,7 +89,7 @@ namespace BindingsGenerator
             {
                 method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
                     .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.ExternKeyword))
-                    .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, false, true)).ToArray())
+                    .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, ConstCharPtrStyle.Pointer, true)).ToArray())
                     .AddDllImport(cppFunction.Name)
                     .AddUnsafeIfNeeded()
                     .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
@@ -108,7 +108,7 @@ namespace BindingsGenerator
             {
                 method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
                     .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.ExternKeyword))
-                    .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, false)).ToArray())
+                    .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, ConstCharPtrStyle.Pointer)).ToArray())
                     .AddDllImport(cppFunction.Name)
                     .AddUnsafeIfNeeded()
                     .WithSemicolonToken(Token(SyntaxKind.SemicolonToken));
@@ -121,10 +121,18 @@ namespace BindingsGenerator
             {
                 method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
                     .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.UnsafeKeyword))
-                    .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, true, true)).ToArray())
+                    .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, ConstCharPtrStyle.CharSpan, true)).ToArray())
                     .AddSkipLocalsInitAttribute()
                     .AddAggressiveInlining()
                     .WithBody(Block(BuildStringBody(cppFunction, returnTypeInfo)));
+                method = method.AddDocumentationComments(cppFunction.Comment, cppFunction.Name);
+                yield return method;
+
+                method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
+                    .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.UnsafeKeyword))
+                    .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, ConstCharPtrStyle.Utf8String, true)).ToArray())
+                    .AddAggressiveInlining()
+                    .WithBody(Block(BuildUtf8StringBody(cppFunction, returnTypeInfo)));
                 method = method.AddDocumentationComments(cppFunction.Comment, cppFunction.Name);
                 yield return method;
             }
@@ -145,17 +153,25 @@ namespace BindingsGenerator
             return false;
         }
 
-        private ParameterSyntax BuildParameter(CppParameter cppParameter, bool convertConstCharPtr, bool useFunctionPointers = false)
+        private ParameterSyntax BuildParameter(CppParameter cppParameter, ConstCharPtrStyle constCharPtrStyle, bool useFunctionPointers = false)
         {
             var name = Identifier(GetManagedName(cppParameter.Name));
 
             if (TypeMap.TryResolveType(cppParameter.Type, out var typeInfo))
             {
-                if (convertConstCharPtr && typeInfo.CppType.IsConstCharPtr())
+                if (typeInfo.CppType.IsConstCharPtr())
                 {
-                    return Parameter(name)
-                        .WithType(SyntaxBuilder.BuildReadOnlySpanName(SyntaxKind.CharKeyword))
-                        .AddModifiers(Token(SyntaxKind.InKeyword));
+                    switch (constCharPtrStyle)
+                    {
+                        case ConstCharPtrStyle.CharSpan:
+                            return Parameter(name)
+                                .WithType(SyntaxBuilder.BuildReadOnlySpanName(SyntaxKind.CharKeyword))
+                                .AddModifiers(Token(SyntaxKind.InKeyword));
+                        case ConstCharPtrStyle.Utf8String:
+                            return Parameter(name)
+                                .WithType(SyntaxBuilder.Utf8StringName)
+                                .AddModifiers(Token(SyntaxKind.InKeyword));
+                    }
                 }
 
                 if (useFunctionPointers && typeInfo.IsFunction)
@@ -262,6 +278,42 @@ namespace BindingsGenerator
             }
         }
 
+        private IEnumerable<StatementSyntax> BuildUtf8StringBody(CppFunction cppFunction, TypeInfo returnTypeInfo)
+        {
+            var call =
+                InvocationExpression(IdentifierName(GetManagedName(cppFunction.Name)))
+                    .AddArgumentListArguments(cppFunction.Parameters.Select(BuildArgument).ToArray());
+
+            var fixedStatement = FixedStatement(
+                VariableDeclaration(PointerType(PredefinedType(Token(SyntaxKind.ByteKeyword))))
+                    .AddVariables(GetStringVariables().ToArray()),
+                returnTypeInfo.IsVoid ? ExpressionStatement(call) : ReturnStatement(call)
+            );
+
+            yield return fixedStatement;
+            
+            IEnumerable<VariableDeclaratorSyntax> GetStringVariables()
+            {
+                foreach (var cppParameter in cppFunction.Parameters.Where(p => p.Type.IsConstCharPtr()))
+                {
+                    var paramName = GetManagedName(cppParameter.Name);
+                    yield return VariableDeclarator(paramName + "Ptr")
+                        .WithInitializer(EqualsValueClause(IdentifierName(paramName)));
+                }
+            }
+
+            ArgumentSyntax BuildArgument(CppParameter cppParameter)
+            {
+                var name = GetManagedName(cppParameter.Name);
+                if (cppParameter.Type.IsConstCharPtr())
+                {
+                    name += "Ptr";
+                }
+
+                return Argument(IdentifierName(name));
+            }
+        }
+
         protected override string GetRelativeNamespace(CppFunction cppElement) => $"{base.GetRelativeNamespace(cppElement)}.Internal";
 
         protected override string GetNativeName(CppFunction cppFunction) => cppFunction.Name;
@@ -282,6 +334,13 @@ namespace BindingsGenerator
             var file = Path.GetFileNameWithoutExtension(cppFunction.Span.Start.File);
             var name = GetManagedName(file);
             return name + "API";
+        }
+
+        private enum ConstCharPtrStyle : byte
+        {
+            Pointer = 0,
+            CharSpan = 1,
+            Utf8String = 2
         }
     }
 }
