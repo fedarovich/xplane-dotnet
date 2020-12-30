@@ -18,8 +18,10 @@ namespace XP.SDK.Analyzers
 
         public const string LiteralProperty = "Literal";
         public const string Utf8AttributeProperty = "Utf8Attribute";
+        public const string Utf8StringTypeProperty = "Utf8String";
+        public const string ParameterNameProperty = "ParameterName";
 
-        private static readonly DiagnosticDescriptor Rule8001 = new DiagnosticDescriptor(
+        private static readonly DiagnosticDescriptor Rule8001 = new (
             Rule8001Id,
             "The method can be converted to UTF-8 string literal method",
             "Convert method to UTF-8 string literal method",
@@ -28,7 +30,7 @@ namespace XP.SDK.Analyzers
             true,
             "UTF-8 string literal partial methods allows you to create UTF-8 strings without additional encoding and memory allocations.");
         
-        private static readonly DiagnosticDescriptor Rule8002 = new DiagnosticDescriptor(
+        private static readonly DiagnosticDescriptor Rule8002 = new (
             Rule8002Id,
             "UTF-8 string literal method should be used for better performance",
             "Use UTF-8 string literal method instead",
@@ -93,11 +95,19 @@ namespace XP.SDK.Analyzers
         {
             var invocationExpr = (InvocationExpressionSyntax)context.Node;
 
+            if (context.Compilation.GetTypeByMetadataName("XP.SDK.Utf8StringLiteralAttribute") is not { } utf8StringLiteralAttributeSymbol)
+                return;
+
+            if (context.Compilation.GetTypeByMetadataName("XP.SDK.Utf8String") is not { } utf8StringSymbol)
+                return;
+
             var literal = GetUtf8StringLiteral(context, invocationExpr);
             if (literal.HasValue)
             {
                 var properties = ImmutableDictionary<string, string>.Empty
-                    .Add(LiteralProperty, literal.Value);
+                    .Add(LiteralProperty, literal.Value)
+                    .Add(Utf8AttributeProperty, utf8StringLiteralAttributeSymbol.ToMinimalDisplayString(context.SemanticModel, invocationExpr.SpanStart))
+                    .Add(Utf8StringTypeProperty, utf8StringSymbol.ToMinimalDisplayString(context.SemanticModel, invocationExpr.SpanStart));
                 
                 var diagnostic = Diagnostic.Create(Rule8002, invocationExpr.GetLocation(), properties);
                 context.ReportDiagnostic(diagnostic);

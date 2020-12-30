@@ -1,7 +1,6 @@
 ﻿#nullable enable
 using System;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace XP.SDK
@@ -12,7 +11,16 @@ namespace XP.SDK
     public readonly ref struct Utf8String
     {
         private static readonly UTF8Encoding UTF8 = new (false);
-        
+
+        /// <summary>
+        /// Gets the empty UTF-8 string.
+        /// </summary>
+        public static Utf8String Empty
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => new Utf8String(new byte[] {0}, 0);
+        }
+
         /// <summary>
         /// Gets the underlying span.
         /// </summary>
@@ -121,7 +129,7 @@ namespace XP.SDK
         /// <summary>
         /// Converts the <see cref="Utf8String"/> to <see cref="string"/>.
         /// </summary>
-        public static implicit operator string?(in Utf8String str) => str.ToString();
+        public static explicit operator string?(in Utf8String str) => str.ToString();
 
         /// <summary>
         /// Returns a value indicating whether a specified substring occurs within this string.

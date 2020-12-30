@@ -426,7 +426,7 @@ namespace XP.SDK
         /// <remarks>
         /// It is not possible to modify the string and the builder after this method is called.
         /// </remarks>
-        public Utf8String Complete()
+        public Utf8String Build()
         {
             BufferWriter.Write(new [] { (byte) 0 });
             BufferWriter.Complete();

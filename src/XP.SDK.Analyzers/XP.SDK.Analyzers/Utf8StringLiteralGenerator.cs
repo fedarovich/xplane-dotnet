@@ -10,7 +10,6 @@ using System.Xml.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 
 namespace XP.SDK.Analyzers
 {
@@ -142,6 +141,7 @@ namespace XP.SDK.Analyzers
                         literalInfo.Literal != null
                             ? "&quot;" + new XText(literalInfo.Literal) + "&quot;"
                             : "<see langword=\"null\" />");
+                    writer.WriteLine("[global::System.Runtime.CompilerServices.MethodImplAttribute(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]");
                     writer.Write("{0} {1}{2}{3}{4}partial {5} {6}() => ",
                         AccessibilityToString(literalInfo.Accessibility),
                         literalInfo.Modifiers.HasFlag(Modifiers.Static) ? "static " : string.Empty,
@@ -151,7 +151,7 @@ namespace XP.SDK.Analyzers
                         utf8StringSymbolDisplayString,
                         literalInfo.Name);
                     
-                    if (literalInfo.Literal != null)
+                    if (!string.IsNullOrEmpty(literalInfo.Literal))
                     {
                         writer.Write("new {0}(new byte[] {{ ", utf8StringSymbolDisplayString);
 
@@ -162,6 +162,10 @@ namespace XP.SDK.Analyzers
                         }
 
                         writer.WriteLine("0x00 }}, {0});", bytes.Length);
+                    }
+                    else if (literalInfo.Literal != null)
+                    {
+                        writer.WriteLine("global::XP.SDK.Utf8String.Empty;");
                     }
                     else
                     {

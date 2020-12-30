@@ -268,7 +268,17 @@ namespace XP.SDK.XPLM
         /// To clear the replay, pass <see langword="null"/> or <see langword="default"/> as the <paramref name="path"/>
         /// (this is only valid with replay movies, not sit files).
         /// </summary>
-        public static int LoadDataFile(DataFileType fileType, in ReadOnlySpan<char> path = default)
+        public static int LoadDataFile(DataFileType fileType, in ReadOnlySpan<char> path)
+        {
+            return UtilitiesAPI.LoadDataFile(fileType, path);
+        }
+
+        /// <summary>
+        /// Loads a data file of a given type. Paths must be relative to the X-System folder.
+        /// To clear the replay, pass <see langword="null"/> or <see langword="default"/> as the <paramref name="path"/>
+        /// (this is only valid with replay movies, not sit files).
+        /// </summary>
+        public static int LoadDataFile(DataFileType fileType, in Utf8String path = default)
         {
             return UtilitiesAPI.LoadDataFile(fileType, path);
         }
@@ -277,6 +287,14 @@ namespace XP.SDK.XPLM
         /// Saves the current situation or replay; paths are relative to the X-System folder.
         /// </summary>
         public static int SaveDataFile(DataFileType fileType, in ReadOnlySpan<char> path)
+        {
+            return UtilitiesAPI.SaveDataFile(fileType, path);
+        }
+
+        /// <summary>
+        /// Saves the current situation or replay; paths are relative to the X-System folder.
+        /// </summary>
+        public static int SaveDataFile(DataFileType fileType, in Utf8String path)
         {
             return UtilitiesAPI.SaveDataFile(fileType, path);
         }
@@ -342,9 +360,29 @@ namespace XP.SDK.XPLM
             /// For most cases you should use <seealso cref="Debug.Write"/> which is no-op in Release builds.
             /// </para>
             /// </remarks>
-            /// <seealso cref="WriteLine"/>
             /// <seealso cref="Debug"/>
             public static void Write(in ReadOnlySpan<char> str)
+            {
+                UtilitiesAPI.DebugString(str);
+            }
+
+            /// <summary>
+            /// This routine outputs a string to the Log.txt file.
+            /// The file is immediately flushed so you will not lose data. (This does cause a performance penalty.)
+            /// </summary>
+            /// <remarks>
+            /// <para>
+            /// Please do not leave routine diagnostic logging enabled in your shipping plugin.
+            /// The X-Plane Log file is shared by X-Plane and every plugin in the system,
+            /// and plugins that (when functioning normally) print verbose log output make it difficult for developers
+            /// to find error conditions from other parts of the system.
+            /// </para>
+            /// <para>
+            /// For most cases you should use <seealso cref="Debug.Write"/> which is no-op in Release builds.
+            /// </para>
+            /// </remarks>
+            /// <seealso cref="Debug"/>
+            public static void Write(in Utf8String str)
             {
                 UtilitiesAPI.DebugString(str);
             }
@@ -364,17 +402,40 @@ namespace XP.SDK.XPLM
             /// For most cases you should use <seealso cref="Debug.WriteLine"/> which is no-op in Release builds.
             /// </para>
             /// </remarks>
-            /// <seealso cref="Write"/>
             /// <seealso cref="Debug"/>
+            [SkipLocalsInit]
             public static unsafe void WriteLine(in ReadOnlySpan<char> str)
             {
-                IL.DeclareLocals(false);
                 Span<byte> inStringUtf8 = stackalloc byte[(str.Length << 1) + 3];
                 var strPtr = Utils.ToUtf8Unsafe(str, inStringUtf8, out int count);
                 // TODO: Check whether we have to use \r\n on Windows.
                 strPtr[count] = (byte) '\n';
                 strPtr[count + 1] = 0;
                 UtilitiesAPI.DebugString(strPtr);
+            }
+
+            /// <summary>
+            /// This routine outputs a string to the Log.txt file.
+            /// The file is immediately flushed so you will not lose data. (This does cause a performance penalty.)
+            /// </summary>
+            /// <remarks>
+            /// <para>
+            /// Please do not leave routine diagnostic logging enabled in your shipping plugin.
+            /// The X-Plane Log file is shared by X-Plane and every plugin in the system,
+            /// and plugins that (when functioning normally) print verbose log output make it difficult for developers
+            /// to find error conditions from other parts of the system.
+            /// </para>
+            /// <para>
+            /// For most cases you should use <seealso cref="Debug.WriteLine"/> which is no-op in Release builds.
+            /// </para>
+            /// </remarks>
+            /// <seealso cref="Debug"/>
+            public static void WriteLine(in Utf8String str)
+            {
+                using var builder = Utf8StringBuilderFactory.SharedPooled.CreateBuilder(str.Length + 3);
+                builder.Append(str);
+                builder.AppendLine();
+                UtilitiesAPI.DebugString(builder.Build());
             }
         }
 

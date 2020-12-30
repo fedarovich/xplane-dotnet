@@ -352,6 +352,11 @@
             Represents null-terminated C-style string in UTF-8 encoding.
             </summary>
         </member>
+        <member name="P:XP.SDK.Utf8String.Empty">
+            <summary>
+            Gets the empty UTF-8 string.
+            </summary>
+        </member>
         <member name="P:XP.SDK.Utf8String.Data">
             <summary>
             Gets the underlying span.
@@ -424,7 +429,7 @@
             It can be used for pinning and is required to support the use of span within a fixed statement.
             </summary>
         </member>
-        <member name="M:XP.SDK.Utf8String.op_Implicit(XP.SDK.Utf8String@)~System.String">
+        <member name="M:XP.SDK.Utf8String.op_Explicit(XP.SDK.Utf8String@)~System.String">
             <summary>
             Converts the <see cref="T:XP.SDK.Utf8String"/> to <see cref="T:System.String"/>.
             </summary>
@@ -630,7 +635,7 @@
             <param name="value">The value to append.</param>
             <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.UInt64,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
         </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Complete">
+        <member name="M:XP.SDK.Utf8StringBuilder.Build">
             <summary>
             Completes building of the UTF-8 string and returns the built string.
             </summary>
@@ -699,6 +704,16 @@
             <param name="disposePool">
             The value indicating whether the <paramref name="memoryPool"/> must be disposed while disposing this factory.
             </param>
+        </member>
+        <member name="P:XP.SDK.Utf8StringBuilderFactory.Shared">
+            <summary>
+            Gets the shared instance of <see cref="T:XP.SDK.Utf8StringBuilderFactory"/> that will use a new managed array for each builder.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Utf8StringBuilderFactory.SharedPooled">
+            <summary>
+            Gets the shared instance of <see cref="T:XP.SDK.Utf8StringBuilderFactory"/> that will use managed arrays taken from the <see cref="P:System.Buffers.ArrayPool`1.Shared"/> for each builder.
+            </summary>
         </member>
         <member name="M:XP.SDK.Utf8StringBuilderFactory.CreateBuilder(System.Int32)">
             <summary>
@@ -9061,7 +9076,19 @@
             (this is only valid with replay movies, not sit files).
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.XPlane.LoadDataFile(XP.SDK.XPLM.DataFileType,XP.SDK.Utf8String@)">
+            <summary>
+            Loads a data file of a given type. Paths must be relative to the X-System folder.
+            To clear the replay, pass <see langword="null"/> or <see langword="default"/> as the <paramref name="path"/>
+            (this is only valid with replay movies, not sit files).
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.XPlane.SaveDataFile(XP.SDK.XPLM.DataFileType,System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            Saves the current situation or replay; paths are relative to the X-System folder.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.SaveDataFile(XP.SDK.XPLM.DataFileType,XP.SDK.Utf8String@)">
             <summary>
             Saves the current situation or replay; paths are relative to the X-System folder.
             </summary>
@@ -9117,7 +9144,24 @@
             For most cases you should use <seealso cref="M:XP.SDK.XPLM.XPlane.Debug.Write(System.ReadOnlySpan{System.Char}@)"/> which is no-op in Release builds.
             </para>
             </remarks>
-            <seealso cref="M:XP.SDK.XPLM.XPlane.Trace.WriteLine(System.ReadOnlySpan{System.Char}@)"/>
+            <seealso cref="T:XP.SDK.XPLM.XPlane.Debug"/>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.Trace.Write(XP.SDK.Utf8String@)">
+            <summary>
+            This routine outputs a string to the Log.txt file.
+            The file is immediately flushed so you will not lose data. (This does cause a performance penalty.)
+            </summary>
+            <remarks>
+            <para>
+            Please do not leave routine diagnostic logging enabled in your shipping plugin.
+            The X-Plane Log file is shared by X-Plane and every plugin in the system,
+            and plugins that (when functioning normally) print verbose log output make it difficult for developers
+            to find error conditions from other parts of the system.
+            </para>
+            <para>
+            For most cases you should use <seealso cref="M:XP.SDK.XPLM.XPlane.Debug.Write(System.ReadOnlySpan{System.Char}@)"/> which is no-op in Release builds.
+            </para>
+            </remarks>
             <seealso cref="T:XP.SDK.XPLM.XPlane.Debug"/>
         </member>
         <member name="M:XP.SDK.XPLM.XPlane.Trace.WriteLine(System.ReadOnlySpan{System.Char}@)">
@@ -9136,7 +9180,24 @@
             For most cases you should use <seealso cref="M:XP.SDK.XPLM.XPlane.Debug.WriteLine(System.ReadOnlySpan{System.Char}@)"/> which is no-op in Release builds.
             </para>
             </remarks>
-            <seealso cref="M:XP.SDK.XPLM.XPlane.Trace.Write(System.ReadOnlySpan{System.Char}@)"/>
+            <seealso cref="T:XP.SDK.XPLM.XPlane.Debug"/>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.Trace.WriteLine(XP.SDK.Utf8String@)">
+            <summary>
+            This routine outputs a string to the Log.txt file.
+            The file is immediately flushed so you will not lose data. (This does cause a performance penalty.)
+            </summary>
+            <remarks>
+            <para>
+            Please do not leave routine diagnostic logging enabled in your shipping plugin.
+            The X-Plane Log file is shared by X-Plane and every plugin in the system,
+            and plugins that (when functioning normally) print verbose log output make it difficult for developers
+            to find error conditions from other parts of the system.
+            </para>
+            <para>
+            For most cases you should use <seealso cref="M:XP.SDK.XPLM.XPlane.Debug.WriteLine(System.ReadOnlySpan{System.Char}@)"/> which is no-op in Release builds.
+            </para>
+            </remarks>
             <seealso cref="T:XP.SDK.XPLM.XPlane.Debug"/>
         </member>
         <member name="T:XP.SDK.XPLM.XPlane.Debug">

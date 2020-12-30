@@ -29,7 +29,7 @@ namespace XP.SDK
 
         private readonly object _pool;
         private readonly bool _disposePool;
-
+        
         /// <summary>
         /// Initializes a new instance of <see cref="Utf8StringBuilderFactory"/> that will use a new managed array for each builder.
         /// </summary>
@@ -73,6 +73,16 @@ namespace XP.SDK
         }
 
         /// <summary>
+        /// Gets the shared instance of <see cref="Utf8StringBuilderFactory"/> that will use a new managed array for each builder.
+        /// </summary>
+        public static Utf8StringBuilderFactory Shared => SharedHolder.Instance;
+
+        /// <summary>
+        /// Gets the shared instance of <see cref="Utf8StringBuilderFactory"/> that will use managed arrays taken from the <see cref="ArrayPool{T}.Shared"/> for each builder.
+        /// </summary>
+        public static Utf8StringBuilderFactory SharedPooled => SharedPooledHolder.Instance;
+        
+        /// <summary>
         /// Creates a new <see cref="Utf8StringBuilder"/> with the specified initial capacity.
         /// </summary>
         /// <param name="initialCapacity">The initial buffer capacity of the string builder.</param>
@@ -98,6 +108,20 @@ namespace XP.SDK
         {
             if (_disposePool && _pool is IDisposable disposable)
                 disposable.Dispose();
+        }
+
+        private static class SharedHolder
+        {
+            internal static readonly Utf8StringBuilderFactory Instance;
+
+            static SharedHolder() => Instance = new Utf8StringBuilderFactory();
+        }
+
+        private static class SharedPooledHolder
+        {
+            internal static readonly Utf8StringBuilderFactory Instance;
+
+            static SharedPooledHolder() => Instance = new Utf8StringBuilderFactory(ArrayPool<byte>.Shared);
         }
     }
 }
