@@ -1,5 +1,5 @@
 ﻿using System;
-using XP.SDK.Widgets.Internal;
+using XP.SDK.Widgets.Interop;
 using XP.SDK.XPLM;
 
 namespace XP.SDK.Widgets

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using InlineIL;
-using XP.SDK.XPLM.Internal;
+using XP.SDK.XPLM.Interop;
 
 namespace XP.SDK.XPLM
 {

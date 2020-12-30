@@ -314,7 +314,7 @@ namespace BindingsGenerator
             }
         }
 
-        protected override string GetRelativeNamespace(CppFunction cppElement) => $"{base.GetRelativeNamespace(cppElement)}.Internal";
+        protected override string GetRelativeNamespace(CppFunction cppElement) => $"{base.GetRelativeNamespace(cppElement)}.Interop";
 
         protected override string GetNativeName(CppFunction cppFunction) => cppFunction.Name;
 

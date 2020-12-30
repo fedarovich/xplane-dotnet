@@ -1,7 +1,7 @@
 ﻿#nullable enable
 using System;
 using System.Runtime.CompilerServices;
-using XP.SDK.Widgets.Internal;
+using XP.SDK.Widgets.Interop;
 using XP.SDK.XPLM;
 
 namespace XP.SDK.Widgets

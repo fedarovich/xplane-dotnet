@@ -8,6 +8,7 @@ using System.Runtime.Loader;
 using System.Text.Unicode;
 using XP.SDK;
 using XP.SDK.XPLM;
+using XP.SDK.XPLM.Interop;
 
 namespace XP.Proxy
 {
@@ -41,8 +42,8 @@ namespace XP.Proxy
                 {
                     return name switch
                     {
-                        SDK.XPLM.Internal.Lib.Name => NativeLibrary.TryLoad(Path.Combine(startupPath!, XPLMPath), out var handle) ? handle : default,
-                        SDK.Widgets.Internal.Lib.Name => NativeLibrary.TryLoad(Path.Combine(startupPath!, XPWidgetsPath), out var handle) ? handle : default,
+                        Lib.Name => NativeLibrary.TryLoad(Path.Combine(startupPath!, XPLMPath), out var handle) ? handle : default,
+                        SDK.Widgets.Interop.Lib.Name => NativeLibrary.TryLoad(Path.Combine(startupPath!, XPWidgetsPath), out var handle) ? handle : default,
                         _ => default
                     };
                 });
@@ -93,10 +94,10 @@ namespace XP.Proxy
                     Log($"Failed to instantiate the plugin of type {attr.PluginType}.");
                     return 0;
                 }
-                
-                _plugin.GetName().CopyTo(outName);
-                _plugin.GetSignature().CopyTo(outSig);
-                _plugin.GetDescription().CopyTo(outDesc);
+
+                CopyChecked(_plugin.GetName(), outName);
+                CopyChecked(_plugin.GetSignature(), outSig);
+                CopyChecked(_plugin.GetDescription(), outDesc);
 
                 return _plugin.Start() ? 1 : 0;
             }
@@ -105,6 +106,14 @@ namespace XP.Proxy
                 Log(ex.ToString());
                 Unload();
                 return 0;
+            }
+
+            static void CopyChecked(in Utf8String str, byte* destination, int maxLength = 255)
+            {
+                if (str.Length > maxLength)
+                    throw new ArgumentException($"The string length must not exceed {maxLength} characters.");
+
+                str.CopyTo(destination);
             }
         }
 

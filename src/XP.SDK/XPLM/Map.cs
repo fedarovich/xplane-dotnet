@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text.Unicode;
-using XP.SDK.XPLM.Internal;
+using XP.SDK.XPLM.Interop;
 
 namespace XP.SDK.XPLM
 {

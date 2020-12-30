@@ -59,7 +59,7 @@ namespace BindingsGenerator
             throw new NotImplementedException();
         }
 
-        protected override string GetRelativeNamespace(CppClass cppElement) => $"{base.GetRelativeNamespace(cppElement)}.Internal";
+        protected override string GetRelativeNamespace(CppClass cppElement) => $"{base.GetRelativeNamespace(cppElement)}.Interop";
 
         protected override string GetNativeName(CppClass type) => type.Name;
 

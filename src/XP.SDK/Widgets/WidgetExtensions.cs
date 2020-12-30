@@ -2,7 +2,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using XP.SDK.Widgets.Behaviors;
-using XP.SDK.Widgets.Internal;
+using XP.SDK.Widgets.Interop;
 
 namespace XP.SDK.Widgets
 {

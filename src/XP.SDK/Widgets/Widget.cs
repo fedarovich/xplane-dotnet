@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using XP.SDK.Widgets.Internal;
+using XP.SDK.Widgets.Interop;
 using XP.SDK.XPLM;
 
 namespace XP.SDK.Widgets

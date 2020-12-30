@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using XP.SDK.XPLM.Internal;
+using XP.SDK.XPLM.Interop;
 
 namespace XP.SDK.XPLM
 {
