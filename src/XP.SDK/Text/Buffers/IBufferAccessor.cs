@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XP.SDK.Buffers
+namespace XP.SDK.Text.Buffers
 {
     public interface IBufferAccessor<T>
     {

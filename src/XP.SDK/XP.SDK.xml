@@ -4,16 +4,16 @@
         <name>XP.SDK</name>
     </assembly>
     <members>
-        <member name="M:XP.SDK.Buffers.ArrayPoolBufferWriter`1.#ctor(System.Buffers.ArrayPool{`0})">
+        <member name="M:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.#ctor(System.Buffers.ArrayPool{`0})">
             <summary>
-            Creates an instance of an <see cref="T:XP.SDK.Buffers.ArrayPoolBufferWriter`1"/>, in which data can be written to,
+            Creates an instance of an <see cref="T:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1"/>, in which data can be written to,
             with the default initial capacity.
             </summary>
             <param name="pool">The <see cref="T:System.Buffers.ArrayPool`1"/> to get arrays from.</param>
         </member>
-        <member name="M:XP.SDK.Buffers.ArrayPoolBufferWriter`1.#ctor(System.Buffers.ArrayPool{`0},System.Int32)">
+        <member name="M:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.#ctor(System.Buffers.ArrayPool{`0},System.Int32)">
             <summary>
-            Creates an instance of an <see cref="T:XP.SDK.Buffers.ArrayPoolBufferWriter`1"/>, in which data can be written to,
+            Creates an instance of an <see cref="T:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1"/>, in which data can be written to,
             with an initial capacity specified.
             </summary>
             <param name="initialCapacity">The minimum capacity with which to initialize the underlying buffer.</param>
@@ -22,32 +22,32 @@
             Thrown when <paramref name="initialCapacity"/> is not positive (i.e. less than or equal to 0).
             </exception>
         </member>
-        <member name="P:XP.SDK.Buffers.ArrayPoolBufferWriter`1.WrittenMemory">
+        <member name="P:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.WrittenMemory">
             <summary>
             Returns the data written to the underlying buffer so far, as a <see cref="T:System.ReadOnlyMemory`1"/>.
             </summary>
         </member>
-        <member name="P:XP.SDK.Buffers.ArrayPoolBufferWriter`1.WrittenSpan">
+        <member name="P:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.WrittenSpan">
             <summary>
             Returns the data written to the underlying buffer so far, as a <see cref="T:System.ReadOnlySpan`1"/>.
             </summary>
         </member>
-        <member name="P:XP.SDK.Buffers.ArrayPoolBufferWriter`1.WrittenCount">
+        <member name="P:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.WrittenCount">
             <summary>
             Returns the amount of data written to the underlying buffer so far.
             </summary>
         </member>
-        <member name="P:XP.SDK.Buffers.ArrayPoolBufferWriter`1.Capacity">
+        <member name="P:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.Capacity">
             <summary>
             Returns the total amount of space within the underlying buffer.
             </summary>
         </member>
-        <member name="P:XP.SDK.Buffers.ArrayPoolBufferWriter`1.FreeCapacity">
+        <member name="P:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.FreeCapacity">
             <summary>
             Returns the amount of space available that can still be written into without forcing the underlying buffer to grow.
             </summary>
         </member>
-        <member name="M:XP.SDK.Buffers.ArrayPoolBufferWriter`1.Clear">
+        <member name="M:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.Clear">
             <summary>
             Clears the data written to the underlying buffer.
             </summary>
@@ -55,7 +55,7 @@
             You must clear the <see cref="T:System.Buffers.ArrayBufferWriter`1"/> before trying to re-use it.
             </remarks>
         </member>
-        <member name="M:XP.SDK.Buffers.ArrayPoolBufferWriter`1.Advance(System.Int32)">
+        <member name="M:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.Advance(System.Int32)">
             <summary>
             Notifies <see cref="T:System.Buffers.IBufferWriter`1"/> that <paramref name="count"/> amount of data was written to the output <see cref="T:System.Span`1"/>/<see cref="T:System.Memory`1"/>
             </summary>
@@ -69,7 +69,7 @@
             You must request a new buffer after calling Advance to continue writing more data and cannot write to a previously acquired buffer.
             </remarks>
         </member>
-        <member name="M:XP.SDK.Buffers.ArrayPoolBufferWriter`1.GetMemory(System.Int32)">
+        <member name="M:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.GetMemory(System.Int32)">
             <summary>
             Returns a <see cref="T:System.Memory`1"/> to write to that is at least the requested length (specified by <paramref name="sizeHint"/>).
             If no <paramref name="sizeHint"/> is provided (or it's equal to <code>0</code>), some non-empty buffer is returned.
@@ -87,7 +87,7 @@
             You must request a new buffer after calling Advance to continue writing more data and cannot write to a previously acquired buffer.
             </remarks>
         </member>
-        <member name="M:XP.SDK.Buffers.ArrayPoolBufferWriter`1.GetSpan(System.Int32)">
+        <member name="M:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.GetSpan(System.Int32)">
             <summary>
             Returns a <see cref="T:System.Span`1"/> to write to that is at least the requested length (specified by <paramref name="sizeHint"/>).
             If no <paramref name="sizeHint"/> is provided (or it's equal to <code>0</code>), some non-empty buffer is returned.
@@ -105,22 +105,22 @@
             You must request a new buffer after calling Advance to continue writing more data and cannot write to a previously acquired buffer.
             </remarks>
         </member>
-        <member name="P:XP.SDK.Buffers.ArrayPoolBufferWriter`1.IsCompleted">
+        <member name="P:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.IsCompleted">
             <summary>
             Checks whether the writer is completed.
             </summary>
-            <seealso cref="M:XP.SDK.Buffers.ArrayPoolBufferWriter`1.Complete"/>
+            <seealso cref="M:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.Complete"/>
         </member>
-        <member name="M:XP.SDK.Buffers.ArrayPoolBufferWriter`1.Complete">
+        <member name="M:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.Complete">
             <summary>
             Completes the writer, so that no more write operations can be done.
             </summary>
-            <seealso cref="P:XP.SDK.Buffers.ArrayPoolBufferWriter`1.IsCompleted"/>
+            <seealso cref="P:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.IsCompleted"/>
         </member>
-        <member name="M:XP.SDK.Buffers.ArrayPoolBufferWriter`1.Dispose">
+        <member name="M:XP.SDK.Text.Buffers.ArrayPoolBufferWriter`1.Dispose">
             <inheritdoc />
         </member>
-        <member name="M:XP.SDK.Buffers.CompletableArrayBufferWriter`1.Advance(System.Int32)">
+        <member name="M:XP.SDK.Text.Buffers.CompletableArrayBufferWriter`1.Advance(System.Int32)">
             <summary>
             Notifies <see cref="T:System.Buffers.IBufferWriter`1"/> that <paramref name="count"/> amount of data was written to the output <see cref="T:System.Span`1"/>/<see cref="T:System.Memory`1"/>
             </summary>
@@ -134,7 +134,7 @@
             You must request a new buffer after calling Advance to continue writing more data and cannot write to a previously acquired buffer.
             </remarks>
         </member>
-        <member name="M:XP.SDK.Buffers.CompletableArrayBufferWriter`1.GetMemory(System.Int32)">
+        <member name="M:XP.SDK.Text.Buffers.CompletableArrayBufferWriter`1.GetMemory(System.Int32)">
             <summary>
             Returns a <see cref="T:System.Memory`1"/> to write to that is at least the requested length (specified by <paramref name="sizeHint"/>).
             If no <paramref name="sizeHint"/> is provided (or it's equal to <code>0</code>), some non-empty buffer is returned.
@@ -152,7 +152,7 @@
             You must request a new buffer after calling Advance to continue writing more data and cannot write to a previously acquired buffer.
             </remarks>
         </member>
-        <member name="M:XP.SDK.Buffers.CompletableArrayBufferWriter`1.GetSpan(System.Int32)">
+        <member name="M:XP.SDK.Text.Buffers.CompletableArrayBufferWriter`1.GetSpan(System.Int32)">
             <summary>
             Returns a <see cref="T:System.Span`1"/> to write to that is at least the requested length (specified by <paramref name="sizeHint"/>).
             If no <paramref name="sizeHint"/> is provided (or it's equal to <code>0</code>), some non-empty buffer is returned.
@@ -170,76 +170,76 @@
             You must request a new buffer after calling Advance to continue writing more data and cannot write to a previously acquired buffer.
             </remarks>
         </member>
-        <member name="P:XP.SDK.Buffers.CompletableArrayBufferWriter`1.WrittenMemory">
+        <member name="P:XP.SDK.Text.Buffers.CompletableArrayBufferWriter`1.WrittenMemory">
             <summary>
             Returns the data written to the underlying buffer so far, as a <see cref="T:System.ReadOnlyMemory`1"/>.
             </summary>
         </member>
-        <member name="P:XP.SDK.Buffers.CompletableArrayBufferWriter`1.WrittenSpan">
+        <member name="P:XP.SDK.Text.Buffers.CompletableArrayBufferWriter`1.WrittenSpan">
             <summary>
             Returns the data written to the underlying buffer so far, as a <see cref="T:System.ReadOnlySpan`1"/>.
             </summary>
         </member>
-        <member name="P:XP.SDK.Buffers.CompletableArrayBufferWriter`1.WrittenCount">
+        <member name="P:XP.SDK.Text.Buffers.CompletableArrayBufferWriter`1.WrittenCount">
             <summary>
             Returns the amount of data written to the underlying buffer so far.
             </summary>
         </member>
-        <member name="P:XP.SDK.Buffers.CompletableArrayBufferWriter`1.IsCompleted">
+        <member name="P:XP.SDK.Text.Buffers.CompletableArrayBufferWriter`1.IsCompleted">
             <summary>
             Checks whether the writer is completed.
             </summary>
-            <seealso cref="M:XP.SDK.Buffers.CompletableArrayBufferWriter`1.Complete"/>
+            <seealso cref="M:XP.SDK.Text.Buffers.CompletableArrayBufferWriter`1.Complete"/>
         </member>
-        <member name="M:XP.SDK.Buffers.CompletableArrayBufferWriter`1.Complete">
+        <member name="M:XP.SDK.Text.Buffers.CompletableArrayBufferWriter`1.Complete">
             <summary>
             Completes the writer, so that no more write operations can be done.
             </summary>
-            <seealso cref="P:XP.SDK.Buffers.CompletableArrayBufferWriter`1.IsCompleted"/>
+            <seealso cref="P:XP.SDK.Text.Buffers.CompletableArrayBufferWriter`1.IsCompleted"/>
         </member>
-        <member name="P:XP.SDK.Buffers.IBufferAccessor`1.WrittenMemory">
+        <member name="P:XP.SDK.Text.Buffers.IBufferAccessor`1.WrittenMemory">
             <summary>
             Returns the data written to the underlying buffer so far, as a <see cref="T:System.ReadOnlyMemory`1"/>.
             </summary>
         </member>
-        <member name="P:XP.SDK.Buffers.IBufferAccessor`1.WrittenSpan">
+        <member name="P:XP.SDK.Text.Buffers.IBufferAccessor`1.WrittenSpan">
             <summary>
             Returns the data written to the underlying buffer so far, as a <see cref="T:System.ReadOnlySpan`1"/>.
             </summary>
         </member>
-        <member name="P:XP.SDK.Buffers.IBufferAccessor`1.WrittenCount">
+        <member name="P:XP.SDK.Text.Buffers.IBufferAccessor`1.WrittenCount">
             <summary>
             Returns the amount of data written to the underlying buffer so far.
             </summary>
         </member>
-        <member name="T:XP.SDK.Buffers.ICompletableBufferWriter`1">
+        <member name="T:XP.SDK.Text.Buffers.ICompletableBufferWriter`1">
             <summary>
             Buffer writer which can be completed.
             </summary>
         </member>
-        <member name="P:XP.SDK.Buffers.ICompletableBufferWriter`1.IsCompleted">
+        <member name="P:XP.SDK.Text.Buffers.ICompletableBufferWriter`1.IsCompleted">
             <summary>
             Checks whether the writer is completed.
             </summary>
-            <seealso cref="M:XP.SDK.Buffers.ICompletableBufferWriter`1.Complete"/>
+            <seealso cref="M:XP.SDK.Text.Buffers.ICompletableBufferWriter`1.Complete"/>
         </member>
-        <member name="M:XP.SDK.Buffers.ICompletableBufferWriter`1.Complete">
+        <member name="M:XP.SDK.Text.Buffers.ICompletableBufferWriter`1.Complete">
             <summary>
             Completes the writer, so that no more write operations can be done.
             </summary>
-            <seealso cref="P:XP.SDK.Buffers.ICompletableBufferWriter`1.IsCompleted"/>
+            <seealso cref="P:XP.SDK.Text.Buffers.ICompletableBufferWriter`1.IsCompleted"/>
         </member>
-        <member name="M:XP.SDK.Buffers.MemoryPoolBufferWriter`1.#ctor(System.Buffers.MemoryPool{`0},System.Boolean)">
+        <member name="M:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.#ctor(System.Buffers.MemoryPool{`0},System.Boolean)">
             <summary>
-            Creates an instance of an <see cref="T:XP.SDK.Buffers.MemoryPoolBufferWriter`1"/>, in which data can be written to,
+            Creates an instance of an <see cref="T:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1"/>, in which data can be written to,
             with the default initial capacity.
             </summary>
             <param name="pool">The <see cref="T:System.Buffers.MemoryPool`1"/> to get arrays from.</param>
             <param name="disposePool">The value indicating whether the <paramref name="pool"/> must be disposed while disposing this instance.</param>
         </member>
-        <member name="M:XP.SDK.Buffers.MemoryPoolBufferWriter`1.#ctor(System.Buffers.MemoryPool{`0},System.Boolean,System.Int32)">
+        <member name="M:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.#ctor(System.Buffers.MemoryPool{`0},System.Boolean,System.Int32)">
             <summary>
-            Creates an instance of an <see cref="T:XP.SDK.Buffers.MemoryPoolBufferWriter`1"/>, in which data can be written to,
+            Creates an instance of an <see cref="T:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1"/>, in which data can be written to,
             with an initial capacity specified.
             </summary>
             <param name="initialCapacity">The minimum capacity with which to initialize the underlying buffer.</param>
@@ -249,32 +249,32 @@
             Thrown when <paramref name="initialCapacity"/> is not positive (i.e. less than or equal to 0).
             </exception>
         </member>
-        <member name="P:XP.SDK.Buffers.MemoryPoolBufferWriter`1.WrittenMemory">
+        <member name="P:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.WrittenMemory">
             <summary>
             Returns the data written to the underlying buffer so far, as a <see cref="T:System.ReadOnlyMemory`1"/>.
             </summary>
         </member>
-        <member name="P:XP.SDK.Buffers.MemoryPoolBufferWriter`1.WrittenSpan">
+        <member name="P:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.WrittenSpan">
             <summary>
             Returns the data written to the underlying buffer so far, as a <see cref="T:System.ReadOnlySpan`1"/>.
             </summary>
         </member>
-        <member name="P:XP.SDK.Buffers.MemoryPoolBufferWriter`1.WrittenCount">
+        <member name="P:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.WrittenCount">
             <summary>
             Returns the amount of data written to the underlying buffer so far.
             </summary>
         </member>
-        <member name="P:XP.SDK.Buffers.MemoryPoolBufferWriter`1.Capacity">
+        <member name="P:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.Capacity">
             <summary>
             Returns the total amount of space within the underlying buffer.
             </summary>
         </member>
-        <member name="P:XP.SDK.Buffers.MemoryPoolBufferWriter`1.FreeCapacity">
+        <member name="P:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.FreeCapacity">
             <summary>
             Returns the amount of space available that can still be written into without forcing the underlying buffer to grow.
             </summary>
         </member>
-        <member name="M:XP.SDK.Buffers.MemoryPoolBufferWriter`1.Clear">
+        <member name="M:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.Clear">
             <summary>
             Clears the data written to the underlying buffer.
             </summary>
@@ -282,7 +282,7 @@
             You must clear the <see cref="T:System.Buffers.ArrayBufferWriter`1"/> before trying to re-use it.
             </remarks>
         </member>
-        <member name="M:XP.SDK.Buffers.MemoryPoolBufferWriter`1.Advance(System.Int32)">
+        <member name="M:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.Advance(System.Int32)">
             <summary>
             Notifies <see cref="T:System.Buffers.IBufferWriter`1"/> that <paramref name="count"/> amount of data was written to the output <see cref="T:System.Span`1"/>/<see cref="T:System.Memory`1"/>
             </summary>
@@ -296,7 +296,7 @@
             You must request a new buffer after calling Advance to continue writing more data and cannot write to a previously acquired buffer.
             </remarks>
         </member>
-        <member name="M:XP.SDK.Buffers.MemoryPoolBufferWriter`1.GetMemory(System.Int32)">
+        <member name="M:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.GetMemory(System.Int32)">
             <summary>
             Returns a <see cref="T:System.Memory`1"/> to write to that is at least the requested length (specified by <paramref name="sizeHint"/>).
             If no <paramref name="sizeHint"/> is provided (or it's equal to <code>0</code>), some non-empty buffer is returned.
@@ -314,7 +314,7 @@
             You must request a new buffer after calling Advance to continue writing more data and cannot write to a previously acquired buffer.
             </remarks>
         </member>
-        <member name="M:XP.SDK.Buffers.MemoryPoolBufferWriter`1.GetSpan(System.Int32)">
+        <member name="M:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.GetSpan(System.Int32)">
             <summary>
             Returns a <see cref="T:System.Span`1"/> to write to that is at least the requested length (specified by <paramref name="sizeHint"/>).
             If no <paramref name="sizeHint"/> is provided (or it's equal to <code>0</code>), some non-empty buffer is returned.
@@ -332,20 +332,385 @@
             You must request a new buffer after calling Advance to continue writing more data and cannot write to a previously acquired buffer.
             </remarks>
         </member>
-        <member name="P:XP.SDK.Buffers.MemoryPoolBufferWriter`1.IsCompleted">
+        <member name="P:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.IsCompleted">
             <summary>
             Checks whether the writer is completed.
             </summary>
-            <seealso cref="M:XP.SDK.Buffers.MemoryPoolBufferWriter`1.Complete"/>
+            <seealso cref="M:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.Complete"/>
         </member>
-        <member name="M:XP.SDK.Buffers.MemoryPoolBufferWriter`1.Complete">
+        <member name="M:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.Complete">
             <summary>
             Completes the writer, so that no more write operations can be done.
             </summary>
-            <seealso cref="P:XP.SDK.Buffers.MemoryPoolBufferWriter`1.IsCompleted"/>
+            <seealso cref="P:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.IsCompleted"/>
         </member>
-        <member name="M:XP.SDK.Buffers.MemoryPoolBufferWriter`1.Dispose">
+        <member name="M:XP.SDK.Text.Buffers.MemoryPoolBufferWriter`1.Dispose">
             <inheritdoc />
+        </member>
+        <member name="M:XP.SDK.Text.Formatters.EnumFormatter`1.GetSymbolOrDefault(System.Buffers.StandardFormat@,System.Char)">
+            <summary>
+            Returns the symbol contained within the standard format. If the standard format
+            has not been initialized, returns the provided fallback symbol.
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Text.NewLineSequence">
+            <summary>
+            The new-line character sequence to use.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.Text.NewLineSequence.Auto">
+            <summary>
+            <c>\r\n</c> on Windows; <c>\n</c> on other platforms.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.Text.NewLineSequence.Windows">
+            <summary>
+            <c>\r\n</c>
+            </summary>
+        </member>
+        <member name="F:XP.SDK.Text.NewLineSequence.Unix">
+            <summary>
+            <c>\n</c>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.Text.Utf8StringBuilder">
+            <summary>
+            Provides a way to build a <see cref="T:XP.SDK.Utf8String"/>.
+            </summary>
+            <remarks>
+            <para>
+            You must always call <see cref="M:XP.SDK.Text.Utf8StringBuilder.Dispose"/> on the builder if it uses the memory from <see cref="T:System.Buffers.ArrayPool`1"/> or <see cref="T:System.Buffers.MemoryPool`1"/>.
+            The easiest way to do is to use <c>using</c> block in C# (see the example below).
+            </para>
+            <para>
+            You must never use the UTF-8 string created by the builder after the builder has been disposed.
+            </para>
+            </remarks>
+            <example>
+            The following example shows how you can use <see cref="T:XP.SDK.Text.Utf8StringBuilderFactory"/>
+            to create a <see cref="T:XP.SDK.Text.Utf8StringBuilder"/> and build a <see cref="T:XP.SDK.Utf8String"/> with it.
+            <code>
+            <![CDATA[
+            void SayHello(Utf8StringBuilderFactory factory)
+            {
+                using Utf8StringBuilder builder = factory.CreateBuilder();
+                builder.Append("Hello, world!");
+                builder.AppendLine();
+                Utf8String str = builder.Build();
+                XPlane.Trace.Write(str);
+            }
+            ]]>
+            </code>
+            </example>
+        </member>
+        <member name="P:XP.SDK.Text.Utf8StringBuilder.RequiresScope">
+            <summary>
+            Gets the value indicating whether the underlying buffer is scoped, and so the constructed string must be created using <see cref="M:XP.SDK.Text.Utf8StringBuilder.BuildScoped"/> method.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.AppendLine">
+            <summary>
+            Appends a platform-dependent new line to the string.
+            </summary>
+            <remarks>
+            This method will append <c>\r\n</c> on Windows and <c>\n</c> on all other platforms.
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.AppendLine(XP.SDK.Text.NewLineSequence)">
+            <summary>
+            Appends a new line to the string.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.String)">
+            <summary>
+            Appends the string.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.String,System.Int32)">
+            <summary>
+            Appends the substring of the string.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.String,System.Int32,System.Int32)">
+            <summary>
+            Appends the substring of the string.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.String,System.Range)">
+            <summary>
+            Appends the substring of the string.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            Appends the UTF-16 string.
+            </summary>
+            <param name="str"></param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(XP.SDK.Utf8String@)">
+            <summary>
+            Appends the UTF-8 string.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(XP.SDK.Utf8String@,System.Int32)">
+            <summary>
+            Appends the UTF-8 substring.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(XP.SDK.Utf8String@,System.Int32,System.Int32)">
+            <summary>
+            Appends the UTF-8 substring.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(XP.SDK.Utf8String@,System.Range)">
+            <summary>
+            Appends the UTF-8 substring.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.Boolean,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.Boolean"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Boolean,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.Byte,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.Byte"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Byte,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.DateTime,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.DateTime"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.DateTime,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.DateTimeOffset,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.DateTimeOffset"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.DateTimeOffset,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.Decimal,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.Decimal"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Decimal,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.Double,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.Double"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Double,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.Guid,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.Guid"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Guid,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.Int16,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.Int16"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Int16,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.Int32,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.Int32"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Int32,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.Int64,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.Int64"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Int64,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.SByte,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.SByte"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.SByte,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.Single,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.Single"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Single,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.TimeSpan,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.TimeSpan"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.TimeSpan,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.UInt16,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.UInt16"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.UInt16,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.UInt32,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.UInt32"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.UInt32,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.UInt64,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.UInt64"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.UInt64,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append``1(``0,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the value of type implementing <see cref="T:XP.SDK.Text.IUtf8Formattable"/> interface.
+            </summary>
+            <typeparam name="T">The formattable type.</typeparam>
+            <param name="value">The formattable value.</param>
+            <param name="format">The format.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append``1(``0@,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the value of type implementing <see cref="T:XP.SDK.Text.IUtf8Formattable"/> interface.
+            </summary>
+            <typeparam name="T">The formattable type.</typeparam>
+            <param name="value">The formattable value.</param>
+            <param name="format">The format.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Build">
+            <summary>
+            Completes building of the UTF-8 string and returns the built string.
+            </summary>
+            <returns>The built UTF-8 string.</returns>
+            <remarks>
+            It is not possible to modify the string and the builder after this method is called.
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">The underlying buffer is disposable. <see cref="M:XP.SDK.Text.Utf8StringBuilder.BuildScoped"/> method must be used instead.</exception>
+            <seealso cref="M:XP.SDK.Text.Utf8StringBuilder.BuildScoped"/>
+            <seealso cref="P:XP.SDK.Text.Utf8StringBuilder.RequiresScope"/>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.BuildScoped">
+            <summary>
+            Completes building of the UTF-8 string and returns the disposable scope containing the built string.
+            </summary>
+            <returns>The the disposable scope containing the built UTF-8 string.</returns>
+            <remarks>
+            It is not possible to modify the string and the builder after this method is called.
+            </remarks>
+            <seealso cref="M:XP.SDK.Text.Utf8StringBuilder.Build"/>
+            <seealso cref="P:XP.SDK.Text.Utf8StringBuilder.RequiresScope"/>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.ToString">
+            <summary>
+            Gets the current representation of the string stored in the builder.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilderExtensions.Append``1(XP.SDK.Text.Utf8StringBuilder@,``0,System.Buffers.StandardFormat)">
+            <summary>
+            Append the value of enum type <typeparamref name="TEnum"/>.
+            </summary>
+            <typeparam name="TEnum">The enum type.</typeparam>
+            <param name="builder">An instance of <see cref="T:XP.SDK.Text.Utf8StringBuilder"/>.</param>
+            <param name="value">The value.</param>
+            <param name="format">The format.</param>
+        </member>
+        <member name="T:XP.SDK.Text.Utf8StringBuilderFactory">
+            <summary>
+            Provides the means to create <see cref="T:XP.SDK.Text.Utf8StringBuilder"/>.
+            </summary>
+            <example>
+            The following example shows how you can use <see cref="T:XP.SDK.Text.Utf8StringBuilderFactory"/>
+            to create a <see cref="T:XP.SDK.Text.Utf8StringBuilder"/> and build a <see cref="T:XP.SDK.Utf8String"/> with it.
+            <code>
+            <![CDATA[
+            void SayHello(Utf8StringBuilderFactory factory)
+            {
+                using Utf8StringBuilder builder = factory.CreateBuilder();
+                builder.Append("Hello, world!");
+                builder.AppendLine();
+                Utf8String str = builder.Build();
+                XPlane.Trace.Write(str);
+            }
+            ]]>
+            </code>
+            </example>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilderFactory.#ctor">
+            <summary>
+            Initializes a new instance of <see cref="T:XP.SDK.Text.Utf8StringBuilderFactory"/> that will use a new managed array for each builder.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilderFactory.#ctor(System.Buffers.ArrayPool{System.Byte})">
+            <summary>
+            Initializes a new instance of <see cref="T:XP.SDK.Text.Utf8StringBuilderFactory"/> that will use managed arrays taken from the <paramref name="arrayPool"/> for each builder.
+            </summary>
+            <param name="arrayPool">The array pool to get arrays for the builder from.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilderFactory.#ctor(System.Buffers.ArrayPool{System.Byte},System.Boolean)">
+            <summary>
+            Initializes a new instance of <see cref="T:XP.SDK.Text.Utf8StringBuilderFactory"/> that will use managed arrays taken from the <paramref name="arrayPool"/> for each builder.
+            </summary>
+            <param name="arrayPool">The array pool to get arrays for the builder from.</param>
+            <param name="disposePool">
+            The value indicating whether the <paramref name="arrayPool"/> must be disposed while disposing this factory.
+            If the array pool does not implement <see cref="T:System.IDisposable"/>, this parameter is ignored.
+            </param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilderFactory.#ctor(System.Buffers.MemoryPool{System.Byte},System.Boolean)">
+            <summary>
+            Initializes a new instance of <see cref="T:XP.SDK.Text.Utf8StringBuilderFactory"/> that will use memory taken from the <paramref name="memoryPool"/> for each builder.
+            </summary>
+            <param name="memoryPool">The memory pool to get memory for the builder from.</param>
+            <param name="disposePool">
+            The value indicating whether the <paramref name="memoryPool"/> must be disposed while disposing this factory.
+            </param>
+        </member>
+        <member name="P:XP.SDK.Text.Utf8StringBuilderFactory.Shared">
+            <summary>
+            Gets the shared instance of <see cref="T:XP.SDK.Text.Utf8StringBuilderFactory"/> that will use a new managed array for each builder.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Text.Utf8StringBuilderFactory.SharedPooled">
+            <summary>
+            Gets the shared instance of <see cref="T:XP.SDK.Text.Utf8StringBuilderFactory"/> that will use managed arrays taken from the <see cref="P:System.Buffers.ArrayPool`1.Shared"/> for each builder.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilderFactory.CreateBuilder(System.Int32)">
+            <summary>
+            Creates a new <see cref="T:XP.SDK.Text.Utf8StringBuilder"/> with the specified initial capacity.
+            </summary>
+            <param name="initialCapacity">The initial buffer capacity of the string builder.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilderFactory.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+            </summary>
+            <remarks>
+            If the factory was created using the default constructor or with a pool that is not disposable or must not be disposed together with this factory, you can skip calling this method.
+            </remarks>
         </member>
         <member name="T:XP.SDK.Utf8String">
             <summary>
@@ -366,16 +731,28 @@
             <summary>
             Gets the string length.
             </summary>
+            <seealso cref="M:XP.SDK.Utf8String.StrLen" />
         </member>
         <member name="P:XP.SDK.Utf8String.IsNull">
             <summary>
             Gets the value indicating whether the string is null.
             </summary>
+            <seealso cref="P:XP.SDK.Utf8String.IsEmpty"/>
+            <seealso cref="P:XP.SDK.Utf8String.IsNullOrEmpty" />
+        </member>
+        <member name="P:XP.SDK.Utf8String.IsEmpty">
+            <summary>
+            Gets the value indicating whether the string is empty.
+            </summary>
+            <seealso cref="P:XP.SDK.Utf8String.IsNull"/>
+            <seealso cref="P:XP.SDK.Utf8String.IsNullOrEmpty" />
         </member>
         <member name="P:XP.SDK.Utf8String.IsNullOrEmpty">
             <summary>
             Gets the value indicating whether the string is null or empty.
             </summary>
+            <seealso cref="P:XP.SDK.Utf8String.IsNull"/>
+            <seealso cref="P:XP.SDK.Utf8String.IsEmpty"/>
         </member>
         <member name="M:XP.SDK.Utf8String.#ctor(System.ReadOnlySpan{System.Byte}@,System.Int32)">
             <summary>
@@ -475,259 +852,17 @@
             </summary>
             <param name="destination">The destination to copy the data to. The destination buffer must be at least <c>Length + 1</c> bytes long.</param>
         </member>
-        <member name="T:XP.SDK.Utf8StringBuilder">
+        <member name="M:XP.SDK.Utf8String.StrLen">
             <summary>
-            Provides a way to build a <see cref="T:XP.SDK.Utf8String"/>.
+            Returns the length of the C string.
             </summary>
+            <returns>The length of the C string is this object contains a valid not-null C-string; <c>-1</c> otherwise.</returns>
             <remarks>
-            <para>
-            You must always call <see cref="M:XP.SDK.Utf8StringBuilder.Dispose"/> on the builder if it uses the memory from <see cref="T:System.Buffers.ArrayPool`1"/> or <see cref="T:System.Buffers.MemoryPool`1"/>.
-            The easiest way to do is to use <c>using</c> block in C# (see the example below).
-            </para>
-            <para>
-            You must never use the UTF-8 string created by the builder after the builder has been disposed.
-            </para>
+            The length of a C string is determined by the terminating null-character:
+            A C string is as long as the number of characters between the beginning of the string and the terminating null character
+            (without including the terminating null character itself).
             </remarks>
-            <example>
-            The following example shows how you can use <see cref="T:XP.SDK.Utf8StringBuilderFactory"/>
-            to create a <see cref="T:XP.SDK.Utf8StringBuilder"/> and build a <see cref="T:XP.SDK.Utf8String"/> with it.
-            <code>
-            <![CDATA[
-            void SayHello(Utf8StringBuilderFactory factory)
-            {
-                using Utf8StringBuilder builder = factory.CreateBuilder();
-                builder.Append("Hello, world!");
-                builder.AppendLine();
-                Utf8String str = builder.Complete();
-                XPlane.Trace.Write(str);
-            }
-            ]]>
-            </code>
-            </example>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.AppendLine">
-            <summary>
-            Appends a platform-dependent new line to the string.
-            </summary>
-            <remarks>
-            This method will append <c>\r\n</c> on Windows and <c>\n</c> on all other platforms.
-            </remarks>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.String)">
-            <summary>
-            Appends the string.
-            </summary>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(XP.SDK.Utf8String@)">
-            <summary>
-            Appends the UTF-8 string.
-            </summary>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.Boolean,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.Boolean"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Boolean,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.Byte,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.Byte"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Byte,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.DateTime,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.DateTime"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.DateTime,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.DateTimeOffset,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.DateTimeOffset"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.DateTimeOffset,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.Decimal,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.Decimal"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Decimal,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.Double,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.Double"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Double,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.Guid,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.Guid"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Guid,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.Int16,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.Int16"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Int16,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.Int32,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.Int32"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Int32,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.Int64,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.Int64"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Int64,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.SByte,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.SByte"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.SByte,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.Single,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.Single"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Single,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.TimeSpan,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.TimeSpan"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.TimeSpan,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.UInt16,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.UInt16"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.UInt16,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.UInt32,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.UInt32"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.UInt32,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Append(System.UInt64,System.Buffers.StandardFormat)">
-            <summary>
-            Appends the <see cref="T:System.UInt64"/> value.
-            </summary>
-            <param name="value">The value to append.</param>
-            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.UInt64,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Build">
-            <summary>
-            Completes building of the UTF-8 string and returns the built string.
-            </summary>
-            <returns>The built UTF-8 string.</returns>
-            <remarks>
-            It is not possible to modify the string and the builder after this method is called.
-            </remarks>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.ToString">
-            <summary>
-            Gets the current representation of the string stored in the builder.
-            </summary>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilder.Dispose">
-            <summary>
-            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-            </summary>
-        </member>
-        <member name="T:XP.SDK.Utf8StringBuilderFactory">
-            <summary>
-            Provides the means to create <see cref="T:XP.SDK.Utf8StringBuilder"/>.
-            </summary>
-            <example>
-            The following example shows how you can use <see cref="T:XP.SDK.Utf8StringBuilderFactory"/>
-            to create a <see cref="T:XP.SDK.Utf8StringBuilder"/> and build a <see cref="T:XP.SDK.Utf8String"/> with it.
-            <code>
-            <![CDATA[
-            void SayHello(Utf8StringBuilderFactory factory)
-            {
-                using Utf8StringBuilder builder = factory.CreateBuilder();
-                builder.Append("Hello, world!");
-                builder.AppendLine();
-                Utf8String str = builder.Complete();
-                XPlane.Trace.Write(str);
-            }
-            ]]>
-            </code>
-            </example>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilderFactory.#ctor">
-            <summary>
-            Initializes a new instance of <see cref="T:XP.SDK.Utf8StringBuilderFactory"/> that will use a new managed array for each builder.
-            </summary>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilderFactory.#ctor(System.Buffers.ArrayPool{System.Byte})">
-            <summary>
-            Initializes a new instance of <see cref="T:XP.SDK.Utf8StringBuilderFactory"/> that will use managed arrays taken from the <paramref name="arrayPool"/> for each builder.
-            </summary>
-            <param name="arrayPool">The array pool to get arrays for the builder from.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilderFactory.#ctor(System.Buffers.ArrayPool{System.Byte},System.Boolean)">
-            <summary>
-            Initializes a new instance of <see cref="T:XP.SDK.Utf8StringBuilderFactory"/> that will use managed arrays taken from the <paramref name="arrayPool"/> for each builder.
-            </summary>
-            <param name="arrayPool">The array pool to get arrays for the builder from.</param>
-            <param name="disposePool">
-            The value indicating whether the <paramref name="arrayPool"/> must be disposed while disposing this factory.
-            If the array pool does not implement <see cref="T:System.IDisposable"/>, this parameter is ignored.
-            </param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilderFactory.#ctor(System.Buffers.MemoryPool{System.Byte},System.Boolean)">
-            <summary>
-            Initializes a new instance of <see cref="T:XP.SDK.Utf8StringBuilderFactory"/> that will use memory taken from the <paramref name="memoryPool"/> for each builder.
-            </summary>
-            <param name="memoryPool">The memory pool to get memory for the builder from.</param>
-            <param name="disposePool">
-            The value indicating whether the <paramref name="memoryPool"/> must be disposed while disposing this factory.
-            </param>
-        </member>
-        <member name="P:XP.SDK.Utf8StringBuilderFactory.Shared">
-            <summary>
-            Gets the shared instance of <see cref="T:XP.SDK.Utf8StringBuilderFactory"/> that will use a new managed array for each builder.
-            </summary>
-        </member>
-        <member name="P:XP.SDK.Utf8StringBuilderFactory.SharedPooled">
-            <summary>
-            Gets the shared instance of <see cref="T:XP.SDK.Utf8StringBuilderFactory"/> that will use managed arrays taken from the <see cref="P:System.Buffers.ArrayPool`1.Shared"/> for each builder.
-            </summary>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilderFactory.CreateBuilder(System.Int32)">
-            <summary>
-            Creates a new <see cref="T:XP.SDK.Utf8StringBuilder"/> with the specified initial capacity.
-            </summary>
-            <param name="initialCapacity">The initial buffer capacity of the string builder.</param>
-        </member>
-        <member name="M:XP.SDK.Utf8StringBuilderFactory.Dispose">
-            <summary>
-            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-            </summary>
-            <remarks>
-            If the factory was created using the default constructor or with a pool that is not disposable or must not be disposed together with this factory, you can skip calling this method.
-            </remarks>
+            <seealso cref="P:XP.SDK.Utf8String.Length"/>
         </member>
         <member name="T:XP.SDK.Utf8StringLiteralAttribute">
             <summary>

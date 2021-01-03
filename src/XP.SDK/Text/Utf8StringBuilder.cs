@@ -2,11 +2,13 @@
 using System;
 using System.Buffers;
 using System.Buffers.Text;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Unicode;
-using XP.SDK.Buffers;
+using XP.SDK.Text.Buffers;
+using XP.SDK.Text.Formatters;
 
-namespace XP.SDK
+namespace XP.SDK.Text
 {
     /// <summary>
     /// Provides a way to build a <see cref="Utf8String"/>.
@@ -30,7 +32,7 @@ namespace XP.SDK
     ///     using Utf8StringBuilder builder = factory.CreateBuilder();
     ///     builder.Append("Hello, world!");
     ///     builder.AppendLine();
-    ///     Utf8String str = builder.Complete();
+    ///     Utf8String str = builder.Build();
     ///     XPlane.Trace.Write(str);
     /// }
     /// ]]>
@@ -41,14 +43,25 @@ namespace XP.SDK
         private static readonly Encoding Utf16 = new UnicodeEncoding(false, false);
 
         private readonly ICompletableBufferWriter<byte> _bufferWriter;
-        private readonly bool _useCrLf;
 
         private ICompletableBufferWriter<byte> BufferWriter => _bufferWriter ?? throw new InvalidOperationException("The Utf8StringBuilder must be created by Utf8StringBuilderFactory.");
 
+        private static ReadOnlySpan<byte> WindowsNewLine => new byte[] {(byte) '\r', (byte) '\n'};
+
+        private static ReadOnlySpan<byte> UnixNewLine => new byte[] { (byte)'\n' };
+
+        /// <summary>
+        /// Gets the value indicating whether the underlying buffer is scoped, and so the constructed string must be created using <see cref="BuildScoped"/> method.
+        /// </summary>
+        public bool RequiresScope => _bufferWriter is IDisposable;
+        
         internal Utf8StringBuilder(ICompletableBufferWriter<byte> bufferWriter)
         {
             _bufferWriter = bufferWriter;
-            _useCrLf = Environment.NewLine == "\r\n";
+        }
+
+        static Utf8StringBuilder()
+        {
         }
 
         /// <summary>
@@ -59,13 +72,39 @@ namespace XP.SDK
         /// </remarks>
         public void AppendLine()
         {
-            if (_useCrLf)
+            if (OperatingSystem.IsWindows())
             {
-                BufferWriter.Write(new [] { (byte)'\r', (byte)'\n' });
+                BufferWriter.Write(WindowsNewLine);
             }
             else
             {
-                BufferWriter.Write(new [] { (byte)'\n' } );
+                BufferWriter.Write(UnixNewLine);
+            }
+        }
+
+        /// <summary>
+        /// Appends a new line to the string.
+        /// </summary>
+        public void AppendLine(NewLineSequence newLine)
+        {
+            switch (newLine)
+            {
+                case NewLineSequence.Auto:
+                    if (OperatingSystem.IsWindows())
+                    {
+                        BufferWriter.Write(WindowsNewLine);
+                    }
+                    else
+                    {
+                        BufferWriter.Write(UnixNewLine);
+                    }
+                    break;
+                case NewLineSequence.Windows:
+                    BufferWriter.Write(WindowsNewLine);
+                    break;
+                case NewLineSequence.Unix:
+                    BufferWriter.Write(UnixNewLine);
+                    break;
             }
         }
 
@@ -74,14 +113,35 @@ namespace XP.SDK
         /// <summary>
         /// Appends the string.
         /// </summary>
-        public void Append(string? str)
+        public void Append(string? str) => Append(str.AsSpan());
+
+        /// <summary>
+        /// Appends the substring of the string.
+        /// </summary>
+        public void Append(string? str, int start) => Append(str.AsSpan(start));
+
+        /// <summary>
+        /// Appends the substring of the string.
+        /// </summary>
+        public void Append(string? str, int start, int length) => Append(str.AsSpan(start, length));
+
+        /// <summary>
+        /// Appends the substring of the string.
+        /// </summary>
+        public void Append(string? str, Range range) => Append(str.AsSpan()[range]);
+
+        /// <summary>
+        /// Appends the UTF-16 string.
+        /// </summary>
+        /// <param name="str"></param>
+        public void Append(in ReadOnlySpan<char> str)
         {
             int offset = 0;
             OperationStatus result;
 
             do
             {
-                var source = str.AsSpan(offset);
+                var source = str.Slice(offset);
                 var dest = BufferWriter.GetSpan(source.Length);
                 result = Utf8.FromUtf16(source, dest, out var read, out var written);
                 BufferWriter.Advance(written);
@@ -94,14 +154,38 @@ namespace XP.SDK
         /// </summary>
         public void Append(in Utf8String utf8String)
         {
-            BufferWriter.Write(utf8String.Data.Slice(0, utf8String.Length));
+            BufferWriter.Write(utf8String.Data[..utf8String.Length]);
+        }
+
+        /// <summary>
+        /// Appends the UTF-8 substring.
+        /// </summary>
+        public void Append(in Utf8String utf8String, int start)
+        {
+            BufferWriter.Write(utf8String.Data[start..utf8String.Length]);
+        }
+
+        /// <summary>
+        /// Appends the UTF-8 substring.
+        /// </summary>
+        public void Append(in Utf8String utf8String, int start, int length)
+        {
+            BufferWriter.Write(utf8String.Data[..utf8String.Length].Slice(start, length));
+        }
+
+        /// <summary>
+        /// Appends the UTF-8 substring.
+        /// </summary>
+        public void Append(in Utf8String utf8String, Range range)
+        {
+            BufferWriter.Write(utf8String.Data[..utf8String.Length][range]);
         }
 
         /// <summary>
         /// Appends the <see cref="bool"/> value.
         /// </summary>
         /// <param name="value">The value to append.</param>
-        /// <param name="format">The format. See <seealso cref="Utf8Formatter.TryFormat(bool, Span{byte}, out int, StandardFormat)"/> for the available formats.</param>
+        /// <param name="format">The format. See <seealso cref="Utf8Formatter.TryFormat(bool,System.Span{byte},out int,System.Buffers.StandardFormat)"/> for the available formats.</param>
         public void Append(bool value, StandardFormat format = default)
         {
             int sizeHint = 5;
@@ -417,6 +501,52 @@ namespace XP.SDK
             }
         }
 
+        /// <summary>
+        /// Appends the value of type implementing <see cref="IUtf8Formattable"/> interface.
+        /// </summary>
+        /// <typeparam name="T">The formattable type.</typeparam>
+        /// <param name="value">The formattable value.</param>
+        /// <param name="format">The format.</param>
+        public void Append<T>(T value, StandardFormat format = default)
+            where T : IUtf8Formattable
+        {
+            int sizeHint = value.GetSizeHint(format);
+            
+            while (true)
+            {
+                if (value.TryFormat(BufferWriter.GetSpan(sizeHint), out var written, format))
+                {
+                    BufferWriter.Advance(written);
+                    break;
+                }
+
+                sizeHint *= 2;
+            }
+        }
+
+        /// <summary>
+        /// Appends the value of type implementing <see cref="IUtf8Formattable"/> interface.
+        /// </summary>
+        /// <typeparam name="T">The formattable type.</typeparam>
+        /// <param name="value">The formattable value.</param>
+        /// <param name="format">The format.</param>
+        public void Append<T>(in T value, StandardFormat format = default)
+            where T : IUtf8Formattable
+        {
+            int sizeHint = value.GetSizeHint(format);
+
+            while (true)
+            {
+                if (value.TryFormat(BufferWriter.GetSpan(sizeHint), out var written, format))
+                {
+                    BufferWriter.Advance(written);
+                    break;
+                }
+
+                sizeHint *= 2;
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -426,9 +556,36 @@ namespace XP.SDK
         /// <remarks>
         /// It is not possible to modify the string and the builder after this method is called.
         /// </remarks>
+        /// <exception cref="InvalidOperationException">The underlying buffer is disposable. <see cref="BuildScoped"/> method must be used instead.</exception>
+        /// <seealso cref="BuildScoped"/>
+        /// <seealso cref="RequiresScope"/>
         public Utf8String Build()
         {
-            BufferWriter.Write(new [] { (byte) 0 });
+            if (RequiresScope)
+                throw new InvalidOperationException("The underlying buffer is disposable, so BuildScoped method must be used.");
+
+            return BuildUnsafe();
+        }
+
+        /// <summary>
+        /// Completes building of the UTF-8 string and returns the disposable scope containing the built string.
+        /// </summary>
+        /// <returns>The the disposable scope containing the built UTF-8 string.</returns>
+        /// <remarks>
+        /// It is not possible to modify the string and the builder after this method is called.
+        /// </remarks>
+        /// <seealso cref="Build"/>
+        /// <seealso cref="RequiresScope"/>
+        public Utf8StringScope BuildScoped()
+        {
+            var utf8String = BuildUnsafe();
+            return new Utf8StringScope(utf8String, BufferWriter as IDisposable);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal Utf8String BuildUnsafe()
+        {
+            BufferWriter.Write(new[] { (byte)0 });
             BufferWriter.Complete();
             var utf8String = new Utf8String(BufferWriter.WrittenSpan, BufferWriter.WrittenCount - 1);
             return utf8String;

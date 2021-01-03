@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Buffers;
-using XP.SDK.Buffers;
+using XP.SDK.Text.Buffers;
 
-namespace XP.SDK
+namespace XP.SDK.Text
 {
     /// <summary>
     /// Provides the means to create <see cref="Utf8StringBuilder"/>.
@@ -17,7 +17,7 @@ namespace XP.SDK
     ///     using Utf8StringBuilder builder = factory.CreateBuilder();
     ///     builder.Append("Hello, world!");
     ///     builder.AppendLine();
-    ///     Utf8String str = builder.Complete();
+    ///     Utf8String str = builder.Build();
     ///     XPlane.Trace.Write(str);
     /// }
     /// ]]>

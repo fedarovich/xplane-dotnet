@@ -10,8 +10,6 @@ namespace XP.SDK
     /// </summary>
     public readonly ref struct Utf8String
     {
-        private static readonly UTF8Encoding UTF8 = new (false);
-
         /// <summary>
         /// Gets the empty UTF-8 string.
         /// </summary>
@@ -29,16 +27,28 @@ namespace XP.SDK
         /// <summary>
         /// Gets the string length.
         /// </summary>
+        /// <seealso cref="StrLen" />
         public int Length => Data.IsEmpty ? 0 : Data.Length - 1;
 
         /// <summary>
         /// Gets the value indicating whether the string is null.
         /// </summary>
+        /// <seealso cref="IsEmpty"/>
+        /// <seealso cref="IsNullOrEmpty" />
         public bool IsNull => Data.IsEmpty;
+
+        /// <summary>
+        /// Gets the value indicating whether the string is empty.
+        /// </summary>
+        /// <seealso cref="IsNull"/>
+        /// <seealso cref="IsNullOrEmpty" />
+        public bool IsEmpty => Data.Length == 1;
 
         /// <summary>
         /// Gets the value indicating whether the string is null or empty.
         /// </summary>
+        /// <seealso cref="IsNull"/>
+        /// <seealso cref="IsEmpty"/>
         public bool IsNullOrEmpty => Data.Length <= 1;
 
         /// <summary>
@@ -104,14 +114,14 @@ namespace XP.SDK
             if (str == null)
                 return default;
 
-            var length = UTF8.GetByteCount(str);
+            var length = Utils.UTF8WithoutPreamble.GetByteCount(str);
             var buffer = new byte[length + 1];
-            UTF8.GetBytes(str, buffer);
+            Utils.UTF8WithoutPreamble.GetBytes(str, buffer);
             return new Utf8String(buffer, length);
         }
 
         /// <inheritdoc />
-        public override string? ToString() => Data.IsEmpty ? null : UTF8.GetString(Data[..^1]);
+        public override string? ToString() => Data.IsEmpty ? null : Utils.UTF8WithoutPreamble.GetString(Data[..^1]);
 
         /// <summary>
         /// Compares whether two UTF8 strings are equal.
@@ -177,5 +187,17 @@ namespace XP.SDK
                 Buffer.MemoryCopy(source, destination, Data.Length, Data.Length);
             }
         }
+
+        /// <summary>
+        /// Returns the length of the C string.
+        /// </summary>
+        /// <returns>The length of the C string is this object contains a valid not-null C-string; <c>-1</c> otherwise.</returns>
+        /// <remarks>
+        /// The length of a C string is determined by the terminating null-character:
+        /// A C string is as long as the number of characters between the beginning of the string and the terminating null character
+        /// (without including the terminating null character itself).
+        /// </remarks>
+        /// <seealso cref="Length"/>
+        public int StrLen() => Data.IndexOf((byte) 0);
     }
 }

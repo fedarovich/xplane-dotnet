@@ -72,6 +72,7 @@ namespace XP.SDK.Analyzers
             if (indices.Count == 0)
                 return;
 
+            // TODO: Try context.SemanticModel.GetMemberGroup(memberAccessExpr)
             var overloads = methodSymbol.ContainingType
                 .GetMembers(methodSymbol.Name)
                 .OfType<IMethodSymbol>()

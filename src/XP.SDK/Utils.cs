@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.Unicode;
 
 #nullable enable
@@ -9,6 +10,8 @@ namespace XP.SDK
 {
     public static class Utils
     {
+        internal static readonly UTF8Encoding UTF8WithoutPreamble = new UTF8Encoding(false);
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref byte ToUtf8(ReadOnlySpan<char> utf16, Span<byte> utf8)
         {

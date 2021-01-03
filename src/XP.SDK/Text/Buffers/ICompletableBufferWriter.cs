@@ -1,6 +1,6 @@
 ﻿using System.Buffers;
 
-namespace XP.SDK.Buffers
+namespace XP.SDK.Text.Buffers
 {
     /// <summary>
     /// Buffer writer which can be completed.

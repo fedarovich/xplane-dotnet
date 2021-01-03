@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
-using InlineIL;
+using XP.SDK.Text;
 using XP.SDK.XPLM.Interop;
 
 namespace XP.SDK.XPLM
@@ -406,7 +406,7 @@ namespace XP.SDK.XPLM
             [SkipLocalsInit]
             public static unsafe void WriteLine(in ReadOnlySpan<char> str)
             {
-                Span<byte> inStringUtf8 = stackalloc byte[(str.Length << 1) + 3];
+                Span<byte> inStringUtf8 = stackalloc byte[str.Length * 3 + 3];
                 var strPtr = Utils.ToUtf8Unsafe(str, inStringUtf8, out int count);
                 // TODO: Check whether we have to use \r\n on Windows.
                 strPtr[count] = (byte) '\n';
@@ -435,7 +435,8 @@ namespace XP.SDK.XPLM
                 using var builder = Utf8StringBuilderFactory.SharedPooled.CreateBuilder(str.Length + 3);
                 builder.Append(str);
                 builder.AppendLine();
-                UtilitiesAPI.DebugString(builder.Build());
+                using var scope = builder.BuildScoped();
+                UtilitiesAPI.DebugString(builder.BuildUnsafe());
             }
         }
 

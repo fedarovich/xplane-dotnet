@@ -3,40 +3,45 @@ using System.Buffers;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace XP.SDK.Buffers
+namespace XP.SDK.Text.Buffers
 {
-    public sealed class ArrayPoolBufferWriter<T> : ICompletableBufferWriter<T>, IDisposable
+    public sealed class MemoryPoolBufferWriter<T> : ICompletableBufferWriter<T>, IDisposable
     {
-        private ArrayPool<T> _pool;
-        private T[] _buffer;
+        private MemoryPool<T> _pool;
+        private readonly bool _disposePool;
+        private IMemoryOwner<T> _buffer;
         private int _index;
 
         private const int DefaultInitialBufferSize = 256;
 
         /// <summary>
-        /// Creates an instance of an <see cref="ArrayPoolBufferWriter{T}"/>, in which data can be written to,
+        /// Creates an instance of an <see cref="MemoryPoolBufferWriter{T}"/>, in which data can be written to,
         /// with the default initial capacity.
         /// </summary>
-        /// <param name="pool">The <see cref="ArrayPool{T}"/> to get arrays from.</param>
-        public ArrayPoolBufferWriter(ArrayPool<T> pool)
+        /// <param name="pool">The <see cref="MemoryPool{T}"/> to get arrays from.</param>
+        /// <param name="disposePool">The value indicating whether the <paramref name="pool"/> must be disposed while disposing this instance.</param>
+        public MemoryPoolBufferWriter(MemoryPool<T> pool, bool disposePool)
         {
             _pool = pool ?? throw new ArgumentNullException(nameof(pool));
+            _disposePool = disposePool;
             _buffer = _pool.Rent(0);
             _index = 0;
         }
 
         /// <summary>
-        /// Creates an instance of an <see cref="ArrayPoolBufferWriter{T}"/>, in which data can be written to,
+        /// Creates an instance of an <see cref="MemoryPoolBufferWriter{T}"/>, in which data can be written to,
         /// with an initial capacity specified.
         /// </summary>
         /// <param name="initialCapacity">The minimum capacity with which to initialize the underlying buffer.</param>
-        /// <param name="pool">The <see cref="ArrayPool{T}"/> to get arrays from.</param>
+        /// <param name="pool">The <see cref="MemoryPool{T}"/> to get arrays from.</param>
+        /// <param name="disposePool">The value indicating whether the <paramref name="pool"/> must be disposed while disposing this instance.</param>
         /// <exception cref="ArgumentException">
         /// Thrown when <paramref name="initialCapacity"/> is not positive (i.e. less than or equal to 0).
         /// </exception>
-        public ArrayPoolBufferWriter(ArrayPool<T> pool, int initialCapacity)
+        public MemoryPoolBufferWriter(MemoryPool<T> pool, bool disposePool, int initialCapacity)
         {
             _pool = pool ?? throw new ArgumentNullException(nameof(pool));
+            _disposePool = disposePool;
             if (initialCapacity <= 0)
                 throw new ArgumentException(null, nameof(initialCapacity));
 
@@ -52,7 +57,7 @@ namespace XP.SDK.Buffers
             get
             {
                 CheckNotDisposed();
-                return _buffer.AsMemory(0, _index);
+                return _buffer.Memory.Slice(0, _index);
             }
         }
 
@@ -64,7 +69,7 @@ namespace XP.SDK.Buffers
             get
             {
                 CheckNotDisposed();
-                return _buffer.AsSpan(0, _index);
+                return _buffer.Memory.Span.Slice(0, _index);
             }
         }
 
@@ -88,7 +93,7 @@ namespace XP.SDK.Buffers
             get
             {
                 CheckNotDisposed();
-                return _buffer.Length;
+                return _buffer.Memory.Length;
             }
         }
 
@@ -100,7 +105,7 @@ namespace XP.SDK.Buffers
             get
             {
                 CheckNotDisposed();
-                return _buffer.Length - _index;
+                return _buffer.Memory.Length - _index;
             }
         }
 
@@ -115,8 +120,8 @@ namespace XP.SDK.Buffers
             CheckNotDisposed();
             CheckNotCompleted();
 
-            Debug.Assert(_buffer.Length >= _index);
-            _buffer.AsSpan(0, _index).Clear();
+            Debug.Assert(_buffer.Memory.Length >= _index);
+            _buffer.Memory.Span.Slice(0, _index).Clear();
             _index = 0;
         }
 
@@ -140,8 +145,8 @@ namespace XP.SDK.Buffers
             if (count < 0)
                 throw new ArgumentException(null, nameof(count));
 
-            if (_index > _buffer.Length - count)
-                ThrowInvalidOperationException_AdvancedTooFar(_buffer.Length);
+            if (_index > _buffer.Memory.Length - count)
+                ThrowInvalidOperationException_AdvancedTooFar(_buffer.Memory.Length);
 
             _index += count;
         }
@@ -167,8 +172,8 @@ namespace XP.SDK.Buffers
             CheckNotDisposed();
             CheckNotCompleted();
             CheckAndResizeBuffer(sizeHint);
-            Debug.Assert(_buffer.Length > _index);
-            return _buffer.AsMemory(_index);
+            Debug.Assert(_buffer.Memory.Length > _index);
+            return _buffer.Memory.Slice(_index);
         }
 
         /// <summary>
@@ -192,8 +197,8 @@ namespace XP.SDK.Buffers
             CheckNotDisposed();
             CheckNotCompleted();
             CheckAndResizeBuffer(sizeHint);
-            Debug.Assert(_buffer.Length > _index);
-            return _buffer.AsSpan(_index);
+            Debug.Assert(_buffer.Memory.Length > _index);
+            return _buffer.Memory.Span.Slice(_index);
         }
 
         /// <summary>
@@ -213,12 +218,16 @@ namespace XP.SDK.Buffers
         {
             if (_pool != null)
             {
-                _pool.Return(_buffer);
+                _buffer.Dispose();
                 _buffer = null;
+                if (_disposePool)
+                {
+                    _pool.Dispose();
+                }
                 _pool = null;
             }
         }
-        
+
         private void CheckAndResizeBuffer(int sizeHint)
         {
             if (sizeHint < 0)
@@ -231,7 +240,7 @@ namespace XP.SDK.Buffers
 
             if (sizeHint > FreeCapacity)
             {
-                int currentLength = _buffer.Length;
+                int currentLength = _buffer.Memory.Length;
                 int growBy = Math.Max(sizeHint, currentLength);
 
                 if (currentLength == 0)
@@ -252,8 +261,8 @@ namespace XP.SDK.Buffers
 
                 var oldBuffer = _buffer;
                 _buffer = _pool.Rent(newSize);
-                Array.Copy(oldBuffer, _buffer, oldBuffer.Length);
-                _pool.Return(oldBuffer);
+                oldBuffer.Memory.CopyTo(_buffer.Memory);
+                oldBuffer.Dispose();
             }
 
             Debug.Assert(FreeCapacity > 0 && FreeCapacity >= sizeHint);
@@ -283,7 +292,7 @@ namespace XP.SDK.Buffers
         {
             if (_pool == null)
             {
-                throw new ObjectDisposedException(nameof(ArrayPoolBufferWriter<T>));
+                throw new ObjectDisposedException(nameof(MemoryPoolBufferWriter<T>));
             }
         }
     }

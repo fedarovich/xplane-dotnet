@@ -19,7 +19,6 @@ namespace XP.SDK.Analyzers
         public const string LiteralProperty = "Literal";
         public const string Utf8AttributeProperty = "Utf8Attribute";
         public const string Utf8StringTypeProperty = "Utf8String";
-        public const string ParameterNameProperty = "ParameterName";
 
         private static readonly DiagnosticDescriptor Rule8001 = new (
             Rule8001Id,
