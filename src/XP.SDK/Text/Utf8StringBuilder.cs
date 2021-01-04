@@ -152,33 +152,29 @@ namespace XP.SDK.Text
         /// <summary>
         /// Appends the UTF-8 string.
         /// </summary>
-        public void Append(in Utf8String utf8String)
-        {
-            BufferWriter.Write(utf8String.Data[..utf8String.Length]);
-        }
+        public void Append(in Utf8String utf8String) => Append(utf8String.Data[..utf8String.Length]);
 
         /// <summary>
         /// Appends the UTF-8 substring.
         /// </summary>
-        public void Append(in Utf8String utf8String, int start)
-        {
-            BufferWriter.Write(utf8String.Data[start..utf8String.Length]);
-        }
+        public void Append(in Utf8String utf8String, int start) => Append(utf8String.Data[start..utf8String.Length]);
 
         /// <summary>
         /// Appends the UTF-8 substring.
         /// </summary>
-        public void Append(in Utf8String utf8String, int start, int length)
-        {
-            BufferWriter.Write(utf8String.Data[..utf8String.Length].Slice(start, length));
-        }
+        public void Append(in Utf8String utf8String, int start, int length) => Append(utf8String.Data[..utf8String.Length].Slice(start, length));
 
         /// <summary>
         /// Appends the UTF-8 substring.
         /// </summary>
-        public void Append(in Utf8String utf8String, Range range)
+        public void Append(in Utf8String utf8String, Range range) => Append(utf8String.Data[..utf8String.Length][range]);
+
+        /// <summary>
+        /// Appends the UTF-8 substring.
+        /// </summary>
+        public void Append(in ReadOnlySpan<byte> utf8)
         {
-            BufferWriter.Write(utf8String.Data[..utf8String.Length][range]);
+            BufferWriter.Write(utf8);
         }
 
         /// <summary>
@@ -219,6 +215,20 @@ namespace XP.SDK.Text
 
                 sizeHint *= 2;
             }
+        }
+
+        /// <summary>
+        /// Appends the <see cref="char"/> value.
+        /// </summary>
+        /// <param name="value">The value to append.</param>
+        /// <param name="format">The format. See <seealso cref="Utf8Formatter.TryFormat(byte, Span{byte}, out int, StandardFormat)"/> for the available formats.</param>
+        [SkipLocalsInit]
+        public void Append(char value, StandardFormat format = default)
+        {
+            ReadOnlySpan<char> chars = stackalloc char[] {value};
+            Span<byte> bytes = stackalloc byte[4];
+            Utf8.FromUtf16(chars, bytes, out _, out var len);
+            BufferWriter.Write(bytes.Slice(0, len));
         }
 
         /// <summary>
@@ -382,6 +392,43 @@ namespace XP.SDK.Text
         }
 
         /// <summary>
+        /// Appends the <see cref="IntPtr"/> value.
+        /// </summary>
+        /// <param name="value">The value to append.</param>
+        /// <param name="format">The format. See <seealso cref="Utf8Formatter.TryFormat(long, Span{byte}, out int, StandardFormat)"/> for the available formats.</param>
+        public void Append(nint value, StandardFormat format = default)
+        {
+            if (IntPtr.Size == 8)
+            {
+                int sizeHint = 29;
+                while (true)
+                {
+                    if (Utf8Formatter.TryFormat(value, BufferWriter.GetSpan(sizeHint), out var written, format))
+                    {
+                        BufferWriter.Advance(written);
+                        break;
+                    }
+
+                    sizeHint *= 2;
+                }
+            }
+            else
+            {
+                int sizeHint = 17;
+                while (true)
+                {
+                    if (Utf8Formatter.TryFormat((int) value, BufferWriter.GetSpan(sizeHint), out var written, format))
+                    {
+                        BufferWriter.Advance(written);
+                        break;
+                    }
+
+                    sizeHint *= 2;
+                }
+            }
+        }
+
+        /// <summary>
         /// Appends the <see cref="sbyte"/> value.
         /// </summary>
         /// <param name="value">The value to append.</param>
@@ -498,6 +545,43 @@ namespace XP.SDK.Text
                 }
 
                 sizeHint *= 2;
+            }
+        }
+
+        /// <summary>
+        /// Appends the <see cref="UIntPtr"/> value.
+        /// </summary>
+        /// <param name="value">The value to append.</param>
+        /// <param name="format">The format. See <seealso cref="Utf8Formatter.TryFormat(ulong, Span{byte}, out int, StandardFormat)"/> for the available formats.</param>
+        public void Append(nuint value, StandardFormat format = default)
+        {
+            if (IntPtr.Size == 8)
+            {
+                int sizeHint = 28;
+                while (true)
+                {
+                    if (Utf8Formatter.TryFormat(value, BufferWriter.GetSpan(sizeHint), out var written, format))
+                    {
+                        BufferWriter.Advance(written);
+                        break;
+                    }
+
+                    sizeHint *= 2;
+                }
+            }
+            else
+            {
+                int sizeHint = 16;
+                while (true)
+                {
+                    if (Utf8Formatter.TryFormat((uint) value, BufferWriter.GetSpan(sizeHint), out var written, format))
+                    {
+                        BufferWriter.Advance(written);
+                        break;
+                    }
+
+                    sizeHint *= 2;
+                }
             }
         }
 

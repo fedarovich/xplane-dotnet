@@ -215,6 +215,7 @@ namespace XP.SDK.Analyzers
                     Accessibility.Internal => "internal",
                     Accessibility.ProtectedOrInternal => "protected internal",
                     Accessibility.Public => "public",
+                    Accessibility.NotApplicable => "",
                     _ => throw new ArgumentOutOfRangeException(nameof(access), access, null)
                 };
         }

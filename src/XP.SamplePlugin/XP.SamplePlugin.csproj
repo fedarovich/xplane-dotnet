@@ -6,6 +6,10 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <EmitCompilerGeneratedFiles>True</EmitCompilerGeneratedFiles>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\XP.SDK.Analyzers\XP.SDK.Analyzers\XP.SDK.Analyzers.csproj"
                       OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>

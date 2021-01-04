@@ -1,5 +1,6 @@
 ﻿using System;
 using XP.SDK;
+using XP.SDK.Text;
 using XP.SDK.XPLM;
 
 [assembly: Plugin(typeof(XP.SamplePlugin.Plugin))]
@@ -18,6 +19,10 @@ namespace XP.SamplePlugin
         {
             return Utf8String.FromString("Sample plugin.");
         }
+
+        [Utf8StringFormat("ab{0}cd{color}e{1:X8}{2}gh{\n}ijk{d}l{4}mn", NullDisplayText = "<n/a>")]
+        public virtual partial Utf8StringScope Format(int a, uint? b = 4_000_000_000, string c = "abc", in decimal d = 2.5m, Base64FormattingOptions e = Base64FormattingOptions.InsertLineBreaks,
+            in RGBColor color = default);
 
         protected override bool OnStart()
         {

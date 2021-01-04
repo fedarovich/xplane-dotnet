@@ -7,7 +7,7 @@ namespace XP.SDK
     /// Mark partial method returning <see cref="Utf8String"/> with this attribute
     /// in order to automatically generate the return value from the specified literal.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     [Conditional("SAVE_UTF8_LITERAL_IN_METADATA")]
     public sealed class Utf8StringLiteralAttribute : Attribute
     {

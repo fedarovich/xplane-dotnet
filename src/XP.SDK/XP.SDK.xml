@@ -467,6 +467,11 @@
             Appends the UTF-8 substring.
             </summary>
         </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.ReadOnlySpan{System.Byte}@)">
+            <summary>
+            Appends the UTF-8 substring.
+            </summary>
+        </member>
         <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.Boolean,System.Buffers.StandardFormat)">
             <summary>
             Appends the <see cref="T:System.Boolean"/> value.
@@ -477,6 +482,13 @@
         <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.Byte,System.Buffers.StandardFormat)">
             <summary>
             Appends the <see cref="T:System.Byte"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Byte,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.Char,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.Char"/> value.
             </summary>
             <param name="value">The value to append.</param>
             <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Byte,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
@@ -537,6 +549,13 @@
             <param name="value">The value to append.</param>
             <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Int64,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
         </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.IntPtr,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.IntPtr"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.Int64,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
         <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.SByte,System.Buffers.StandardFormat)">
             <summary>
             Appends the <see cref="T:System.SByte"/> value.
@@ -575,6 +594,13 @@
         <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.UInt64,System.Buffers.StandardFormat)">
             <summary>
             Appends the <see cref="T:System.UInt64"/> value.
+            </summary>
+            <param name="value">The value to append.</param>
+            <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.UInt64,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
+        </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilder.Append(System.UIntPtr,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the <see cref="T:System.UIntPtr"/> value.
             </summary>
             <param name="value">The value to append.</param>
             <param name="format">The format. See <seealso cref="M:System.Buffers.Text.Utf8Formatter.TryFormat(System.UInt64,System.Span{System.Byte},System.Int32@,System.Buffers.StandardFormat)"/> for the available formats.</param>
@@ -863,6 +889,12 @@
             (without including the terminating null character itself).
             </remarks>
             <seealso cref="P:XP.SDK.Utf8String.Length"/>
+        </member>
+        <member name="T:XP.SDK.Utf8StringFormatAttribute">
+            <summary>
+            Mark partial method returning <see cref="T:XP.SDK.Utf8String"/> or <see cref="T:XP.SDK.Utf8StringScope"/> with this attribute
+            in order to automatically generate the return value from the specified format string and method parameters.
+            </summary>
         </member>
         <member name="T:XP.SDK.Utf8StringLiteralAttribute">
             <summary>
