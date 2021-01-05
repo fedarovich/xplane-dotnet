@@ -106,6 +106,28 @@ namespace XP.SDK
         }
 
         /// <summary>
+        /// Initializes the string from pointer.
+        /// </summary>
+        /// <param name="data">The pointer to the NULL-terminated string data..</param>
+        /// <remarks>
+        /// <para>
+        /// If the <paramref name="data"/> is <see langword="null"/>, <see cref="Utf8String.IsNull"/> property of the resulting string will be null.
+        /// </para>
+        /// </remarks>
+        public unsafe Utf8String(byte* data)
+        {
+            if (data == null)
+            {
+                this = default;
+            }
+            else
+            {
+                int length = (int) Utils.StrLen(data);
+                Data = new ReadOnlySpan<byte>(data, length + 1);
+            }
+        }
+
+        /// <summary>
         /// Creates a new <see cref="Utf8String"/> from the string.
         /// </summary>
         /// <remarks>The actual string data is stored in a managed array.</remarks>

@@ -8,7 +8,7 @@ using System.Text.Unicode;
 
 namespace XP.SDK
 {
-    public static class Utils
+    internal static partial class Utils
     {
         internal static readonly UTF8Encoding UTF8WithoutPreamble = new UTF8Encoding(false);
         
@@ -50,15 +50,6 @@ namespace XP.SDK
             return refcon != null
                 ? GCHandle.FromIntPtr(new IntPtr(refcon)).Target as T
                 : null;
-        }
-
-        internal static unsafe int StrLen(byte* str)
-        {
-            byte* s;
-            for (s = str; *s != 0; ++s)
-            {
-            }
-            return (int)(s - str);
         }
     }
 }

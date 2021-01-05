@@ -811,6 +811,17 @@
             </remarks>
             <exception cref="T:System.ArgumentException">The <paramref name="data"/> does not contain zero byte.</exception>
         </member>
+        <member name="M:XP.SDK.Utf8String.#ctor(System.Byte*)">
+            <summary>
+            Initializes the string from pointer.
+            </summary>
+            <param name="data">The pointer to the NULL-terminated string data..</param>
+            <remarks>
+            <para>
+            If the <paramref name="data"/> is <see langword="null"/>, <see cref="P:XP.SDK.Utf8String.IsNull"/> property of the resulting string will be null.
+            </para>
+            </remarks>
+        </member>
         <member name="M:XP.SDK.Utf8String.FromString(System.String)">
             <summary>
             Creates a new <see cref="T:XP.SDK.Utf8String"/> from the string.

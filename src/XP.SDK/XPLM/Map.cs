@@ -54,7 +54,7 @@ namespace XP.SDK.XPLM
             public unsafe void Invoke(byte* mapIdentifier)
             {
                 var len = Utils.StrLen(mapIdentifier);
-                var span = new Span<byte>(mapIdentifier, len + 1);
+                var span = new Span<byte>(mapIdentifier, (int)(len + 1));
                 if (span.SequenceEqual(UserInterfaceUtf8.Span))
                 {
                     Delegate.Invoke(UserInterface);
