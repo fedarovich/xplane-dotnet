@@ -32,6 +32,27 @@ namespace XP.SDK.Analyzers
         private static readonly SymbolDisplayFormat MethodModifiersFormat = new (
             memberOptions: SymbolDisplayMemberOptions.IncludeAccessibility | SymbolDisplayMemberOptions.IncludeModifiers);
 
+        private static readonly IReadOnlyDictionary<SpecialType, string> Formats = new Dictionary<SpecialType, string>
+        {
+            [SpecialType.System_Boolean] = "lG",
+            [SpecialType.System_DateTime] = "lGOR",
+            // Integer types
+            [SpecialType.System_Byte] = "dgnxDGNX",
+            [SpecialType.System_Int16] = "dgnxDGNX",
+            [SpecialType.System_Int32] = "dgnxDGNX",
+            [SpecialType.System_Int64] = "dgnxDGNX",
+            [SpecialType.System_IntPtr] = "dgnxDGNX",
+            [SpecialType.System_SByte] = "dgnxDGNX",
+            [SpecialType.System_UInt16] = "dgnxDGNX",
+            [SpecialType.System_UInt32] = "dgnxDGNX",
+            [SpecialType.System_UInt64] = "dgnxDGNX",
+            [SpecialType.System_UIntPtr] = "dgnxDGNX",
+            // Floating point types
+            [SpecialType.System_Single] = "efgEFG",
+            [SpecialType.System_Double] = "efgEFG",
+            [SpecialType.System_Decimal] = "efgEFG",
+        };
+
         private static readonly DiagnosticDescriptor Rule8200 = new (
             "XPSDK8200",
             "Format string is invalid",
@@ -72,6 +93,14 @@ namespace XP.SDK.Analyzers
             DiagnosticSeverity.Error,
             true);
 
+        private static readonly DiagnosticDescriptor Rule8205 = new(
+            "XPSDK8205",
+            "Unsupported format symbol",
+            "The type '{0}' does not support format '{1}'. The following formats are allowed: {2}.",
+            "Usage",
+            DiagnosticSeverity.Error,
+            true);
+
         private static readonly Regex ParameterNameRegex = new (@"^[\w-[\d]][\w]{0,511}$", RegexOptions.Compiled);
         
         public void Initialize(GeneratorInitializationContext context)
@@ -104,10 +133,16 @@ namespace XP.SDK.Analyzers
             if (compilation.GetTypeByMetadataName("XP.SDK.Text.IUtf8Formattable") is not { } utf8FormattableSymbol)
                 return;
 
+            if (compilation.GetTypeByMetadataName("XP.SDK.Text.SupportedFormatAttribute") is not { } supportedFormatAttributeSymbol)
+                return;
+
             if (compilation.GetTypeByMetadataName("System.ReadOnlySpan`1") is not { } readOnlySpanSymbol)
                 return;
 
             if (compilation.GetTypeByMetadataName("System.TimeSpan") is not { } timeSpanSymbol)
+                return;
+
+            if (compilation.GetTypeByMetadataName("System.DateTimeOffset") is not { } dateTimeOffsetSymbol)
                 return;
 
             if (compilation.GetTypeByMetadataName("System.Guid") is not { } guidSymbol)
@@ -463,7 +498,6 @@ namespace XP.SDK.Analyzers
                         switch (type.SpecialType)
                         {
                             case SpecialType.System_Boolean:
-                            case SpecialType.System_Char:
                             case SpecialType.System_SByte:
                             case SpecialType.System_Byte:
                             case SpecialType.System_Int16:
@@ -478,9 +512,10 @@ namespace XP.SDK.Analyzers
                             case SpecialType.System_IntPtr:
                             case SpecialType.System_UIntPtr:
                             case SpecialType.System_DateTime:
-                                VerifyFormat(type, format);
+                                VerifyFormatOfSpecialType(type, format);
                                 WriteCore();
                                 return;
+                            case SpecialType.System_Char:
                             case SpecialType.System_String:
                                 WriteCore();
                                 return;
@@ -490,16 +525,29 @@ namespace XP.SDK.Analyzers
                         {
                             WriteCore();
                         }
-                        else if (type is INamedTypeSymbol { EnumUnderlyingType: not null } ||
-                            SymbolEqualityComparer.Default.Equals(type, timeSpanSymbol) ||
-                            SymbolEqualityComparer.Default.Equals(type, guidSymbol))
+                        else if (SymbolEqualityComparer.Default.Equals(type, timeSpanSymbol))
                         {
-                            VerifyFormat(type, format);
+                            VerifyFormat(type, format, "cgtGT");
+                            WriteCore();
+                        }
+                        else if (SymbolEqualityComparer.Default.Equals(type, dateTimeOffsetSymbol))
+                        {
+                            VerifyFormat(type, format, "lGOR");
+                            WriteCore();
+                        }
+                        else if (SymbolEqualityComparer.Default.Equals(type, guidSymbol))
+                        {
+                            VerifyFormat(type, format, "BDNP");
+                            WriteCore();
+                        }
+                        else if (type is INamedTypeSymbol { EnumUnderlyingType: not null })
+                        {
+                            VerifyFormat(type, format, "dfgxDFGX");
                             WriteCore();
                         }
                         else if (type is INamedTypeSymbol namedType && namedType.IsSubtypeOf(utf8FormattableSymbol))
                         {
-                            VerifyFormat(type, format);
+                            VerifyFormatOfFormattable(type, format);
                             WriteCore(true);
                         }
                         else
@@ -538,9 +586,47 @@ namespace XP.SDK.Analyzers
                         }
                     }
 
-                    void VerifyFormat(ITypeSymbol type, StandardFormat standardFormat)
+                    void VerifyFormatOfSpecialType(ITypeSymbol type, StandardFormat standardFormat)
                     {
+                        if (standardFormat.IsDefault || !Formats.TryGetValue(type.SpecialType, out var allowedFormats))
+                            return;
 
+                        VerifyFormat(type, standardFormat, allowedFormats);
+                    }
+
+                    void VerifyFormatOfFormattable(ITypeSymbol type, StandardFormat standardFormat)
+                    {
+                        if (standardFormat.IsDefault)
+                            return;
+                        
+                        var allowedFormats = type.GetAttributes()
+                            .Where(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass, supportedFormatAttributeSymbol))
+                            .Select(a => a.ConstructorArguments.FirstOrDefault().Value as char?)
+                            .Where(c => c != null)
+                            .Select(c => c.Value)
+                            .Distinct()
+                            .OrderBy(c => c)
+                            .ToList();
+                        
+                        if (allowedFormats.Count == 0)
+                            return;
+
+                        VerifyFormat(type, standardFormat, allowedFormats);
+                    }
+
+                    void VerifyFormat(ITypeSymbol type, StandardFormat standardFormat, IEnumerable<char> allowedFormats)
+                    {
+                        // ReSharper disable PossibleMultipleEnumeration
+                        if (!standardFormat.IsDefault && !allowedFormats.Contains(standardFormat.Symbol))
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(
+                                Rule8205,
+                                parameter.DeclaringSyntaxReferences[0].GetSyntax().GetLocation(),
+                                type.ToString(),
+                                standardFormat.Symbol,
+                                string.Join(", ", allowedFormats.Select(c => $"'{c}'"))));
+                        }
+                        // ReSharper restore PossibleMultipleEnumeration
                     }
                 }
             }

@@ -373,6 +373,27 @@
             <c>\n</c>
             </summary>
         </member>
+        <member name="T:XP.SDK.Text.SupportedFormatAttribute">
+            <summary>
+            Identifies one of the format symbols supported by <see cref="T:XP.SDK.Text.IUtf8Formattable"/> implementation.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.Text.SupportedFormatAttribute.#ctor(System.Char)">
+            <summary>
+            Initialized a new instance of <see cref="T:XP.SDK.Text.SupportedFormatAttribute"/>.
+            </summary>
+            <param name="format">The supported format symbol.</param>
+        </member>
+        <member name="P:XP.SDK.Text.SupportedFormatAttribute.Format">
+            <summary>
+            Gets the supported format symbol.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.Text.SupportedFormatAttribute.Description">
+            <summary>
+            Gets or sets the optional description.
+            </summary>
+        </member>
         <member name="T:XP.SDK.Text.Utf8StringBuilder">
             <summary>
             Provides a way to build a <see cref="T:XP.SDK.Utf8String"/>.
