@@ -769,7 +769,7 @@
             Gets the empty UTF-8 string.
             </summary>
         </member>
-        <member name="P:XP.SDK.Utf8String.Data">
+        <member name="P:XP.SDK.Utf8String.Span">
             <summary>
             Gets the underlying span.
             </summary>
@@ -843,10 +843,20 @@
             </para>
             </remarks>
         </member>
-        <member name="M:XP.SDK.Utf8String.FromString(System.String)">
+        <member name="M:XP.SDK.Utf8String.FromString(System.String,System.Boolean)">
             <summary>
             Creates a new <see cref="T:XP.SDK.Utf8String"/> from the string.
             </summary>
+            <param name="str">The string.</param>
+            <param name="pinned">If <see langword="true"/>, the underlying memory buffer will be allocated in the Pinned Object Heap, instead of normal heap.</param>
+            <remarks>The actual string data is stored in a managed array.</remarks>
+        </member>
+        <member name="M:XP.SDK.Utf8String.FromUtf16(System.ReadOnlySpan{System.Char}@,System.Boolean)">
+            <summary>
+            Creates a new <see cref="T:XP.SDK.Utf8String"/> from the span containing UTF-16 chars.
+            </summary>
+            <param name="chars">The span with char data.</param>
+            <param name="pinned">If <see langword="true"/>, the underlying memory buffer will be allocated in the Pinned Object Heap, instead of normal heap.</param>
             <remarks>The actual string data is stored in a managed array.</remarks>
         </member>
         <member name="M:XP.SDK.Utf8String.ToString">
@@ -933,6 +943,28 @@
             Mark partial method returning <see cref="T:XP.SDK.Utf8String"/> with this attribute
             in order to automatically generate the return value from the specified literal.
             </summary>
+        </member>
+        <member name="M:XP.SDK.Utils.CStringLength(System.Byte*)">
+            <summary>
+            Gets the length on null-terminated string. This function is equivalent to <c>strlen_s</c> C function.
+            </summary>
+            <param name="str">The pointer to the string start.</param>
+            <returns>
+            <para>The length of the null-terminated byte string <paramref name="str"/>.</para>
+            <para><c>0</c> if <paramref name="str"/> is <see langword="null"/>.</para>
+            </returns>
+        </member>
+        <member name="M:XP.SDK.Utils.CStringLength(System.Byte*,System.UIntPtr)">
+            <summary>
+            Gets the length on null-terminated string. This function is equivalent to <c>strnlen_s</c> C function.
+            </summary>
+            <param name="str">The pointer to the string start.</param>
+            <param name="maxLength">The maximal length to check.</param>
+            <returns>
+            <para>The length of the null-terminated byte string <paramref name="str"/>.</para>
+            <para><c>0</c> if <paramref name="str"/> is <see langword="null"/>.</para>
+            <para><c>maxLength</c> if the string does not contain null character in the first <paramref name="maxLength"/> bytes.</para>
+            </returns>
         </member>
         <member name="T:XP.SDK.Widgets.Behavior">
             <summary>

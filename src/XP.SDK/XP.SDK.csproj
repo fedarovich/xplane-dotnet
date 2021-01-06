@@ -36,8 +36,4 @@
   <ItemGroup>
     <None Include="build/**" Pack="True" PackagePath="build/" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Buffers\" />
-  </ItemGroup>
 </Project>

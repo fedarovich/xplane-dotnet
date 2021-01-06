@@ -152,22 +152,22 @@ namespace XP.SDK.Text
         /// <summary>
         /// Appends the UTF-8 string.
         /// </summary>
-        public void Append(in Utf8String utf8String) => Append(utf8String.Data[..utf8String.Length]);
+        public void Append(in Utf8String utf8String) => Append(utf8String.Span[..utf8String.Length]);
 
         /// <summary>
         /// Appends the UTF-8 substring.
         /// </summary>
-        public void Append(in Utf8String utf8String, int start) => Append(utf8String.Data[start..utf8String.Length]);
+        public void Append(in Utf8String utf8String, int start) => Append(utf8String.Span[start..utf8String.Length]);
 
         /// <summary>
         /// Appends the UTF-8 substring.
         /// </summary>
-        public void Append(in Utf8String utf8String, int start, int length) => Append(utf8String.Data[..utf8String.Length].Slice(start, length));
+        public void Append(in Utf8String utf8String, int start, int length) => Append(utf8String.Span[..utf8String.Length].Slice(start, length));
 
         /// <summary>
         /// Appends the UTF-8 substring.
         /// </summary>
-        public void Append(in Utf8String utf8String, Range range) => Append(utf8String.Data[..utf8String.Length][range]);
+        public void Append(in Utf8String utf8String, Range range) => Append(utf8String.Span[..utf8String.Length][range]);
 
         /// <summary>
         /// Appends the UTF-8 substring.

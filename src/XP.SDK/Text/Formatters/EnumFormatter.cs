@@ -103,7 +103,7 @@ namespace XP.SDK.Text.Formatters
                 var flagsString = Utf8String.FromString(value.ToString("F"));
                 if (destination.Length >= flagsString.Length)
                 {
-                    flagsString.Data.Slice(0, flagsString.Length).CopyTo(destination);
+                    flagsString.Span.Slice(0, flagsString.Length).CopyTo(destination);
                     bytesWritten = flagsString.Length;
                     return true;
                 }

@@ -22,34 +22,34 @@ namespace XP.SDK
         /// <summary>
         /// Gets the underlying span.
         /// </summary>
-        public ReadOnlySpan<byte> Data { get; }
+        public ReadOnlySpan<byte> Span { get; }
 
         /// <summary>
         /// Gets the string length.
         /// </summary>
-        /// <seealso cref="StrLen" />
-        public int Length => Data.IsEmpty ? 0 : Data.Length - 1;
+        /// <seealso cref="GetStringLength" />
+        public int Length => Span.IsEmpty ? 0 : Span.Length - 1;
 
         /// <summary>
         /// Gets the value indicating whether the string is null.
         /// </summary>
         /// <seealso cref="IsEmpty"/>
         /// <seealso cref="IsNullOrEmpty" />
-        public bool IsNull => Data.IsEmpty;
+        public bool IsNull => Span.IsEmpty;
 
         /// <summary>
         /// Gets the value indicating whether the string is empty.
         /// </summary>
         /// <seealso cref="IsNull"/>
         /// <seealso cref="IsNullOrEmpty" />
-        public bool IsEmpty => Data.Length == 1;
+        public bool IsEmpty => Span.Length == 1;
 
         /// <summary>
         /// Gets the value indicating whether the string is null or empty.
         /// </summary>
         /// <seealso cref="IsNull"/>
         /// <seealso cref="IsEmpty"/>
-        public bool IsNullOrEmpty => Data.Length <= 1;
+        public bool IsNullOrEmpty => Span.Length <= 1;
 
         /// <summary>
         /// Initializes the string from read-only span.
@@ -73,7 +73,7 @@ namespace XP.SDK
             if (data[length] != 0)
                 throw new ArgumentException("The data span must have value 0 at index length.");
 
-            Data = data;
+            Span = data;
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace XP.SDK
                 if (length < 0)
                     throw new ArgumentException("The data must be a null-terminated string.");
 
-                Data = data.Slice(0, length + 1);
+                Span = data.Slice(0, length + 1);
             }
         }
 
@@ -114,6 +114,7 @@ namespace XP.SDK
         /// If the <paramref name="data"/> is <see langword="null"/>, <see cref="Utf8String.IsNull"/> property of the resulting string will be null.
         /// </para>
         /// </remarks>
+        /// <exception cref="ArgumentException">The length of the string exceeds 2147483646.</exception>
         public unsafe Utf8String(byte* data)
         {
             if (data == null)
@@ -122,41 +123,65 @@ namespace XP.SDK
             }
             else
             {
-                int length = (int) Utils.StrLen(data);
-                Data = new ReadOnlySpan<byte>(data, length + 1);
+                var length = (int) Utils.CStringLength(data, int.MaxValue);
+                if (length == int.MaxValue)
+                    throw new ArgumentException("The string length must not exceed 2147483646.");
+                
+                Span = new ReadOnlySpan<byte>(data, length + 1);
             }
         }
 
         /// <summary>
         /// Creates a new <see cref="Utf8String"/> from the string.
         /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="pinned">If <see langword="true"/>, the underlying memory buffer will be allocated in the Pinned Object Heap, instead of normal heap.</param>
         /// <remarks>The actual string data is stored in a managed array.</remarks>
-        public static Utf8String FromString(string? str)
+        public static Utf8String FromString(string? str, bool pinned = false)
         {
             if (str == null)
                 return default;
 
             var length = Utils.UTF8WithoutPreamble.GetByteCount(str);
-            var buffer = new byte[length + 1];
+            var buffer = GC.AllocateUninitializedArray<byte>(length + 1, pinned);
             Utils.UTF8WithoutPreamble.GetBytes(str, buffer);
+            buffer[length] = 0;
+            return new Utf8String(buffer, length);
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Utf8String"/> from the span containing UTF-16 chars.
+        /// </summary>
+        /// <param name="chars">The span with char data.</param>
+        /// <param name="pinned">If <see langword="true"/>, the underlying memory buffer will be allocated in the Pinned Object Heap, instead of normal heap.</param>
+        /// <remarks>The actual string data is stored in a managed array.</remarks>
+        public static Utf8String FromUtf16(in ReadOnlySpan<char> chars, bool pinned = false)
+        {
+            if (chars.IsEmpty)
+                return default;
+
+            var length = Utils.UTF8WithoutPreamble.GetByteCount(chars);
+            var buffer = GC.AllocateUninitializedArray<byte>(length + 1, pinned);
+            Utils.UTF8WithoutPreamble.GetBytes(chars, buffer);
+            buffer[length] = 0;
             return new Utf8String(buffer, length);
         }
 
         /// <inheritdoc />
-        public override string? ToString() => Data.IsEmpty ? null : Utils.UTF8WithoutPreamble.GetString(Data[..^1]);
+        public override string? ToString() => Span.IsEmpty ? null : Utils.UTF8WithoutPreamble.GetString(Span[..^1]);
 
         /// <summary>
         /// Compares whether two UTF8 strings are equal.
         /// </summary>
         /// <param name="other">The string to compare with.</param>
-        public bool Equals(in Utf8String other) => Data.Length == other.Data.Length && Data.SequenceEqual(other.Data);
+        public bool Equals(in Utf8String other) => Span.Length == other.Span.Length && Span.SequenceEqual(other.Span);
 
         /// <summary>
         /// Returns a reference to the 0th element of the UTF-8 string. If the string is null (i.e. the underlying span is empty), returns null reference.
         /// It can be used for pinning and is required to support the use of span within a fixed statement.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public ref readonly byte GetPinnableReference() => ref Data.GetPinnableReference();
+        public ref readonly byte GetPinnableReference() => ref Span.GetPinnableReference();
 
         /// <summary>
         /// Converts the <see cref="Utf8String"/> to <see cref="string"/>.
@@ -175,28 +200,28 @@ namespace XP.SDK
         /// </summary>
         /// <param name="substring">The substring to seek.</param>
         /// <returns>The zero-based index position of value if that substring is found, or <c>-1</c> if it is not. If value is Null or Empty, the return value is <c>0</c>.</returns>
-        public int IndexOf(in Utf8String substring) => substring.IsNullOrEmpty ? 0 : Data.IndexOf(substring.Data[..^1]);
+        public int IndexOf(in Utf8String substring) => substring.IsNullOrEmpty ? 0 : Span.IndexOf(substring.Span[..^1]);
 
         /// <summary>
         /// Reports the zero-based index of the last occurrence of the specified substring in this instance.
         /// </summary>
         /// <param name="substring">The substring to seek.</param>
         /// <returns>The zero-based index position of value if that substring is found, or <c>-1</c> if it is not. If value is Null or Empty, the return value is <c>-1</c>.</returns>
-        public int LastIndexOf(in Utf8String substring) => substring.IsNullOrEmpty ? -1 : Data.LastIndexOf(substring.Data[..^1]);
+        public int LastIndexOf(in Utf8String substring) => substring.IsNullOrEmpty ? -1 : Span.LastIndexOf(substring.Span[..^1]);
 
         /// <summary>
         /// Determines whether the beginning of this string instance matches the specified string.
         /// </summary>
         /// <param name="substring">The string to compare.</param>
         /// <returns><see langword="true"/> if substring matches the beginning of this string; otherwise, <see langword="false"/></returns>
-        public bool StartsWith(in Utf8String substring) => substring.IsNullOrEmpty || Data.StartsWith(substring.Data[..^1]);
+        public bool StartsWith(in Utf8String substring) => substring.IsNullOrEmpty || Span.StartsWith(substring.Span[..^1]);
 
         /// <summary>
         /// Determines whether the end of this string instance matches the specified string.
         /// </summary>
         /// <param name="substring">The string to compare.</param>
         /// <returns><see langword="true"/> if substring matches the end of this string; otherwise, <see langword="false"/></returns>
-        public bool EndsWith(in Utf8String substring) => substring.IsNullOrEmpty || Data.EndsWith(substring.Data[..^1]);
+        public bool EndsWith(in Utf8String substring) => substring.IsNullOrEmpty || Span.EndsWith(substring.Span[..^1]);
 
         /// <summary>
         /// Copies the data to the destination.
@@ -204,22 +229,35 @@ namespace XP.SDK
         /// <param name="destination">The destination to copy the data to. The destination buffer must be at least <c>Length + 1</c> bytes long.</param>
         public unsafe void CopyTo(byte* destination)
         {
-            fixed (byte* source = Data)
+            fixed (byte* source = Span)
             {
-                Buffer.MemoryCopy(source, destination, Data.Length, Data.Length);
+                Buffer.MemoryCopy(source, destination, Span.Length, Span.Length);
             }
         }
 
         /// <summary>
         /// Returns the length of the C string.
         /// </summary>
-        /// <returns>The length of the C string is this object contains a valid not-null C-string; <c>-1</c> otherwise.</returns>
+        /// <returns>
+        /// <para>The length of the C string is this object contains a valid C-string; <c>-1</c> otherwise.</para>
+        /// <para>If <see cref="IsNull"/>, returns <c>0</c>.</para>
+        /// </returns>
         /// <remarks>
         /// The length of a C string is determined by the terminating null-character:
         /// A C string is as long as the number of characters between the beginning of the string and the terminating null character
         /// (without including the terminating null character itself).
         /// </remarks>
         /// <seealso cref="Length"/>
-        public int StrLen() => Data.IndexOf((byte) 0);
+        public unsafe int GetStringLength()
+        {
+            if (Span.IsEmpty)
+                return 0;
+
+            fixed (byte* str = Span)
+            {
+                var length = (int) Utils.CStringLength(str, (nuint) Span.Length);
+                return length < Span.Length ? length : -1;
+            }
+        }
     }
 }
