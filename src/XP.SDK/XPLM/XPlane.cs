@@ -19,9 +19,6 @@ namespace XP.SDK.XPLM
         private static readonly Lazy<(int xplaneVersion, int xplmVersion, HostApplicationID app)> Versions;
         private static readonly Lazy<string> SystemPathLazy;
         private static readonly Lazy<string> PreferencesPathLazy;
-        private static readonly ErrorCallback ErrorCallback;
-
-        private static Action<string> _errorCallback;
 
         #region Constructor
 
@@ -45,9 +42,8 @@ namespace XP.SDK.XPLM
             }
 
             Versions = new Lazy<(int xplaneVersion, int xplmVersion, HostApplicationID app)>(GetVersion, LazyThreadSafetyMode.PublicationOnly);
-            SystemPathLazy = new Lazy<string>(GetSystemPath, LazyThreadSafetyMode.PublicationOnly);
-            PreferencesPathLazy = new Lazy<string>(GetPreferencesPath, LazyThreadSafetyMode.PublicationOnly);
-            ErrorCallback = OnError;
+            SystemPathLazy = new Lazy<string>(GetSystemPathString, LazyThreadSafetyMode.PublicationOnly);
+            PreferencesPathLazy = new Lazy<string>(GetPreferencesPathString, LazyThreadSafetyMode.PublicationOnly);
 
             static (int, int, HostApplicationID) GetVersion()
             {
@@ -56,27 +52,22 @@ namespace XP.SDK.XPLM
                 return result;
             }
 
-            static string GetSystemPath()
+            static string GetSystemPathString()
             {
                 Span<byte> buffer = stackalloc byte[MaxPath];
-                UtilitiesAPI.GetSystemPath((byte*)Unsafe.AsPointer(ref buffer.GetPinnableReference()));
-                return Encoding.UTF8.GetString(buffer[..buffer.IndexOf((byte)0)]);
+                byte* ptr = (byte*) Unsafe.AsPointer(ref buffer.GetPinnableReference());
+                UtilitiesAPI.GetSystemPath(ptr);
+                int length = (int) Utils.CStringLength(ptr);
+                return Utf8String.Encoding.GetString(buffer[..length]);
             }
 
-            static string GetPreferencesPath()
+            static string GetPreferencesPathString()
             {
                 Span<byte> buffer = stackalloc byte[MaxPath];
-                UtilitiesAPI.GetSystemPath((byte*)Unsafe.AsPointer(ref buffer.GetPinnableReference()));
-                return Encoding.UTF8.GetString(buffer[..buffer.IndexOf((byte)0)]);
-            }
-
-            static void OnError(byte* inmessage)
-            {
-                if (_errorCallback == null)
-                    return;
-
-                var message = Marshal.PtrToStringUTF8(new IntPtr(inmessage));
-                _errorCallback?.Invoke(message);
+                byte* ptr = (byte*) Unsafe.AsPointer(ref buffer.GetPinnableReference());
+                UtilitiesAPI.GetPrefsPath(ptr);
+                int length = (int) Utils.CStringLength(ptr);
+                return Utf8String.Encoding.GetString(buffer[..length]);
             }
         }
 
@@ -87,6 +78,7 @@ namespace XP.SDK.XPLM
         /// <summary>
         /// Gets the full path to the X-System folder.
         /// </summary>
+        /// <seealso cref="GetSystemPath" />
         public static string SystemPath => SystemPathLazy.Value;
 
         /// <summary>
@@ -95,6 +87,7 @@ namespace XP.SDK.XPLM
         /// <remarks>
         /// You should remove the file name back to the last directory separator to get the preferences directory.
         /// </remarks>
+        /// <seealso cref="GetPreferencesPath"/>
         public static string PreferencesPath => PreferencesPathLazy.Value;
 
         /// <summary>
@@ -128,6 +121,37 @@ namespace XP.SDK.XPLM
         #region Methods
 
         /// <summary>
+        /// Gets the full path to the X-System folder.
+        /// </summary>
+        /// <seealso cref="SystemPath" />
+        public static unsafe Utf8String GetSystemPath()
+        {
+            var buffer = GC.AllocateUninitializedArray<byte>(MaxPath);
+            fixed (byte* ptr = buffer)
+            {
+                UtilitiesAPI.GetSystemPath(ptr);
+                return new Utf8String(ptr);
+            }
+        }
+
+        /// <summary>
+        /// Gets a full path to a file that is within X-Plane’s preferences directory.
+        /// </summary>
+        /// <remarks>
+        /// You should remove the file name back to the last directory separator to get the preferences directory.
+        /// </remarks>
+        /// <seealso cref="PreferencesPath"/>
+        public static unsafe Utf8String GetPreferencesPath()
+        {
+            var buffer = GC.AllocateUninitializedArray<byte>(MaxPath);
+            fixed (byte* ptr = buffer)
+            {
+                UtilitiesAPI.GetPrefsPath(ptr);
+                return new Utf8String(ptr);
+            }
+        }
+
+        /// <summary>
         /// <para>
         /// Installs an error-reporting callback for your plugin.
         /// Normally the plugin system performs minimum diagnostics to maximize
@@ -151,16 +175,12 @@ namespace XP.SDK.XPLM
         /// </summary>
         [Obsolete("This method will cause performance issues and should not be used in Release builds. Use " 
                   + nameof(SetErrorCallbackForDebugBuild) + " method instead, if needed.")]
-        public static unsafe void SetErrorCallback(Action<string> callback)
+        public static unsafe void SetErrorCallback(delegate* unmanaged<byte*, void> callback)
         {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback));
 
-            if (Interlocked.Exchange(ref _errorCallback, callback) == null)
-            {
-                var callbackPtr = (delegate* unmanaged<byte*, void>) Marshal.GetFunctionPointerForDelegate(ErrorCallback);
-                UtilitiesAPI.SetErrorCallback(callbackPtr);
-            }
+            UtilitiesAPI.SetErrorCallback(callback);
         }
 
         /// <summary>
@@ -183,11 +203,20 @@ namespace XP.SDK.XPLM
         /// </para>
         /// </summary>
         [Conditional("DEBUG")]
-        public static void SetErrorCallbackForDebugBuild(Action<string> callback)
+        public static unsafe void SetErrorCallbackForDebugBuild(delegate* unmanaged<byte*, void> callback)
         {
 #pragma warning disable 618
             SetErrorCallback(callback);
 #pragma warning restore 618
+        }
+
+        /// <summary>
+        /// This function displays the string in a translucent overlay over the current display and also speaks the string if text-to-speech is enabled.
+        /// The string is spoken asynchronously, this function returns immediately. This function may not speak or print depending on user preferences.
+        /// </summary>
+        public static void Speak(in Utf8String str)
+        {
+            UtilitiesAPI.SpeakString(str);
         }
 
         /// <summary>
@@ -212,18 +241,50 @@ namespace XP.SDK.XPLM
         /// <list type="bullet">
         /// <item>
         /// <description>
-        /// Use <seealso cref="Version"/>, <see cref="XplmVersion"/> and <see cref="FindSymbol"/> to detect that the host sim is new enough
+        /// Use <seealso cref="Version"/>, <see cref="XplmVersion"/> and <see cref="FindSymbol(in Utf8String)"/> to detect that the host sim is new enough
         /// to use new functions and resolve function pointers.
         /// </description>
         /// </item>
         /// <item>
         /// <description>
-        /// Conditionally use the new functions if and only if <see cref="FindSymbol"/> returns a non-NULL pointer.
+        /// Conditionally use the new functions if and only if <see cref="FindSymbol(in Utf8String)"/> returns a non-NULL pointer.
         /// </description>
         /// </item>
         /// </list>
         /// <para>
-        /// Warning: you should always check the XPLM API version as well as the results of <see cref="FindSymbol"/> to determine if functionality is safe to use.
+        /// Warning: you should always check the XPLM API version as well as the results of <see cref="FindSymbol(in Utf8String)"/> to determine if functionality is safe to use.
+        /// </para>
+        /// </remarks>
+        public static unsafe IntPtr FindSymbol(in Utf8String name)
+        {
+            return new IntPtr(UtilitiesAPI.FindSymbol(name));
+        }
+
+        /// <summary>
+        /// This routine will attempt to find the symbol passed in the <paramref name="name"/>
+        /// parameter. If the symbol is found a pointer the function is returned,
+        /// otherwise the function will return <seealso cref="IntPtr.Zero"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// You can use FindSymbol to utilize newer SDK API features without requiring newer versions of the SDK (and X-Plane)
+        /// as your minimum X-Plane version as follows:
+        /// </para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>
+        /// Use <seealso cref="Version"/>, <see cref="XplmVersion"/> and <see cref="FindSymbol(in ReadOnlySpan{char})"/> to detect that the host sim is new enough
+        /// to use new functions and resolve function pointers.
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// Conditionally use the new functions if and only if <see cref="FindSymbol(in ReadOnlySpan{char})"/> returns a non-NULL pointer.
+        /// </description>
+        /// </item>
+        /// </list>
+        /// <para>
+        /// Warning: you should always check the XPLM API version as well as the results of <see cref="FindSymbol(in ReadOnlySpan{char})"/> to determine if functionality is safe to use.
         /// </para>
         /// </remarks>
         public static unsafe IntPtr FindSymbol(in ReadOnlySpan<char> name)
@@ -244,18 +305,51 @@ namespace XP.SDK.XPLM
         /// <list type="bullet">
         /// <item>
         /// <description>
-        /// Use <seealso cref="Version"/>, <see cref="XplmVersion"/> and <see cref="FindFunction{T}"/> to detect that the host sim is new enough
+        /// Use <seealso cref="Version"/>, <see cref="XplmVersion"/> and <see cref="FindFunction{T}(in Utf8String)"/> to detect that the host sim is new enough
         /// to use new functions and resolve function pointers.
         /// </description>
         /// </item>
         /// <item>
         /// <description>
-        /// Conditionally use the new functions if and only if <see cref="FindFunction{T}"/> returns a non-NULL pointer.
+        /// Conditionally use the new functions if and only if <see cref="FindFunction{T}(in Utf8String)"/> returns a non-NULL pointer.
         /// </description>
         /// </item>
         /// </list>
         /// <para>
-        /// Warning: you should always check the XPLM API version as well as the results of <see cref="FindFunction{T}"/> to determine if functionality is safe to use.
+        /// Warning: you should always check the XPLM API version as well as the results of <see cref="FindFunction{T}(in Utf8String)"/> to determine if functionality is safe to use.
+        /// </para>
+        /// </remarks>
+        public static T FindFunction<T>(in Utf8String name) where T : Delegate
+        {
+            var ptr = FindSymbol(name);
+            return ptr != default ? Marshal.GetDelegateForFunctionPointer<T>(ptr) : null;
+        }
+
+        /// <summary>
+        /// This routine will attempt to find the symbol passed in the <paramref name="name"/>
+        /// parameter. If the symbol is found a delegate is returned,
+        /// otherwise the function will return <seealso langword="null"/>.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// You can use FindSymbol to utilize newer SDK API features without requiring newer versions of the SDK (and X-Plane)
+        /// as your minimum X-Plane version as follows:
+        /// </para>
+        /// <list type="bullet">
+        /// <item>
+        /// <description>
+        /// Use <seealso cref="Version"/>, <see cref="XplmVersion"/> and <see cref="FindFunction{T}(in ReadOnlySpan{char})"/> to detect that the host sim is new enough
+        /// to use new functions and resolve function pointers.
+        /// </description>
+        /// </item>
+        /// <item>
+        /// <description>
+        /// Conditionally use the new functions if and only if <see cref="FindFunction{T}(in ReadOnlySpan{char})"/> returns a non-NULL pointer.
+        /// </description>
+        /// </item>
+        /// </list>
+        /// <para>
+        /// Warning: you should always check the XPLM API version as well as the results of <see cref="FindFunction{T}(in ReadOnlySpan{char})"/> to determine if functionality is safe to use.
         /// </para>
         /// </remarks>
         public static T FindFunction<T>(in ReadOnlySpan<char> name) where T : Delegate
@@ -269,7 +363,7 @@ namespace XP.SDK.XPLM
         /// To clear the replay, pass <see langword="null"/> or <see langword="default"/> as the <paramref name="path"/>
         /// (this is only valid with replay movies, not sit files).
         /// </summary>
-        public static int LoadDataFile(DataFileType fileType, in ReadOnlySpan<char> path)
+        public static int LoadDataFile(DataFileType fileType, in Utf8String path = default)
         {
             return UtilitiesAPI.LoadDataFile(fileType, path);
         }
@@ -279,7 +373,7 @@ namespace XP.SDK.XPLM
         /// To clear the replay, pass <see langword="null"/> or <see langword="default"/> as the <paramref name="path"/>
         /// (this is only valid with replay movies, not sit files).
         /// </summary>
-        public static int LoadDataFile(DataFileType fileType, in Utf8String path = default)
+        public static int LoadDataFile(DataFileType fileType, in ReadOnlySpan<char> path)
         {
             return UtilitiesAPI.LoadDataFile(fileType, path);
         }
@@ -287,15 +381,15 @@ namespace XP.SDK.XPLM
         /// <summary>
         /// Saves the current situation or replay; paths are relative to the X-System folder.
         /// </summary>
-        public static int SaveDataFile(DataFileType fileType, in ReadOnlySpan<char> path)
+        public static int SaveDataFile(DataFileType fileType, in Utf8String path)
         {
             return UtilitiesAPI.SaveDataFile(fileType, path);
         }
-
+        
         /// <summary>
         /// Saves the current situation or replay; paths are relative to the X-System folder.
         /// </summary>
-        public static int SaveDataFile(DataFileType fileType, in Utf8String path)
+        public static int SaveDataFile(DataFileType fileType, in ReadOnlySpan<char> path)
         {
             return UtilitiesAPI.SaveDataFile(fileType, path);
         }
@@ -440,7 +534,6 @@ namespace XP.SDK.XPLM
                 using var builder = Utf8StringBuilderFactory.SharedPooled.CreateBuilder(str.Length + 3);
                 builder.Append(str);
                 builder.AppendLine();
-                using var scope = builder.BuildScoped();
                 UtilitiesAPI.DebugString(builder.BuildUnsafe());
             }
         }

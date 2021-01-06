@@ -9187,6 +9187,7 @@
             <summary>
             Gets the full path to the X-System folder.
             </summary>
+            <seealso cref="M:XP.SDK.XPLM.XPlane.GetSystemPath" />
         </member>
         <member name="P:XP.SDK.XPLM.XPlane.PreferencesPath">
             <summary>
@@ -9195,6 +9196,7 @@
             <remarks>
             You should remove the file name back to the last directory separator to get the preferences directory.
             </remarks>
+            <seealso cref="M:XP.SDK.XPLM.XPlane.GetPreferencesPath"/>
         </member>
         <member name="P:XP.SDK.XPLM.XPlane.Language">
             <summary>
@@ -9222,7 +9224,22 @@
             Gets the host application ID.
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.XPlane.SetErrorCallback(System.Action{System.String})">
+        <member name="M:XP.SDK.XPLM.XPlane.GetSystemPath">
+            <summary>
+            Gets the full path to the X-System folder.
+            </summary>
+            <seealso cref="P:XP.SDK.XPLM.XPlane.SystemPath" />
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.GetPreferencesPath">
+            <summary>
+            Gets a full path to a file that is within X-Plane’s preferences directory.
+            </summary>
+            <remarks>
+            You should remove the file name back to the last directory separator to get the preferences directory.
+            </remarks>
+            <seealso cref="P:XP.SDK.XPLM.XPlane.PreferencesPath"/>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.SetErrorCallback()">
             <summary>
             <para>
             Installs an error-reporting callback for your plugin.
@@ -9242,11 +9259,11 @@
             leave error callbacks installed in shipping plugins.
             </para>
             <para>
-            For this reason, it is recommended to use <seealso cref="M:XP.SDK.XPLM.XPlane.SetErrorCallbackForDebugBuild(System.Action{System.String})"/> instead.
+            For this reason, it is recommended to use <seealso cref="M:XP.SDK.XPLM.XPlane.SetErrorCallbackForDebugBuild()"/> instead.
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.XPlane.SetErrorCallbackForDebugBuild(System.Action{System.String})">
+        <member name="M:XP.SDK.XPLM.XPlane.SetErrorCallbackForDebugBuild()">
             <summary>
             <para>
             Installs an error-reporting callback for your plugin.
@@ -9265,6 +9282,12 @@
             not normally run, and this may adversely affect performance, so do not
             leave error callbacks installed in shipping plugins.
             </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.Speak(XP.SDK.Utf8String@)">
+            <summary>
+            This function displays the string in a translucent overlay over the current display and also speaks the string if text-to-speech is enabled.
+            The string is spoken asynchronously, this function returns immediately. This function may not speak or print depending on user preferences.
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.XPlane.Speak(System.ReadOnlySpan{System.Char}@)">
@@ -9272,6 +9295,35 @@
             This function displays the string in a translucent overlay over the current display and also speaks the string if text-to-speech is enabled.
             The string is spoken asynchronously, this function returns immediately. This function may not speak or print depending on user preferences.
             </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.FindSymbol(XP.SDK.Utf8String@)">
+            <summary>
+            This routine will attempt to find the symbol passed in the <paramref name="name"/>
+            parameter. If the symbol is found a pointer the function is returned,
+            otherwise the function will return <seealso cref="F:System.IntPtr.Zero"/>.
+            </summary>
+            <remarks>
+            <para>
+            You can use FindSymbol to utilize newer SDK API features without requiring newer versions of the SDK (and X-Plane)
+            as your minimum X-Plane version as follows:
+            </para>
+            <list type="bullet">
+            <item>
+            <description>
+            Use <seealso cref="P:XP.SDK.XPLM.XPlane.Version"/>, <see cref="P:XP.SDK.XPLM.XPlane.XplmVersion"/> and <see cref="M:XP.SDK.XPLM.XPlane.FindSymbol(XP.SDK.Utf8String@)"/> to detect that the host sim is new enough
+            to use new functions and resolve function pointers.
+            </description>
+            </item>
+            <item>
+            <description>
+            Conditionally use the new functions if and only if <see cref="M:XP.SDK.XPLM.XPlane.FindSymbol(XP.SDK.Utf8String@)"/> returns a non-NULL pointer.
+            </description>
+            </item>
+            </list>
+            <para>
+            Warning: you should always check the XPLM API version as well as the results of <see cref="M:XP.SDK.XPLM.XPlane.FindSymbol(XP.SDK.Utf8String@)"/> to determine if functionality is safe to use.
+            </para>
+            </remarks>
         </member>
         <member name="M:XP.SDK.XPLM.XPlane.FindSymbol(System.ReadOnlySpan{System.Char}@)">
             <summary>
@@ -9299,6 +9351,35 @@
             </list>
             <para>
             Warning: you should always check the XPLM API version as well as the results of <see cref="M:XP.SDK.XPLM.XPlane.FindSymbol(System.ReadOnlySpan{System.Char}@)"/> to determine if functionality is safe to use.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.FindFunction``1(XP.SDK.Utf8String@)">
+            <summary>
+            This routine will attempt to find the symbol passed in the <paramref name="name"/>
+            parameter. If the symbol is found a delegate is returned,
+            otherwise the function will return <seealso langword="null"/>.
+            </summary>
+            <remarks>
+            <para>
+            You can use FindSymbol to utilize newer SDK API features without requiring newer versions of the SDK (and X-Plane)
+            as your minimum X-Plane version as follows:
+            </para>
+            <list type="bullet">
+            <item>
+            <description>
+            Use <seealso cref="P:XP.SDK.XPLM.XPlane.Version"/>, <see cref="P:XP.SDK.XPLM.XPlane.XplmVersion"/> and <see cref="M:XP.SDK.XPLM.XPlane.FindFunction``1(XP.SDK.Utf8String@)"/> to detect that the host sim is new enough
+            to use new functions and resolve function pointers.
+            </description>
+            </item>
+            <item>
+            <description>
+            Conditionally use the new functions if and only if <see cref="M:XP.SDK.XPLM.XPlane.FindFunction``1(XP.SDK.Utf8String@)"/> returns a non-NULL pointer.
+            </description>
+            </item>
+            </list>
+            <para>
+            Warning: you should always check the XPLM API version as well as the results of <see cref="M:XP.SDK.XPLM.XPlane.FindFunction``1(XP.SDK.Utf8String@)"/> to determine if functionality is safe to use.
             </para>
             </remarks>
         </member>
@@ -9331,13 +9412,6 @@
             </para>
             </remarks>
         </member>
-        <member name="M:XP.SDK.XPLM.XPlane.LoadDataFile(XP.SDK.XPLM.DataFileType,System.ReadOnlySpan{System.Char}@)">
-            <summary>
-            Loads a data file of a given type. Paths must be relative to the X-System folder.
-            To clear the replay, pass <see langword="null"/> or <see langword="default"/> as the <paramref name="path"/>
-            (this is only valid with replay movies, not sit files).
-            </summary>
-        </member>
         <member name="M:XP.SDK.XPLM.XPlane.LoadDataFile(XP.SDK.XPLM.DataFileType,XP.SDK.Utf8String@)">
             <summary>
             Loads a data file of a given type. Paths must be relative to the X-System folder.
@@ -9345,12 +9419,19 @@
             (this is only valid with replay movies, not sit files).
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.XPlane.SaveDataFile(XP.SDK.XPLM.DataFileType,System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.XPlane.LoadDataFile(XP.SDK.XPLM.DataFileType,System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            Loads a data file of a given type. Paths must be relative to the X-System folder.
+            To clear the replay, pass <see langword="null"/> or <see langword="default"/> as the <paramref name="path"/>
+            (this is only valid with replay movies, not sit files).
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.XPlane.SaveDataFile(XP.SDK.XPLM.DataFileType,XP.SDK.Utf8String@)">
             <summary>
             Saves the current situation or replay; paths are relative to the X-System folder.
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.XPlane.SaveDataFile(XP.SDK.XPLM.DataFileType,XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.XPlane.SaveDataFile(XP.SDK.XPLM.DataFileType,System.ReadOnlySpan{System.Char}@)">
             <summary>
             Saves the current situation or replay; paths are relative to the X-System folder.
             </summary>

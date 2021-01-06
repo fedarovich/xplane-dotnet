@@ -11,9 +11,29 @@ namespace XP.SDK.XPLM
         /// </summary>
         /// <param name="aircraftPath">A full path (hard drive and everything including the .acf extension) to the .acf file.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void SetAircraft(in Utf8String aircraftPath)
+        {
+            PlanesAPI.SetUsersAircraft(aircraftPath);
+        }
+
+        /// <summary>
+        /// Changes the user’s aircraft. Note that this will reinitialize the user to be on the nearest airport’s first runway.
+        /// </summary>
+        /// <param name="aircraftPath">A full path (hard drive and everything including the .acf extension) to the .acf file.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SetAircraft(in ReadOnlySpan<char> aircraftPath)
         {
             PlanesAPI.SetUsersAircraft(aircraftPath);
+        }
+
+        /// <summary>
+        /// Places the user at a given airport.
+        /// </summary>
+        /// <param name="airportCode">The airport by its X-Plane airport ID (e.g. 'KBOS').</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void PlaceAtAirport(in Utf8String airportCode)
+        {
+            PlanesAPI.PlaceUserAtAirport(airportCode);
         }
 
         /// <summary>
