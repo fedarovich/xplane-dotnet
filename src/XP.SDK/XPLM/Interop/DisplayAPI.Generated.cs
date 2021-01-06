@@ -483,9 +483,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void SetWindowTitle(WindowID inWindowID, in ReadOnlySpan<char> inWindowTitle)
         {
-            Span<byte> inWindowTitleUtf8 = stackalloc byte[(inWindowTitle.Length << 1) | 1];
-            var inWindowTitlePtr = Utils.ToUtf8Unsafe(inWindowTitle, inWindowTitleUtf8);
-            SetWindowTitle(inWindowID, inWindowTitlePtr);
+            int inWindowTitleUtf8Len = inWindowTitle.Length * 3 + 4;
+            Span<byte> inWindowTitleUtf8 = inWindowTitleUtf8Len <= 4096 ? stackalloc byte[inWindowTitleUtf8Len] : new byte[inWindowTitleUtf8Len];
+            Utils.ToUtf8(inWindowTitle, inWindowTitleUtf8);
+            fixed (byte* inWindowTitlePtr = inWindowTitleUtf8)
+                SetWindowTitle(inWindowID, inWindowTitlePtr);
         }
 
         
@@ -647,9 +649,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, in ReadOnlySpan<char> inDescription, delegate* unmanaged[Cdecl]<void*, void> inCallback, void* inRefcon)
         {
-            Span<byte> inDescriptionUtf8 = stackalloc byte[(inDescription.Length << 1) | 1];
-            var inDescriptionPtr = Utils.ToUtf8Unsafe(inDescription, inDescriptionUtf8);
-            return RegisterHotKey(inVirtualKey, inFlags, inDescriptionPtr, inCallback, inRefcon);
+            int inDescriptionUtf8Len = inDescription.Length * 3 + 4;
+            Span<byte> inDescriptionUtf8 = inDescriptionUtf8Len <= 4096 ? stackalloc byte[inDescriptionUtf8Len] : new byte[inDescriptionUtf8Len];
+            Utils.ToUtf8(inDescription, inDescriptionUtf8);
+            fixed (byte* inDescriptionPtr = inDescriptionUtf8)
+                return RegisterHotKey(inVirtualKey, inFlags, inDescriptionPtr, inCallback, inRefcon);
         }
 
         

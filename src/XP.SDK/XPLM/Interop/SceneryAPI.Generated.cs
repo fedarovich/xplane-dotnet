@@ -126,9 +126,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe ObjectRef LoadObject(in ReadOnlySpan<char> inPath)
         {
-            Span<byte> inPathUtf8 = stackalloc byte[(inPath.Length << 1) | 1];
-            var inPathPtr = Utils.ToUtf8Unsafe(inPath, inPathUtf8);
-            return LoadObject(inPathPtr);
+            int inPathUtf8Len = inPath.Length * 3 + 4;
+            Span<byte> inPathUtf8 = inPathUtf8Len <= 4096 ? stackalloc byte[inPathUtf8Len] : new byte[inPathUtf8Len];
+            Utils.ToUtf8(inPath, inPathUtf8);
+            fixed (byte* inPathPtr = inPathUtf8)
+                return LoadObject(inPathPtr);
         }
 
         
@@ -209,9 +211,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void LoadObjectAsync(in ReadOnlySpan<char> inPath, delegate* unmanaged[Cdecl]<ObjectRef, void*, void> inCallback, void* inRefcon)
         {
-            Span<byte> inPathUtf8 = stackalloc byte[(inPath.Length << 1) | 1];
-            var inPathPtr = Utils.ToUtf8Unsafe(inPath, inPathUtf8);
-            LoadObjectAsync(inPathPtr, inCallback, inRefcon);
+            int inPathUtf8Len = inPath.Length * 3 + 4;
+            Span<byte> inPathUtf8 = inPathUtf8Len <= 4096 ? stackalloc byte[inPathUtf8Len] : new byte[inPathUtf8Len];
+            Utils.ToUtf8(inPath, inPathUtf8);
+            fixed (byte* inPathPtr = inPathUtf8)
+                LoadObjectAsync(inPathPtr, inCallback, inRefcon);
         }
 
         
@@ -289,9 +293,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int LookupObjects(in ReadOnlySpan<char> inPath, float inLatitude, float inLongitude, delegate* unmanaged[Cdecl]<byte*, void*, void> enumerator, void* @ref)
         {
-            Span<byte> inPathUtf8 = stackalloc byte[(inPath.Length << 1) | 1];
-            var inPathPtr = Utils.ToUtf8Unsafe(inPath, inPathUtf8);
-            return LookupObjects(inPathPtr, inLatitude, inLongitude, enumerator, @ref);
+            int inPathUtf8Len = inPath.Length * 3 + 4;
+            Span<byte> inPathUtf8 = inPathUtf8Len <= 4096 ? stackalloc byte[inPathUtf8Len] : new byte[inPathUtf8Len];
+            Utils.ToUtf8(inPath, inPathUtf8);
+            fixed (byte* inPathPtr = inPathUtf8)
+                return LookupObjects(inPathPtr, inLatitude, inLongitude, enumerator, @ref);
         }
 
         

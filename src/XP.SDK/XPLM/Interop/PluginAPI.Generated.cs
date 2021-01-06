@@ -61,9 +61,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe PluginID FindPluginByPath(in ReadOnlySpan<char> inPath)
         {
-            Span<byte> inPathUtf8 = stackalloc byte[(inPath.Length << 1) | 1];
-            var inPathPtr = Utils.ToUtf8Unsafe(inPath, inPathUtf8);
-            return FindPluginByPath(inPathPtr);
+            int inPathUtf8Len = inPath.Length * 3 + 4;
+            Span<byte> inPathUtf8 = inPathUtf8Len <= 4096 ? stackalloc byte[inPathUtf8Len] : new byte[inPathUtf8Len];
+            Utils.ToUtf8(inPath, inPathUtf8);
+            fixed (byte* inPathPtr = inPathUtf8)
+                return FindPluginByPath(inPathPtr);
         }
 
         
@@ -110,9 +112,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe PluginID FindPluginBySignature(in ReadOnlySpan<char> inSignature)
         {
-            Span<byte> inSignatureUtf8 = stackalloc byte[(inSignature.Length << 1) | 1];
-            var inSignaturePtr = Utils.ToUtf8Unsafe(inSignature, inSignatureUtf8);
-            return FindPluginBySignature(inSignaturePtr);
+            int inSignatureUtf8Len = inSignature.Length * 3 + 4;
+            Span<byte> inSignatureUtf8 = inSignatureUtf8Len <= 4096 ? stackalloc byte[inSignatureUtf8Len] : new byte[inSignatureUtf8Len];
+            Utils.ToUtf8(inSignature, inSignatureUtf8);
+            fixed (byte* inSignaturePtr = inSignatureUtf8)
+                return FindPluginBySignature(inSignaturePtr);
         }
 
         
@@ -225,9 +229,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int HasFeature(in ReadOnlySpan<char> inFeature)
         {
-            Span<byte> inFeatureUtf8 = stackalloc byte[(inFeature.Length << 1) | 1];
-            var inFeaturePtr = Utils.ToUtf8Unsafe(inFeature, inFeatureUtf8);
-            return HasFeature(inFeaturePtr);
+            int inFeatureUtf8Len = inFeature.Length * 3 + 4;
+            Span<byte> inFeatureUtf8 = inFeatureUtf8Len <= 4096 ? stackalloc byte[inFeatureUtf8Len] : new byte[inFeatureUtf8Len];
+            Utils.ToUtf8(inFeature, inFeatureUtf8);
+            fixed (byte* inFeaturePtr = inFeatureUtf8)
+                return HasFeature(inFeaturePtr);
         }
 
         
@@ -267,9 +273,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int IsFeatureEnabled(in ReadOnlySpan<char> inFeature)
         {
-            Span<byte> inFeatureUtf8 = stackalloc byte[(inFeature.Length << 1) | 1];
-            var inFeaturePtr = Utils.ToUtf8Unsafe(inFeature, inFeatureUtf8);
-            return IsFeatureEnabled(inFeaturePtr);
+            int inFeatureUtf8Len = inFeature.Length * 3 + 4;
+            Span<byte> inFeatureUtf8 = inFeatureUtf8Len <= 4096 ? stackalloc byte[inFeatureUtf8Len] : new byte[inFeatureUtf8Len];
+            Utils.ToUtf8(inFeature, inFeatureUtf8);
+            fixed (byte* inFeaturePtr = inFeatureUtf8)
+                return IsFeatureEnabled(inFeaturePtr);
         }
 
         
@@ -310,9 +318,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void EnableFeature(in ReadOnlySpan<char> inFeature, int inEnable)
         {
-            Span<byte> inFeatureUtf8 = stackalloc byte[(inFeature.Length << 1) | 1];
-            var inFeaturePtr = Utils.ToUtf8Unsafe(inFeature, inFeatureUtf8);
-            EnableFeature(inFeaturePtr, inEnable);
+            int inFeatureUtf8Len = inFeature.Length * 3 + 4;
+            Span<byte> inFeatureUtf8 = inFeatureUtf8Len <= 4096 ? stackalloc byte[inFeatureUtf8Len] : new byte[inFeatureUtf8Len];
+            Utils.ToUtf8(inFeature, inFeatureUtf8);
+            fixed (byte* inFeaturePtr = inFeatureUtf8)
+                EnableFeature(inFeaturePtr, inEnable);
         }
 
         

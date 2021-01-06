@@ -12,20 +12,10 @@ namespace XP.SDK
     {
         internal static readonly UTF8Encoding UTF8WithoutPreamble = new UTF8Encoding(false);
         
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static ref byte ToUtf8(ReadOnlySpan<char> utf16, Span<byte> utf8)
+        internal static void ToUtf8(ReadOnlySpan<char> utf16, Span<byte> utf8)
         {
             Utf8.FromUtf16(utf16, utf8, out _, out int count);
             utf8[count] = 0;
-            return ref utf8.GetPinnableReference();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static ref byte ToUtf8(ReadOnlySpan<char> utf16, Span<byte> utf8, out int count)
-        {
-            Utf8.FromUtf16(utf16, utf8, out _, out count);
-            utf8[count] = 0;
-            return ref utf8.GetPinnableReference();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

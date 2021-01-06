@@ -179,9 +179,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int GetDirectoryContents(in ReadOnlySpan<char> inDirectoryPath, int inFirstReturn, byte* outFileNames, int inFileNameBufSize, byte** outIndices, int inIndexCount, int* outTotalFiles, int* outReturnedFiles)
         {
-            Span<byte> inDirectoryPathUtf8 = stackalloc byte[(inDirectoryPath.Length << 1) | 1];
-            var inDirectoryPathPtr = Utils.ToUtf8Unsafe(inDirectoryPath, inDirectoryPathUtf8);
-            return GetDirectoryContents(inDirectoryPathPtr, inFirstReturn, outFileNames, inFileNameBufSize, outIndices, inIndexCount, outTotalFiles, outReturnedFiles);
+            int inDirectoryPathUtf8Len = inDirectoryPath.Length * 3 + 4;
+            Span<byte> inDirectoryPathUtf8 = inDirectoryPathUtf8Len <= 4096 ? stackalloc byte[inDirectoryPathUtf8Len] : new byte[inDirectoryPathUtf8Len];
+            Utils.ToUtf8(inDirectoryPath, inDirectoryPathUtf8);
+            fixed (byte* inDirectoryPathPtr = inDirectoryPathUtf8)
+                return GetDirectoryContents(inDirectoryPathPtr, inFirstReturn, outFileNames, inFileNameBufSize, outIndices, inIndexCount, outTotalFiles, outReturnedFiles);
         }
 
         
@@ -268,9 +270,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int LoadDataFile(DataFileType inFileType, in ReadOnlySpan<char> inFilePath)
         {
-            Span<byte> inFilePathUtf8 = stackalloc byte[(inFilePath.Length << 1) | 1];
-            var inFilePathPtr = Utils.ToUtf8Unsafe(inFilePath, inFilePathUtf8);
-            return LoadDataFile(inFileType, inFilePathPtr);
+            int inFilePathUtf8Len = inFilePath.Length * 3 + 4;
+            Span<byte> inFilePathUtf8 = inFilePathUtf8Len <= 4096 ? stackalloc byte[inFilePathUtf8Len] : new byte[inFilePathUtf8Len];
+            Utils.ToUtf8(inFilePath, inFilePathUtf8);
+            fixed (byte* inFilePathPtr = inFilePathUtf8)
+                return LoadDataFile(inFileType, inFilePathPtr);
         }
 
         
@@ -309,9 +313,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int SaveDataFile(DataFileType inFileType, in ReadOnlySpan<char> inFilePath)
         {
-            Span<byte> inFilePathUtf8 = stackalloc byte[(inFilePath.Length << 1) | 1];
-            var inFilePathPtr = Utils.ToUtf8Unsafe(inFilePath, inFilePathUtf8);
-            return SaveDataFile(inFileType, inFilePathPtr);
+            int inFilePathUtf8Len = inFilePath.Length * 3 + 4;
+            Span<byte> inFilePathUtf8 = inFilePathUtf8Len <= 4096 ? stackalloc byte[inFilePathUtf8Len] : new byte[inFilePathUtf8Len];
+            Utils.ToUtf8(inFilePath, inFilePathUtf8);
+            fixed (byte* inFilePathPtr = inFilePathUtf8)
+                return SaveDataFile(inFileType, inFilePathPtr);
         }
 
         
@@ -428,9 +434,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void* FindSymbol(in ReadOnlySpan<char> inString)
         {
-            Span<byte> inStringUtf8 = stackalloc byte[(inString.Length << 1) | 1];
-            var inStringPtr = Utils.ToUtf8Unsafe(inString, inStringUtf8);
-            return FindSymbol(inStringPtr);
+            int inStringUtf8Len = inString.Length * 3 + 4;
+            Span<byte> inStringUtf8 = inStringUtf8Len <= 4096 ? stackalloc byte[inStringUtf8Len] : new byte[inStringUtf8Len];
+            Utils.ToUtf8(inString, inStringUtf8);
+            fixed (byte* inStringPtr = inStringUtf8)
+                return FindSymbol(inStringPtr);
         }
 
         
@@ -542,9 +550,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void DebugString(in ReadOnlySpan<char> inString)
         {
-            Span<byte> inStringUtf8 = stackalloc byte[(inString.Length << 1) | 1];
-            var inStringPtr = Utils.ToUtf8Unsafe(inString, inStringUtf8);
-            DebugString(inStringPtr);
+            int inStringUtf8Len = inString.Length * 3 + 4;
+            Span<byte> inStringUtf8 = inStringUtf8Len <= 4096 ? stackalloc byte[inStringUtf8Len] : new byte[inStringUtf8Len];
+            Utils.ToUtf8(inString, inStringUtf8);
+            fixed (byte* inStringPtr = inStringUtf8)
+                DebugString(inStringPtr);
         }
 
         
@@ -594,9 +604,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void SpeakString(in ReadOnlySpan<char> inString)
         {
-            Span<byte> inStringUtf8 = stackalloc byte[(inString.Length << 1) | 1];
-            var inStringPtr = Utils.ToUtf8Unsafe(inString, inStringUtf8);
-            SpeakString(inStringPtr);
+            int inStringUtf8Len = inString.Length * 3 + 4;
+            Span<byte> inStringUtf8 = inStringUtf8Len <= 4096 ? stackalloc byte[inStringUtf8Len] : new byte[inStringUtf8Len];
+            Utils.ToUtf8(inString, inStringUtf8);
+            fixed (byte* inStringPtr = inStringUtf8)
+                SpeakString(inStringPtr);
         }
 
         
@@ -662,9 +674,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe CommandRef FindCommand(in ReadOnlySpan<char> inName)
         {
-            Span<byte> inNameUtf8 = stackalloc byte[(inName.Length << 1) | 1];
-            var inNamePtr = Utils.ToUtf8Unsafe(inName, inNameUtf8);
-            return FindCommand(inNamePtr);
+            int inNameUtf8Len = inName.Length * 3 + 4;
+            Span<byte> inNameUtf8 = inNameUtf8Len <= 4096 ? stackalloc byte[inNameUtf8Len] : new byte[inNameUtf8Len];
+            Utils.ToUtf8(inName, inNameUtf8);
+            fixed (byte* inNamePtr = inNameUtf8)
+                return FindCommand(inNamePtr);
         }
 
         
@@ -740,11 +754,14 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe CommandRef CreateCommand(in ReadOnlySpan<char> inName, in ReadOnlySpan<char> inDescription)
         {
-            Span<byte> inNameUtf8 = stackalloc byte[(inName.Length << 1) | 1];
-            var inNamePtr = Utils.ToUtf8Unsafe(inName, inNameUtf8);
-            Span<byte> inDescriptionUtf8 = stackalloc byte[(inDescription.Length << 1) | 1];
-            var inDescriptionPtr = Utils.ToUtf8Unsafe(inDescription, inDescriptionUtf8);
-            return CreateCommand(inNamePtr, inDescriptionPtr);
+            int inNameUtf8Len = inName.Length * 3 + 4;
+            Span<byte> inNameUtf8 = inNameUtf8Len <= 4096 ? stackalloc byte[inNameUtf8Len] : new byte[inNameUtf8Len];
+            Utils.ToUtf8(inName, inNameUtf8);
+            int inDescriptionUtf8Len = inDescription.Length * 3 + 4;
+            Span<byte> inDescriptionUtf8 = inDescriptionUtf8Len <= 4096 ? stackalloc byte[inDescriptionUtf8Len] : new byte[inDescriptionUtf8Len];
+            Utils.ToUtf8(inDescription, inDescriptionUtf8);
+            fixed (byte* inNamePtr = inNameUtf8, inDescriptionPtr = inDescriptionUtf8)
+                return CreateCommand(inNamePtr, inDescriptionPtr);
         }
 
         

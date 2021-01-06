@@ -46,9 +46,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe DataRef FindDataRef(in ReadOnlySpan<char> inDataRefName)
         {
-            Span<byte> inDataRefNameUtf8 = stackalloc byte[(inDataRefName.Length << 1) | 1];
-            var inDataRefNamePtr = Utils.ToUtf8Unsafe(inDataRefName, inDataRefNameUtf8);
-            return FindDataRef(inDataRefNamePtr);
+            int inDataRefNameUtf8Len = inDataRefName.Length * 3 + 4;
+            Span<byte> inDataRefNameUtf8 = inDataRefNameUtf8Len <= 4096 ? stackalloc byte[inDataRefNameUtf8Len] : new byte[inDataRefNameUtf8Len];
+            Utils.ToUtf8(inDataRefName, inDataRefNameUtf8);
+            fixed (byte* inDataRefNamePtr = inDataRefNameUtf8)
+                return FindDataRef(inDataRefNamePtr);
         }
 
         
@@ -343,9 +345,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe DataRef RegisterDataAccessor(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, int inIsWritable, delegate* unmanaged[Cdecl]<void*, int> inReadInt, delegate* unmanaged[Cdecl]<void*, int, void> inWriteInt, delegate* unmanaged[Cdecl]<void*, float> inReadFloat, delegate* unmanaged[Cdecl]<void*, float, void> inWriteFloat, delegate* unmanaged[Cdecl]<void*, double> inReadDouble, delegate* unmanaged[Cdecl]<void*, double, void> inWriteDouble, delegate* unmanaged[Cdecl]<void*, int*, int, int, int> inReadIntArray, delegate* unmanaged[Cdecl]<void*, int*, int, int, void> inWriteIntArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, int> inReadFloatArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, void> inWriteFloatArray, delegate* unmanaged[Cdecl]<void*, void*, int, int, int> inReadData, delegate* unmanaged[Cdecl]<void*, void*, int, int, void> inWriteData, void* inReadRefcon, void* inWriteRefcon)
         {
-            Span<byte> inDataNameUtf8 = stackalloc byte[(inDataName.Length << 1) | 1];
-            var inDataNamePtr = Utils.ToUtf8Unsafe(inDataName, inDataNameUtf8);
-            return RegisterDataAccessor(inDataNamePtr, inDataType, inIsWritable, inReadInt, inWriteInt, inReadFloat, inWriteFloat, inReadDouble, inWriteDouble, inReadIntArray, inWriteIntArray, inReadFloatArray, inWriteFloatArray, inReadData, inWriteData, inReadRefcon, inWriteRefcon);
+            int inDataNameUtf8Len = inDataName.Length * 3 + 4;
+            Span<byte> inDataNameUtf8 = inDataNameUtf8Len <= 4096 ? stackalloc byte[inDataNameUtf8Len] : new byte[inDataNameUtf8Len];
+            Utils.ToUtf8(inDataName, inDataNameUtf8);
+            fixed (byte* inDataNamePtr = inDataNameUtf8)
+                return RegisterDataAccessor(inDataNamePtr, inDataType, inIsWritable, inReadInt, inWriteInt, inReadFloat, inWriteFloat, inReadDouble, inWriteDouble, inReadIntArray, inWriteIntArray, inReadFloatArray, inWriteFloatArray, inReadData, inWriteData, inReadRefcon, inWriteRefcon);
         }
 
         
@@ -433,9 +437,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int ShareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
         {
-            Span<byte> inDataNameUtf8 = stackalloc byte[(inDataName.Length << 1) | 1];
-            var inDataNamePtr = Utils.ToUtf8Unsafe(inDataName, inDataNameUtf8);
-            return ShareData(inDataNamePtr, inDataType, inNotificationFunc, inNotificationRefcon);
+            int inDataNameUtf8Len = inDataName.Length * 3 + 4;
+            Span<byte> inDataNameUtf8 = inDataNameUtf8Len <= 4096 ? stackalloc byte[inDataNameUtf8Len] : new byte[inDataNameUtf8Len];
+            Utils.ToUtf8(inDataName, inDataNameUtf8);
+            fixed (byte* inDataNamePtr = inDataNameUtf8)
+                return ShareData(inDataNamePtr, inDataType, inNotificationFunc, inNotificationRefcon);
         }
 
         
@@ -492,9 +498,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int UnshareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
         {
-            Span<byte> inDataNameUtf8 = stackalloc byte[(inDataName.Length << 1) | 1];
-            var inDataNamePtr = Utils.ToUtf8Unsafe(inDataName, inDataNameUtf8);
-            return UnshareData(inDataNamePtr, inDataType, inNotificationFunc, inNotificationRefcon);
+            int inDataNameUtf8Len = inDataName.Length * 3 + 4;
+            Span<byte> inDataNameUtf8 = inDataNameUtf8Len <= 4096 ? stackalloc byte[inDataNameUtf8Len] : new byte[inDataNameUtf8Len];
+            Utils.ToUtf8(inDataName, inDataNameUtf8);
+            fixed (byte* inDataNamePtr = inDataNameUtf8)
+                return UnshareData(inDataNamePtr, inDataType, inNotificationFunc, inNotificationRefcon);
         }
 
         

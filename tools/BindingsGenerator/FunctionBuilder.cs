@@ -252,19 +252,34 @@ namespace BindingsGenerator
             foreach (var cppParameter in cppFunction.Parameters.Where(p => p.Type.IsConstCharPtr()))
             {
                 var utf16Name = GetManagedName(cppParameter.Name);
+                var lenName = utf16Name + "Utf8Len"; 
                 var utf8Name = utf16Name + "Utf8";
-                var ptrName = utf16Name + "Ptr";
-                yield return SyntaxBuilder.DeclareSpanForUtf8Variable(utf8Name, utf16Name);
-                yield return SyntaxBuilder.DeclarePtrForUtf8Variable(ptrName, utf8Name, utf16Name);
+                yield return SyntaxBuilder.DeclareLengthForUtf8Variable(lenName, utf16Name);
+                yield return SyntaxBuilder.DeclareSpanForUtf8Variable(utf8Name, lenName);
+                yield return SyntaxBuilder.ConvertToUtf8(utf8Name, utf16Name);
             }
 
             var call = 
                 InvocationExpression(IdentifierName(GetManagedName(cppFunction.Name)))
                     .AddArgumentListArguments(cppFunction.Parameters.Select(BuildArgument).ToArray());
 
-            yield return returnTypeInfo.IsVoid
-                ? (StatementSyntax) ExpressionStatement(call)
-                : (StatementSyntax) ReturnStatement(call);
+            var fixedStatement = FixedStatement(
+                VariableDeclaration(PointerType(PredefinedType(Token(SyntaxKind.ByteKeyword))))
+                    .AddVariables(GetStringVariables().ToArray()),
+                returnTypeInfo.IsVoid ? ExpressionStatement(call) : ReturnStatement(call)
+            );
+
+            yield return fixedStatement;
+
+            IEnumerable<VariableDeclaratorSyntax> GetStringVariables()
+            {
+                foreach (var cppParameter in cppFunction.Parameters.Where(p => p.Type.IsConstCharPtr()))
+                {
+                    var paramName = GetManagedName(cppParameter.Name);
+                    yield return VariableDeclarator(paramName + "Ptr")
+                        .WithInitializer(EqualsValueClause(IdentifierName(paramName + "Utf8")));
+                }
+            }
 
             ArgumentSyntax BuildArgument(CppParameter cppParameter)
             {

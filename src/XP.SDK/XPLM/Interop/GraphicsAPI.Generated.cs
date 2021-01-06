@@ -203,9 +203,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe float MeasureString(FontID inFontID, in ReadOnlySpan<char> inChar, int inNumChars)
         {
-            Span<byte> inCharUtf8 = stackalloc byte[(inChar.Length << 1) | 1];
-            var inCharPtr = Utils.ToUtf8Unsafe(inChar, inCharUtf8);
-            return MeasureString(inFontID, inCharPtr, inNumChars);
+            int inCharUtf8Len = inChar.Length * 3 + 4;
+            Span<byte> inCharUtf8 = inCharUtf8Len <= 4096 ? stackalloc byte[inCharUtf8Len] : new byte[inCharUtf8Len];
+            Utils.ToUtf8(inChar, inCharUtf8);
+            fixed (byte* inCharPtr = inCharUtf8)
+                return MeasureString(inFontID, inCharPtr, inNumChars);
         }
 
         

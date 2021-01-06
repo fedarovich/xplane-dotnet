@@ -30,9 +30,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void SetUsersAircraft(in ReadOnlySpan<char> inAircraftPath)
         {
-            Span<byte> inAircraftPathUtf8 = stackalloc byte[(inAircraftPath.Length << 1) | 1];
-            var inAircraftPathPtr = Utils.ToUtf8Unsafe(inAircraftPath, inAircraftPathUtf8);
-            SetUsersAircraft(inAircraftPathPtr);
+            int inAircraftPathUtf8Len = inAircraftPath.Length * 3 + 4;
+            Span<byte> inAircraftPathUtf8 = inAircraftPathUtf8Len <= 4096 ? stackalloc byte[inAircraftPathUtf8Len] : new byte[inAircraftPathUtf8Len];
+            Utils.ToUtf8(inAircraftPath, inAircraftPathUtf8);
+            fixed (byte* inAircraftPathPtr = inAircraftPathUtf8)
+                SetUsersAircraft(inAircraftPathPtr);
         }
 
         
@@ -71,9 +73,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void PlaceUserAtAirport(in ReadOnlySpan<char> inAirportCode)
         {
-            Span<byte> inAirportCodeUtf8 = stackalloc byte[(inAirportCode.Length << 1) | 1];
-            var inAirportCodePtr = Utils.ToUtf8Unsafe(inAirportCode, inAirportCodeUtf8);
-            PlaceUserAtAirport(inAirportCodePtr);
+            int inAirportCodeUtf8Len = inAirportCode.Length * 3 + 4;
+            Span<byte> inAirportCodeUtf8 = inAirportCodeUtf8Len <= 4096 ? stackalloc byte[inAirportCodeUtf8Len] : new byte[inAirportCodeUtf8Len];
+            Utils.ToUtf8(inAirportCode, inAirportCodeUtf8);
+            fixed (byte* inAirportCodePtr = inAirportCodeUtf8)
+                PlaceUserAtAirport(inAirportCodePtr);
         }
 
         
@@ -199,9 +203,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void SetAircraftModel(int inIndex, in ReadOnlySpan<char> inAircraftPath)
         {
-            Span<byte> inAircraftPathUtf8 = stackalloc byte[(inAircraftPath.Length << 1) | 1];
-            var inAircraftPathPtr = Utils.ToUtf8Unsafe(inAircraftPath, inAircraftPathUtf8);
-            SetAircraftModel(inIndex, inAircraftPathPtr);
+            int inAircraftPathUtf8Len = inAircraftPath.Length * 3 + 4;
+            Span<byte> inAircraftPathUtf8 = inAircraftPathUtf8Len <= 4096 ? stackalloc byte[inAircraftPathUtf8Len] : new byte[inAircraftPathUtf8Len];
+            Utils.ToUtf8(inAircraftPath, inAircraftPathUtf8);
+            fixed (byte* inAircraftPathPtr = inAircraftPathUtf8)
+                SetAircraftModel(inIndex, inAircraftPathPtr);
         }
 
         

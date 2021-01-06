@@ -75,9 +75,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe int MapExists(in ReadOnlySpan<char> mapIdentifier)
         {
-            Span<byte> mapIdentifierUtf8 = stackalloc byte[(mapIdentifier.Length << 1) | 1];
-            var mapIdentifierPtr = Utils.ToUtf8Unsafe(mapIdentifier, mapIdentifierUtf8);
-            return MapExists(mapIdentifierPtr);
+            int mapIdentifierUtf8Len = mapIdentifier.Length * 3 + 4;
+            Span<byte> mapIdentifierUtf8 = mapIdentifierUtf8Len <= 4096 ? stackalloc byte[mapIdentifierUtf8Len] : new byte[mapIdentifierUtf8Len];
+            Utils.ToUtf8(mapIdentifier, mapIdentifierUtf8);
+            fixed (byte* mapIdentifierPtr = mapIdentifierUtf8)
+                return MapExists(mapIdentifierPtr);
         }
 
         
@@ -178,9 +180,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void DrawMapIconFromSheet(MapLayerID layer, in ReadOnlySpan<char> inPngPath, int s, int t, int ds, int dt, float mapX, float mapY, MapOrientation orientation, float rotationDegrees, float mapWidth)
         {
-            Span<byte> inPngPathUtf8 = stackalloc byte[(inPngPath.Length << 1) | 1];
-            var inPngPathPtr = Utils.ToUtf8Unsafe(inPngPath, inPngPathUtf8);
-            DrawMapIconFromSheet(layer, inPngPathPtr, s, t, ds, dt, mapX, mapY, orientation, rotationDegrees, mapWidth);
+            int inPngPathUtf8Len = inPngPath.Length * 3 + 4;
+            Span<byte> inPngPathUtf8 = inPngPathUtf8Len <= 4096 ? stackalloc byte[inPngPathUtf8Len] : new byte[inPngPathUtf8Len];
+            Utils.ToUtf8(inPngPath, inPngPathUtf8);
+            fixed (byte* inPngPathPtr = inPngPathUtf8)
+                DrawMapIconFromSheet(layer, inPngPathPtr, s, t, ds, dt, mapX, mapY, orientation, rotationDegrees, mapWidth);
         }
 
         
@@ -253,9 +257,11 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void DrawMapLabel(MapLayerID layer, in ReadOnlySpan<char> inText, float mapX, float mapY, MapOrientation orientation, float rotationDegrees)
         {
-            Span<byte> inTextUtf8 = stackalloc byte[(inText.Length << 1) | 1];
-            var inTextPtr = Utils.ToUtf8Unsafe(inText, inTextUtf8);
-            DrawMapLabel(layer, inTextPtr, mapX, mapY, orientation, rotationDegrees);
+            int inTextUtf8Len = inText.Length * 3 + 4;
+            Span<byte> inTextUtf8 = inTextUtf8Len <= 4096 ? stackalloc byte[inTextUtf8Len] : new byte[inTextUtf8Len];
+            Utils.ToUtf8(inText, inTextUtf8);
+            fixed (byte* inTextPtr = inTextUtf8)
+                DrawMapLabel(layer, inTextPtr, mapX, mapY, orientation, rotationDegrees);
         }
 
         

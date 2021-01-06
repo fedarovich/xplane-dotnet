@@ -192,46 +192,57 @@ namespace BindingsGenerator
                     ArgumentList(SingletonSeparatedList(Argument(identifier)))));
         }
 
-        public static LocalDeclarationStatementSyntax DeclareSpanForUtf8Variable(string utf8Name, string utf16Name)
+        public static LocalDeclarationStatementSyntax DeclareLengthForUtf8Variable(string lengthName, string utf16Name)
+        {
+            return LocalDeclarationStatement(
+                VariableDeclaration(PredefinedType(Token(SyntaxKind.IntKeyword)))
+                    .AddVariables(VariableDeclarator(lengthName)
+                        .WithInitializer(EqualsValueClause(
+                            BinaryExpression(
+                                SyntaxKind.AddExpression,
+                                BinaryExpression(
+                                        SyntaxKind.MultiplyExpression,
+                                        MemberAccessExpression(
+                                            SyntaxKind.SimpleMemberAccessExpression,
+                                            IdentifierName(utf16Name),
+                                            IdentifierName(nameof(Span<char>.Length))),
+                                        LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(3))),
+                                LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(4)))
+                        ))));
+        }
+
+        public static LocalDeclarationStatementSyntax DeclareSpanForUtf8Variable(string utf8Name, string lengthName)
         {
             return LocalDeclarationStatement(
                 VariableDeclaration(BuildSpanName(SyntaxKind.ByteKeyword))
                     .AddVariables(VariableDeclarator(utf8Name)
                         .WithInitializer(EqualsValueClause(
-                            StackAllocArrayCreationExpression(
-                                ArrayType(PredefinedType(Token(SyntaxKind.ByteKeyword)))
-                                    .AddRankSpecifiers(
-                                        ArrayRankSpecifier(
-                                            SingletonSeparatedList<ExpressionSyntax>(
-                                                BinaryExpression(
-                                                    SyntaxKind.BitwiseOrExpression,
-                                                    ParenthesizedExpression(
-                                                        BinaryExpression(
-                                                            SyntaxKind.LeftShiftExpression,
-                                                            MemberAccessExpression(
-                                                                SyntaxKind.SimpleMemberAccessExpression,
-                                                                IdentifierName(utf16Name),
-                                                                IdentifierName(nameof(Span<byte>.Length))),
-                                                            LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(1)))),
-                                                    LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(1)))))))
-                                ))));
+                            ConditionalExpression(
+                                BinaryExpression(
+                                    SyntaxKind.LessThanOrEqualExpression,
+                                    IdentifierName(lengthName),
+                                    LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(4096))),
+                                StackAllocArrayCreationExpression(
+                                    ArrayType(PredefinedType(Token(SyntaxKind.ByteKeyword)))
+                                        .AddRankSpecifiers(ArrayRankSpecifier(SingletonSeparatedList<ExpressionSyntax>(IdentifierName(lengthName))))),
+                                ArrayCreationExpression(
+                                    ArrayType(PredefinedType(Token(SyntaxKind.ByteKeyword)))
+                                        .AddRankSpecifiers(ArrayRankSpecifier(SingletonSeparatedList<ExpressionSyntax>(IdentifierName(lengthName))))))
+                            ))));
         }
 
-        public static LocalDeclarationStatementSyntax DeclarePtrForUtf8Variable(string ptrName, string utf8Name, string utf16Name)
+        public static ExpressionStatementSyntax ConvertToUtf8(string utf8Name, string utf16Name)
         {
-            return LocalDeclarationStatement(
-                VariableDeclaration(IdentifierName("var"))
-                    .AddVariables(VariableDeclarator(ptrName)
-                        .WithInitializer(EqualsValueClause(
-                            InvocationExpression(
-                                    MemberAccessExpression(
-                                        SyntaxKind.SimpleMemberAccessExpression, 
-                                        IdentifierName("Utils"),
-                                        IdentifierName("ToUtf8Unsafe")))
-                                .AddArgumentListArguments(
-                                    Argument(IdentifierName(utf16Name)),
-                                    Argument(IdentifierName(utf8Name)))
-                        ))));
+            return ExpressionStatement(
+                InvocationExpression(
+                        MemberAccessExpression(
+                            SyntaxKind.SimpleMemberAccessExpression,
+                            IdentifierName("Utils"),
+                            IdentifierName("ToUtf8")))
+                    .AddArgumentListArguments(
+                        Argument(IdentifierName(utf16Name)),
+                        Argument(IdentifierName(utf8Name)))
+                );
         }
 
         public static T AddUnsafeIfNeeded<T>(this T method) where T : BaseMethodDeclarationSyntax

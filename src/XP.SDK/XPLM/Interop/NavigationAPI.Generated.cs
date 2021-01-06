@@ -125,11 +125,14 @@ namespace XP.SDK.XPLM.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe NavRef FindNavAid(in ReadOnlySpan<char> inNameFragment, in ReadOnlySpan<char> inIDFragment, float* inLat, float* inLon, int* inFrequency, NavType inType)
         {
-            Span<byte> inNameFragmentUtf8 = stackalloc byte[(inNameFragment.Length << 1) | 1];
-            var inNameFragmentPtr = Utils.ToUtf8Unsafe(inNameFragment, inNameFragmentUtf8);
-            Span<byte> inIDFragmentUtf8 = stackalloc byte[(inIDFragment.Length << 1) | 1];
-            var inIDFragmentPtr = Utils.ToUtf8Unsafe(inIDFragment, inIDFragmentUtf8);
-            return FindNavAid(inNameFragmentPtr, inIDFragmentPtr, inLat, inLon, inFrequency, inType);
+            int inNameFragmentUtf8Len = inNameFragment.Length * 3 + 4;
+            Span<byte> inNameFragmentUtf8 = inNameFragmentUtf8Len <= 4096 ? stackalloc byte[inNameFragmentUtf8Len] : new byte[inNameFragmentUtf8Len];
+            Utils.ToUtf8(inNameFragment, inNameFragmentUtf8);
+            int inIDFragmentUtf8Len = inIDFragment.Length * 3 + 4;
+            Span<byte> inIDFragmentUtf8 = inIDFragmentUtf8Len <= 4096 ? stackalloc byte[inIDFragmentUtf8Len] : new byte[inIDFragmentUtf8Len];
+            Utils.ToUtf8(inIDFragment, inIDFragmentUtf8);
+            fixed (byte* inNameFragmentPtr = inNameFragmentUtf8, inIDFragmentPtr = inIDFragmentUtf8)
+                return FindNavAid(inNameFragmentPtr, inIDFragmentPtr, inLat, inLon, inFrequency, inType);
         }
 
         

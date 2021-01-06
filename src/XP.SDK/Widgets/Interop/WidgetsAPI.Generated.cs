@@ -85,9 +85,11 @@ namespace XP.SDK.Widgets.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe WidgetID CreateWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, in ReadOnlySpan<char> inDescriptor, int inIsRoot, WidgetID inContainer, WidgetClass inClass)
         {
-            Span<byte> inDescriptorUtf8 = stackalloc byte[(inDescriptor.Length << 1) | 1];
-            var inDescriptorPtr = Utils.ToUtf8Unsafe(inDescriptor, inDescriptorUtf8);
-            return CreateWidget(inLeft, inTop, inRight, inBottom, inVisible, inDescriptorPtr, inIsRoot, inContainer, inClass);
+            int inDescriptorUtf8Len = inDescriptor.Length * 3 + 4;
+            Span<byte> inDescriptorUtf8 = inDescriptorUtf8Len <= 4096 ? stackalloc byte[inDescriptorUtf8Len] : new byte[inDescriptorUtf8Len];
+            Utils.ToUtf8(inDescriptor, inDescriptorUtf8);
+            fixed (byte* inDescriptorPtr = inDescriptorUtf8)
+                return CreateWidget(inLeft, inTop, inRight, inBottom, inVisible, inDescriptorPtr, inIsRoot, inContainer, inClass);
         }
 
         
@@ -159,9 +161,11 @@ namespace XP.SDK.Widgets.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe WidgetID CreateCustomWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, in ReadOnlySpan<char> inDescriptor, int inIsRoot, WidgetID inContainer, delegate* unmanaged[Cdecl]<WidgetMessage, WidgetID, nint, nint, int> inCallback)
         {
-            Span<byte> inDescriptorUtf8 = stackalloc byte[(inDescriptor.Length << 1) | 1];
-            var inDescriptorPtr = Utils.ToUtf8Unsafe(inDescriptor, inDescriptorUtf8);
-            return CreateCustomWidget(inLeft, inTop, inRight, inBottom, inVisible, inDescriptorPtr, inIsRoot, inContainer, inCallback);
+            int inDescriptorUtf8Len = inDescriptor.Length * 3 + 4;
+            Span<byte> inDescriptorUtf8 = inDescriptorUtf8Len <= 4096 ? stackalloc byte[inDescriptorUtf8Len] : new byte[inDescriptorUtf8Len];
+            Utils.ToUtf8(inDescriptor, inDescriptorUtf8);
+            fixed (byte* inDescriptorPtr = inDescriptorUtf8)
+                return CreateCustomWidget(inLeft, inTop, inRight, inBottom, inVisible, inDescriptorPtr, inIsRoot, inContainer, inCallback);
         }
 
         
@@ -422,9 +426,11 @@ namespace XP.SDK.Widgets.Interop
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
         public static unsafe void SetWidgetDescriptor(WidgetID inWidget, in ReadOnlySpan<char> inDescriptor)
         {
-            Span<byte> inDescriptorUtf8 = stackalloc byte[(inDescriptor.Length << 1) | 1];
-            var inDescriptorPtr = Utils.ToUtf8Unsafe(inDescriptor, inDescriptorUtf8);
-            SetWidgetDescriptor(inWidget, inDescriptorPtr);
+            int inDescriptorUtf8Len = inDescriptor.Length * 3 + 4;
+            Span<byte> inDescriptorUtf8 = inDescriptorUtf8Len <= 4096 ? stackalloc byte[inDescriptorUtf8Len] : new byte[inDescriptorUtf8Len];
+            Utils.ToUtf8(inDescriptor, inDescriptorUtf8);
+            fixed (byte* inDescriptorPtr = inDescriptorUtf8)
+                SetWidgetDescriptor(inWidget, inDescriptorPtr);
         }
 
         
