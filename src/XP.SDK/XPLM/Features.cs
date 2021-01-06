@@ -56,7 +56,7 @@ namespace XP.SDK.XPLM
                 handle.Free();
             }
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void Callback(byte* infeature, void* inref) => 
                 Utils.TryGetObject<HashSet<string>>(inref)?.Add(Marshal.PtrToStringUTF8(new IntPtr(infeature)));
         }

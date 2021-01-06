@@ -88,8 +88,8 @@ namespace BindingsGenerator
                 
             var returnType = TypeMap.GetType(function.ReturnType.GetDisplayName()).TypeSyntax;
 
-                return FunctionPointerType()
-                .WithCdeclCallingConvention()
+            return FunctionPointerType()
+                .WithUnmanagedCallingConvention()
                 .AddParameterListParameters(BuildFunctionPointerParameterList());
 
             FunctionPointerParameterSyntax[] BuildFunctionPointerParameterList()

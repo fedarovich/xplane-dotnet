@@ -98,7 +98,7 @@ namespace XP.SDK.XPLM
 
             return result;
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void OnPlanesAvailable(void* inrefcon)
             {
                 Utils.TryGetObject<ActionWrapper>(inrefcon)?.Invoke();

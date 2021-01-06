@@ -36,11 +36,11 @@ namespace XP.SDK.XPLM
                 refcon,
                 isWriteable ? refcon : null);
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static int GetDatai(void* inrefcon) =>
                 Utils.TryGetObject<DataRefSource>(inrefcon)?.Int32Value ?? default;
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void SetDatai(void* inrefcon, int invalue)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -50,11 +50,11 @@ namespace XP.SDK.XPLM
                 }
             }
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static float GetDataf(void* inrefcon) =>
                 Utils.TryGetObject<DataRefSource>(inrefcon)?.SingleValue ?? default;
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void SetDataf(void* inrefcon, float invalue)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -64,11 +64,11 @@ namespace XP.SDK.XPLM
                 }
             }
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static double GetDatad(void* inrefcon) =>
                 Utils.TryGetObject<DataRefSource>(inrefcon)?.DoubleValue ?? default;
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void SetDatad(void* inrefcon, double invalue)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -78,7 +78,7 @@ namespace XP.SDK.XPLM
                 }
             }
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static int GetDatavi(void* inrefcon, int* outvalues, int inoffset, int inmax)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -91,7 +91,7 @@ namespace XP.SDK.XPLM
                 return 0;
             }
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void SetDatavi(void* inrefcon, int* invalues, int inoffset, int incount)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -102,7 +102,7 @@ namespace XP.SDK.XPLM
                 }
             }
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static int GetDatavf(void* inrefcon, float* outvalues, int inoffset, int inmax)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -115,7 +115,7 @@ namespace XP.SDK.XPLM
                 return 0;
             }
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void SetDatavf(void* inrefcon, float* invalues, int inoffset, int incount)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -126,7 +126,7 @@ namespace XP.SDK.XPLM
                 }
             }
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static int GetDatab(void* inrefcon, void* outvalues, int inoffset, int inmax)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);
@@ -139,7 +139,7 @@ namespace XP.SDK.XPLM
                 return 0;
             }
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void SetDatab(void* inrefcon, void* invalues, int inoffset, int incount)
             {
                 var obj = Utils.TryGetObject<DataRefSource>(inrefcon);

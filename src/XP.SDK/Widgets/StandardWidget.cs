@@ -51,7 +51,7 @@ namespace XP.SDK.Widgets
         /// <returns><see langword="true"/> if the message was handled; <see langword="false"/> otherwise.</returns>
         protected virtual bool HandleMessage(WidgetMessage message, IntPtr param1, IntPtr param2) => false;
 
-        [UnmanagedCallersOnly(CallConvs = new [] { typeof(CallConvCdecl)})]
+        [UnmanagedCallersOnly]
         private static int StandardWidgetCallback(WidgetMessage inmessage, WidgetID inwidget, IntPtr inparam1, IntPtr inparam2)
         {
             try

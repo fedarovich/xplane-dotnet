@@ -168,7 +168,7 @@ namespace XP.SDK.XPLM
             }
         }
 
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+        [UnmanagedCallersOnly]
         private static unsafe int BeforeExecuteCallback(CommandRef incommand, CommandPhase inphase, void* inrefcon)
         {
             if (_commandCache.TryGetValue(incommand, out var command) && command != null)
@@ -181,7 +181,7 @@ namespace XP.SDK.XPLM
             return 1;
         }
 
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+        [UnmanagedCallersOnly]
         private static unsafe int AfterExecuteCallback(CommandRef incommand, CommandPhase inphase, void* inrefcon)
         {
             if (_commandCache.TryGetValue(incommand, out var command) && command != null)

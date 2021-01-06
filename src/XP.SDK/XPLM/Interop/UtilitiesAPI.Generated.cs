@@ -503,7 +503,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetErrorCallback", ExactSpelling = true)]
-        public static extern unsafe void SetErrorCallback(delegate* unmanaged[Cdecl]<byte*, void> inCallback);
+        public static extern unsafe void SetErrorCallback(delegate* unmanaged<byte*, void> inCallback);
 
         
         /// <summary>
@@ -779,7 +779,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterCommandHandler", ExactSpelling = true)]
-        public static extern unsafe void RegisterCommandHandler(CommandRef inComand, delegate* unmanaged[Cdecl]<CommandRef, CommandPhase, void*, int> inHandler, int inBefore, void* inRefcon);
+        public static extern unsafe void RegisterCommandHandler(CommandRef inComand, delegate* unmanaged<CommandRef, CommandPhase, void*, int> inHandler, int inBefore, void* inRefcon);
 
         
         /// <summary>
@@ -789,6 +789,6 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterCommandHandler", ExactSpelling = true)]
-        public static extern unsafe void UnregisterCommandHandler(CommandRef inComand, delegate* unmanaged[Cdecl]<CommandRef, CommandPhase, void*, int> inHandler, int inBefore, void* inRefcon);
+        public static extern unsafe void UnregisterCommandHandler(CommandRef inComand, delegate* unmanaged<CommandRef, CommandPhase, void*, int> inHandler, int inBefore, void* inRefcon);
     }
 }

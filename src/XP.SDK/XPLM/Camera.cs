@@ -64,7 +64,7 @@ namespace XP.SDK.XPLM
             CameraAPI.ControlCamera(duration, &OnCameraCallback, controller.RefCon);
             return controller;
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static int OnCameraCallback(CameraPosition* outcameraposition, int inislosingcontrol, void* inrefcon)
             {
                 return Utils.TryGetObject<Controller>(inrefcon)?.OnCameraControl(outcameraposition, inislosingcontrol) ?? 0;

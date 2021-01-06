@@ -48,7 +48,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterFlightLoopCallback", ExactSpelling = true)]
-        public static extern unsafe void RegisterFlightLoopCallback(delegate* unmanaged[Cdecl]<float, float, int, void*, float> inFlightLoop, float inInterval, void* inRefcon);
+        public static extern unsafe void RegisterFlightLoopCallback(delegate* unmanaged<float, float, int, void*, float> inFlightLoop, float inInterval, void* inRefcon);
 
         
         /// <summary>
@@ -63,7 +63,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterFlightLoopCallback", ExactSpelling = true)]
-        public static extern unsafe void UnregisterFlightLoopCallback(delegate* unmanaged[Cdecl]<float, float, int, void*, float> inFlightLoop, void* inRefcon);
+        public static extern unsafe void UnregisterFlightLoopCallback(delegate* unmanaged<float, float, int, void*, float> inFlightLoop, void* inRefcon);
 
         
         /// <summary>
@@ -81,7 +81,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMSetFlightLoopCallbackInterval", ExactSpelling = true)]
-        public static extern unsafe void SetFlightLoopCallbackInterval(delegate* unmanaged[Cdecl]<float, float, int, void*, float> inFlightLoop, float inInterval, int inRelativeToNow, void* inRefcon);
+        public static extern unsafe void SetFlightLoopCallbackInterval(delegate* unmanaged<float, float, int, void*, float> inFlightLoop, float inInterval, int inRelativeToNow, void* inRefcon);
 
         
         /// <summary>

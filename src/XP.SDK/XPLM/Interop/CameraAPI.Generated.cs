@@ -15,7 +15,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMControlCamera", ExactSpelling = true)]
-        public static extern unsafe void ControlCamera(CameraControlDuration inHowLong, delegate* unmanaged[Cdecl]<CameraPosition*, int, void*, int> inControlFunc, void* inRefcon);
+        public static extern unsafe void ControlCamera(CameraControlDuration inHowLong, delegate* unmanaged<CameraPosition*, int, void*, int> inControlFunc, void* inRefcon);
 
         
         /// <summary>

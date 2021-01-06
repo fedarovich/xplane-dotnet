@@ -23,15 +23,15 @@ namespace XP.SDK.XPLM.Interop
         public byte* mapToCreateLayerIn;
         public MapLayerType layerType;
         [ManagedTypeAttribute(typeof(MapWillBeDeletedCallback))]
-        public delegate* unmanaged[Cdecl]<MapLayerID, void*, void> willBeDeletedCallback;
+        public delegate* unmanaged<MapLayerID, void*, void> willBeDeletedCallback;
         [ManagedTypeAttribute(typeof(MapPrepareCacheCallback))]
-        public delegate* unmanaged[Cdecl]<MapLayerID, float*, MapProjectionID, void*, void> prepCacheCallback;
+        public delegate* unmanaged<MapLayerID, float*, MapProjectionID, void*, void> prepCacheCallback;
         [ManagedTypeAttribute(typeof(MapDrawingCallback))]
-        public delegate* unmanaged[Cdecl]<MapLayerID, float*, float, float, MapStyle, MapProjectionID, void*, void> drawCallback;
+        public delegate* unmanaged<MapLayerID, float*, float, float, MapStyle, MapProjectionID, void*, void> drawCallback;
         [ManagedTypeAttribute(typeof(MapIconDrawingCallback))]
-        public delegate* unmanaged[Cdecl]<MapLayerID, float*, float, float, MapStyle, MapProjectionID, void*, void> iconCallback;
+        public delegate* unmanaged<MapLayerID, float*, float, float, MapStyle, MapProjectionID, void*, void> iconCallback;
         [ManagedTypeAttribute(typeof(MapLabelDrawingCallback))]
-        public delegate* unmanaged[Cdecl]<MapLayerID, float*, float, float, MapStyle, MapProjectionID, void*, void> labelCallback;
+        public delegate* unmanaged<MapLayerID, float*, float, float, MapStyle, MapProjectionID, void*, void> labelCallback;
         public int showUiToggle;
         public byte* layerName;
         public void* refcon;

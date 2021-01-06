@@ -97,27 +97,27 @@ namespace XP.SDK.XPLM
 
             // TODO: Register window in global context or plugin base
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void DrawWindow(WindowID inwindowid, void* inrefcon) =>
                 Utils.TryGetObject<WindowBase>(inrefcon)?.OnDrawWindow();
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static int HandleMouseLeftClick(WindowID inwindowid, int x, int y, MouseStatus inmouse, void* inrefcon) =>
                 (Utils.TryGetObject<WindowBase>(inrefcon)?.OnMouseLeftButtonEvent(x, y, inmouse) == true).ToInt();
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static int HandleMouseRightClick(WindowID inwindowid, int x, int y, MouseStatus inmouse, void* inrefcon) =>
                 (Utils.TryGetObject<WindowBase>(inrefcon)?.OnMouseRightButtonEvent(x, y, inmouse) == true).ToInt();
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static int HandleMouseWheel(WindowID inwindowid, int x, int y, int wheel, int clicks, void* inrefcon) =>
                 (Utils.TryGetObject<WindowBase>(inrefcon)?.OnMouseWheelEvent(x, y, (MouseWheel)wheel, clicks) == true).ToInt();
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void HandleKey(WindowID inwindowid, byte inkey, KeyFlags inflags, byte invirtualkey, void* inrefcon, int losingfocus) =>
                 Utils.TryGetObject<WindowBase>(inrefcon)?.OnKeyEvent(inkey, inflags, invirtualkey, losingfocus == 1);
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static CursorStatus HandleCursor(WindowID inwindowid, int x, int y, void* inrefcon) =>
                 Utils.TryGetObject<WindowBase>(inrefcon)?.OnCursorRequested(x, y) ?? CursorStatus.Default;
         }

@@ -115,6 +115,14 @@ namespace BindingsGenerator
                         InteropServices.ToFullString())));
         }
 
+        public static FunctionPointerTypeSyntax WithUnmanagedCallingConvention(this FunctionPointerTypeSyntax functionPointerTypeSyntax)
+        {
+            return functionPointerTypeSyntax
+                .WithCallingConvention(
+                    FunctionPointerCallingConvention(Token(SyntaxKind.UnmanagedKeyword))
+                );
+        }
+
         public static FunctionPointerTypeSyntax WithCdeclCallingConvention(this FunctionPointerTypeSyntax functionPointerTypeSyntax)
         {
             return functionPointerTypeSyntax

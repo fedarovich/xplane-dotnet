@@ -151,7 +151,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMAcquirePlanes", ExactSpelling = true)]
-        public static extern unsafe int AcquirePlanes(byte** inAircraft, delegate* unmanaged[Cdecl]<void*, void> inCallback, void* inRefcon);
+        public static extern unsafe int AcquirePlanes(byte** inAircraft, delegate* unmanaged<void*, void> inCallback, void* inRefcon);
 
         
         /// <summary>

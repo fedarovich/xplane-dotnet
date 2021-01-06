@@ -322,7 +322,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterDataAccessor", ExactSpelling = true)]
-        public static extern unsafe DataRef RegisterDataAccessor(byte* inDataName, DataTypeID inDataType, int inIsWritable, delegate* unmanaged[Cdecl]<void*, int> inReadInt, delegate* unmanaged[Cdecl]<void*, int, void> inWriteInt, delegate* unmanaged[Cdecl]<void*, float> inReadFloat, delegate* unmanaged[Cdecl]<void*, float, void> inWriteFloat, delegate* unmanaged[Cdecl]<void*, double> inReadDouble, delegate* unmanaged[Cdecl]<void*, double, void> inWriteDouble, delegate* unmanaged[Cdecl]<void*, int*, int, int, int> inReadIntArray, delegate* unmanaged[Cdecl]<void*, int*, int, int, void> inWriteIntArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, int> inReadFloatArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, void> inWriteFloatArray, delegate* unmanaged[Cdecl]<void*, void*, int, int, int> inReadData, delegate* unmanaged[Cdecl]<void*, void*, int, int, void> inWriteData, void* inReadRefcon, void* inWriteRefcon);
+        public static extern unsafe DataRef RegisterDataAccessor(byte* inDataName, DataTypeID inDataType, int inIsWritable, delegate* unmanaged<void*, int> inReadInt, delegate* unmanaged<void*, int, void> inWriteInt, delegate* unmanaged<void*, float> inReadFloat, delegate* unmanaged<void*, float, void> inWriteFloat, delegate* unmanaged<void*, double> inReadDouble, delegate* unmanaged<void*, double, void> inWriteDouble, delegate* unmanaged<void*, int*, int, int, int> inReadIntArray, delegate* unmanaged<void*, int*, int, int, void> inWriteIntArray, delegate* unmanaged<void*, float*, int, int, int> inReadFloatArray, delegate* unmanaged<void*, float*, int, int, void> inWriteFloatArray, delegate* unmanaged<void*, void*, int, int, int> inReadData, delegate* unmanaged<void*, void*, int, int, void> inWriteData, void* inReadRefcon, void* inWriteRefcon);
 
         
         /// <summary>
@@ -340,7 +340,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe DataRef RegisterDataAccessor(in XP.SDK.Utf8String inDataName, DataTypeID inDataType, int inIsWritable, delegate* unmanaged[Cdecl]<void*, int> inReadInt, delegate* unmanaged[Cdecl]<void*, int, void> inWriteInt, delegate* unmanaged[Cdecl]<void*, float> inReadFloat, delegate* unmanaged[Cdecl]<void*, float, void> inWriteFloat, delegate* unmanaged[Cdecl]<void*, double> inReadDouble, delegate* unmanaged[Cdecl]<void*, double, void> inWriteDouble, delegate* unmanaged[Cdecl]<void*, int*, int, int, int> inReadIntArray, delegate* unmanaged[Cdecl]<void*, int*, int, int, void> inWriteIntArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, int> inReadFloatArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, void> inWriteFloatArray, delegate* unmanaged[Cdecl]<void*, void*, int, int, int> inReadData, delegate* unmanaged[Cdecl]<void*, void*, int, int, void> inWriteData, void* inReadRefcon, void* inWriteRefcon)
+        public static unsafe DataRef RegisterDataAccessor(in XP.SDK.Utf8String inDataName, DataTypeID inDataType, int inIsWritable, delegate* unmanaged<void*, int> inReadInt, delegate* unmanaged<void*, int, void> inWriteInt, delegate* unmanaged<void*, float> inReadFloat, delegate* unmanaged<void*, float, void> inWriteFloat, delegate* unmanaged<void*, double> inReadDouble, delegate* unmanaged<void*, double, void> inWriteDouble, delegate* unmanaged<void*, int*, int, int, int> inReadIntArray, delegate* unmanaged<void*, int*, int, int, void> inWriteIntArray, delegate* unmanaged<void*, float*, int, int, int> inReadFloatArray, delegate* unmanaged<void*, float*, int, int, void> inWriteFloatArray, delegate* unmanaged<void*, void*, int, int, int> inReadData, delegate* unmanaged<void*, void*, int, int, void> inWriteData, void* inReadRefcon, void* inWriteRefcon)
         {
             fixed (byte* inDataNamePtr = inDataName)
                 return RegisterDataAccessor(inDataNamePtr, inDataType, inIsWritable, inReadInt, inWriteInt, inReadFloat, inWriteFloat, inReadDouble, inWriteDouble, inReadIntArray, inWriteIntArray, inReadFloatArray, inWriteFloatArray, inReadData, inWriteData, inReadRefcon, inWriteRefcon);
@@ -362,7 +362,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [SkipLocalsInitAttribute]
-        public static unsafe DataRef RegisterDataAccessor(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, int inIsWritable, delegate* unmanaged[Cdecl]<void*, int> inReadInt, delegate* unmanaged[Cdecl]<void*, int, void> inWriteInt, delegate* unmanaged[Cdecl]<void*, float> inReadFloat, delegate* unmanaged[Cdecl]<void*, float, void> inWriteFloat, delegate* unmanaged[Cdecl]<void*, double> inReadDouble, delegate* unmanaged[Cdecl]<void*, double, void> inWriteDouble, delegate* unmanaged[Cdecl]<void*, int*, int, int, int> inReadIntArray, delegate* unmanaged[Cdecl]<void*, int*, int, int, void> inWriteIntArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, int> inReadFloatArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, void> inWriteFloatArray, delegate* unmanaged[Cdecl]<void*, void*, int, int, int> inReadData, delegate* unmanaged[Cdecl]<void*, void*, int, int, void> inWriteData, void* inReadRefcon, void* inWriteRefcon)
+        public static unsafe DataRef RegisterDataAccessor(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, int inIsWritable, delegate* unmanaged<void*, int> inReadInt, delegate* unmanaged<void*, int, void> inWriteInt, delegate* unmanaged<void*, float> inReadFloat, delegate* unmanaged<void*, float, void> inWriteFloat, delegate* unmanaged<void*, double> inReadDouble, delegate* unmanaged<void*, double, void> inWriteDouble, delegate* unmanaged<void*, int*, int, int, int> inReadIntArray, delegate* unmanaged<void*, int*, int, int, void> inWriteIntArray, delegate* unmanaged<void*, float*, int, int, int> inReadFloatArray, delegate* unmanaged<void*, float*, int, int, void> inWriteFloatArray, delegate* unmanaged<void*, void*, int, int, int> inReadData, delegate* unmanaged<void*, void*, int, int, void> inWriteData, void* inReadRefcon, void* inWriteRefcon)
         {
             int inDataNameUtf8Len = inDataName.Length * 3 + 4;
             Span<byte> inDataNameUtf8 = inDataNameUtf8Len <= 4096 ? stackalloc byte[inDataNameUtf8Len] : GC.AllocateUninitializedArray<byte>(inDataNameUtf8Len);
@@ -405,7 +405,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMShareData", ExactSpelling = true)]
-        public static extern unsafe int ShareData(byte* inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon);
+        public static extern unsafe int ShareData(byte* inDataName, DataTypeID inDataType, delegate* unmanaged<void*, void> inNotificationFunc, void* inNotificationRefcon);
 
         
         /// <summary>
@@ -430,7 +430,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int ShareData(in XP.SDK.Utf8String inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
+        public static unsafe int ShareData(in XP.SDK.Utf8String inDataName, DataTypeID inDataType, delegate* unmanaged<void*, void> inNotificationFunc, void* inNotificationRefcon)
         {
             fixed (byte* inDataNamePtr = inDataName)
                 return ShareData(inDataNamePtr, inDataType, inNotificationFunc, inNotificationRefcon);
@@ -459,7 +459,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [SkipLocalsInitAttribute]
-        public static unsafe int ShareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
+        public static unsafe int ShareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, delegate* unmanaged<void*, void> inNotificationFunc, void* inNotificationRefcon)
         {
             int inDataNameUtf8Len = inDataName.Length * 3 + 4;
             Span<byte> inDataNameUtf8 = inDataNameUtf8Len <= 4096 ? stackalloc byte[inDataNameUtf8Len] : GC.AllocateUninitializedArray<byte>(inDataNameUtf8Len);
@@ -477,7 +477,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnshareData", ExactSpelling = true)]
-        public static extern unsafe int UnshareData(byte* inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon);
+        public static extern unsafe int UnshareData(byte* inDataName, DataTypeID inDataType, delegate* unmanaged<void*, void> inNotificationFunc, void* inNotificationRefcon);
 
         
         /// <summary>
@@ -489,7 +489,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int UnshareData(in XP.SDK.Utf8String inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
+        public static unsafe int UnshareData(in XP.SDK.Utf8String inDataName, DataTypeID inDataType, delegate* unmanaged<void*, void> inNotificationFunc, void* inNotificationRefcon)
         {
             fixed (byte* inDataNamePtr = inDataName)
                 return UnshareData(inDataNamePtr, inDataType, inNotificationFunc, inNotificationRefcon);
@@ -505,7 +505,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [SkipLocalsInitAttribute]
-        public static unsafe int UnshareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
+        public static unsafe int UnshareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, delegate* unmanaged<void*, void> inNotificationFunc, void* inNotificationRefcon)
         {
             int inDataNameUtf8Len = inDataName.Length * 3 + 4;
             Span<byte> inDataNameUtf8 = inDataNameUtf8Len <= 4096 ? stackalloc byte[inDataNameUtf8Len] : GC.AllocateUninitializedArray<byte>(inDataNameUtf8Len);

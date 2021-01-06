@@ -69,7 +69,7 @@ namespace XP.SDK.XPLM
             _items = new MenuItemList(id);
         }
 
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+        [UnmanagedCallersOnly]
         static unsafe void OnMenuCallback(void* inMenuRef, void* inItemRef)
         {
             var menu = Utils.TryGetObject<Menu>(inMenuRef);

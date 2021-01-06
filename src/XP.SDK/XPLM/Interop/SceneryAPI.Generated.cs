@@ -184,7 +184,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMLoadObjectAsync", ExactSpelling = true)]
-        public static extern unsafe void LoadObjectAsync(byte* inPath, delegate* unmanaged[Cdecl]<ObjectRef, void*, void> inCallback, void* inRefcon);
+        public static extern unsafe void LoadObjectAsync(byte* inPath, delegate* unmanaged<ObjectRef, void*, void> inCallback, void* inRefcon);
 
         
         /// <summary>
@@ -206,7 +206,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void LoadObjectAsync(in XP.SDK.Utf8String inPath, delegate* unmanaged[Cdecl]<ObjectRef, void*, void> inCallback, void* inRefcon)
+        public static unsafe void LoadObjectAsync(in XP.SDK.Utf8String inPath, delegate* unmanaged<ObjectRef, void*, void> inCallback, void* inRefcon)
         {
             fixed (byte* inPathPtr = inPath)
                 LoadObjectAsync(inPathPtr, inCallback, inRefcon);
@@ -232,7 +232,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [SkipLocalsInitAttribute]
-        public static unsafe void LoadObjectAsync(in ReadOnlySpan<char> inPath, delegate* unmanaged[Cdecl]<ObjectRef, void*, void> inCallback, void* inRefcon)
+        public static unsafe void LoadObjectAsync(in ReadOnlySpan<char> inPath, delegate* unmanaged<ObjectRef, void*, void> inCallback, void* inRefcon)
         {
             int inPathUtf8Len = inPath.Length * 3 + 4;
             Span<byte> inPathUtf8 = inPathUtf8Len <= 4096 ? stackalloc byte[inPathUtf8Len] : GC.AllocateUninitializedArray<byte>(inPathUtf8Len);
@@ -268,7 +268,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMLookupObjects", ExactSpelling = true)]
-        public static extern unsafe int LookupObjects(byte* inPath, float inLatitude, float inLongitude, delegate* unmanaged[Cdecl]<byte*, void*, void> enumerator, void* @ref);
+        public static extern unsafe int LookupObjects(byte* inPath, float inLatitude, float inLongitude, delegate* unmanaged<byte*, void*, void> enumerator, void* @ref);
 
         
         /// <summary>
@@ -286,7 +286,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int LookupObjects(in XP.SDK.Utf8String inPath, float inLatitude, float inLongitude, delegate* unmanaged[Cdecl]<byte*, void*, void> enumerator, void* @ref)
+        public static unsafe int LookupObjects(in XP.SDK.Utf8String inPath, float inLatitude, float inLongitude, delegate* unmanaged<byte*, void*, void> enumerator, void* @ref)
         {
             fixed (byte* inPathPtr = inPath)
                 return LookupObjects(inPathPtr, inLatitude, inLongitude, enumerator, @ref);
@@ -308,7 +308,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [SkipLocalsInitAttribute]
-        public static unsafe int LookupObjects(in ReadOnlySpan<char> inPath, float inLatitude, float inLongitude, delegate* unmanaged[Cdecl]<byte*, void*, void> enumerator, void* @ref)
+        public static unsafe int LookupObjects(in ReadOnlySpan<char> inPath, float inLatitude, float inLongitude, delegate* unmanaged<byte*, void*, void> enumerator, void* @ref)
         {
             int inPathUtf8Len = inPath.Length * 3 + 4;
             Span<byte> inPathUtf8 = inPathUtf8Len <= 4096 ? stackalloc byte[inPathUtf8Len] : GC.AllocateUninitializedArray<byte>(inPathUtf8Len);

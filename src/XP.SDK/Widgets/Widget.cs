@@ -461,7 +461,7 @@ namespace XP.SDK.Widgets
         public unsafe void AddHook(WidgetFuncCallback hook)
         {
             (_hooks ??= new List<WidgetFuncCallback>()).Add(hook);
-            var hookPtr = (delegate* unmanaged[Cdecl]<WidgetMessage, WidgetID, IntPtr, IntPtr, int>) Marshal.GetFunctionPointerForDelegate(hook);
+            var hookPtr = (delegate* unmanaged<WidgetMessage, WidgetID, IntPtr, IntPtr, int>) Marshal.GetFunctionPointerForDelegate(hook);
             WidgetsAPI.AddWidgetCallback(Id, hookPtr);
         }
 

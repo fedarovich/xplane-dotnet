@@ -79,7 +79,7 @@ namespace XP.SDK.XPLM
             }
         }
 
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+        [UnmanagedCallersOnly]
         static unsafe int OnKeySnifferCallback(byte inchar, KeyFlags inflags, byte invirtualkey, void* inrefcon) =>
             (Utils.TryGetObject<Callback>(inrefcon)?.Invoke(inchar, inflags, invirtualkey) == true).ToInt();
 

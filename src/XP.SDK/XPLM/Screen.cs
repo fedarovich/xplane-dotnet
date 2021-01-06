@@ -102,7 +102,7 @@ namespace XP.SDK.XPLM
                     dictHandle.Free();
                 }
 
-                [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+                [UnmanagedCallersOnly]
                 static void Callback(int index, int left, int top, int right, int bottom, void* inrefcon)
                 {
                     var dict = (Dictionary<int, Rect>)GCHandle.FromIntPtr(new IntPtr(inrefcon)).Target;
@@ -144,7 +144,7 @@ namespace XP.SDK.XPLM
                     dictHandle.Free();
                 }
 
-                [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+                [UnmanagedCallersOnly]
                 static void Callback(int index, int left, int top, int right, int bottom, void* inrefcon)
                 {
                     var dict = (Dictionary<int, Rect>)GCHandle.FromIntPtr(new IntPtr(inrefcon)).Target;

@@ -62,7 +62,7 @@ namespace XP.SDK.XPLM
             }
         }
 
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+        [UnmanagedCallersOnly]
         static unsafe void OnDataChanged(void* inrefcon)
         {
             var sharedData = Utils.TryGetObject<SharedData>(inrefcon);

@@ -33,7 +33,7 @@ namespace XP.SDK.XPLM
                 GCHandle.ToIntPtr(hotKey._handle).ToPointer());
             return hotKey;
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void OnHotKey(void* inrefcon) =>
                 Utils.TryGetObject<HotKey>(inrefcon)?.OnHotKey();
         }

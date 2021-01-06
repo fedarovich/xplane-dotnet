@@ -55,31 +55,31 @@ namespace XP.SDK.XPLM
 
             _handle = handle;
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void HandleWillBeDeletedCallback(MapLayerID inlayer, void* inrefcon) => Utils.TryGetObject<MapLayer>(inrefcon)?.HandleWillBeDeleted();
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void HandlePrepareCacheCallback(MapLayerID inlayer, float* inTotalMapBoundsLeftTopRightBottom, MapProjectionID projection, void* inrefcon)
             {
                 ref readonly RectF bounds = ref Unsafe.AsRef<RectF>((RectF*)inTotalMapBoundsLeftTopRightBottom);
                 Utils.TryGetObject<MapLayer>(inrefcon)?.OnPreparingCache(bounds, projection);
             }
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void HandleMapDrawingCallback(MapLayerID inlayer, float* inMapBoundsLeftTopRightBottom, float zoomRatio, float mapUnitsPerUserInterfaceUnit, MapStyle mapStyle, MapProjectionID projection, void* inrefcon)
             {
                 ref readonly RectF bounds = ref Unsafe.AsRef<RectF>((RectF*)inMapBoundsLeftTopRightBottom);
                 Utils.TryGetObject<MapLayer>(inrefcon)?.OnMapDrawing(bounds, zoomRatio, mapUnitsPerUserInterfaceUnit, mapStyle, projection);
             }
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void HandleMapIconDrawingCallback(MapLayerID inlayer, float* inMapBoundsLeftTopRightBottom, float zoomRatio, float mapUnitsPerUserInterfaceUnit, MapStyle mapStyle, MapProjectionID projection, void* inrefcon)
             {
                 ref readonly RectF bounds = ref Unsafe.AsRef<RectF>((RectF*)inMapBoundsLeftTopRightBottom);
                 Utils.TryGetObject<MapLayer>(inrefcon)?.HandleIconDrawing(bounds, zoomRatio, mapUnitsPerUserInterfaceUnit, mapStyle, projection);
             }
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void HandleMapLabelDrawingCallback(MapLayerID inlayer, float* inMapBoundsLeftTopRightBottom, float zoomRatio, float mapUnitsPerUserInterfaceUnit, MapStyle mapStyle, MapProjectionID projection, void* inrefcon)
             {
                 ref readonly RectF bounds = ref Unsafe.AsRef<RectF>((RectF*)inMapBoundsLeftTopRightBottom);

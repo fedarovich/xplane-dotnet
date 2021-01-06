@@ -158,7 +158,7 @@ namespace XP.SDK.XPLM
 
             if (Interlocked.Exchange(ref _errorCallback, callback) == null)
             {
-                var callbackPtr = (delegate* unmanaged[Cdecl]<byte*, void>) Marshal.GetFunctionPointerForDelegate(ErrorCallback);
+                var callbackPtr = (delegate* unmanaged<byte*, void>) Marshal.GetFunctionPointerForDelegate(ErrorCallback);
                 UtilitiesAPI.SetErrorCallback(callbackPtr);
             }
         }

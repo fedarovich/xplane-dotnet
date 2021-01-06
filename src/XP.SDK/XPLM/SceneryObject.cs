@@ -33,7 +33,7 @@ namespace XP.SDK.XPLM
             SceneryAPI.LoadObjectAsync(path, &OnObjectLoaded, GCHandle.ToIntPtr(handle).ToPointer());
             return tcs.Task;
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void OnObjectLoaded(ObjectRef objectRef, void* inrefcon)
             {
                 var handle = GCHandle.FromIntPtr(new IntPtr(inrefcon));
@@ -66,7 +66,7 @@ namespace XP.SDK.XPLM
                 handle.Free();
             }
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void Callback(byte* filePath, void* inref)
             {
                 var list = (List<string>) GCHandle.FromIntPtr(new IntPtr(inref)).Target;

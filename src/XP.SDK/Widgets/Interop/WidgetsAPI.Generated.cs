@@ -143,7 +143,7 @@ namespace XP.SDK.Widgets.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPCreateCustomWidget", ExactSpelling = true)]
-        public static extern unsafe WidgetID CreateCustomWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, byte* inDescriptor, int inIsRoot, WidgetID inContainer, delegate* unmanaged[Cdecl]<WidgetMessage, WidgetID, nint, nint, int> inCallback);
+        public static extern unsafe WidgetID CreateCustomWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, byte* inDescriptor, int inIsRoot, WidgetID inContainer, delegate* unmanaged<WidgetMessage, WidgetID, nint, nint, int> inCallback);
 
         
         /// <summary>
@@ -156,7 +156,7 @@ namespace XP.SDK.Widgets.Interop
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe WidgetID CreateCustomWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, in XP.SDK.Utf8String inDescriptor, int inIsRoot, WidgetID inContainer, delegate* unmanaged[Cdecl]<WidgetMessage, WidgetID, nint, nint, int> inCallback)
+        public static unsafe WidgetID CreateCustomWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, in XP.SDK.Utf8String inDescriptor, int inIsRoot, WidgetID inContainer, delegate* unmanaged<WidgetMessage, WidgetID, nint, nint, int> inCallback)
         {
             fixed (byte* inDescriptorPtr = inDescriptor)
                 return CreateCustomWidget(inLeft, inTop, inRight, inBottom, inVisible, inDescriptorPtr, inIsRoot, inContainer, inCallback);
@@ -173,7 +173,7 @@ namespace XP.SDK.Widgets.Interop
         /// </para>
         /// </summary>
         [SkipLocalsInitAttribute]
-        public static unsafe WidgetID CreateCustomWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, in ReadOnlySpan<char> inDescriptor, int inIsRoot, WidgetID inContainer, delegate* unmanaged[Cdecl]<WidgetMessage, WidgetID, nint, nint, int> inCallback)
+        public static unsafe WidgetID CreateCustomWidget(int inLeft, int inTop, int inRight, int inBottom, int inVisible, in ReadOnlySpan<char> inDescriptor, int inIsRoot, WidgetID inContainer, delegate* unmanaged<WidgetMessage, WidgetID, nint, nint, int> inCallback)
         {
             int inDescriptorUtf8Len = inDescriptor.Length * 3 + 4;
             Span<byte> inDescriptorUtf8 = inDescriptorUtf8Len <= 4096 ? stackalloc byte[inDescriptorUtf8Len] : GC.AllocateUninitializedArray<byte>(inDescriptorUtf8Len);
@@ -563,7 +563,7 @@ namespace XP.SDK.Widgets.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPAddWidgetCallback", ExactSpelling = true)]
-        public static extern unsafe void AddWidgetCallback(WidgetID inWidget, delegate* unmanaged[Cdecl]<WidgetMessage, WidgetID, nint, nint, int> inNewCallback);
+        public static extern unsafe void AddWidgetCallback(WidgetID inWidget, delegate* unmanaged<WidgetMessage, WidgetID, nint, nint, int> inNewCallback);
 
         
         /// <summary>

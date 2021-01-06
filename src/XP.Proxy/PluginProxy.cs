@@ -16,7 +16,7 @@ namespace XP.Proxy
     {
         private static PluginContext _context;
         private static PluginBase _plugin;
-        private static delegate* unmanaged[Cdecl]<byte*, void> _debugString;
+        private static delegate* unmanaged<byte*, void> _debugString;
 
         [SkipLocalsInit]
         private static void Log(in ReadOnlySpan<char> str)
@@ -63,7 +63,7 @@ namespace XP.Proxy
             }
         }
 
-        [UnmanagedCallersOnly(CallConvs = new [] {typeof(CallConvCdecl)})]
+        [UnmanagedCallersOnly]
         public static int XPluginStart(byte* outName, byte* outSig, byte* outDesc)
         {
             var pluginPath = PluginInfo.ThisPlugin.FilePath;
@@ -117,26 +117,26 @@ namespace XP.Proxy
             }
         }
 
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+        [UnmanagedCallersOnly]
         public static void XPluginStop()
         {
             _plugin.Stop();
             Unload();
         }
 
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+        [UnmanagedCallersOnly]
         public static int XPluginEnable()
         {
             return _plugin.Enable() ? 1 : 0;
         }
 
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+        [UnmanagedCallersOnly]
         public static void XPluginDisable()
         {
             _plugin.Disable();
         }
 
-        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+        [UnmanagedCallersOnly]
         public static void XPluginReceiveMessage(int pluginId, int message, nint param)
         {
             _plugin.ReceiveMessage(pluginId, message, param);

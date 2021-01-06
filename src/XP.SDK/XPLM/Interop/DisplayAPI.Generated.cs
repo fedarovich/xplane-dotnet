@@ -24,7 +24,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterDrawCallback", ExactSpelling = true)]
-        public static extern unsafe int RegisterDrawCallback(delegate* unmanaged[Cdecl]<DrawingPhase, int, void*, int> inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon);
+        public static extern unsafe int RegisterDrawCallback(delegate* unmanaged<DrawingPhase, int, void*, int> inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon);
 
         
         /// <summary>
@@ -41,7 +41,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterDrawCallback", ExactSpelling = true)]
-        public static extern unsafe int UnregisterDrawCallback(delegate* unmanaged[Cdecl]<DrawingPhase, int, void*, int> inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon);
+        public static extern unsafe int UnregisterDrawCallback(delegate* unmanaged<DrawingPhase, int, void*, int> inCallback, DrawingPhase inPhase, int inWantsBefore, void* inRefcon);
 
         
         /// <summary>
@@ -83,7 +83,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCreateWindow", ExactSpelling = true)]
-        public static extern unsafe WindowID CreateWindow(int inLeft, int inTop, int inRight, int inBottom, int inIsVisible, delegate* unmanaged[Cdecl]<WindowID, void*, void> inDrawCallback, delegate* unmanaged[Cdecl]<WindowID, byte, KeyFlags, byte, void*, int, void> inKeyCallback, delegate* unmanaged[Cdecl]<WindowID, int, int, MouseStatus, void*, int> inMouseCallback, void* inRefcon);
+        public static extern unsafe WindowID CreateWindow(int inLeft, int inTop, int inRight, int inBottom, int inIsVisible, delegate* unmanaged<WindowID, void*, void> inDrawCallback, delegate* unmanaged<WindowID, byte, KeyFlags, byte, void*, int, void> inKeyCallback, delegate* unmanaged<WindowID, int, int, MouseStatus, void*, int> inMouseCallback, void* inRefcon);
 
         
         /// <summary>
@@ -174,7 +174,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetAllMonitorBoundsGlobal", ExactSpelling = true)]
-        public static extern unsafe void GetAllMonitorBoundsGlobal(delegate* unmanaged[Cdecl]<int, int, int, int, int, void*, void> inMonitorBoundsCallback, void* inRefcon);
+        public static extern unsafe void GetAllMonitorBoundsGlobal(delegate* unmanaged<int, int, int, int, int, void*, void> inMonitorBoundsCallback, void* inRefcon);
 
         
         /// <summary>
@@ -192,7 +192,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMGetAllMonitorBoundsOS", ExactSpelling = true)]
-        public static extern unsafe void GetAllMonitorBoundsOS(delegate* unmanaged[Cdecl]<int, int, int, int, int, void*, void> inMonitorBoundsCallback, void* inRefcon);
+        public static extern unsafe void GetAllMonitorBoundsOS(delegate* unmanaged<int, int, int, int, int, void*, void> inMonitorBoundsCallback, void* inRefcon);
 
         
         /// <summary>
@@ -605,7 +605,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterKeySniffer", ExactSpelling = true)]
-        public static extern unsafe int RegisterKeySniffer(delegate* unmanaged[Cdecl]<byte, KeyFlags, byte, void*, int> inCallback, int inBeforeWindows, void* inRefcon);
+        public static extern unsafe int RegisterKeySniffer(delegate* unmanaged<byte, KeyFlags, byte, void*, int> inCallback, int inBeforeWindows, void* inRefcon);
 
         
         /// <summary>
@@ -616,7 +616,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMUnregisterKeySniffer", ExactSpelling = true)]
-        public static extern unsafe int UnregisterKeySniffer(delegate* unmanaged[Cdecl]<byte, KeyFlags, byte, void*, int> inCallback, int inBeforeWindows, void* inRefcon);
+        public static extern unsafe int UnregisterKeySniffer(delegate* unmanaged<byte, KeyFlags, byte, void*, int> inCallback, int inBeforeWindows, void* inRefcon);
 
         
         /// <summary>
@@ -630,7 +630,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterHotKey", ExactSpelling = true)]
-        public static extern unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, byte* inDescription, delegate* unmanaged[Cdecl]<void*, void> inCallback, void* inRefcon);
+        public static extern unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, byte* inDescription, delegate* unmanaged<void*, void> inCallback, void* inRefcon);
 
         
         /// <summary>
@@ -644,7 +644,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, in XP.SDK.Utf8String inDescription, delegate* unmanaged[Cdecl]<void*, void> inCallback, void* inRefcon)
+        public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, in XP.SDK.Utf8String inDescription, delegate* unmanaged<void*, void> inCallback, void* inRefcon)
         {
             fixed (byte* inDescriptionPtr = inDescription)
                 return RegisterHotKey(inVirtualKey, inFlags, inDescriptionPtr, inCallback, inRefcon);
@@ -662,7 +662,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [SkipLocalsInitAttribute]
-        public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, in ReadOnlySpan<char> inDescription, delegate* unmanaged[Cdecl]<void*, void> inCallback, void* inRefcon)
+        public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, in ReadOnlySpan<char> inDescription, delegate* unmanaged<void*, void> inCallback, void* inRefcon)
         {
             int inDescriptionUtf8Len = inDescription.Length * 3 + 4;
             Span<byte> inDescriptionUtf8 = inDescriptionUtf8Len <= 4096 ? stackalloc byte[inDescriptionUtf8Len] : GC.AllocateUninitializedArray<byte>(inDescriptionUtf8Len);

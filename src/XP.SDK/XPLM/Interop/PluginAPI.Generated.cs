@@ -339,6 +339,6 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMEnumerateFeatures", ExactSpelling = true)]
-        public static extern unsafe void EnumerateFeatures(delegate* unmanaged[Cdecl]<byte*, void*, void> inEnumerator, void* inRef);
+        public static extern unsafe void EnumerateFeatures(delegate* unmanaged<byte*, void*, void> inEnumerator, void* inRef);
     }
 }

@@ -47,19 +47,19 @@ namespace XP.SDK.XPLM.Interop
         public int bottom;
         public int visible;
         [ManagedTypeAttribute(typeof(DrawWindowCallback))]
-        public delegate* unmanaged[Cdecl]<WindowID, void*, void> drawWindowFunc;
+        public delegate* unmanaged<WindowID, void*, void> drawWindowFunc;
         [ManagedTypeAttribute(typeof(HandleMouseClickCallback))]
-        public delegate* unmanaged[Cdecl]<WindowID, int, int, MouseStatus, void*, int> handleMouseClickFunc;
+        public delegate* unmanaged<WindowID, int, int, MouseStatus, void*, int> handleMouseClickFunc;
         [ManagedTypeAttribute(typeof(HandleKeyCallback))]
-        public delegate* unmanaged[Cdecl]<WindowID, byte, KeyFlags, byte, void*, int, void> handleKeyFunc;
+        public delegate* unmanaged<WindowID, byte, KeyFlags, byte, void*, int, void> handleKeyFunc;
         [ManagedTypeAttribute(typeof(HandleCursorCallback))]
-        public delegate* unmanaged[Cdecl]<WindowID, int, int, void*, CursorStatus> handleCursorFunc;
+        public delegate* unmanaged<WindowID, int, int, void*, CursorStatus> handleCursorFunc;
         [ManagedTypeAttribute(typeof(HandleMouseWheelCallback))]
-        public delegate* unmanaged[Cdecl]<WindowID, int, int, int, int, void*, int> handleMouseWheelFunc;
+        public delegate* unmanaged<WindowID, int, int, int, int, void*, int> handleMouseWheelFunc;
         public void* refcon;
         public WindowDecoration decorateAsFloatingWindow;
         public WindowLayer layer;
         [ManagedTypeAttribute(typeof(HandleMouseClickCallback))]
-        public delegate* unmanaged[Cdecl]<WindowID, int, int, MouseStatus, void*, int> handleRightClickFunc;
+        public delegate* unmanaged<WindowID, int, int, MouseStatus, void*, int> handleRightClickFunc;
     }
 }

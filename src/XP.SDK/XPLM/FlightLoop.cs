@@ -26,7 +26,7 @@ namespace XP.SDK.XPLM
             };
             _id = ProcessingAPI.CreateFlightLoop(&parameters);
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl)})]
+            [UnmanagedCallersOnly]
             static float FlightLoopCallback(float inelapsedsincelastcall, float inelapsedtimesincelastflightloop, int incounter, void* inrefcon) =>
                 Utils.TryGetObject<FlightLoop>(inrefcon)?.OnFlightLoopCallback(
                     inelapsedsincelastcall, inelapsedtimesincelastflightloop, incounter) ?? 0;

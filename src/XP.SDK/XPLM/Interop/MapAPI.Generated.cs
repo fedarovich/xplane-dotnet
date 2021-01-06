@@ -50,7 +50,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMRegisterMapCreationHook", ExactSpelling = true)]
-        public static extern unsafe void RegisterMapCreationHook(delegate* unmanaged[Cdecl]<byte*, void*, void> callback, void* refcon);
+        public static extern unsafe void RegisterMapCreationHook(delegate* unmanaged<byte*, void*, void> callback, void* refcon);
 
         
         /// <summary>

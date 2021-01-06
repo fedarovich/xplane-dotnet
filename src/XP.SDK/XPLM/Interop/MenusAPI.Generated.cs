@@ -54,7 +54,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [DllImportAttribute(Lib.Name, EntryPoint = "XPLMCreateMenu", ExactSpelling = true)]
-        public static extern unsafe MenuID CreateMenu(byte* inName, MenuID inParentMenu, int inParentItem, delegate* unmanaged[Cdecl]<void*, void*, void> inHandler, void* inMenuRef);
+        public static extern unsafe MenuID CreateMenu(byte* inName, MenuID inParentMenu, int inParentItem, delegate* unmanaged<void*, void*, void> inHandler, void* inMenuRef);
 
         
         /// <summary>
@@ -73,7 +73,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe MenuID CreateMenu(in XP.SDK.Utf8String inName, MenuID inParentMenu, int inParentItem, delegate* unmanaged[Cdecl]<void*, void*, void> inHandler, void* inMenuRef)
+        public static unsafe MenuID CreateMenu(in XP.SDK.Utf8String inName, MenuID inParentMenu, int inParentItem, delegate* unmanaged<void*, void*, void> inHandler, void* inMenuRef)
         {
             fixed (byte* inNamePtr = inName)
                 return CreateMenu(inNamePtr, inParentMenu, inParentItem, inHandler, inMenuRef);
@@ -96,7 +96,7 @@ namespace XP.SDK.XPLM.Interop
         /// </para>
         /// </summary>
         [SkipLocalsInitAttribute]
-        public static unsafe MenuID CreateMenu(in ReadOnlySpan<char> inName, MenuID inParentMenu, int inParentItem, delegate* unmanaged[Cdecl]<void*, void*, void> inHandler, void* inMenuRef)
+        public static unsafe MenuID CreateMenu(in ReadOnlySpan<char> inName, MenuID inParentMenu, int inParentItem, delegate* unmanaged<void*, void*, void> inHandler, void* inMenuRef)
         {
             int inNameUtf8Len = inName.Length * 3 + 4;
             Span<byte> inNameUtf8 = inNameUtf8Len <= 4096 ? stackalloc byte[inNameUtf8Len] : GC.AllocateUninitializedArray<byte>(inNameUtf8Len);

@@ -35,7 +35,7 @@ namespace XP.SDK.XPLM
                 &OnMapCreated,
                 GCHandle.ToIntPtr(hook.Handle).ToPointer());
 
-            [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+            [UnmanagedCallersOnly]
             static void OnMapCreated(byte* mapidentifier, void* refcon) =>
                 Utils.TryGetObject<MapCreationHook>(refcon)?.Invoke(mapidentifier);
         }
