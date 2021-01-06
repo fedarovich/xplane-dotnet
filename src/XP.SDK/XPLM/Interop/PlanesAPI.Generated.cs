@@ -26,14 +26,10 @@ namespace XP.SDK.XPLM.Interop
         /// (hard drive and everything including the .acf extension) to the .acf file.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetUsersAircraft(in ReadOnlySpan<char> inAircraftPath)
+        public static unsafe void SetUsersAircraft(in XP.SDK.Utf8String inAircraftPath)
         {
-            int inAircraftPathUtf8Len = inAircraftPath.Length * 3 + 4;
-            Span<byte> inAircraftPathUtf8 = inAircraftPathUtf8Len <= 4096 ? stackalloc byte[inAircraftPathUtf8Len] : new byte[inAircraftPathUtf8Len];
-            Utils.ToUtf8(inAircraftPath, inAircraftPathUtf8);
-            fixed (byte* inAircraftPathPtr = inAircraftPathUtf8)
+            fixed (byte* inAircraftPathPtr = inAircraftPath)
                 SetUsersAircraft(inAircraftPathPtr);
         }
 
@@ -45,11 +41,13 @@ namespace XP.SDK.XPLM.Interop
         /// (hard drive and everything including the .acf extension) to the .acf file.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetUsersAircraft(in XP.SDK.Utf8String inAircraftPath)
+        [SkipLocalsInitAttribute]
+        public static unsafe void SetUsersAircraft(in ReadOnlySpan<char> inAircraftPath)
         {
-            fixed (byte* inAircraftPathPtr = inAircraftPath)
-                SetUsersAircraft(inAircraftPathPtr);
+            int inAircraftPathUtf8Len = inAircraftPath.Length * 3 + 4;
+            Span<byte> inAircraftPathUtf8 = inAircraftPathUtf8Len <= 4096 ? stackalloc byte[inAircraftPathUtf8Len] : GC.AllocateUninitializedArray<byte>(inAircraftPathUtf8Len);
+            var inAircraftPathUtf8Str = Utf8String.FromUtf16Unsafe(inAircraftPath, inAircraftPathUtf8);
+            SetUsersAircraft(inAircraftPathUtf8Str);
         }
 
         
@@ -69,14 +67,10 @@ namespace XP.SDK.XPLM.Interop
         /// its X-Plane airport ID (e.g. 'KBOS').
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void PlaceUserAtAirport(in ReadOnlySpan<char> inAirportCode)
+        public static unsafe void PlaceUserAtAirport(in XP.SDK.Utf8String inAirportCode)
         {
-            int inAirportCodeUtf8Len = inAirportCode.Length * 3 + 4;
-            Span<byte> inAirportCodeUtf8 = inAirportCodeUtf8Len <= 4096 ? stackalloc byte[inAirportCodeUtf8Len] : new byte[inAirportCodeUtf8Len];
-            Utils.ToUtf8(inAirportCode, inAirportCodeUtf8);
-            fixed (byte* inAirportCodePtr = inAirportCodeUtf8)
+            fixed (byte* inAirportCodePtr = inAirportCode)
                 PlaceUserAtAirport(inAirportCodePtr);
         }
 
@@ -87,11 +81,13 @@ namespace XP.SDK.XPLM.Interop
         /// its X-Plane airport ID (e.g. 'KBOS').
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void PlaceUserAtAirport(in XP.SDK.Utf8String inAirportCode)
+        [SkipLocalsInitAttribute]
+        public static unsafe void PlaceUserAtAirport(in ReadOnlySpan<char> inAirportCode)
         {
-            fixed (byte* inAirportCodePtr = inAirportCode)
-                PlaceUserAtAirport(inAirportCodePtr);
+            int inAirportCodeUtf8Len = inAirportCode.Length * 3 + 4;
+            Span<byte> inAirportCodeUtf8 = inAirportCodeUtf8Len <= 4096 ? stackalloc byte[inAirportCodeUtf8Len] : GC.AllocateUninitializedArray<byte>(inAirportCodeUtf8Len);
+            var inAirportCodeUtf8Str = Utf8String.FromUtf16Unsafe(inAirportCode, inAirportCodeUtf8);
+            PlaceUserAtAirport(inAirportCodeUtf8Str);
         }
 
         
@@ -199,14 +195,10 @@ namespace XP.SDK.XPLM.Interop
         /// (use XPLMSetUsersAircraft to load the user's aircracft).
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetAircraftModel(int inIndex, in ReadOnlySpan<char> inAircraftPath)
+        public static unsafe void SetAircraftModel(int inIndex, in XP.SDK.Utf8String inAircraftPath)
         {
-            int inAircraftPathUtf8Len = inAircraftPath.Length * 3 + 4;
-            Span<byte> inAircraftPathUtf8 = inAircraftPathUtf8Len <= 4096 ? stackalloc byte[inAircraftPathUtf8Len] : new byte[inAircraftPathUtf8Len];
-            Utils.ToUtf8(inAircraftPath, inAircraftPathUtf8);
-            fixed (byte* inAircraftPathPtr = inAircraftPathUtf8)
+            fixed (byte* inAircraftPathPtr = inAircraftPath)
                 SetAircraftModel(inIndex, inAircraftPathPtr);
         }
 
@@ -219,11 +211,13 @@ namespace XP.SDK.XPLM.Interop
         /// (use XPLMSetUsersAircraft to load the user's aircracft).
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetAircraftModel(int inIndex, in XP.SDK.Utf8String inAircraftPath)
+        [SkipLocalsInitAttribute]
+        public static unsafe void SetAircraftModel(int inIndex, in ReadOnlySpan<char> inAircraftPath)
         {
-            fixed (byte* inAircraftPathPtr = inAircraftPath)
-                SetAircraftModel(inIndex, inAircraftPathPtr);
+            int inAircraftPathUtf8Len = inAircraftPath.Length * 3 + 4;
+            Span<byte> inAircraftPathUtf8 = inAircraftPathUtf8Len <= 4096 ? stackalloc byte[inAircraftPathUtf8Len] : GC.AllocateUninitializedArray<byte>(inAircraftPathUtf8Len);
+            var inAircraftPathUtf8Str = Utf8String.FromUtf16Unsafe(inAircraftPath, inAircraftPathUtf8);
+            SetAircraftModel(inIndex, inAircraftPathUtf8Str);
         }
 
         

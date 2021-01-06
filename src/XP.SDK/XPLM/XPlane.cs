@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Unicode;
 using System.Threading;
 using XP.SDK.Text;
 using XP.SDK.XPLM.Interop;
@@ -406,12 +407,16 @@ namespace XP.SDK.XPLM
             [SkipLocalsInit]
             public static unsafe void WriteLine(in ReadOnlySpan<char> str)
             {
-                Span<byte> inStringUtf8 = stackalloc byte[str.Length * 3 + 3];
-                var strPtr = Utils.ToUtf8Unsafe(str, inStringUtf8, out int count);
-                // TODO: Check whether we have to use \r\n on Windows.
-                strPtr[count] = (byte) '\n';
-                strPtr[count + 1] = 0;
-                UtilitiesAPI.DebugString(strPtr);
+                int strLength = str.Length * 3 + 4 + 3;
+                Span<byte> strUtf8 = strLength <= 4096 ? stackalloc byte[strLength] : GC.AllocateUninitializedArray<byte>(strLength);
+                Utf8.FromUtf16(str, strUtf8, out _, out var length);
+                fixed (byte* pStr = strUtf8)
+                {
+                    // TODO: Check whether we have to use \r\n on Windows.
+                    pStr[length] = (byte) '\n';
+                    pStr[length + 1] = 0;
+                    UtilitiesAPI.DebugString(pStr);
+                }
             }
 
             /// <summary>

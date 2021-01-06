@@ -72,14 +72,10 @@ namespace XP.SDK.XPLM.Interop
         /// a submenu where the title is not visible.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe MenuID CreateMenu(in ReadOnlySpan<char> inName, MenuID inParentMenu, int inParentItem, delegate* unmanaged[Cdecl]<void*, void*, void> inHandler, void* inMenuRef)
+        public static unsafe MenuID CreateMenu(in XP.SDK.Utf8String inName, MenuID inParentMenu, int inParentItem, delegate* unmanaged[Cdecl]<void*, void*, void> inHandler, void* inMenuRef)
         {
-            int inNameUtf8Len = inName.Length * 3 + 4;
-            Span<byte> inNameUtf8 = inNameUtf8Len <= 4096 ? stackalloc byte[inNameUtf8Len] : new byte[inNameUtf8Len];
-            Utils.ToUtf8(inName, inNameUtf8);
-            fixed (byte* inNamePtr = inNameUtf8)
+            fixed (byte* inNamePtr = inName)
                 return CreateMenu(inNamePtr, inParentMenu, inParentItem, inHandler, inMenuRef);
         }
 
@@ -99,11 +95,13 @@ namespace XP.SDK.XPLM.Interop
         /// a submenu where the title is not visible.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe MenuID CreateMenu(in XP.SDK.Utf8String inName, MenuID inParentMenu, int inParentItem, delegate* unmanaged[Cdecl]<void*, void*, void> inHandler, void* inMenuRef)
+        [SkipLocalsInitAttribute]
+        public static unsafe MenuID CreateMenu(in ReadOnlySpan<char> inName, MenuID inParentMenu, int inParentItem, delegate* unmanaged[Cdecl]<void*, void*, void> inHandler, void* inMenuRef)
         {
-            fixed (byte* inNamePtr = inName)
-                return CreateMenu(inNamePtr, inParentMenu, inParentItem, inHandler, inMenuRef);
+            int inNameUtf8Len = inName.Length * 3 + 4;
+            Span<byte> inNameUtf8 = inNameUtf8Len <= 4096 ? stackalloc byte[inNameUtf8Len] : GC.AllocateUninitializedArray<byte>(inNameUtf8Len);
+            var inNameUtf8Str = Utf8String.FromUtf16Unsafe(inName, inNameUtf8);
+            return CreateMenu(inNameUtf8Str, inParentMenu, inParentItem, inHandler, inMenuRef);
         }
 
         
@@ -171,14 +169,10 @@ namespace XP.SDK.XPLM.Interop
         /// plugin.)
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int AppendMenuItem(MenuID inMenu, in ReadOnlySpan<char> inItemName, void* inItemRef, int inDeprecatedAndIgnored)
+        public static unsafe int AppendMenuItem(MenuID inMenu, in XP.SDK.Utf8String inItemName, void* inItemRef, int inDeprecatedAndIgnored)
         {
-            int inItemNameUtf8Len = inItemName.Length * 3 + 4;
-            Span<byte> inItemNameUtf8 = inItemNameUtf8Len <= 4096 ? stackalloc byte[inItemNameUtf8Len] : new byte[inItemNameUtf8Len];
-            Utils.ToUtf8(inItemName, inItemNameUtf8);
-            fixed (byte* inItemNamePtr = inItemNameUtf8)
+            fixed (byte* inItemNamePtr = inItemName)
                 return AppendMenuItem(inMenu, inItemNamePtr, inItemRef, inDeprecatedAndIgnored);
         }
 
@@ -203,11 +197,13 @@ namespace XP.SDK.XPLM.Interop
         /// plugin.)
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int AppendMenuItem(MenuID inMenu, in XP.SDK.Utf8String inItemName, void* inItemRef, int inDeprecatedAndIgnored)
+        [SkipLocalsInitAttribute]
+        public static unsafe int AppendMenuItem(MenuID inMenu, in ReadOnlySpan<char> inItemName, void* inItemRef, int inDeprecatedAndIgnored)
         {
-            fixed (byte* inItemNamePtr = inItemName)
-                return AppendMenuItem(inMenu, inItemNamePtr, inItemRef, inDeprecatedAndIgnored);
+            int inItemNameUtf8Len = inItemName.Length * 3 + 4;
+            Span<byte> inItemNameUtf8 = inItemNameUtf8Len <= 4096 ? stackalloc byte[inItemNameUtf8Len] : GC.AllocateUninitializedArray<byte>(inItemNameUtf8Len);
+            var inItemNameUtf8Str = Utf8String.FromUtf16Unsafe(inItemName, inItemNameUtf8);
+            return AppendMenuItem(inMenu, inItemNameUtf8Str, inItemRef, inDeprecatedAndIgnored);
         }
 
         
@@ -249,14 +245,10 @@ namespace XP.SDK.XPLM.Interop
         /// menus only.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int AppendMenuItemWithCommand(MenuID inMenu, in ReadOnlySpan<char> inItemName, CommandRef inCommandToExecute)
+        public static unsafe int AppendMenuItemWithCommand(MenuID inMenu, in XP.SDK.Utf8String inItemName, CommandRef inCommandToExecute)
         {
-            int inItemNameUtf8Len = inItemName.Length * 3 + 4;
-            Span<byte> inItemNameUtf8 = inItemNameUtf8Len <= 4096 ? stackalloc byte[inItemNameUtf8Len] : new byte[inItemNameUtf8Len];
-            Utils.ToUtf8(inItemName, inItemNameUtf8);
-            fixed (byte* inItemNamePtr = inItemNameUtf8)
+            fixed (byte* inItemNamePtr = inItemName)
                 return AppendMenuItemWithCommand(inMenu, inItemNamePtr, inCommandToExecute);
         }
 
@@ -278,11 +270,13 @@ namespace XP.SDK.XPLM.Interop
         /// menus only.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int AppendMenuItemWithCommand(MenuID inMenu, in XP.SDK.Utf8String inItemName, CommandRef inCommandToExecute)
+        [SkipLocalsInitAttribute]
+        public static unsafe int AppendMenuItemWithCommand(MenuID inMenu, in ReadOnlySpan<char> inItemName, CommandRef inCommandToExecute)
         {
-            fixed (byte* inItemNamePtr = inItemName)
-                return AppendMenuItemWithCommand(inMenu, inItemNamePtr, inCommandToExecute);
+            int inItemNameUtf8Len = inItemName.Length * 3 + 4;
+            Span<byte> inItemNameUtf8 = inItemNameUtf8Len <= 4096 ? stackalloc byte[inItemNameUtf8Len] : GC.AllocateUninitializedArray<byte>(inItemNameUtf8Len);
+            var inItemNameUtf8Str = Utf8String.FromUtf16Unsafe(inItemName, inItemNameUtf8);
+            return AppendMenuItemWithCommand(inMenu, inItemNameUtf8Str, inCommandToExecute);
         }
 
         
@@ -315,14 +309,10 @@ namespace XP.SDK.XPLM.Interop
         /// ID and the index of the menu item.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetMenuItemName(MenuID inMenu, int inIndex, in ReadOnlySpan<char> inItemName, int inDeprecatedAndIgnored)
+        public static unsafe void SetMenuItemName(MenuID inMenu, int inIndex, in XP.SDK.Utf8String inItemName, int inDeprecatedAndIgnored)
         {
-            int inItemNameUtf8Len = inItemName.Length * 3 + 4;
-            Span<byte> inItemNameUtf8 = inItemNameUtf8Len <= 4096 ? stackalloc byte[inItemNameUtf8Len] : new byte[inItemNameUtf8Len];
-            Utils.ToUtf8(inItemName, inItemNameUtf8);
-            fixed (byte* inItemNamePtr = inItemNameUtf8)
+            fixed (byte* inItemNamePtr = inItemName)
                 SetMenuItemName(inMenu, inIndex, inItemNamePtr, inDeprecatedAndIgnored);
         }
 
@@ -333,11 +323,13 @@ namespace XP.SDK.XPLM.Interop
         /// ID and the index of the menu item.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetMenuItemName(MenuID inMenu, int inIndex, in XP.SDK.Utf8String inItemName, int inDeprecatedAndIgnored)
+        [SkipLocalsInitAttribute]
+        public static unsafe void SetMenuItemName(MenuID inMenu, int inIndex, in ReadOnlySpan<char> inItemName, int inDeprecatedAndIgnored)
         {
-            fixed (byte* inItemNamePtr = inItemName)
-                SetMenuItemName(inMenu, inIndex, inItemNamePtr, inDeprecatedAndIgnored);
+            int inItemNameUtf8Len = inItemName.Length * 3 + 4;
+            Span<byte> inItemNameUtf8 = inItemNameUtf8Len <= 4096 ? stackalloc byte[inItemNameUtf8Len] : GC.AllocateUninitializedArray<byte>(inItemNameUtf8Len);
+            var inItemNameUtf8Str = Utf8String.FromUtf16Unsafe(inItemName, inItemNameUtf8);
+            SetMenuItemName(inMenu, inIndex, inItemNameUtf8Str, inDeprecatedAndIgnored);
         }
 
         

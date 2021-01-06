@@ -122,14 +122,10 @@ namespace XP.SDK.XPLM.Interop
         /// defer object loading until the sim has fully started.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe ObjectRef LoadObject(in ReadOnlySpan<char> inPath)
+        public static unsafe ObjectRef LoadObject(in XP.SDK.Utf8String inPath)
         {
-            int inPathUtf8Len = inPath.Length * 3 + 4;
-            Span<byte> inPathUtf8 = inPathUtf8Len <= 4096 ? stackalloc byte[inPathUtf8Len] : new byte[inPathUtf8Len];
-            Utils.ToUtf8(inPath, inPathUtf8);
-            fixed (byte* inPathPtr = inPathUtf8)
+            fixed (byte* inPathPtr = inPath)
                 return LoadObject(inPathPtr);
         }
 
@@ -159,11 +155,13 @@ namespace XP.SDK.XPLM.Interop
         /// defer object loading until the sim has fully started.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe ObjectRef LoadObject(in XP.SDK.Utf8String inPath)
+        [SkipLocalsInitAttribute]
+        public static unsafe ObjectRef LoadObject(in ReadOnlySpan<char> inPath)
         {
-            fixed (byte* inPathPtr = inPath)
-                return LoadObject(inPathPtr);
+            int inPathUtf8Len = inPath.Length * 3 + 4;
+            Span<byte> inPathUtf8 = inPathUtf8Len <= 4096 ? stackalloc byte[inPathUtf8Len] : GC.AllocateUninitializedArray<byte>(inPathUtf8Len);
+            var inPathUtf8Str = Utf8String.FromUtf16Unsafe(inPath, inPathUtf8);
+            return LoadObject(inPathUtf8Str);
         }
 
         
@@ -207,14 +205,10 @@ namespace XP.SDK.XPLM.Interop
         /// desired.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void LoadObjectAsync(in ReadOnlySpan<char> inPath, delegate* unmanaged[Cdecl]<ObjectRef, void*, void> inCallback, void* inRefcon)
+        public static unsafe void LoadObjectAsync(in XP.SDK.Utf8String inPath, delegate* unmanaged[Cdecl]<ObjectRef, void*, void> inCallback, void* inRefcon)
         {
-            int inPathUtf8Len = inPath.Length * 3 + 4;
-            Span<byte> inPathUtf8 = inPathUtf8Len <= 4096 ? stackalloc byte[inPathUtf8Len] : new byte[inPathUtf8Len];
-            Utils.ToUtf8(inPath, inPathUtf8);
-            fixed (byte* inPathPtr = inPathUtf8)
+            fixed (byte* inPathPtr = inPath)
                 LoadObjectAsync(inPathPtr, inCallback, inRefcon);
         }
 
@@ -237,11 +231,13 @@ namespace XP.SDK.XPLM.Interop
         /// desired.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void LoadObjectAsync(in XP.SDK.Utf8String inPath, delegate* unmanaged[Cdecl]<ObjectRef, void*, void> inCallback, void* inRefcon)
+        [SkipLocalsInitAttribute]
+        public static unsafe void LoadObjectAsync(in ReadOnlySpan<char> inPath, delegate* unmanaged[Cdecl]<ObjectRef, void*, void> inCallback, void* inRefcon)
         {
-            fixed (byte* inPathPtr = inPath)
-                LoadObjectAsync(inPathPtr, inCallback, inRefcon);
+            int inPathUtf8Len = inPath.Length * 3 + 4;
+            Span<byte> inPathUtf8 = inPathUtf8Len <= 4096 ? stackalloc byte[inPathUtf8Len] : GC.AllocateUninitializedArray<byte>(inPathUtf8Len);
+            var inPathUtf8Str = Utf8String.FromUtf16Unsafe(inPath, inPathUtf8);
+            LoadObjectAsync(inPathUtf8Str, inCallback, inRefcon);
         }
 
         
@@ -289,14 +285,10 @@ namespace XP.SDK.XPLM.Interop
         /// latitude/longitude you provide will be returned.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int LookupObjects(in ReadOnlySpan<char> inPath, float inLatitude, float inLongitude, delegate* unmanaged[Cdecl]<byte*, void*, void> enumerator, void* @ref)
+        public static unsafe int LookupObjects(in XP.SDK.Utf8String inPath, float inLatitude, float inLongitude, delegate* unmanaged[Cdecl]<byte*, void*, void> enumerator, void* @ref)
         {
-            int inPathUtf8Len = inPath.Length * 3 + 4;
-            Span<byte> inPathUtf8 = inPathUtf8Len <= 4096 ? stackalloc byte[inPathUtf8Len] : new byte[inPathUtf8Len];
-            Utils.ToUtf8(inPath, inPathUtf8);
-            fixed (byte* inPathPtr = inPathUtf8)
+            fixed (byte* inPathPtr = inPath)
                 return LookupObjects(inPathPtr, inLatitude, inLongitude, enumerator, @ref);
         }
 
@@ -315,11 +307,13 @@ namespace XP.SDK.XPLM.Interop
         /// latitude/longitude you provide will be returned.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int LookupObjects(in XP.SDK.Utf8String inPath, float inLatitude, float inLongitude, delegate* unmanaged[Cdecl]<byte*, void*, void> enumerator, void* @ref)
+        [SkipLocalsInitAttribute]
+        public static unsafe int LookupObjects(in ReadOnlySpan<char> inPath, float inLatitude, float inLongitude, delegate* unmanaged[Cdecl]<byte*, void*, void> enumerator, void* @ref)
         {
-            fixed (byte* inPathPtr = inPath)
-                return LookupObjects(inPathPtr, inLatitude, inLongitude, enumerator, @ref);
+            int inPathUtf8Len = inPath.Length * 3 + 4;
+            Span<byte> inPathUtf8 = inPathUtf8Len <= 4096 ? stackalloc byte[inPathUtf8Len] : GC.AllocateUninitializedArray<byte>(inPathUtf8Len);
+            var inPathUtf8Str = Utf8String.FromUtf16Unsafe(inPath, inPathUtf8);
+            return LookupObjects(inPathUtf8Str, inLatitude, inLongitude, enumerator, @ref);
         }
     }
 }

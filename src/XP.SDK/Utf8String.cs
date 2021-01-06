@@ -1,7 +1,9 @@
 ﻿#nullable enable
 using System;
+using System.Buffers;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Unicode;
 
 namespace XP.SDK
 {
@@ -10,6 +12,8 @@ namespace XP.SDK
     /// </summary>
     public readonly ref struct Utf8String
     {
+        internal static readonly UTF8Encoding Encoding = new UTF8Encoding(false);
+        
         /// <summary>
         /// Gets the empty UTF-8 string.
         /// </summary>
@@ -18,7 +22,7 @@ namespace XP.SDK
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get => new Utf8String(new byte[] {0}, 0);
         }
-
+        
         /// <summary>
         /// Gets the underlying span.
         /// </summary>
@@ -131,6 +135,19 @@ namespace XP.SDK
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        private Utf8String(in Span<byte> data)
+        {
+            if (data.IsEmpty)
+            {
+                this = default;
+            }
+            else
+            {
+                Span = data;
+            }
+        }
+        
         /// <summary>
         /// Creates a new <see cref="Utf8String"/> from the string.
         /// </summary>
@@ -142,9 +159,9 @@ namespace XP.SDK
             if (str == null)
                 return default;
 
-            var length = Utils.UTF8WithoutPreamble.GetByteCount(str);
+            var length = Encoding.GetByteCount(str);
             var buffer = GC.AllocateUninitializedArray<byte>(length + 1, pinned);
-            Utils.UTF8WithoutPreamble.GetBytes(str, buffer);
+            Encoding.GetBytes(str, buffer);
             buffer[length] = 0;
             return new Utf8String(buffer, length);
         }
@@ -158,17 +175,63 @@ namespace XP.SDK
         public static Utf8String FromUtf16(in ReadOnlySpan<char> chars, bool pinned = false)
         {
             if (chars.IsEmpty)
-                return default;
-
-            var length = Utils.UTF8WithoutPreamble.GetByteCount(chars);
+                return Empty;
+            
+            var length = Encoding.GetByteCount(chars);
             var buffer = GC.AllocateUninitializedArray<byte>(length + 1, pinned);
-            Utils.UTF8WithoutPreamble.GetBytes(chars, buffer);
+            Encoding.GetBytes(chars, buffer);
             buffer[length] = 0;
             return new Utf8String(buffer, length);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
+        internal static Utf8String FromUtf16Unsafe(in ReadOnlySpan<char> utf16String, in Span<byte> destinationBuffer)
+        {
+            if (utf16String.IsEmpty)
+                return Empty;
+
+            Utf8.FromUtf16(utf16String, destinationBuffer, out _, out var length);
+            destinationBuffer[length] = 0;
+            return new Utf8String(destinationBuffer.Slice(0, length + 1));
+        }
+
+        /// <summary>
+        /// Tries to create <see cref="Utf8String"/> from the UTF-16 string with data placed in <paramref name="destinationBuffer"/>.
+        /// </summary>
+        /// <param name="utf16String">The source UTF-16 string.</param>
+        /// <param name="destinationBuffer">The destination buffer for UTF-8 string.</param>
+        /// <param name="result">The resulting <see cref="Utf8String"/> if the operation succeeded.</param>
+        /// <returns><see langword="true"/> if the operation succeeded; <see langword="false"/> otherwise.</returns>
+        /// <remarks>
+        /// <para>
+        /// If <paramref name="utf16String"/> is empty, this method will return <see langword="true"/> with the <paramref name="result"/> set to <see cref="Empty"/>.
+        /// </para>
+        /// <para>
+        /// If <paramref name="destinationBuffer"/> is empty or has not enough place to store the UTF-8 data with trailing null character, this method will return <see langword="false"/>.
+        /// </para>
+        /// </remarks>
+        public static bool TryCreate(in ReadOnlySpan<char> utf16String, in Span<byte> destinationBuffer, out Utf8String result)
+        {
+            if (utf16String.IsEmpty)
+            {
+                result = Empty;
+                return true;
+            }
+            
+            if (destinationBuffer.IsEmpty || 
+                Utf8.FromUtf16(utf16String, destinationBuffer[..^1], out _, out var length) != OperationStatus.Done)
+            {
+                result = default;
+                return false;
+            }
+
+            destinationBuffer[length] = 0;
+            result = new Utf8String(destinationBuffer.Slice(0, length + 1));
+            return true;
+        }
+
         /// <inheritdoc />
-        public override string? ToString() => Span.IsEmpty ? null : Utils.UTF8WithoutPreamble.GetString(Span[..^1]);
+        public override string? ToString() => Span.IsEmpty ? null : Encoding.GetString(Span[..^1]);
 
         /// <summary>
         /// Compares whether two UTF8 strings are equal.

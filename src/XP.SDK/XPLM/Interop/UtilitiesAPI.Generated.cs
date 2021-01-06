@@ -175,14 +175,10 @@ namespace XP.SDK.XPLM.Interop
         /// 6 compatibility is needed, use your own code to iterate directories.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int GetDirectoryContents(in ReadOnlySpan<char> inDirectoryPath, int inFirstReturn, byte* outFileNames, int inFileNameBufSize, byte** outIndices, int inIndexCount, int* outTotalFiles, int* outReturnedFiles)
+        public static unsafe int GetDirectoryContents(in XP.SDK.Utf8String inDirectoryPath, int inFirstReturn, byte* outFileNames, int inFileNameBufSize, byte** outIndices, int inIndexCount, int* outTotalFiles, int* outReturnedFiles)
         {
-            int inDirectoryPathUtf8Len = inDirectoryPath.Length * 3 + 4;
-            Span<byte> inDirectoryPathUtf8 = inDirectoryPathUtf8Len <= 4096 ? stackalloc byte[inDirectoryPathUtf8Len] : new byte[inDirectoryPathUtf8Len];
-            Utils.ToUtf8(inDirectoryPath, inDirectoryPathUtf8);
-            fixed (byte* inDirectoryPathPtr = inDirectoryPathUtf8)
+            fixed (byte* inDirectoryPathPtr = inDirectoryPath)
                 return GetDirectoryContents(inDirectoryPathPtr, inFirstReturn, outFileNames, inFileNameBufSize, outIndices, inIndexCount, outTotalFiles, outReturnedFiles);
         }
 
@@ -240,11 +236,13 @@ namespace XP.SDK.XPLM.Interop
         /// 6 compatibility is needed, use your own code to iterate directories.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int GetDirectoryContents(in XP.SDK.Utf8String inDirectoryPath, int inFirstReturn, byte* outFileNames, int inFileNameBufSize, byte** outIndices, int inIndexCount, int* outTotalFiles, int* outReturnedFiles)
+        [SkipLocalsInitAttribute]
+        public static unsafe int GetDirectoryContents(in ReadOnlySpan<char> inDirectoryPath, int inFirstReturn, byte* outFileNames, int inFileNameBufSize, byte** outIndices, int inIndexCount, int* outTotalFiles, int* outReturnedFiles)
         {
-            fixed (byte* inDirectoryPathPtr = inDirectoryPath)
-                return GetDirectoryContents(inDirectoryPathPtr, inFirstReturn, outFileNames, inFileNameBufSize, outIndices, inIndexCount, outTotalFiles, outReturnedFiles);
+            int inDirectoryPathUtf8Len = inDirectoryPath.Length * 3 + 4;
+            Span<byte> inDirectoryPathUtf8 = inDirectoryPathUtf8Len <= 4096 ? stackalloc byte[inDirectoryPathUtf8Len] : GC.AllocateUninitializedArray<byte>(inDirectoryPathUtf8Len);
+            var inDirectoryPathUtf8Str = Utf8String.FromUtf16Unsafe(inDirectoryPath, inDirectoryPathUtf8);
+            return GetDirectoryContents(inDirectoryPathUtf8Str, inFirstReturn, outFileNames, inFileNameBufSize, outIndices, inIndexCount, outTotalFiles, outReturnedFiles);
         }
 
         
@@ -266,14 +264,10 @@ namespace XP.SDK.XPLM.Interop
         /// replay movies, not sit files).
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int LoadDataFile(DataFileType inFileType, in ReadOnlySpan<char> inFilePath)
+        public static unsafe int LoadDataFile(DataFileType inFileType, in XP.SDK.Utf8String inFilePath)
         {
-            int inFilePathUtf8Len = inFilePath.Length * 3 + 4;
-            Span<byte> inFilePathUtf8 = inFilePathUtf8Len <= 4096 ? stackalloc byte[inFilePathUtf8Len] : new byte[inFilePathUtf8Len];
-            Utils.ToUtf8(inFilePath, inFilePathUtf8);
-            fixed (byte* inFilePathPtr = inFilePathUtf8)
+            fixed (byte* inFilePathPtr = inFilePath)
                 return LoadDataFile(inFileType, inFilePathPtr);
         }
 
@@ -285,11 +279,13 @@ namespace XP.SDK.XPLM.Interop
         /// replay movies, not sit files).
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int LoadDataFile(DataFileType inFileType, in XP.SDK.Utf8String inFilePath)
+        [SkipLocalsInitAttribute]
+        public static unsafe int LoadDataFile(DataFileType inFileType, in ReadOnlySpan<char> inFilePath)
         {
-            fixed (byte* inFilePathPtr = inFilePath)
-                return LoadDataFile(inFileType, inFilePathPtr);
+            int inFilePathUtf8Len = inFilePath.Length * 3 + 4;
+            Span<byte> inFilePathUtf8 = inFilePathUtf8Len <= 4096 ? stackalloc byte[inFilePathUtf8Len] : GC.AllocateUninitializedArray<byte>(inFilePathUtf8Len);
+            var inFilePathUtf8Str = Utf8String.FromUtf16Unsafe(inFilePath, inFilePathUtf8);
+            return LoadDataFile(inFileType, inFilePathUtf8Str);
         }
 
         
@@ -309,14 +305,10 @@ namespace XP.SDK.XPLM.Interop
         /// folder.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int SaveDataFile(DataFileType inFileType, in ReadOnlySpan<char> inFilePath)
+        public static unsafe int SaveDataFile(DataFileType inFileType, in XP.SDK.Utf8String inFilePath)
         {
-            int inFilePathUtf8Len = inFilePath.Length * 3 + 4;
-            Span<byte> inFilePathUtf8 = inFilePathUtf8Len <= 4096 ? stackalloc byte[inFilePathUtf8Len] : new byte[inFilePathUtf8Len];
-            Utils.ToUtf8(inFilePath, inFilePathUtf8);
-            fixed (byte* inFilePathPtr = inFilePathUtf8)
+            fixed (byte* inFilePathPtr = inFilePath)
                 return SaveDataFile(inFileType, inFilePathPtr);
         }
 
@@ -327,11 +319,13 @@ namespace XP.SDK.XPLM.Interop
         /// folder.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int SaveDataFile(DataFileType inFileType, in XP.SDK.Utf8String inFilePath)
+        [SkipLocalsInitAttribute]
+        public static unsafe int SaveDataFile(DataFileType inFileType, in ReadOnlySpan<char> inFilePath)
         {
-            fixed (byte* inFilePathPtr = inFilePath)
-                return SaveDataFile(inFileType, inFilePathPtr);
+            int inFilePathUtf8Len = inFilePath.Length * 3 + 4;
+            Span<byte> inFilePathUtf8 = inFilePathUtf8Len <= 4096 ? stackalloc byte[inFilePathUtf8Len] : GC.AllocateUninitializedArray<byte>(inFilePathUtf8Len);
+            var inFilePathUtf8Str = Utf8String.FromUtf16Unsafe(inFilePath, inFilePathUtf8);
+            return SaveDataFile(inFileType, inFilePathUtf8Str);
         }
 
         
@@ -430,14 +424,10 @@ namespace XP.SDK.XPLM.Interop
         /// the correct type.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void* FindSymbol(in ReadOnlySpan<char> inString)
+        public static unsafe void* FindSymbol(in XP.SDK.Utf8String inString)
         {
-            int inStringUtf8Len = inString.Length * 3 + 4;
-            Span<byte> inStringUtf8 = inStringUtf8Len <= 4096 ? stackalloc byte[inStringUtf8Len] : new byte[inStringUtf8Len];
-            Utils.ToUtf8(inString, inStringUtf8);
-            fixed (byte* inStringPtr = inStringUtf8)
+            fixed (byte* inStringPtr = inString)
                 return FindSymbol(inStringPtr);
         }
 
@@ -475,11 +465,13 @@ namespace XP.SDK.XPLM.Interop
         /// the correct type.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void* FindSymbol(in XP.SDK.Utf8String inString)
+        [SkipLocalsInitAttribute]
+        public static unsafe void* FindSymbol(in ReadOnlySpan<char> inString)
         {
-            fixed (byte* inStringPtr = inString)
-                return FindSymbol(inStringPtr);
+            int inStringUtf8Len = inString.Length * 3 + 4;
+            Span<byte> inStringUtf8 = inStringUtf8Len <= 4096 ? stackalloc byte[inStringUtf8Len] : GC.AllocateUninitializedArray<byte>(inStringUtf8Len);
+            var inStringUtf8Str = Utf8String.FromUtf16Unsafe(inString, inStringUtf8);
+            return FindSymbol(inStringUtf8Str);
         }
 
         
@@ -546,14 +538,10 @@ namespace XP.SDK.XPLM.Interop
         /// parts of the system.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void DebugString(in ReadOnlySpan<char> inString)
+        public static unsafe void DebugString(in XP.SDK.Utf8String inString)
         {
-            int inStringUtf8Len = inString.Length * 3 + 4;
-            Span<byte> inStringUtf8 = inStringUtf8Len <= 4096 ? stackalloc byte[inStringUtf8Len] : new byte[inStringUtf8Len];
-            Utils.ToUtf8(inString, inStringUtf8);
-            fixed (byte* inStringPtr = inStringUtf8)
+            fixed (byte* inStringPtr = inString)
                 DebugString(inStringPtr);
         }
 
@@ -572,11 +560,13 @@ namespace XP.SDK.XPLM.Interop
         /// parts of the system.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void DebugString(in XP.SDK.Utf8String inString)
+        [SkipLocalsInitAttribute]
+        public static unsafe void DebugString(in ReadOnlySpan<char> inString)
         {
-            fixed (byte* inStringPtr = inString)
-                DebugString(inStringPtr);
+            int inStringUtf8Len = inString.Length * 3 + 4;
+            Span<byte> inStringUtf8 = inStringUtf8Len <= 4096 ? stackalloc byte[inStringUtf8Len] : GC.AllocateUninitializedArray<byte>(inStringUtf8Len);
+            var inStringUtf8Str = Utf8String.FromUtf16Unsafe(inString, inStringUtf8);
+            DebugString(inStringUtf8Str);
         }
 
         
@@ -600,14 +590,10 @@ namespace XP.SDK.XPLM.Interop
         /// may not speak or print depending on user preferences.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SpeakString(in ReadOnlySpan<char> inString)
+        public static unsafe void SpeakString(in XP.SDK.Utf8String inString)
         {
-            int inStringUtf8Len = inString.Length * 3 + 4;
-            Span<byte> inStringUtf8 = inStringUtf8Len <= 4096 ? stackalloc byte[inStringUtf8Len] : new byte[inStringUtf8Len];
-            Utils.ToUtf8(inString, inStringUtf8);
-            fixed (byte* inStringPtr = inStringUtf8)
+            fixed (byte* inStringPtr = inString)
                 SpeakString(inStringPtr);
         }
 
@@ -620,11 +606,13 @@ namespace XP.SDK.XPLM.Interop
         /// may not speak or print depending on user preferences.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SpeakString(in XP.SDK.Utf8String inString)
+        [SkipLocalsInitAttribute]
+        public static unsafe void SpeakString(in ReadOnlySpan<char> inString)
         {
-            fixed (byte* inStringPtr = inString)
-                SpeakString(inStringPtr);
+            int inStringUtf8Len = inString.Length * 3 + 4;
+            Span<byte> inStringUtf8 = inStringUtf8Len <= 4096 ? stackalloc byte[inStringUtf8Len] : GC.AllocateUninitializedArray<byte>(inStringUtf8Len);
+            var inStringUtf8Str = Utf8String.FromUtf16Unsafe(inString, inStringUtf8);
+            SpeakString(inStringUtf8Str);
         }
 
         
@@ -670,14 +658,10 @@ namespace XP.SDK.XPLM.Interop
         /// reference or NULL if the command does not exist.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe CommandRef FindCommand(in ReadOnlySpan<char> inName)
+        public static unsafe CommandRef FindCommand(in XP.SDK.Utf8String inName)
         {
-            int inNameUtf8Len = inName.Length * 3 + 4;
-            Span<byte> inNameUtf8 = inNameUtf8Len <= 4096 ? stackalloc byte[inNameUtf8Len] : new byte[inNameUtf8Len];
-            Utils.ToUtf8(inName, inNameUtf8);
-            fixed (byte* inNamePtr = inNameUtf8)
+            fixed (byte* inNamePtr = inName)
                 return FindCommand(inNamePtr);
         }
 
@@ -688,11 +672,13 @@ namespace XP.SDK.XPLM.Interop
         /// reference or NULL if the command does not exist.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe CommandRef FindCommand(in XP.SDK.Utf8String inName)
+        [SkipLocalsInitAttribute]
+        public static unsafe CommandRef FindCommand(in ReadOnlySpan<char> inName)
         {
-            fixed (byte* inNamePtr = inName)
-                return FindCommand(inNamePtr);
+            int inNameUtf8Len = inName.Length * 3 + 4;
+            Span<byte> inNameUtf8 = inNameUtf8Len <= 4096 ? stackalloc byte[inNameUtf8Len] : GC.AllocateUninitializedArray<byte>(inNameUtf8Len);
+            var inNameUtf8Str = Utf8String.FromUtf16Unsafe(inName, inNameUtf8);
+            return FindCommand(inNameUtf8Str);
         }
 
         
@@ -750,17 +736,10 @@ namespace XP.SDK.XPLM.Interop
         /// screen.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe CommandRef CreateCommand(in ReadOnlySpan<char> inName, in ReadOnlySpan<char> inDescription)
+        public static unsafe CommandRef CreateCommand(in XP.SDK.Utf8String inName, in XP.SDK.Utf8String inDescription)
         {
-            int inNameUtf8Len = inName.Length * 3 + 4;
-            Span<byte> inNameUtf8 = inNameUtf8Len <= 4096 ? stackalloc byte[inNameUtf8Len] : new byte[inNameUtf8Len];
-            Utils.ToUtf8(inName, inNameUtf8);
-            int inDescriptionUtf8Len = inDescription.Length * 3 + 4;
-            Span<byte> inDescriptionUtf8 = inDescriptionUtf8Len <= 4096 ? stackalloc byte[inDescriptionUtf8Len] : new byte[inDescriptionUtf8Len];
-            Utils.ToUtf8(inDescription, inDescriptionUtf8);
-            fixed (byte* inNamePtr = inNameUtf8, inDescriptionPtr = inDescriptionUtf8)
+            fixed (byte* inNamePtr = inName, inDescriptionPtr = inDescription)
                 return CreateCommand(inNamePtr, inDescriptionPtr);
         }
 
@@ -773,11 +752,16 @@ namespace XP.SDK.XPLM.Interop
         /// screen.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe CommandRef CreateCommand(in XP.SDK.Utf8String inName, in XP.SDK.Utf8String inDescription)
+        [SkipLocalsInitAttribute]
+        public static unsafe CommandRef CreateCommand(in ReadOnlySpan<char> inName, in ReadOnlySpan<char> inDescription)
         {
-            fixed (byte* inNamePtr = inName, inDescriptionPtr = inDescription)
-                return CreateCommand(inNamePtr, inDescriptionPtr);
+            int inNameUtf8Len = inName.Length * 3 + 4;
+            Span<byte> inNameUtf8 = inNameUtf8Len <= 4096 ? stackalloc byte[inNameUtf8Len] : GC.AllocateUninitializedArray<byte>(inNameUtf8Len);
+            var inNameUtf8Str = Utf8String.FromUtf16Unsafe(inName, inNameUtf8);
+            int inDescriptionUtf8Len = inDescription.Length * 3 + 4;
+            Span<byte> inDescriptionUtf8 = inDescriptionUtf8Len <= 4096 ? stackalloc byte[inDescriptionUtf8Len] : GC.AllocateUninitializedArray<byte>(inDescriptionUtf8Len);
+            var inDescriptionUtf8Str = Utf8String.FromUtf16Unsafe(inDescription, inDescriptionUtf8);
+            return CreateCommand(inNameUtf8Str, inDescriptionUtf8Str);
         }
 
         

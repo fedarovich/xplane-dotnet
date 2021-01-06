@@ -192,7 +192,7 @@ namespace XP.SDK.Text.Formatters
                 foreach (var value in values)
                 {
                     var str = value.ToString("G");
-                    var bytes = Utils.UTF8WithoutPreamble.GetBytes(str);
+                    var bytes = Utf8String.Encoding.GetBytes(str);
                     dictionary.Add(value, bytes);
                 }
 

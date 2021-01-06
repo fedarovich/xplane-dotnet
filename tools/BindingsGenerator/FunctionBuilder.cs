@@ -121,18 +121,18 @@ namespace BindingsGenerator
             {
                 method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
                     .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.UnsafeKeyword))
-                    .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, ConstCharPtrStyle.CharSpan, true)).ToArray())
-                    .AddSkipLocalsInitAttribute()
-                    .AddAggressiveInlining()
-                    .WithBody(Block(BuildStringBody(cppFunction, returnTypeInfo)));
-                method = method.AddDocumentationComments(cppFunction.Comment, cppFunction.Name);
-                yield return method;
-
-                method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
-                    .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.UnsafeKeyword))
                     .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, ConstCharPtrStyle.Utf8String, true)).ToArray())
                     .AddAggressiveInlining()
                     .WithBody(Block(BuildUtf8StringBody(cppFunction, returnTypeInfo)));
+                method = method.AddDocumentationComments(cppFunction.Comment, cppFunction.Name);
+                yield return method;
+                
+                method = MethodDeclaration(returnTypeInfo.TypeSyntax, GetManagedName(cppFunction.Name))
+                    .AddModifiers(Token(SyntaxKind.PublicKeyword), Token(SyntaxKind.StaticKeyword), Token(SyntaxKind.UnsafeKeyword))
+                    .AddParameterListParameters(cppFunction.Parameters.Select(p => BuildParameter(p, ConstCharPtrStyle.CharSpan, true)).ToArray())
+                    .AddSkipLocalsInitAttribute()
+                    //.AddAggressiveInlining()
+                    .WithBody(Block(BuildStringBody(cppFunction, returnTypeInfo)));
                 method = method.AddDocumentationComments(cppFunction.Comment, cppFunction.Name);
                 yield return method;
             }
@@ -256,37 +256,21 @@ namespace BindingsGenerator
                 var utf8Name = utf16Name + "Utf8";
                 yield return SyntaxBuilder.DeclareLengthForUtf8Variable(lenName, utf16Name);
                 yield return SyntaxBuilder.DeclareSpanForUtf8Variable(utf8Name, lenName);
-                yield return SyntaxBuilder.ConvertToUtf8(utf8Name, utf16Name);
+                yield return SyntaxBuilder.DeclareUtf8StringVariable(utf8Name, utf16Name, utf8Name + "Str");
             }
 
             var call = 
                 InvocationExpression(IdentifierName(GetManagedName(cppFunction.Name)))
                     .AddArgumentListArguments(cppFunction.Parameters.Select(BuildArgument).ToArray());
 
-            var fixedStatement = FixedStatement(
-                VariableDeclaration(PointerType(PredefinedType(Token(SyntaxKind.ByteKeyword))))
-                    .AddVariables(GetStringVariables().ToArray()),
-                returnTypeInfo.IsVoid ? ExpressionStatement(call) : ReturnStatement(call)
-            );
-
-            yield return fixedStatement;
-
-            IEnumerable<VariableDeclaratorSyntax> GetStringVariables()
-            {
-                foreach (var cppParameter in cppFunction.Parameters.Where(p => p.Type.IsConstCharPtr()))
-                {
-                    var paramName = GetManagedName(cppParameter.Name);
-                    yield return VariableDeclarator(paramName + "Ptr")
-                        .WithInitializer(EqualsValueClause(IdentifierName(paramName + "Utf8")));
-                }
-            }
+            yield return returnTypeInfo.IsVoid ? ExpressionStatement(call) : ReturnStatement(call);
 
             ArgumentSyntax BuildArgument(CppParameter cppParameter)
             {
                 var name = GetManagedName(cppParameter.Name);
                 if (cppParameter.Type.IsConstCharPtr())
                 {
-                    name += "Ptr";
+                    name += "Utf8Str";
                 }
 
                 return Argument(IdentifierName(name));

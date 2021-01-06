@@ -218,31 +218,36 @@ namespace BindingsGenerator
                     .AddVariables(VariableDeclarator(utf8Name)
                         .WithInitializer(EqualsValueClause(
                             ConditionalExpression(
-                                BinaryExpression(
+                        BinaryExpression(
                                     SyntaxKind.LessThanOrEqualExpression,
                                     IdentifierName(lengthName),
                                     LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(4096))),
-                                StackAllocArrayCreationExpression(
-                                    ArrayType(PredefinedType(Token(SyntaxKind.ByteKeyword)))
+                        StackAllocArrayCreationExpression(
+                                ArrayType(PredefinedType(Token(SyntaxKind.ByteKeyword)))
                                         .AddRankSpecifiers(ArrayRankSpecifier(SingletonSeparatedList<ExpressionSyntax>(IdentifierName(lengthName))))),
-                                ArrayCreationExpression(
-                                    ArrayType(PredefinedType(Token(SyntaxKind.ByteKeyword)))
-                                        .AddRankSpecifiers(ArrayRankSpecifier(SingletonSeparatedList<ExpressionSyntax>(IdentifierName(lengthName))))))
-                            ))));
+                        InvocationExpression(
+                            MemberAccessExpression(
+                                SyntaxKind.SimpleMemberAccessExpression,
+                                IdentifierName(nameof(GC)),
+                                GenericName(nameof(GC.AllocateUninitializedArray)).AddTypeArgumentListArguments(PredefinedType(Token(SyntaxKind.ByteKeyword))))
+                            )
+                            .AddArgumentListArguments(Argument(IdentifierName(lengthName)))
+                        )))));
         }
 
-        public static ExpressionStatementSyntax ConvertToUtf8(string utf8Name, string utf16Name)
+        public static LocalDeclarationStatementSyntax DeclareUtf8StringVariable(string utf8Name, string utf16Name, string utf8StringName)
         {
-            return ExpressionStatement(
-                InvocationExpression(
-                        MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            IdentifierName("Utils"),
-                            IdentifierName("ToUtf8")))
-                    .AddArgumentListArguments(
-                        Argument(IdentifierName(utf16Name)),
-                        Argument(IdentifierName(utf8Name)))
-                );
+            return LocalDeclarationStatement(
+                VariableDeclaration(IdentifierName("var"))
+                    .AddVariables(VariableDeclarator(utf8StringName)
+                        .WithInitializer(EqualsValueClause(
+                            InvocationExpression(
+                                MemberAccessExpression(
+                                    SyntaxKind.SimpleMemberAccessExpression,
+                                    IdentifierName("Utf8String"),
+                                    IdentifierName("FromUtf16Unsafe")))
+                                .AddArgumentListArguments(Argument(IdentifierName(utf16Name)), Argument(IdentifierName(utf8Name)))
+                        ))));
         }
 
         public static T AddUnsafeIfNeeded<T>(this T method) where T : BaseMethodDeclarationSyntax

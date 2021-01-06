@@ -479,14 +479,10 @@ namespace XP.SDK.XPLM.Interop
         /// XPLMCreateWindowEx().
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetWindowTitle(WindowID inWindowID, in ReadOnlySpan<char> inWindowTitle)
+        public static unsafe void SetWindowTitle(WindowID inWindowID, in XP.SDK.Utf8String inWindowTitle)
         {
-            int inWindowTitleUtf8Len = inWindowTitle.Length * 3 + 4;
-            Span<byte> inWindowTitleUtf8 = inWindowTitleUtf8Len <= 4096 ? stackalloc byte[inWindowTitleUtf8Len] : new byte[inWindowTitleUtf8Len];
-            Utils.ToUtf8(inWindowTitle, inWindowTitleUtf8);
-            fixed (byte* inWindowTitlePtr = inWindowTitleUtf8)
+            fixed (byte* inWindowTitlePtr = inWindowTitle)
                 SetWindowTitle(inWindowID, inWindowTitlePtr);
         }
 
@@ -499,11 +495,13 @@ namespace XP.SDK.XPLM.Interop
         /// XPLMCreateWindowEx().
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void SetWindowTitle(WindowID inWindowID, in XP.SDK.Utf8String inWindowTitle)
+        [SkipLocalsInitAttribute]
+        public static unsafe void SetWindowTitle(WindowID inWindowID, in ReadOnlySpan<char> inWindowTitle)
         {
-            fixed (byte* inWindowTitlePtr = inWindowTitle)
-                SetWindowTitle(inWindowID, inWindowTitlePtr);
+            int inWindowTitleUtf8Len = inWindowTitle.Length * 3 + 4;
+            Span<byte> inWindowTitleUtf8 = inWindowTitleUtf8Len <= 4096 ? stackalloc byte[inWindowTitleUtf8Len] : GC.AllocateUninitializedArray<byte>(inWindowTitleUtf8Len);
+            var inWindowTitleUtf8Str = Utf8String.FromUtf16Unsafe(inWindowTitle, inWindowTitleUtf8);
+            SetWindowTitle(inWindowID, inWindowTitleUtf8Str);
         }
 
         
@@ -645,14 +643,10 @@ namespace XP.SDK.XPLM.Interop
         /// may change, but you are insulated from this.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, in ReadOnlySpan<char> inDescription, delegate* unmanaged[Cdecl]<void*, void> inCallback, void* inRefcon)
+        public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, in XP.SDK.Utf8String inDescription, delegate* unmanaged[Cdecl]<void*, void> inCallback, void* inRefcon)
         {
-            int inDescriptionUtf8Len = inDescription.Length * 3 + 4;
-            Span<byte> inDescriptionUtf8 = inDescriptionUtf8Len <= 4096 ? stackalloc byte[inDescriptionUtf8Len] : new byte[inDescriptionUtf8Len];
-            Utils.ToUtf8(inDescription, inDescriptionUtf8);
-            fixed (byte* inDescriptionPtr = inDescriptionUtf8)
+            fixed (byte* inDescriptionPtr = inDescription)
                 return RegisterHotKey(inVirtualKey, inFlags, inDescriptionPtr, inCallback, inRefcon);
         }
 
@@ -667,11 +661,13 @@ namespace XP.SDK.XPLM.Interop
         /// may change, but you are insulated from this.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, in XP.SDK.Utf8String inDescription, delegate* unmanaged[Cdecl]<void*, void> inCallback, void* inRefcon)
+        [SkipLocalsInitAttribute]
+        public static unsafe HotKeyID RegisterHotKey(byte inVirtualKey, KeyFlags inFlags, in ReadOnlySpan<char> inDescription, delegate* unmanaged[Cdecl]<void*, void> inCallback, void* inRefcon)
         {
-            fixed (byte* inDescriptionPtr = inDescription)
-                return RegisterHotKey(inVirtualKey, inFlags, inDescriptionPtr, inCallback, inRefcon);
+            int inDescriptionUtf8Len = inDescription.Length * 3 + 4;
+            Span<byte> inDescriptionUtf8 = inDescriptionUtf8Len <= 4096 ? stackalloc byte[inDescriptionUtf8Len] : GC.AllocateUninitializedArray<byte>(inDescriptionUtf8Len);
+            var inDescriptionUtf8Str = Utf8String.FromUtf16Unsafe(inDescription, inDescriptionUtf8);
+            return RegisterHotKey(inVirtualKey, inFlags, inDescriptionUtf8Str, inCallback, inRefcon);
         }
 
         

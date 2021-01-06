@@ -121,17 +121,10 @@ namespace XP.SDK.XPLM.Interop
         /// * Find the nearest airport whose name contains "Chicago".
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe NavRef FindNavAid(in ReadOnlySpan<char> inNameFragment, in ReadOnlySpan<char> inIDFragment, float* inLat, float* inLon, int* inFrequency, NavType inType)
+        public static unsafe NavRef FindNavAid(in XP.SDK.Utf8String inNameFragment, in XP.SDK.Utf8String inIDFragment, float* inLat, float* inLon, int* inFrequency, NavType inType)
         {
-            int inNameFragmentUtf8Len = inNameFragment.Length * 3 + 4;
-            Span<byte> inNameFragmentUtf8 = inNameFragmentUtf8Len <= 4096 ? stackalloc byte[inNameFragmentUtf8Len] : new byte[inNameFragmentUtf8Len];
-            Utils.ToUtf8(inNameFragment, inNameFragmentUtf8);
-            int inIDFragmentUtf8Len = inIDFragment.Length * 3 + 4;
-            Span<byte> inIDFragmentUtf8 = inIDFragmentUtf8Len <= 4096 ? stackalloc byte[inIDFragmentUtf8Len] : new byte[inIDFragmentUtf8Len];
-            Utils.ToUtf8(inIDFragment, inIDFragmentUtf8);
-            fixed (byte* inNameFragmentPtr = inNameFragmentUtf8, inIDFragmentPtr = inIDFragmentUtf8)
+            fixed (byte* inNameFragmentPtr = inNameFragment, inIDFragmentPtr = inIDFragment)
                 return FindNavAid(inNameFragmentPtr, inIDFragmentPtr, inLat, inLon, inFrequency, inType);
         }
 
@@ -168,11 +161,16 @@ namespace XP.SDK.XPLM.Interop
         /// * Find the nearest airport whose name contains "Chicago".
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe NavRef FindNavAid(in XP.SDK.Utf8String inNameFragment, in XP.SDK.Utf8String inIDFragment, float* inLat, float* inLon, int* inFrequency, NavType inType)
+        [SkipLocalsInitAttribute]
+        public static unsafe NavRef FindNavAid(in ReadOnlySpan<char> inNameFragment, in ReadOnlySpan<char> inIDFragment, float* inLat, float* inLon, int* inFrequency, NavType inType)
         {
-            fixed (byte* inNameFragmentPtr = inNameFragment, inIDFragmentPtr = inIDFragment)
-                return FindNavAid(inNameFragmentPtr, inIDFragmentPtr, inLat, inLon, inFrequency, inType);
+            int inNameFragmentUtf8Len = inNameFragment.Length * 3 + 4;
+            Span<byte> inNameFragmentUtf8 = inNameFragmentUtf8Len <= 4096 ? stackalloc byte[inNameFragmentUtf8Len] : GC.AllocateUninitializedArray<byte>(inNameFragmentUtf8Len);
+            var inNameFragmentUtf8Str = Utf8String.FromUtf16Unsafe(inNameFragment, inNameFragmentUtf8);
+            int inIDFragmentUtf8Len = inIDFragment.Length * 3 + 4;
+            Span<byte> inIDFragmentUtf8 = inIDFragmentUtf8Len <= 4096 ? stackalloc byte[inIDFragmentUtf8Len] : GC.AllocateUninitializedArray<byte>(inIDFragmentUtf8Len);
+            var inIDFragmentUtf8Str = Utf8String.FromUtf16Unsafe(inIDFragment, inIDFragmentUtf8);
+            return FindNavAid(inNameFragmentUtf8Str, inIDFragmentUtf8Str, inLat, inLon, inFrequency, inType);
         }
 
         

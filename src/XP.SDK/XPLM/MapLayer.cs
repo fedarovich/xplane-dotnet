@@ -21,6 +21,8 @@ namespace XP.SDK.XPLM
             if (layerName == null) 
                 throw new ArgumentNullException(nameof(layerName));
 
+            // TODO: Replace with Utf8String
+            
             Span<byte> mapSpan = stackalloc byte[(map.Length << 1) | 1];
             byte* pMap = Utils.ToUtf8Unsafe(map, mapSpan);
 

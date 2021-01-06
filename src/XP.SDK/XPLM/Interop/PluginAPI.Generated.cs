@@ -57,14 +57,10 @@ namespace XP.SDK.XPLM.Interop
         /// path does not point to a currently loaded plug-in.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe PluginID FindPluginByPath(in ReadOnlySpan<char> inPath)
+        public static unsafe PluginID FindPluginByPath(in XP.SDK.Utf8String inPath)
         {
-            int inPathUtf8Len = inPath.Length * 3 + 4;
-            Span<byte> inPathUtf8 = inPathUtf8Len <= 4096 ? stackalloc byte[inPathUtf8Len] : new byte[inPathUtf8Len];
-            Utils.ToUtf8(inPath, inPathUtf8);
-            fixed (byte* inPathPtr = inPathUtf8)
+            fixed (byte* inPathPtr = inPath)
                 return FindPluginByPath(inPathPtr);
         }
 
@@ -76,11 +72,13 @@ namespace XP.SDK.XPLM.Interop
         /// path does not point to a currently loaded plug-in.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe PluginID FindPluginByPath(in XP.SDK.Utf8String inPath)
+        [SkipLocalsInitAttribute]
+        public static unsafe PluginID FindPluginByPath(in ReadOnlySpan<char> inPath)
         {
-            fixed (byte* inPathPtr = inPath)
-                return FindPluginByPath(inPathPtr);
+            int inPathUtf8Len = inPath.Length * 3 + 4;
+            Span<byte> inPathUtf8 = inPathUtf8Len <= 4096 ? stackalloc byte[inPathUtf8Len] : GC.AllocateUninitializedArray<byte>(inPathUtf8Len);
+            var inPathUtf8Str = Utf8String.FromUtf16Unsafe(inPath, inPathUtf8);
+            return FindPluginByPath(inPathUtf8Str);
         }
 
         
@@ -108,14 +106,10 @@ namespace XP.SDK.XPLM.Interop
         /// locate another plugin that your plugin interoperates with
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe PluginID FindPluginBySignature(in ReadOnlySpan<char> inSignature)
+        public static unsafe PluginID FindPluginBySignature(in XP.SDK.Utf8String inSignature)
         {
-            int inSignatureUtf8Len = inSignature.Length * 3 + 4;
-            Span<byte> inSignatureUtf8 = inSignatureUtf8Len <= 4096 ? stackalloc byte[inSignatureUtf8Len] : new byte[inSignatureUtf8Len];
-            Utils.ToUtf8(inSignature, inSignatureUtf8);
-            fixed (byte* inSignaturePtr = inSignatureUtf8)
+            fixed (byte* inSignaturePtr = inSignature)
                 return FindPluginBySignature(inSignaturePtr);
         }
 
@@ -130,11 +124,13 @@ namespace XP.SDK.XPLM.Interop
         /// locate another plugin that your plugin interoperates with
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe PluginID FindPluginBySignature(in XP.SDK.Utf8String inSignature)
+        [SkipLocalsInitAttribute]
+        public static unsafe PluginID FindPluginBySignature(in ReadOnlySpan<char> inSignature)
         {
-            fixed (byte* inSignaturePtr = inSignature)
-                return FindPluginBySignature(inSignaturePtr);
+            int inSignatureUtf8Len = inSignature.Length * 3 + 4;
+            Span<byte> inSignatureUtf8 = inSignatureUtf8Len <= 4096 ? stackalloc byte[inSignatureUtf8Len] : GC.AllocateUninitializedArray<byte>(inSignatureUtf8Len);
+            var inSignatureUtf8Str = Utf8String.FromUtf16Unsafe(inSignature, inSignatureUtf8);
+            return FindPluginBySignature(inSignatureUtf8Str);
         }
 
         
@@ -225,14 +221,10 @@ namespace XP.SDK.XPLM.Interop
         /// 0 if it does not.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int HasFeature(in ReadOnlySpan<char> inFeature)
+        public static unsafe int HasFeature(in XP.SDK.Utf8String inFeature)
         {
-            int inFeatureUtf8Len = inFeature.Length * 3 + 4;
-            Span<byte> inFeatureUtf8 = inFeatureUtf8Len <= 4096 ? stackalloc byte[inFeatureUtf8Len] : new byte[inFeatureUtf8Len];
-            Utils.ToUtf8(inFeature, inFeatureUtf8);
-            fixed (byte* inFeaturePtr = inFeatureUtf8)
+            fixed (byte* inFeaturePtr = inFeature)
                 return HasFeature(inFeaturePtr);
         }
 
@@ -243,11 +235,13 @@ namespace XP.SDK.XPLM.Interop
         /// 0 if it does not.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int HasFeature(in XP.SDK.Utf8String inFeature)
+        [SkipLocalsInitAttribute]
+        public static unsafe int HasFeature(in ReadOnlySpan<char> inFeature)
         {
-            fixed (byte* inFeaturePtr = inFeature)
-                return HasFeature(inFeaturePtr);
+            int inFeatureUtf8Len = inFeature.Length * 3 + 4;
+            Span<byte> inFeatureUtf8 = inFeatureUtf8Len <= 4096 ? stackalloc byte[inFeatureUtf8Len] : GC.AllocateUninitializedArray<byte>(inFeatureUtf8Len);
+            var inFeatureUtf8Str = Utf8String.FromUtf16Unsafe(inFeature, inFeatureUtf8);
+            return HasFeature(inFeatureUtf8Str);
         }
 
         
@@ -269,14 +263,10 @@ namespace XP.SDK.XPLM.Interop
         /// feature.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int IsFeatureEnabled(in ReadOnlySpan<char> inFeature)
+        public static unsafe int IsFeatureEnabled(in XP.SDK.Utf8String inFeature)
         {
-            int inFeatureUtf8Len = inFeature.Length * 3 + 4;
-            Span<byte> inFeatureUtf8 = inFeatureUtf8Len <= 4096 ? stackalloc byte[inFeatureUtf8Len] : new byte[inFeatureUtf8Len];
-            Utils.ToUtf8(inFeature, inFeatureUtf8);
-            fixed (byte* inFeaturePtr = inFeatureUtf8)
+            fixed (byte* inFeaturePtr = inFeature)
                 return IsFeatureEnabled(inFeaturePtr);
         }
 
@@ -288,11 +278,13 @@ namespace XP.SDK.XPLM.Interop
         /// feature.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int IsFeatureEnabled(in XP.SDK.Utf8String inFeature)
+        [SkipLocalsInitAttribute]
+        public static unsafe int IsFeatureEnabled(in ReadOnlySpan<char> inFeature)
         {
-            fixed (byte* inFeaturePtr = inFeature)
-                return IsFeatureEnabled(inFeaturePtr);
+            int inFeatureUtf8Len = inFeature.Length * 3 + 4;
+            Span<byte> inFeatureUtf8 = inFeatureUtf8Len <= 4096 ? stackalloc byte[inFeatureUtf8Len] : GC.AllocateUninitializedArray<byte>(inFeatureUtf8Len);
+            var inFeatureUtf8Str = Utf8String.FromUtf16Unsafe(inFeature, inFeatureUtf8);
+            return IsFeatureEnabled(inFeatureUtf8Str);
         }
 
         
@@ -314,14 +306,10 @@ namespace XP.SDK.XPLM.Interop
         /// depending on the feature.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void EnableFeature(in ReadOnlySpan<char> inFeature, int inEnable)
+        public static unsafe void EnableFeature(in XP.SDK.Utf8String inFeature, int inEnable)
         {
-            int inFeatureUtf8Len = inFeature.Length * 3 + 4;
-            Span<byte> inFeatureUtf8 = inFeatureUtf8Len <= 4096 ? stackalloc byte[inFeatureUtf8Len] : new byte[inFeatureUtf8Len];
-            Utils.ToUtf8(inFeature, inFeatureUtf8);
-            fixed (byte* inFeaturePtr = inFeatureUtf8)
+            fixed (byte* inFeaturePtr = inFeature)
                 EnableFeature(inFeaturePtr, inEnable);
         }
 
@@ -333,11 +321,13 @@ namespace XP.SDK.XPLM.Interop
         /// depending on the feature.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe void EnableFeature(in XP.SDK.Utf8String inFeature, int inEnable)
+        [SkipLocalsInitAttribute]
+        public static unsafe void EnableFeature(in ReadOnlySpan<char> inFeature, int inEnable)
         {
-            fixed (byte* inFeaturePtr = inFeature)
-                EnableFeature(inFeaturePtr, inEnable);
+            int inFeatureUtf8Len = inFeature.Length * 3 + 4;
+            Span<byte> inFeatureUtf8 = inFeatureUtf8Len <= 4096 ? stackalloc byte[inFeatureUtf8Len] : GC.AllocateUninitializedArray<byte>(inFeatureUtf8Len);
+            var inFeatureUtf8Str = Utf8String.FromUtf16Unsafe(inFeature, inFeatureUtf8);
+            EnableFeature(inFeatureUtf8Str, inEnable);
         }
 
         

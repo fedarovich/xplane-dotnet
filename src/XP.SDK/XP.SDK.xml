@@ -778,7 +778,7 @@
             <summary>
             Gets the string length.
             </summary>
-            <seealso cref="M:XP.SDK.Utf8String.StrLen" />
+            <seealso cref="M:XP.SDK.Utf8String.GetStringLength" />
         </member>
         <member name="P:XP.SDK.Utf8String.IsNull">
             <summary>
@@ -842,6 +842,7 @@
             If the <paramref name="data"/> is <see langword="null"/>, <see cref="P:XP.SDK.Utf8String.IsNull"/> property of the resulting string will be null.
             </para>
             </remarks>
+            <exception cref="T:System.ArgumentException">The length of the string exceeds 2147483646.</exception>
         </member>
         <member name="M:XP.SDK.Utf8String.FromString(System.String,System.Boolean)">
             <summary>
@@ -858,6 +859,23 @@
             <param name="chars">The span with char data.</param>
             <param name="pinned">If <see langword="true"/>, the underlying memory buffer will be allocated in the Pinned Object Heap, instead of normal heap.</param>
             <remarks>The actual string data is stored in a managed array.</remarks>
+        </member>
+        <member name="M:XP.SDK.Utf8String.TryCreate(System.ReadOnlySpan{System.Char}@,System.Span{System.Byte}@,XP.SDK.Utf8String@)">
+            <summary>
+            Tries to create <see cref="T:XP.SDK.Utf8String"/> from the UTF-16 string with data placed in <paramref name="destinationBuffer"/>.
+            </summary>
+            <param name="utf16String">The source UTF-16 string.</param>
+            <param name="destinationBuffer">The destination buffer for UTF-8 string.</param>
+            <param name="result">The resulting <see cref="T:XP.SDK.Utf8String"/> if the operation succeeded.</param>
+            <returns><see langword="true"/> if the operation succeeded; <see langword="false"/> otherwise.</returns>
+            <remarks>
+            <para>
+            If <paramref name="utf16String"/> is empty, this method will return <see langword="true"/> with the <paramref name="result"/> set to <see cref="P:XP.SDK.Utf8String.Empty"/>.
+            </para>
+            <para>
+            If <paramref name="destinationBuffer"/> is empty or has not enough place to store the UTF-8 data with trailing null character, this method will return <see langword="false"/>.
+            </para>
+            </remarks>
         </member>
         <member name="M:XP.SDK.Utf8String.ToString">
             <inheritdoc />
@@ -920,11 +938,14 @@
             </summary>
             <param name="destination">The destination to copy the data to. The destination buffer must be at least <c>Length + 1</c> bytes long.</param>
         </member>
-        <member name="M:XP.SDK.Utf8String.StrLen">
+        <member name="M:XP.SDK.Utf8String.GetStringLength">
             <summary>
             Returns the length of the C string.
             </summary>
-            <returns>The length of the C string is this object contains a valid not-null C-string; <c>-1</c> otherwise.</returns>
+            <returns>
+            <para>The length of the C string is this object contains a valid C-string; <c>-1</c> otherwise.</para>
+            <para>If <see cref="P:XP.SDK.Utf8String.IsNull"/>, returns <c>0</c>.</para>
+            </returns>
             <remarks>
             The length of a C string is determined by the terminating null-character:
             A C string is as long as the number of characters between the beginning of the string and the terminating null character
@@ -2054,7 +2075,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Interop.WidgetsAPI.CreateWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32,XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.WidgetClass)">
+        <member name="M:XP.SDK.Widgets.Interop.WidgetsAPI.CreateWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,XP.SDK.Utf8String@,System.Int32,XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.WidgetClass)">
             <summary>
             <para>
             This function creates a new widget and returns the new widget's ID to you.
@@ -2090,7 +2111,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Interop.WidgetsAPI.CreateWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,XP.SDK.Utf8String@,System.Int32,XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.WidgetClass)">
+        <member name="M:XP.SDK.Widgets.Interop.WidgetsAPI.CreateWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32,XP.SDK.Widgets.WidgetID,XP.SDK.Widgets.WidgetClass)">
             <summary>
             <para>
             This function creates a new widget and returns the new widget's ID to you.
@@ -2137,7 +2158,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Interop.WidgetsAPI.CreateCustomWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32,XP.SDK.Widgets.WidgetID,)">
+        <member name="M:XP.SDK.Widgets.Interop.WidgetsAPI.CreateCustomWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,XP.SDK.Utf8String@,System.Int32,XP.SDK.Widgets.WidgetID,)">
             <summary>
             <para>
             This function is the same as XPCreateWidget except that instead of passing
@@ -2148,7 +2169,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Interop.WidgetsAPI.CreateCustomWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,XP.SDK.Utf8String@,System.Int32,XP.SDK.Widgets.WidgetID,)">
+        <member name="M:XP.SDK.Widgets.Interop.WidgetsAPI.CreateCustomWidget(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32,XP.SDK.Widgets.WidgetID,)">
             <summary>
             <para>
             This function is the same as XPCreateWidget except that instead of passing
@@ -2350,7 +2371,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Interop.WidgetsAPI.SetWidgetDescriptor(XP.SDK.Widgets.WidgetID,System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.Widgets.Interop.WidgetsAPI.SetWidgetDescriptor(XP.SDK.Widgets.WidgetID,XP.SDK.Utf8String@)">
             <summary>
             <para>
             Every widget has a descriptor, which is a text string. What the text string
@@ -2363,7 +2384,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.Widgets.Interop.WidgetsAPI.SetWidgetDescriptor(XP.SDK.Widgets.WidgetID,XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.Widgets.Interop.WidgetsAPI.SetWidgetDescriptor(XP.SDK.Widgets.WidgetID,System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             Every widget has a descriptor, which is a text string. What the text string
@@ -4254,7 +4275,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.FindDataRef(System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.FindDataRef(XP.SDK.Utf8String@)">
             <summary>
             <para>
             Given a c-style string that names the data ref, this routine looks up the
@@ -4271,7 +4292,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.FindDataRef(XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.FindDataRef(System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             Given a c-style string that names the data ref, this routine looks up the
@@ -4506,7 +4527,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.RegisterDataAccessor(System.ReadOnlySpan{System.Char}@,XP.SDK.XPLM.DataTypeID,System.Int32,,,,,,,,,,,,,System.Void*,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.RegisterDataAccessor(XP.SDK.Utf8String@,XP.SDK.XPLM.DataTypeID,System.Int32,,,,,,,,,,,,,System.Void*,System.Void*)">
             <summary>
             <para>
             This routine creates a new item of data that can be read and written. Pass
@@ -4522,7 +4543,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.RegisterDataAccessor(XP.SDK.Utf8String@,XP.SDK.XPLM.DataTypeID,System.Int32,,,,,,,,,,,,,System.Void*,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.RegisterDataAccessor(System.ReadOnlySpan{System.Char}@,XP.SDK.XPLM.DataTypeID,System.Int32,,,,,,,,,,,,,System.Void*,System.Void*)">
             <summary>
             <para>
             This routine creates a new item of data that can be read and written. Pass
@@ -4571,7 +4592,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.ShareData(System.ReadOnlySpan{System.Char}@,XP.SDK.XPLM.DataTypeID,,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.ShareData(XP.SDK.Utf8String@,XP.SDK.XPLM.DataTypeID,,System.Void*)">
             <summary>
             <para>
             This routine connects a plug-in to shared data, creating the shared data if
@@ -4594,7 +4615,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.ShareData(XP.SDK.Utf8String@,XP.SDK.XPLM.DataTypeID,,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.ShareData(System.ReadOnlySpan{System.Char}@,XP.SDK.XPLM.DataTypeID,,System.Void*)">
             <summary>
             <para>
             This routine connects a plug-in to shared data, creating the shared data if
@@ -4627,7 +4648,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.UnshareData(System.ReadOnlySpan{System.Char}@,XP.SDK.XPLM.DataTypeID,,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.UnshareData(XP.SDK.Utf8String@,XP.SDK.XPLM.DataTypeID,,System.Void*)">
             <summary>
             <para>
             This routine removes your notification function for shared data. Call it
@@ -4637,7 +4658,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.UnshareData(XP.SDK.Utf8String@,XP.SDK.XPLM.DataTypeID,,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Interop.DataAccessAPI.UnshareData(System.ReadOnlySpan{System.Char}@,XP.SDK.XPLM.DataTypeID,,System.Void*)">
             <summary>
             <para>
             This routine removes your notification function for shared data. Call it
@@ -5070,7 +5091,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.DisplayAPI.SetWindowTitle(XP.SDK.XPLM.WindowID,System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.DisplayAPI.SetWindowTitle(XP.SDK.XPLM.WindowID,XP.SDK.Utf8String@)">
             <summary>
             <para>
             Sets the name for a window. This only applies to windows that opted-in to
@@ -5080,7 +5101,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.DisplayAPI.SetWindowTitle(XP.SDK.XPLM.WindowID,XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.Interop.DisplayAPI.SetWindowTitle(XP.SDK.XPLM.WindowID,System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             Sets the name for a window. This only applies to windows that opted-in to
@@ -5200,7 +5221,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.DisplayAPI.RegisterHotKey(System.Byte,XP.SDK.XPLM.KeyFlags,System.ReadOnlySpan{System.Char}@,,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Interop.DisplayAPI.RegisterHotKey(System.Byte,XP.SDK.XPLM.KeyFlags,XP.SDK.Utf8String@,,System.Void*)">
             <summary>
             <para>
             This routine registers a hot key.  You specify your preferred key stroke
@@ -5212,7 +5233,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.DisplayAPI.RegisterHotKey(System.Byte,XP.SDK.XPLM.KeyFlags,XP.SDK.Utf8String@,,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Interop.DisplayAPI.RegisterHotKey(System.Byte,XP.SDK.XPLM.KeyFlags,System.ReadOnlySpan{System.Char}@,,System.Void*)">
             <summary>
             <para>
             This routine registers a hot key.  You specify your preferred key stroke
@@ -5407,6 +5428,16 @@
             <summary>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Interop.GraphicsAPI.DrawString(XP.SDK.RGBColor@,System.Int32,System.Int32,XP.SDK.Utf8String@,System.Int32*,XP.SDK.XPLM.FontID)">
+            <summary>
+            <para>
+            This routine draws a NULL terminated string in a given font.  Pass in the
+            lower left pixel that the character is to be drawn onto.  Also pass the
+            character and font ID. This function returns the x offset plus the width of
+            all drawn characters. 
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Interop.GraphicsAPI.DrawString(XP.SDK.RGBColor@,System.Int32,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32*,XP.SDK.XPLM.FontID)">
             <summary>
             <para>
@@ -5579,7 +5610,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.GraphicsAPI.MeasureString(XP.SDK.XPLM.FontID,System.ReadOnlySpan{System.Char}@,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Interop.GraphicsAPI.MeasureString(XP.SDK.XPLM.FontID,XP.SDK.Utf8String@,System.Int32)">
             <summary>
             <para>
             This routine returns the width in pixels of a string using a given font.
@@ -5590,7 +5621,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.GraphicsAPI.MeasureString(XP.SDK.XPLM.FontID,XP.SDK.Utf8String@,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Interop.GraphicsAPI.MeasureString(XP.SDK.XPLM.FontID,System.ReadOnlySpan{System.Char}@,System.Int32)">
             <summary>
             <para>
             This routine returns the width in pixels of a string using a given font.
@@ -5853,15 +5884,6 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.MapAPI.MapExists(System.ReadOnlySpan{System.Char}@)">
-            <summary>
-            <para>
-            Returns 1 if the map with the specified identifier already exists in
-            X-Plane. In that case, you can safely call XPLMCreateMapLayer() specifying
-            that your layer should be added to that map.
-            </para>
-            </summary>
-        </member>
         <member name="M:XP.SDK.XPLM.Interop.MapAPI.MapExists(XP.SDK.Utf8String@)">
             <summary>
             <para>
@@ -5871,46 +5893,16 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.MapAPI.DrawMapIconFromSheet(XP.SDK.XPLM.MapLayerID,System.Byte*,System.Int32,System.Int32,System.Int32,System.Int32,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single,System.Single)">
+        <member name="M:XP.SDK.XPLM.Interop.MapAPI.MapExists(System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
-            Enables plugin-created map layers to draw PNG icons using X-Plane's
-            built-in icon drawing functionality. Only valid from within an
-            XPLMIconDrawingCallback_t (but you can request an arbitrary number of icons
-            to be drawn from within your callback).
-            </para>
-            <para>
-            X-Plane will automatically manage the memory for your texture so that it
-            only has to be loaded from disk once as long as you continue drawing it
-            per-frame. (When you stop drawing it, the memory may purged in a "garbage
-            collection" pass, require a load from disk in the future.)
-            </para>
-            <para>
-            Instead of having X-Plane draw a full PNG, this method allows you to use UV
-            coordinates to request a portion of the image to be drawn. This allows you
-            to use a single texture load (of an icon sheet, for example) to draw many
-            icons. Doing so is much more efficient than drawing a dozen different small
-            PNGs.
-            </para>
-            <para>
-            The UV coordinates used here treat the texture you load as being comprised
-            of a number of identically sized "cells." You specify the width and height
-            in cells (ds and dt, respectively), as well as the coordinates within the
-            cell grid for the sub-image you'd like to draw.
-            </para>
-            <para>
-            Note that you can use different ds and dt values in subsequent calls with
-            the same texture sheet. This enables you to use icons of different sizes in
-            the same sheet if you arrange them properly in the PNG.
-            </para>
-            <para>
-            This function is only valid from within an XPLMIconDrawingCallback_t (but
-            you can request an arbitrary number of icons to be drawn from within your
-            callback).
+            Returns 1 if the map with the specified identifier already exists in
+            X-Plane. In that case, you can safely call XPLMCreateMapLayer() specifying
+            that your layer should be added to that map.
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.MapAPI.DrawMapIconFromSheet(XP.SDK.XPLM.MapLayerID,System.ReadOnlySpan{System.Char}@,System.Int32,System.Int32,System.Int32,System.Int32,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single,System.Single)">
+        <member name="M:XP.SDK.XPLM.Interop.MapAPI.DrawMapIconFromSheet(XP.SDK.XPLM.MapLayerID,System.Byte*,System.Int32,System.Int32,System.Int32,System.Int32,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single,System.Single)">
             <summary>
             <para>
             Enables plugin-created map layers to draw PNG icons using X-Plane's
@@ -5988,6 +5980,45 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Interop.MapAPI.DrawMapIconFromSheet(XP.SDK.XPLM.MapLayerID,System.ReadOnlySpan{System.Char}@,System.Int32,System.Int32,System.Int32,System.Int32,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single,System.Single)">
+            <summary>
+            <para>
+            Enables plugin-created map layers to draw PNG icons using X-Plane's
+            built-in icon drawing functionality. Only valid from within an
+            XPLMIconDrawingCallback_t (but you can request an arbitrary number of icons
+            to be drawn from within your callback).
+            </para>
+            <para>
+            X-Plane will automatically manage the memory for your texture so that it
+            only has to be loaded from disk once as long as you continue drawing it
+            per-frame. (When you stop drawing it, the memory may purged in a "garbage
+            collection" pass, require a load from disk in the future.)
+            </para>
+            <para>
+            Instead of having X-Plane draw a full PNG, this method allows you to use UV
+            coordinates to request a portion of the image to be drawn. This allows you
+            to use a single texture load (of an icon sheet, for example) to draw many
+            icons. Doing so is much more efficient than drawing a dozen different small
+            PNGs.
+            </para>
+            <para>
+            The UV coordinates used here treat the texture you load as being comprised
+            of a number of identically sized "cells." You specify the width and height
+            in cells (ds and dt, respectively), as well as the coordinates within the
+            cell grid for the sub-image you'd like to draw.
+            </para>
+            <para>
+            Note that you can use different ds and dt values in subsequent calls with
+            the same texture sheet. This enables you to use icons of different sizes in
+            the same sheet if you arrange them properly in the PNG.
+            </para>
+            <para>
+            This function is only valid from within an XPLMIconDrawingCallback_t (but
+            you can request an arbitrary number of icons to be drawn from within your
+            callback).
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Interop.MapAPI.DrawMapLabel(XP.SDK.XPLM.MapLayerID,System.Byte*,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single)">
             <summary>
             <para>
@@ -5998,7 +6029,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.MapAPI.DrawMapLabel(XP.SDK.XPLM.MapLayerID,System.ReadOnlySpan{System.Char}@,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single)">
+        <member name="M:XP.SDK.XPLM.Interop.MapAPI.DrawMapLabel(XP.SDK.XPLM.MapLayerID,XP.SDK.Utf8String@,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single)">
             <summary>
             <para>
             Enables plugin-created map layers to draw text labels using X-Plane's
@@ -6008,7 +6039,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.MapAPI.DrawMapLabel(XP.SDK.XPLM.MapLayerID,XP.SDK.Utf8String@,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single)">
+        <member name="M:XP.SDK.XPLM.Interop.MapAPI.DrawMapLabel(XP.SDK.XPLM.MapLayerID,System.ReadOnlySpan{System.Char}@,System.Single,System.Single,XP.SDK.XPLM.MapOrientation,System.Single)">
             <summary>
             <para>
             Enables plugin-created map layers to draw text labels using X-Plane's
@@ -6231,7 +6262,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.CreateMenu(System.ReadOnlySpan{System.Char}@,XP.SDK.XPLM.MenuID,System.Int32,,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.CreateMenu(XP.SDK.Utf8String@,XP.SDK.XPLM.MenuID,System.Int32,,System.Void*)">
             <summary>
             <para>
             This function creates a new menu and returns its ID.  It returns NULL if
@@ -6248,7 +6279,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.CreateMenu(XP.SDK.Utf8String@,XP.SDK.XPLM.MenuID,System.Int32,,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.CreateMenu(System.ReadOnlySpan{System.Char}@,XP.SDK.XPLM.MenuID,System.Int32,,System.Void*)">
             <summary>
             <para>
             This function creates a new menu and returns its ID.  It returns NULL if
@@ -6303,7 +6334,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.AppendMenuItem(XP.SDK.XPLM.MenuID,System.ReadOnlySpan{System.Char}@,System.Void*,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.AppendMenuItem(XP.SDK.XPLM.MenuID,XP.SDK.Utf8String@,System.Void*,System.Int32)">
             <summary>
             <para>
             This routine appends a new menu item to the bottom of a menu and returns
@@ -6325,7 +6356,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.AppendMenuItem(XP.SDK.XPLM.MenuID,XP.SDK.Utf8String@,System.Void*,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.AppendMenuItem(XP.SDK.XPLM.MenuID,System.ReadOnlySpan{System.Char}@,System.Void*,System.Int32)">
             <summary>
             <para>
             This routine appends a new menu item to the bottom of a menu and returns
@@ -6366,7 +6397,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.AppendMenuItemWithCommand(XP.SDK.XPLM.MenuID,System.ReadOnlySpan{System.Char}@,XP.SDK.XPLM.CommandRef)">
+        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.AppendMenuItemWithCommand(XP.SDK.XPLM.MenuID,XP.SDK.Utf8String@,XP.SDK.XPLM.CommandRef)">
             <summary>
             <para>
             Like XPLMAppendMenuItem(), but instead of the new menu item triggering the
@@ -6385,7 +6416,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.AppendMenuItemWithCommand(XP.SDK.XPLM.MenuID,XP.SDK.Utf8String@,XP.SDK.XPLM.CommandRef)">
+        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.AppendMenuItemWithCommand(XP.SDK.XPLM.MenuID,System.ReadOnlySpan{System.Char}@,XP.SDK.XPLM.CommandRef)">
             <summary>
             <para>
             Like XPLMAppendMenuItem(), but instead of the new menu item triggering the
@@ -6423,7 +6454,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.SetMenuItemName(XP.SDK.XPLM.MenuID,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.SetMenuItemName(XP.SDK.XPLM.MenuID,System.Int32,XP.SDK.Utf8String@,System.Int32)">
             <summary>
             <para>
             This routine changes the name of an existing menu item.  Pass in the menu
@@ -6431,7 +6462,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.SetMenuItemName(XP.SDK.XPLM.MenuID,System.Int32,XP.SDK.Utf8String@,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Interop.MenusAPI.SetMenuItemName(XP.SDK.XPLM.MenuID,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32)">
             <summary>
             <para>
             This routine changes the name of an existing menu item.  Pass in the menu
@@ -6540,7 +6571,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.NavigationAPI.FindNavAid(System.ReadOnlySpan{System.Char}@,System.ReadOnlySpan{System.Char}@,System.Single*,System.Single*,System.Int32*,XP.SDK.XPLM.NavType)">
+        <member name="M:XP.SDK.XPLM.Interop.NavigationAPI.FindNavAid(XP.SDK.Utf8String@,XP.SDK.Utf8String@,System.Single*,System.Single*,System.Int32*,XP.SDK.XPLM.NavType)">
             <summary>
             <para>
             This routine provides a number of searching capabilities for the nav
@@ -6574,7 +6605,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.NavigationAPI.FindNavAid(XP.SDK.Utf8String@,XP.SDK.Utf8String@,System.Single*,System.Single*,System.Int32*,XP.SDK.XPLM.NavType)">
+        <member name="M:XP.SDK.XPLM.Interop.NavigationAPI.FindNavAid(System.ReadOnlySpan{System.Char}@,System.ReadOnlySpan{System.Char}@,System.Single*,System.Single*,System.Int32*,XP.SDK.XPLM.NavType)">
             <summary>
             <para>
             This routine provides a number of searching capabilities for the nav
@@ -6774,7 +6805,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.PlanesAPI.SetUsersAircraft(System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.PlanesAPI.SetUsersAircraft(XP.SDK.Utf8String@)">
             <summary>
             <para>
             This routine changes the user's aircraft.  Note that this will reinitialize
@@ -6783,7 +6814,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.PlanesAPI.SetUsersAircraft(XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.Interop.PlanesAPI.SetUsersAircraft(System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             This routine changes the user's aircraft.  Note that this will reinitialize
@@ -6800,7 +6831,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.PlanesAPI.PlaceUserAtAirport(System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.PlanesAPI.PlaceUserAtAirport(XP.SDK.Utf8String@)">
             <summary>
             <para>
             This routine places the user at a given airport.  Specify the airport by
@@ -6808,7 +6839,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.PlanesAPI.PlaceUserAtAirport(XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.Interop.PlanesAPI.PlaceUserAtAirport(System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             This routine places the user at a given airport.  Specify the airport by
@@ -6898,7 +6929,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.PlanesAPI.SetAircraftModel(System.Int32,System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.PlanesAPI.SetAircraftModel(System.Int32,XP.SDK.Utf8String@)">
             <summary>
             <para>
             This routine loads an aircraft model.  It may only be called if you have
@@ -6908,7 +6939,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.PlanesAPI.SetAircraftModel(System.Int32,XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.Interop.PlanesAPI.SetAircraftModel(System.Int32,System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             This routine loads an aircraft model.  It may only be called if you have
@@ -6969,7 +7000,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.FindPluginByPath(System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.FindPluginByPath(XP.SDK.Utf8String@)">
             <summary>
             <para>
             This routine returns the plug-in ID of the plug-in whose file exists at the
@@ -6978,7 +7009,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.FindPluginByPath(XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.FindPluginByPath(System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             This routine returns the plug-in ID of the plug-in whose file exists at the
@@ -6999,7 +7030,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.FindPluginBySignature(System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.FindPluginBySignature(XP.SDK.Utf8String@)">
             <summary>
             <para>
             This routine returns the plug-in ID of the plug-in whose signature matches
@@ -7011,7 +7042,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.FindPluginBySignature(XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.FindPluginBySignature(System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             This routine returns the plug-in ID of the plug-in whose signature matches
@@ -7090,14 +7121,6 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.HasFeature(System.ReadOnlySpan{System.Char}@)">
-            <summary>
-            <para>
-            This returns 1 if the given installation of X-Plane supports a feature, or
-            0 if it does not.
-            </para>
-            </summary>
-        </member>
         <member name="M:XP.SDK.XPLM.Interop.PluginAPI.HasFeature(XP.SDK.Utf8String@)">
             <summary>
             <para>
@@ -7106,16 +7129,15 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.IsFeatureEnabled(System.Byte*)">
+        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.HasFeature(System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
-            This returns 1 if a feature is currently enabled for your plugin, or 0 if
-            it is not enabled.  It is an error to call this routine with an unsupported
-            feature.
+            This returns 1 if the given installation of X-Plane supports a feature, or
+            0 if it does not.
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.IsFeatureEnabled(System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.IsFeatureEnabled(System.Byte*)">
             <summary>
             <para>
             This returns 1 if a feature is currently enabled for your plugin, or 0 if
@@ -7133,6 +7155,15 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.IsFeatureEnabled(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            <para>
+            This returns 1 if a feature is currently enabled for your plugin, or 0 if
+            it is not enabled.  It is an error to call this routine with an unsupported
+            feature.
+            </para>
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Interop.PluginAPI.EnableFeature(System.Byte*,System.Int32)">
             <summary>
             <para>
@@ -7142,7 +7173,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.EnableFeature(System.ReadOnlySpan{System.Char}@,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.EnableFeature(XP.SDK.Utf8String@,System.Int32)">
             <summary>
             <para>
             This routine enables or disables a feature for your plugin.  This will
@@ -7151,7 +7182,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.EnableFeature(XP.SDK.Utf8String@,System.Int32)">
+        <member name="M:XP.SDK.XPLM.Interop.PluginAPI.EnableFeature(System.ReadOnlySpan{System.Char}@,System.Int32)">
             <summary>
             <para>
             This routine enables or disables a feature for your plugin.  This will
@@ -7372,7 +7403,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.SceneryAPI.LoadObject(System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.SceneryAPI.LoadObject(XP.SDK.Utf8String@)">
             <summary>
             <para>
             This routine loads an OBJ file and returns a handle to it. If X-Plane has
@@ -7399,7 +7430,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.SceneryAPI.LoadObject(XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.Interop.SceneryAPI.LoadObject(System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             This routine loads an OBJ file and returns a handle to it. If X-Plane has
@@ -7446,7 +7477,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.SceneryAPI.LoadObjectAsync(System.ReadOnlySpan{System.Char}@,,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Interop.SceneryAPI.LoadObjectAsync(XP.SDK.Utf8String@,,System.Void*)">
             <summary>
             <para>
             This routine loads an object asynchronously; control is returned to you
@@ -7466,7 +7497,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.SceneryAPI.LoadObjectAsync(XP.SDK.Utf8String@,,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Interop.SceneryAPI.LoadObjectAsync(System.ReadOnlySpan{System.Char}@,,System.Void*)">
             <summary>
             <para>
             This routine loads an object asynchronously; control is returned to you
@@ -7512,7 +7543,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.SceneryAPI.LookupObjects(System.ReadOnlySpan{System.Char}@,System.Single,System.Single,,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Interop.SceneryAPI.LookupObjects(XP.SDK.Utf8String@,System.Single,System.Single,,System.Void*)">
             <summary>
             <para>
             This routine looks up a virtual path in the library system and returns all
@@ -7528,7 +7559,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.SceneryAPI.LookupObjects(XP.SDK.Utf8String@,System.Single,System.Single,,System.Void*)">
+        <member name="M:XP.SDK.XPLM.Interop.SceneryAPI.LookupObjects(System.ReadOnlySpan{System.Char}@,System.Single,System.Single,,System.Void*)">
             <summary>
             <para>
             This routine looks up a virtual path in the library system and returns all
@@ -7672,7 +7703,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.GetDirectoryContents(System.ReadOnlySpan{System.Char}@,System.Int32,System.Byte*,System.Int32,System.Byte**,System.Int32,System.Int32*,System.Int32*)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.GetDirectoryContents(XP.SDK.Utf8String@,System.Int32,System.Byte*,System.Int32,System.Byte**,System.Int32,System.Int32*,System.Int32*)">
             <summary>
             <para>
             This routine returns a list of files in a directory (specified by a full
@@ -7727,7 +7758,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.GetDirectoryContents(XP.SDK.Utf8String@,System.Int32,System.Byte*,System.Int32,System.Byte**,System.Int32,System.Int32*,System.Int32*)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.GetDirectoryContents(System.ReadOnlySpan{System.Char}@,System.Int32,System.Byte*,System.Int32,System.Byte**,System.Int32,System.Int32*,System.Int32*)">
             <summary>
             <para>
             This routine returns a list of files in a directory (specified by a full
@@ -7791,7 +7822,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.LoadDataFile(XP.SDK.XPLM.DataFileType,System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.LoadDataFile(XP.SDK.XPLM.DataFileType,XP.SDK.Utf8String@)">
             <summary>
             <para>
             Loads a data file of a given type. Paths must be relative to the X-System
@@ -7800,7 +7831,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.LoadDataFile(XP.SDK.XPLM.DataFileType,XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.LoadDataFile(XP.SDK.XPLM.DataFileType,System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             Loads a data file of a given type. Paths must be relative to the X-System
@@ -7817,7 +7848,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.SaveDataFile(XP.SDK.XPLM.DataFileType,System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.SaveDataFile(XP.SDK.XPLM.DataFileType,XP.SDK.Utf8String@)">
             <summary>
             <para>
             Saves the current situation or replay; paths are relative to the X-System
@@ -7825,7 +7856,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.SaveDataFile(XP.SDK.XPLM.DataFileType,XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.SaveDataFile(XP.SDK.XPLM.DataFileType,System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             Saves the current situation or replay; paths are relative to the X-System
@@ -7889,7 +7920,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.FindSymbol(System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.FindSymbol(XP.SDK.Utf8String@)">
             <summary>
             <para>
             This routine will attempt to find the symbol passed in the inString
@@ -7924,7 +7955,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.FindSymbol(XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.FindSymbol(System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             This routine will attempt to find the symbol passed in the inString
@@ -8004,7 +8035,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.DebugString(System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.DebugString(XP.SDK.Utf8String@)">
             <summary>
             <para>
             This routine outputs a C-style string to the Log.txt file. The file is
@@ -8020,7 +8051,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.DebugString(XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.DebugString(System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             This routine outputs a C-style string to the Log.txt file. The file is
@@ -8046,7 +8077,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.SpeakString(System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.SpeakString(XP.SDK.Utf8String@)">
             <summary>
             <para>
             This function displays the string in a translucent overlay over the current
@@ -8056,7 +8087,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.SpeakString(XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.SpeakString(System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             This function displays the string in a translucent overlay over the current
@@ -8096,7 +8127,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.FindCommand(System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.FindCommand(XP.SDK.Utf8String@)">
             <summary>
             <para>
             XPLMFindCommand looks up a command by name, and returns its command
@@ -8104,7 +8135,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.FindCommand(XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.FindCommand(System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             XPLMFindCommand looks up a command by name, and returns its command
@@ -8150,7 +8181,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.CreateCommand(System.ReadOnlySpan{System.Char}@,System.ReadOnlySpan{System.Char}@)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.CreateCommand(XP.SDK.Utf8String@,XP.SDK.Utf8String@)">
             <summary>
             <para>
             XPLMCreateCommand creates a new command for a given string. If the command
@@ -8160,7 +8191,7 @@
             </para>
             </summary>
         </member>
-        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.CreateCommand(XP.SDK.Utf8String@,XP.SDK.Utf8String@)">
+        <member name="M:XP.SDK.XPLM.Interop.UtilitiesAPI.CreateCommand(System.ReadOnlySpan{System.Char}@,System.ReadOnlySpan{System.Char}@)">
             <summary>
             <para>
             XPLMCreateCommand creates a new command for a given string. If the command

@@ -199,14 +199,10 @@ namespace XP.SDK.XPLM.Interop
         /// for fractional pixels.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe float MeasureString(FontID inFontID, in ReadOnlySpan<char> inChar, int inNumChars)
+        public static unsafe float MeasureString(FontID inFontID, in XP.SDK.Utf8String inChar, int inNumChars)
         {
-            int inCharUtf8Len = inChar.Length * 3 + 4;
-            Span<byte> inCharUtf8 = inCharUtf8Len <= 4096 ? stackalloc byte[inCharUtf8Len] : new byte[inCharUtf8Len];
-            Utils.ToUtf8(inChar, inCharUtf8);
-            fixed (byte* inCharPtr = inCharUtf8)
+            fixed (byte* inCharPtr = inChar)
                 return MeasureString(inFontID, inCharPtr, inNumChars);
         }
 
@@ -220,11 +216,13 @@ namespace XP.SDK.XPLM.Interop
         /// for fractional pixels.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe float MeasureString(FontID inFontID, in XP.SDK.Utf8String inChar, int inNumChars)
+        [SkipLocalsInitAttribute]
+        public static unsafe float MeasureString(FontID inFontID, in ReadOnlySpan<char> inChar, int inNumChars)
         {
-            fixed (byte* inCharPtr = inChar)
-                return MeasureString(inFontID, inCharPtr, inNumChars);
+            int inCharUtf8Len = inChar.Length * 3 + 4;
+            Span<byte> inCharUtf8 = inCharUtf8Len <= 4096 ? stackalloc byte[inCharUtf8Len] : GC.AllocateUninitializedArray<byte>(inCharUtf8Len);
+            var inCharUtf8Str = Utf8String.FromUtf16Unsafe(inChar, inCharUtf8);
+            return MeasureString(inFontID, inCharUtf8Str, inNumChars);
         }
     }
 }

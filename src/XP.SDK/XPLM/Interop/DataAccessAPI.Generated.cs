@@ -42,14 +42,10 @@ namespace XP.SDK.XPLM.Interop
         /// every time you need to read or write it.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe DataRef FindDataRef(in ReadOnlySpan<char> inDataRefName)
+        public static unsafe DataRef FindDataRef(in XP.SDK.Utf8String inDataRefName)
         {
-            int inDataRefNameUtf8Len = inDataRefName.Length * 3 + 4;
-            Span<byte> inDataRefNameUtf8 = inDataRefNameUtf8Len <= 4096 ? stackalloc byte[inDataRefNameUtf8Len] : new byte[inDataRefNameUtf8Len];
-            Utils.ToUtf8(inDataRefName, inDataRefNameUtf8);
-            fixed (byte* inDataRefNamePtr = inDataRefNameUtf8)
+            fixed (byte* inDataRefNamePtr = inDataRefName)
                 return FindDataRef(inDataRefNamePtr);
         }
 
@@ -69,11 +65,13 @@ namespace XP.SDK.XPLM.Interop
         /// every time you need to read or write it.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe DataRef FindDataRef(in XP.SDK.Utf8String inDataRefName)
+        [SkipLocalsInitAttribute]
+        public static unsafe DataRef FindDataRef(in ReadOnlySpan<char> inDataRefName)
         {
-            fixed (byte* inDataRefNamePtr = inDataRefName)
-                return FindDataRef(inDataRefNamePtr);
+            int inDataRefNameUtf8Len = inDataRefName.Length * 3 + 4;
+            Span<byte> inDataRefNameUtf8 = inDataRefNameUtf8Len <= 4096 ? stackalloc byte[inDataRefNameUtf8Len] : GC.AllocateUninitializedArray<byte>(inDataRefNameUtf8Len);
+            var inDataRefNameUtf8Str = Utf8String.FromUtf16Unsafe(inDataRefName, inDataRefNameUtf8);
+            return FindDataRef(inDataRefNameUtf8Str);
         }
 
         
@@ -341,14 +339,10 @@ namespace XP.SDK.XPLM.Interop
         /// this data ref to unregister your data later or read or write from it.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe DataRef RegisterDataAccessor(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, int inIsWritable, delegate* unmanaged[Cdecl]<void*, int> inReadInt, delegate* unmanaged[Cdecl]<void*, int, void> inWriteInt, delegate* unmanaged[Cdecl]<void*, float> inReadFloat, delegate* unmanaged[Cdecl]<void*, float, void> inWriteFloat, delegate* unmanaged[Cdecl]<void*, double> inReadDouble, delegate* unmanaged[Cdecl]<void*, double, void> inWriteDouble, delegate* unmanaged[Cdecl]<void*, int*, int, int, int> inReadIntArray, delegate* unmanaged[Cdecl]<void*, int*, int, int, void> inWriteIntArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, int> inReadFloatArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, void> inWriteFloatArray, delegate* unmanaged[Cdecl]<void*, void*, int, int, int> inReadData, delegate* unmanaged[Cdecl]<void*, void*, int, int, void> inWriteData, void* inReadRefcon, void* inWriteRefcon)
+        public static unsafe DataRef RegisterDataAccessor(in XP.SDK.Utf8String inDataName, DataTypeID inDataType, int inIsWritable, delegate* unmanaged[Cdecl]<void*, int> inReadInt, delegate* unmanaged[Cdecl]<void*, int, void> inWriteInt, delegate* unmanaged[Cdecl]<void*, float> inReadFloat, delegate* unmanaged[Cdecl]<void*, float, void> inWriteFloat, delegate* unmanaged[Cdecl]<void*, double> inReadDouble, delegate* unmanaged[Cdecl]<void*, double, void> inWriteDouble, delegate* unmanaged[Cdecl]<void*, int*, int, int, int> inReadIntArray, delegate* unmanaged[Cdecl]<void*, int*, int, int, void> inWriteIntArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, int> inReadFloatArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, void> inWriteFloatArray, delegate* unmanaged[Cdecl]<void*, void*, int, int, int> inReadData, delegate* unmanaged[Cdecl]<void*, void*, int, int, void> inWriteData, void* inReadRefcon, void* inWriteRefcon)
         {
-            int inDataNameUtf8Len = inDataName.Length * 3 + 4;
-            Span<byte> inDataNameUtf8 = inDataNameUtf8Len <= 4096 ? stackalloc byte[inDataNameUtf8Len] : new byte[inDataNameUtf8Len];
-            Utils.ToUtf8(inDataName, inDataNameUtf8);
-            fixed (byte* inDataNamePtr = inDataNameUtf8)
+            fixed (byte* inDataNamePtr = inDataName)
                 return RegisterDataAccessor(inDataNamePtr, inDataType, inIsWritable, inReadInt, inWriteInt, inReadFloat, inWriteFloat, inReadDouble, inWriteDouble, inReadIntArray, inWriteIntArray, inReadFloatArray, inWriteFloatArray, inReadData, inWriteData, inReadRefcon, inWriteRefcon);
         }
 
@@ -367,11 +361,13 @@ namespace XP.SDK.XPLM.Interop
         /// this data ref to unregister your data later or read or write from it.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe DataRef RegisterDataAccessor(in XP.SDK.Utf8String inDataName, DataTypeID inDataType, int inIsWritable, delegate* unmanaged[Cdecl]<void*, int> inReadInt, delegate* unmanaged[Cdecl]<void*, int, void> inWriteInt, delegate* unmanaged[Cdecl]<void*, float> inReadFloat, delegate* unmanaged[Cdecl]<void*, float, void> inWriteFloat, delegate* unmanaged[Cdecl]<void*, double> inReadDouble, delegate* unmanaged[Cdecl]<void*, double, void> inWriteDouble, delegate* unmanaged[Cdecl]<void*, int*, int, int, int> inReadIntArray, delegate* unmanaged[Cdecl]<void*, int*, int, int, void> inWriteIntArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, int> inReadFloatArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, void> inWriteFloatArray, delegate* unmanaged[Cdecl]<void*, void*, int, int, int> inReadData, delegate* unmanaged[Cdecl]<void*, void*, int, int, void> inWriteData, void* inReadRefcon, void* inWriteRefcon)
+        [SkipLocalsInitAttribute]
+        public static unsafe DataRef RegisterDataAccessor(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, int inIsWritable, delegate* unmanaged[Cdecl]<void*, int> inReadInt, delegate* unmanaged[Cdecl]<void*, int, void> inWriteInt, delegate* unmanaged[Cdecl]<void*, float> inReadFloat, delegate* unmanaged[Cdecl]<void*, float, void> inWriteFloat, delegate* unmanaged[Cdecl]<void*, double> inReadDouble, delegate* unmanaged[Cdecl]<void*, double, void> inWriteDouble, delegate* unmanaged[Cdecl]<void*, int*, int, int, int> inReadIntArray, delegate* unmanaged[Cdecl]<void*, int*, int, int, void> inWriteIntArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, int> inReadFloatArray, delegate* unmanaged[Cdecl]<void*, float*, int, int, void> inWriteFloatArray, delegate* unmanaged[Cdecl]<void*, void*, int, int, int> inReadData, delegate* unmanaged[Cdecl]<void*, void*, int, int, void> inWriteData, void* inReadRefcon, void* inWriteRefcon)
         {
-            fixed (byte* inDataNamePtr = inDataName)
-                return RegisterDataAccessor(inDataNamePtr, inDataType, inIsWritable, inReadInt, inWriteInt, inReadFloat, inWriteFloat, inReadDouble, inWriteDouble, inReadIntArray, inWriteIntArray, inReadFloatArray, inWriteFloatArray, inReadData, inWriteData, inReadRefcon, inWriteRefcon);
+            int inDataNameUtf8Len = inDataName.Length * 3 + 4;
+            Span<byte> inDataNameUtf8 = inDataNameUtf8Len <= 4096 ? stackalloc byte[inDataNameUtf8Len] : GC.AllocateUninitializedArray<byte>(inDataNameUtf8Len);
+            var inDataNameUtf8Str = Utf8String.FromUtf16Unsafe(inDataName, inDataNameUtf8);
+            return RegisterDataAccessor(inDataNameUtf8Str, inDataType, inIsWritable, inReadInt, inWriteInt, inReadFloat, inWriteFloat, inReadDouble, inWriteDouble, inReadIntArray, inWriteIntArray, inReadFloatArray, inWriteFloatArray, inReadData, inWriteData, inReadRefcon, inWriteRefcon);
         }
 
         
@@ -433,14 +429,10 @@ namespace XP.SDK.XPLM.Interop
         /// zero if the data already exists but is of the wrong type.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int ShareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
+        public static unsafe int ShareData(in XP.SDK.Utf8String inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
         {
-            int inDataNameUtf8Len = inDataName.Length * 3 + 4;
-            Span<byte> inDataNameUtf8 = inDataNameUtf8Len <= 4096 ? stackalloc byte[inDataNameUtf8Len] : new byte[inDataNameUtf8Len];
-            Utils.ToUtf8(inDataName, inDataNameUtf8);
-            fixed (byte* inDataNamePtr = inDataNameUtf8)
+            fixed (byte* inDataNamePtr = inDataName)
                 return ShareData(inDataNamePtr, inDataType, inNotificationFunc, inNotificationRefcon);
         }
 
@@ -466,11 +458,13 @@ namespace XP.SDK.XPLM.Interop
         /// zero if the data already exists but is of the wrong type.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int ShareData(in XP.SDK.Utf8String inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
+        [SkipLocalsInitAttribute]
+        public static unsafe int ShareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
         {
-            fixed (byte* inDataNamePtr = inDataName)
-                return ShareData(inDataNamePtr, inDataType, inNotificationFunc, inNotificationRefcon);
+            int inDataNameUtf8Len = inDataName.Length * 3 + 4;
+            Span<byte> inDataNameUtf8 = inDataNameUtf8Len <= 4096 ? stackalloc byte[inDataNameUtf8Len] : GC.AllocateUninitializedArray<byte>(inDataNameUtf8Len);
+            var inDataNameUtf8Str = Utf8String.FromUtf16Unsafe(inDataName, inDataNameUtf8);
+            return ShareData(inDataNameUtf8Str, inDataType, inNotificationFunc, inNotificationRefcon);
         }
 
         
@@ -494,14 +488,10 @@ namespace XP.SDK.XPLM.Interop
         /// since other plug-ins could be using it.
         /// </para>
         /// </summary>
-        [SkipLocalsInitAttribute]
         [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int UnshareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
+        public static unsafe int UnshareData(in XP.SDK.Utf8String inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
         {
-            int inDataNameUtf8Len = inDataName.Length * 3 + 4;
-            Span<byte> inDataNameUtf8 = inDataNameUtf8Len <= 4096 ? stackalloc byte[inDataNameUtf8Len] : new byte[inDataNameUtf8Len];
-            Utils.ToUtf8(inDataName, inDataNameUtf8);
-            fixed (byte* inDataNamePtr = inDataNameUtf8)
+            fixed (byte* inDataNamePtr = inDataName)
                 return UnshareData(inDataNamePtr, inDataType, inNotificationFunc, inNotificationRefcon);
         }
 
@@ -514,11 +504,13 @@ namespace XP.SDK.XPLM.Interop
         /// since other plug-ins could be using it.
         /// </para>
         /// </summary>
-        [MethodImplAttribute(MethodImplOptions.AggressiveInlining)]
-        public static unsafe int UnshareData(in XP.SDK.Utf8String inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
+        [SkipLocalsInitAttribute]
+        public static unsafe int UnshareData(in ReadOnlySpan<char> inDataName, DataTypeID inDataType, delegate* unmanaged[Cdecl]<void*, void> inNotificationFunc, void* inNotificationRefcon)
         {
-            fixed (byte* inDataNamePtr = inDataName)
-                return UnshareData(inDataNamePtr, inDataType, inNotificationFunc, inNotificationRefcon);
+            int inDataNameUtf8Len = inDataName.Length * 3 + 4;
+            Span<byte> inDataNameUtf8 = inDataNameUtf8Len <= 4096 ? stackalloc byte[inDataNameUtf8Len] : GC.AllocateUninitializedArray<byte>(inDataNameUtf8Len);
+            var inDataNameUtf8Str = Utf8String.FromUtf16Unsafe(inDataName, inDataNameUtf8);
+            return UnshareData(inDataNameUtf8Str, inDataType, inNotificationFunc, inNotificationRefcon);
         }
     }
 }
