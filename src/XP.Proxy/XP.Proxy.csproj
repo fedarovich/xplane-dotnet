@@ -13,7 +13,7 @@
     <Authors>Pavel Fedarovich</Authors>
     <Company>Pavel Fedarovich</Company>
     <Product>XP.SDK</Product>
-    <Copyright>© Pavel Fedarovich, 2020</Copyright>
+    <Copyright>© Pavel Fedarovich, 2020-$([System.DateTime]::Now.Year)</Copyright>
     <RepositoryUrl>https://github.com/fedarovich/xplane-dotnet</RepositoryUrl>
     <PackageProjectUrl>https://github.com/fedarovich/xplane-dotnet</PackageProjectUrl>
   </PropertyGroup>

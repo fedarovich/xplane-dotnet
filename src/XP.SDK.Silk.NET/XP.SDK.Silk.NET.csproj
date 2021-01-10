@@ -1,15 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <DocumentationFile>$(OutputDir)XP.SDK.OpenToolkit.Graphics.xml</DocumentationFile>
+    <TargetFramework>net5.0</TargetFramework>
+    <DocumentationFile>$(OutputDir)XP.SDK.Silk.NET.xml</DocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/fedarovich/xplane-dotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/fedarovich/xplane-dotnet</RepositoryUrl>
     <Authors>Pavel Fedarovich</Authors>
     <Company>Pavel Fedarovich</Company>
-    <Copyright>© Pavel Fedarovich, 2020</Copyright>
+    <Copyright>© Pavel Fedarovich, 2020-$([System.DateTime]::Now.Year)</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
