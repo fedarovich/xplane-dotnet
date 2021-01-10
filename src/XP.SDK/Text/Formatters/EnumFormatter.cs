@@ -17,6 +17,8 @@ namespace XP.SDK.Text.Formatters
         where TEnum : unmanaged, Enum
     {
         private static readonly delegate*<TEnum, in Span<byte>, out int, StandardFormat, bool> TryFormatAsNumber;
+        private static int HexLength;
+        private static int DecLength;
         private static bool IsFlags;
 
         public TEnum Value { get; }
@@ -30,25 +32,67 @@ namespace XP.SDK.Text.Formatters
             var baseType = Enum.GetUnderlyingType(typeof(TEnum));
             
             if (baseType == typeof(byte))
+            {
                 TryFormatAsNumber = &TryFormatAsByte;
+                HexLength = 2;
+                DecLength = 3;
+            }
             else if (baseType == typeof(short))
+            {
                 TryFormatAsNumber = &TryFormatAsInt16;
+                HexLength = 4;
+                DecLength = 6;
+            }
             else if (baseType == typeof(int))
+            {
                 TryFormatAsNumber = &TryFormatAsInt32;
+                HexLength = 8;
+                DecLength = 11;
+            }
             else if (baseType == typeof(long))
+            {
                 TryFormatAsNumber = &TryFormatAsInt64;
+                HexLength = 16;
+                DecLength = 20;
+            }
             else if (baseType == typeof(sbyte))
+            {
                 TryFormatAsNumber = &TryFormatAsSByte;
+                HexLength = 2;
+                DecLength = 4;
+            }
             else if (baseType == typeof(ushort))
+            {
                 TryFormatAsNumber = &TryFormatAsUInt16;
+                HexLength = 4;
+                DecLength = 5;
+            }
             else if (baseType == typeof(uint))
+            {
                 TryFormatAsNumber = &TryFormatAsUInt32;
+                HexLength = 8;
+                DecLength = 10;
+            }
             else if (baseType == typeof(ulong))
+            {
                 TryFormatAsNumber = &TryFormatAsUInt64;
+                HexLength = 16;
+                DecLength = 19;
+            }
             else
+            {
                 throw new ArgumentException("Unknown underlying base type of enum.");
+            }
         }
-        
+
+        public int GetSizeHint(StandardFormat format) =>
+            format.Symbol switch
+            {
+                'd' or 'D' => DecLength,
+                'x' or 'X' => HexLength,
+                _ => 32
+            };
+
         public bool TryFormat(in Span<byte> destination, out int bytesWritten, StandardFormat format = default)
         {
             var symbol = GetSymbolOrDefault(format, 'G');
