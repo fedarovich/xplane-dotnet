@@ -15,15 +15,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XP.SDK.Silk.NET", "XP.SDK.S
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analyzers", "Analyzers", "{F787BED1-FC2D-429A-A076-DE44E4785647}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XP.SDK.Analyzers", "XP.SDK.Analyzers\XP.SDK.Analyzers\XP.SDK.Analyzers.csproj", "{83D7AB81-F17F-4645-919B-4848D69485A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XP.SDK.Analyzers", "XP.SDK.Analyzers\XP.SDK.Analyzers\XP.SDK.Analyzers.csproj", "{83D7AB81-F17F-4645-919B-4848D69485A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XP.SDK.Analyzers.CodeFixes", "XP.SDK.Analyzers\XP.SDK.Analyzers.CodeFixes\XP.SDK.Analyzers.CodeFixes.csproj", "{2EFD2828-8A9E-4820-9DB5-E226C75CA1BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XP.SDK.Analyzers.CodeFixes", "XP.SDK.Analyzers\XP.SDK.Analyzers.CodeFixes\XP.SDK.Analyzers.CodeFixes.csproj", "{2EFD2828-8A9E-4820-9DB5-E226C75CA1BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XP.SDK.Analyzers.Package", "XP.SDK.Analyzers\XP.SDK.Analyzers.Package\XP.SDK.Analyzers.Package.csproj", "{A1D7D729-D633-46D0-9133-0FEAB8D9F100}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XP.SDK.Analyzers.Package", "XP.SDK.Analyzers\XP.SDK.Analyzers.Package\XP.SDK.Analyzers.Package.csproj", "{A1D7D729-D633-46D0-9133-0FEAB8D9F100}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XP.SDK.Analyzers.Test", "XP.SDK.Analyzers\XP.SDK.Analyzers.Test\XP.SDK.Analyzers.Test.csproj", "{BF4F3565-13AC-48F7-A7E1-B7AD4CB9A5D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XP.SDK.Analyzers.Test", "XP.SDK.Analyzers\XP.SDK.Analyzers.Test\XP.SDK.Analyzers.Test.csproj", "{BF4F3565-13AC-48F7-A7E1-B7AD4CB9A5D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XP.SDK.Analyzers.Vsix", "XP.SDK.Analyzers\XP.SDK.Analyzers.Vsix\XP.SDK.Analyzers.Vsix.csproj", "{32072F91-9105-41F0-A200-DDE2BF791143}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XP.SDK.Analyzers.Vsix", "XP.SDK.Analyzers\XP.SDK.Analyzers.Vsix\XP.SDK.Analyzers.Vsix.csproj", "{32072F91-9105-41F0-A200-DDE2BF791143}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XP.SDK.OpenTK.Graphics", "XP.SDK.OpenTK.Graphics\XP.SDK.OpenTK.Graphics.csproj", "{617E05CE-6758-40F2-B6F1-D38DB8B7C25F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{32072F91-9105-41F0-A200-DDE2BF791143}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32072F91-9105-41F0-A200-DDE2BF791143}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32072F91-9105-41F0-A200-DDE2BF791143}.Release|Any CPU.Build.0 = Release|Any CPU
+		{617E05CE-6758-40F2-B6F1-D38DB8B7C25F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{617E05CE-6758-40F2-B6F1-D38DB8B7C25F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{617E05CE-6758-40F2-B6F1-D38DB8B7C25F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{617E05CE-6758-40F2-B6F1-D38DB8B7C25F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
