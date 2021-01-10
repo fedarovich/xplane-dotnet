@@ -684,6 +684,15 @@
             <param name="value">The value.</param>
             <param name="format">The format.</param>
         </member>
+        <member name="M:XP.SDK.Text.Utf8StringBuilderExtensions.Append``1(XP.SDK.Text.Utf8StringBuilder@,``0@,System.Buffers.StandardFormat)">
+            <summary>
+            Appends the value of type implementing <see cref="T:XP.SDK.Text.IUtf8Formattable"/> interface.
+            </summary>
+            <typeparam name="T">The formattable type.</typeparam>
+            <param name="builder">An instance of <see cref="T:XP.SDK.Text.Utf8StringBuilder"/>.</param>
+            <param name="value">The formattable value.</param>
+            <param name="format">The format.</param>
+        </member>
         <member name="T:XP.SDK.Text.Utf8StringBuilderFactory">
             <summary>
             Provides the means to create <see cref="T:XP.SDK.Text.Utf8StringBuilder"/>.
@@ -8792,11 +8801,23 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.User.SetAircraft(XP.SDK.Utf8String@)">
+            <summary>
+            Changes the user’s aircraft. Note that this will reinitialize the user to be on the nearest airport’s first runway.
+            </summary>
+            <param name="aircraftPath">A full path (hard drive and everything including the .acf extension) to the .acf file.</param>
+        </member>
         <member name="M:XP.SDK.XPLM.User.SetAircraft(System.ReadOnlySpan{System.Char}@)">
             <summary>
             Changes the user’s aircraft. Note that this will reinitialize the user to be on the nearest airport’s first runway.
             </summary>
             <param name="aircraftPath">A full path (hard drive and everything including the .acf extension) to the .acf file.</param>
+        </member>
+        <member name="M:XP.SDK.XPLM.User.PlaceAtAirport(XP.SDK.Utf8String@)">
+            <summary>
+            Places the user at a given airport.
+            </summary>
+            <param name="airportCode">The airport by its X-Plane airport ID (e.g. 'KBOS').</param>
         </member>
         <member name="M:XP.SDK.XPLM.User.PlaceAtAirport(System.ReadOnlySpan{System.Char}@)">
             <summary>

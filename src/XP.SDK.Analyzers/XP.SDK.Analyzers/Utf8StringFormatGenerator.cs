@@ -101,6 +101,14 @@ namespace XP.SDK.Analyzers
             DiagnosticSeverity.Error,
             true);
 
+        private static readonly DiagnosticDescriptor Rule8206 = new(
+            "XPSDK8206",
+            "Out parameters are not supported",
+            "Out parameters are not supported in format methods, but method {0} has out parameter {1}",
+            "Usage",
+            DiagnosticSeverity.Error,
+            true);
+
         private static readonly Regex ParameterNameRegex = new (@"^[\w-[\d]][\w]{0,511}$", RegexOptions.Compiled);
         
         public void Initialize(GeneratorInitializationContext context)
@@ -295,6 +303,20 @@ namespace XP.SDK.Analyzers
                     writer.Write("partial ");
                     writer.Write(method.ToDisplayString(MethodSignatureFormat));
 
+                    var outParameters = method.Parameters.Where(p => p.RefKind == RefKind.Out).ToArray();
+                    if (outParameters.Length > 0)
+                    {
+                        writer.WriteLine(" => throw new global::System.NotSupportedException(\"The format method must not contain out parameters.\");");
+                        foreach (var outParameter in outParameters)
+                        {
+                            context.ReportDiagnostic(Diagnostic.Create(Rule8206,
+                                outParameter.DeclaringSyntaxReferences[0].GetSyntax().GetLocation(),
+                                method.Name,
+                                outParameter.Name));
+                        }
+                        continue;
+                    }
+                    
                     var attributeLocation = formatInfo.FormatAttribute.ApplicationSyntaxReference?.GetSyntax().GetLocation();
                     var (formatParts, literal) = ParseFormatString(formatInfo.Format, attributeLocation);
                     if (formatParts.Count == 1)
@@ -560,9 +582,17 @@ namespace XP.SDK.Analyzers
                         void WriteCore(bool byRefIfNeeded = false)
                         {
                             writer.Write("__builder__.Append(");
-                            if (byRefIfNeeded && parameter.RefCustomModifiers.Any(m => SymbolEqualityComparer.Default.Equals(m.Modifier, inAttributeSymbol)))
+                            if (byRefIfNeeded)
                             {
-                                writer.Write("in ");
+                                switch (parameter.RefKind)
+                                {
+                                    case RefKind.Ref:
+                                        writer.Write("ref ");
+                                        break;
+                                    case RefKind.In:
+                                        writer.Write("in ");
+                                        break;
+                                }
                             }
                             writer.Write(parameter.Name);
                             if (isNullable)

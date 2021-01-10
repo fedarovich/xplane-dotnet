@@ -631,6 +631,23 @@ namespace XP.SDK.Text
             }
         }
 
+        internal void AppendRef<T>(ref T value, StandardFormat format = default)
+            where T : IUtf8Formattable
+        {
+            int sizeHint = value.GetSizeHint(format);
+
+            while (true)
+            {
+                if (value.TryFormat(BufferWriter.GetSpan(sizeHint), out var written, format))
+                {
+                    BufferWriter.Advance(written);
+                    break;
+                }
+
+                sizeHint *= 2;
+            }
+        }
+
         #endregion
 
         /// <summary>
