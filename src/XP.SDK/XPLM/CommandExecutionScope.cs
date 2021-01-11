@@ -9,6 +9,9 @@ namespace XP.SDK.XPLM
     {
         private CommandRef _commandRef;
 
+        /// <summary>
+        /// Begins the command with the specified <paramref name="commandRef"/>.
+        /// </summary>
         public CommandExecutionScope(CommandRef commandRef)
         {
             _commandRef = commandRef;
@@ -18,6 +21,9 @@ namespace XP.SDK.XPLM
             }
         }
 
+        /// <summary>
+        /// Ends the command.
+        /// </summary>
         public void Dispose()
         {
             if (_commandRef != default)

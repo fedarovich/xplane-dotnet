@@ -7,5 +7,6 @@ if (-not [string]::IsNullOrEmpty($Suffix)) {
 
 dotnet pack ./XP.SDK/XP.SDK.csproj /p:Version=$ver -o $Output -c $Config
 dotnet pack ./XP.Proxy/XP.Proxy.csproj /p:Version=$ver -o $Output -c $Config
-dotnet pack ./XP.SDK.OpenToolkit.Graphics/XP.SDK.OpenToolkit.Graphics.csproj /p:Version=$ver -o $Output -c $Config
+dotnet pack ./XP.SDK.OpenTK.Graphics/XP.SDK.OpenTK.Graphics.csproj /p:Version=$ver -o $Output -c $Config
 dotnet pack ./XP.SDK.Silk.NET/XP.SDK.Silk.NET.csproj /p:Version=$ver -o $Output -c $Config
+dotnet pack ./XP.SDK.Analyzers/XP.SDK.Analyzers.Package/XP.SDK.Analyzers.Package.csproj /p:Version=$ver -o $Output -c $Config

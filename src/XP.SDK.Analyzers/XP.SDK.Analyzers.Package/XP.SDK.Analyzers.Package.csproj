@@ -9,16 +9,14 @@
 
   <PropertyGroup>
     <PackageId>XP.SDK.Analyzers</PackageId>
-    <PackageVersion>1.0.0.0</PackageVersion>
-    <Authors>pavel</Authors>
-    <PackageLicenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</PackageLicenseUrl>
-    <PackageProjectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</PackageProjectUrl>
-    <PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>
-    <RepositoryUrl>http://REPOSITORY_URL_HERE_OR_DELETE_THIS_LINE</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/fedarovich/xplane-dotnet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/fedarovich/xplane-dotnet</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>XP.SDK.Analyzers</Description>
-    <PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
-    <Copyright>Copyright</Copyright>
+    <Authors>Pavel Fedarovich</Authors>
+    <Company>Pavel Fedarovich</Company>
+    <Copyright>© Pavel Fedarovich, 2020-$([System.DateTime]::Now.Year)</Copyright>
     <PackageTags>XP.SDK.Analyzers, analyzers</PackageTags>
     <NoPackageAnalysis>true</NoPackageAnalysis>
 

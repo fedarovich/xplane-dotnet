@@ -1,5 +1,5 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿#nullable enable
+using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 using XP.SDK.XPLM.Interop;
@@ -35,7 +35,7 @@ namespace XP.SDK.XPLM
         /// The <see cref="IDisposable"/> object, than you must use for unsubscription, if the subscription succeeds.
         /// <see langword="null"/> otherwise.
         /// </returns>
-        public static unsafe IDisposable TryRegisterCallback(Callback callback, bool beforeWindows = false)
+        public static unsafe IDisposable? TryRegisterCallback(Callback callback, bool beforeWindows = false)
         {
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback));

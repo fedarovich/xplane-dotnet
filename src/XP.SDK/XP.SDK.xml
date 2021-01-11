@@ -3578,6 +3578,102 @@
             </para>
             </summary>
         </member>
+        <member name="T:XP.SDK.XPLM.Aircraft">
+            <summary>
+            Provides aircrafts management functions.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.XPLM.Aircraft.UserAircraft">
+            <summary>
+            The index of the aircraft controlled by the user.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Aircraft.GetCountAndController">
+            <summary>
+            This function returns the number of aircraft X-Plane is capable of having,
+            as well as the number of aircraft that are currently active.  These numbers
+            count the user's aircraft.  It can also return the plugin that is currently
+            controlling aircraft.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Aircraft.GetModel(System.Int32)">
+            <summary>
+            This function returns the aircraft model for the aircraft with the specified <paramref name="index"/>.
+            Indices are  zero based, with zero being the user's aircraft. 
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Aircraft.SetActiveAircraftCount(System.Int32)">
+            <summary>
+            This routine sets the number of active planes.  If you pass in a number
+            higher than the total number of planes available, only the total number of
+            planes available is actually used.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Aircraft.SetModel(System.Int32,XP.SDK.Utf8String@)">
+            <summary>
+            This routine loads an aircraft model. It may only be called if you have
+            exclusive access to the airplane APIs. Pass in the path of the model with
+            the .acf extension. The index is zero based, but you may not pass in 0
+            (use XPLMSetUsersAircraft to load the user's aircracft).
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Aircraft.SetModel(System.Int32,System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            This routine loads an aircraft model. It may only be called if you have
+            exclusive access to the airplane APIs. Pass in the path of the model with
+            the .acf extension. The index is zero based, but you may not pass in 0
+            (use XPLMSetUsersAircraft to load the user's aircracft).
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Aircraft.DisableAIForPlane(System.Int32)">
+            <summary>
+            This routine turns off X-Plane's AI for a given plane.  The plane will
+            continue to draw and be a real plane in X-Plane, but will not move itself.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Aircraft.AcquireExclusiveControl(System.Collections.Generic.IReadOnlyList{System.String},System.Action)">
+            <summary>
+            XPLMAcquirePlanes grants your plugin exclusive access to the aircraft.  It
+            returns <see langword="true"/> if you gain access, <see langword="false"/> if you do not.
+            </summary>
+            <param name="aircrafts">
+            <para>Pass in a list of strings specifying the planes you want loaded.</para>
+            <para>For any plane index you do not want loaded, pass an empty string.</para>
+            <para>Other strings should be full paths with the <c>.acf</c> extension.</para>
+            <para>Pass <see langword="null"/> if there are no planes you want loaded.</para>
+            </param>
+            <param name="callback">
+            If you pass in a callback and do not receive access to the planes your
+            callback will be called when the airplanes are available. If you do receive
+            airplane access, your callback will not be called.
+            </param>
+        </member>
+        <member name="M:XP.SDK.XPLM.Aircraft.AcquireExclusiveControl(System.Collections.Generic.IReadOnlyList{System.String},,System.Void*)">
+            <summary>
+            XPLMAcquirePlanes grants your plugin exclusive access to the aircraft.  It
+            returns <see langword="true"/> if you gain access, <see langword="false"/> if you do not.
+            </summary>
+            <param name="aircrafts">
+            <para>Pass in a list of strings specifying the planes you want loaded.</para>
+            <para>For any plane index you do not want loaded, pass an empty string.</para>
+            <para>Other strings should be full paths with the <c>.acf</c> extension.</para>
+            <para>Pass <see langword="null"/> if there are no planes you want loaded.</para>
+            </param>
+            <param name="callback">
+            If you pass in a callback and do not receive access to the planes your
+            callback will be called when the airplanes are available. If you do receive
+            airplane access, your callback will not be called.
+            </param>
+            <param name="refCon">
+            Pointer to any arbitrary data to be passed into <paramref name="callback"/>.
+            </param>
+        </member>
+        <member name="M:XP.SDK.XPLM.Aircraft.ReleaseExclusiveControl">
+            <summary>
+            Call this function to release access to the planes.  Note that if you are
+            disabled, access to planes is released for you and you must reacquire it.
+            </summary>
+        </member>
         <member name="T:XP.SDK.XPLM.Camera">
             <summary>
             <para>
@@ -3682,9 +3778,21 @@
             Gets the command reference.
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Command.Find(XP.SDK.Utf8String@)">
+            <summary>
+            Looks up a command by name.
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Command.Find(System.ReadOnlySpan{System.Char}@)">
             <summary>
             Looks up a command by name.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Command.Create(XP.SDK.Utf8String@,XP.SDK.Utf8String@)">
+            <summary>
+            Creates a new command for a given string.
+            If the command already exists, the existing command reference is returned.
+            The description may appear in user interface contexts, such as the joystick configuration screen.
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Command.Create(System.ReadOnlySpan{System.Char}@,System.ReadOnlySpan{System.Char}@)">
@@ -3743,6 +3851,43 @@
             Raised after X-Plane has executed the command.
             </summary>
         </member>
+        <member name="T:XP.SDK.XPLM.CommandAfterExecuteEventArgs">
+            <summary>
+            Encapsulates arguments for <see cref="E:XP.SDK.XPLM.Command.AfterExecute"/> event.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.CommandAfterExecuteEventArgs.#ctor(XP.SDK.XPLM.CommandPhase)">
+            <summary>
+            Initializes a new instance of <see cref="T:XP.SDK.XPLM.CommandAfterExecuteEventArgs"/>.
+            </summary>
+            <param name="commandPhase">The command phase.</param>
+        </member>
+        <member name="F:XP.SDK.XPLM.CommandAfterExecuteEventArgs.CommandPhase">
+            <summary>
+            Gets the command phase.
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.CommandBeforeExecuteEventArgs">
+            <summary>
+            Encapsulates event arguments for <see cref="E:XP.SDK.XPLM.Command.BeforeExecute"/> event.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.CommandBeforeExecuteEventArgs.#ctor(XP.SDK.XPLM.CommandPhase)">
+            <summary>
+            Initializes a new instance of <see cref="T:XP.SDK.XPLM.CommandBeforeExecuteEventArgs"/>.
+            </summary>
+            <param name="commandPhase">The command phase.</param>
+        </member>
+        <member name="F:XP.SDK.XPLM.CommandBeforeExecuteEventArgs.CommandPhase">
+            <summary>
+            Gets the command phase.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.XPLM.CommandBeforeExecuteEventArgs.Handled">
+            <summary>
+            Set to <see langword="true"/> to prevent the command from being handled by X-Plane and other plugins.
+            </summary>
+        </member>
         <member name="T:XP.SDK.XPLM.CommandButtonID">
             <summary>
             <para>
@@ -3756,6 +3901,16 @@
         <member name="T:XP.SDK.XPLM.CommandExecutionScope">
             <summary>
             Begins the command after construction and ends it on disposal.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.CommandExecutionScope.#ctor(XP.SDK.XPLM.CommandRef)">
+            <summary>
+            Begins the command with the specified <paramref name="commandRef"/>.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.CommandExecutionScope.Dispose">
+            <summary>
+            Ends the command.
             </summary>
         </member>
         <member name="T:XP.SDK.XPLM.CommandKeyID">
@@ -3789,12 +3944,46 @@
             </para>
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.CommandRef.Find(XP.SDK.Utf8String@)">
+            <summary>
+            Looks up a command by name, and returns its command
+            reference or <see langword="default"/> if the command does not exist.
+            </summary>
+            <param name="name">The command name.</param>
+        </member>
         <member name="M:XP.SDK.XPLM.CommandRef.Find(System.ReadOnlySpan{System.Char}@)">
             <summary>
             Looks up a command by name, and returns its command
             reference or <see langword="default"/> if the command does not exist.
             </summary>
             <param name="name">The command name.</param>
+        </member>
+        <member name="T:XP.SDK.XPLM.CursorRequestEventArgs">
+            <summary>
+            Encapsulates the arguments for the <see cref="E:XP.SDK.XPLM.Window.CursorRequested"/> event.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.CursorRequestEventArgs.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of <see cref="T:XP.SDK.XPLM.CursorRequestEventArgs"/>.
+            </summary>
+            <param name="x">Cursor's X coordinate.</param>
+            <param name="y">Cursor's Y coordinate.</param>
+        </member>
+        <member name="F:XP.SDK.XPLM.CursorRequestEventArgs.X">
+            <summary>
+            Cursor's X coordinate.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.XPLM.CursorRequestEventArgs.Y">
+            <summary>
+            Cursor's Y coordinate.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.XPLM.CursorRequestEventArgs.Cursor">
+            <summary>
+            Gets or sets the current cursor.
+            </summary>
         </member>
         <member name="T:XP.SDK.XPLM.CursorStatus">
             <summary>
@@ -3821,6 +4010,157 @@
             get them from XPLMFindDataRef.
             </para>
             </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.DataRef.Types">
+            <summary>
+            Gets the types of the Data Ref for accessor use.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.DataRef.CanWrite">
+            <summary>
+            Gets the value indicating whether the Data Ref is writable.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.DataRef.Int32Value">
+            <summary>
+            Gets the <see cref="T:System.Int32"/> value.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.DataRef.SingleValue">
+            <summary>
+            Gets the <see cref="T:System.Single"/> value.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.DataRef.DoubleValue">
+            <summary>
+            Gets the <see cref="T:System.Double"/> value.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.DataRef.ReadValues(System.Span{System.Int32}@,System.Int32)">
+            <summary>
+            Fills the <paramref name="buffer"/> with <see cref="T:System.Int32"/> values
+            read from the Data Ref supporting <see cref="F:XP.SDK.XPLM.DataTypeID.IntArray"/> data type
+            starting from the specified offset.
+            </summary>
+            <param name="buffer">The buffer to fill.</param>
+            <param name="offset">The offset from the start of Data Ref's data.</param>
+            <returns>The number of actually copied values if the <paramref name="buffer" /> is not empty; the size of the data otherwise.</returns>
+            <remarks>
+            <para>This method can be used to read data from Data Ref supporting <see cref="F:XP.SDK.XPLM.DataTypeID.IntArray"/> type.</para>
+            <para>Calling this method IS NOT THE SAME as calling <see cref="M:XP.SDK.XPLM.DataRef.ReadValues``1(System.Span{``0}@,System.Int32)"/> as the latter reads the data of <see cref="F:XP.SDK.XPLM.DataTypeID.Data"/> type.</para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.DataRef.ReadValues(System.Span{System.Single}@,System.Int32)">
+            <summary>
+            Fills the <paramref name="buffer"/> with <see cref="T:System.Single"/> values
+            read from the Data Ref supporting <see cref="F:XP.SDK.XPLM.DataTypeID.FloatArray"/> data type
+            starting from the specified offset.
+            </summary>
+            <param name="buffer">The buffer to fill.</param>
+            <param name="offset">The offset from the start of Data Ref's data.</param>
+            <returns>The number of actually copied values if the <paramref name="buffer" /> is not empty; the size of the data otherwise.</returns>
+            <remarks>
+            <para>This method can be used to read data from Data Ref supporting <see cref="F:XP.SDK.XPLM.DataTypeID.FloatArray"/> type.</para>
+            <para>Calling this method IS NOT THE SAME as calling <see cref="M:XP.SDK.XPLM.DataRef.ReadValues``1(System.Span{``0}@,System.Int32)"/> as the latter reads the data of <see cref="F:XP.SDK.XPLM.DataTypeID.Data"/> type.</para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.DataRef.ReadValues``1(System.Span{``0}@,System.Int32)">
+            <summary>
+            Fills the <paramref name="buffer"/> with the values of type <typeparamref name="T"/>
+            read from the Data Ref supporting <see cref="F:XP.SDK.XPLM.DataTypeID.Data"/> data type
+            starting from the specified offset.
+            </summary>
+            <param name="buffer">The buffer to fill.</param>
+            <param name="offset">The offset (in Ts) from the start of Data Ref's data. The actual byte offset is given as <c>offset * sizeof(T)</c>.</param>
+            <returns>The number of actually copied values if the <paramref name="buffer" /> is not empty; the size of the data otherwise.</returns>
+            <remarks>
+            <para>This method can be used to read data from Data Ref supporting <see cref="F:XP.SDK.XPLM.DataTypeID.Data"/> type.</para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.DataRef.WriteValues(System.ReadOnlySpan{System.Int32}@,System.Int32)">
+            <summary>
+            Writes <see cref="T:System.Int32"/> values from the <paramref name="buffer"/>
+            to the Data Ref supporting <see cref="F:XP.SDK.XPLM.DataTypeID.IntArray"/> type
+            starting from the specified offset.
+            </summary>
+            <param name="buffer">The source buffer.</param>
+            <param name="offset">The offset from the start of Data Ref's data.</param>
+            <remarks>
+            <para>This method can be used to read data from Data Ref supporting <see cref="F:XP.SDK.XPLM.DataTypeID.IntArray"/> type.</para>
+            <para>Calling this method IS NOT THE SAME as calling <see cref="M:XP.SDK.XPLM.DataRef.WriteValues``1(System.ReadOnlySpan{``0}@,System.Int32)"/> as the latter writes the data of <see cref="F:XP.SDK.XPLM.DataTypeID.Data"/> type.</para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.DataRef.WriteValues(System.ReadOnlySpan{System.Single}@,System.Int32)">
+            <summary>
+            Writes <see cref="T:System.Single"/> values from the <paramref name="buffer"/>
+            to the Data Ref supporting <see cref="F:XP.SDK.XPLM.DataTypeID.FloatArray"/> type
+            starting from the specified offset.
+            </summary>
+            <param name="buffer">The source buffer.</param>
+            <param name="offset">The offset from the start of Data Ref's data.</param>
+            <remarks>
+            <para>This method can be used to read data from Data Ref supporting <see cref="F:XP.SDK.XPLM.DataTypeID.FloatArray"/> type.</para>
+            <para>Calling this method IS NOT THE SAME as calling <see cref="M:XP.SDK.XPLM.DataRef.WriteValues``1(System.ReadOnlySpan{``0}@,System.Int32)"/> as the latter writes the data of <see cref="F:XP.SDK.XPLM.DataTypeID.Data"/> type.</para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.DataRef.WriteValues``1(System.ReadOnlySpan{``0}@,System.Int32)">
+            <summary>
+            Writes the values of type <typeparamref name="T"/> from the <paramref name="buffer"/>
+            to the Data Ref supporting <see cref="F:XP.SDK.XPLM.DataTypeID.Data"/> type
+            starting from the specified offset.
+            </summary>
+            <param name="buffer">The source buffer.</param>
+            <param name="offset">The offset (in Ts) from the start of Data Ref's data. The actual byte offset is given as <c>offset * sizeof(T)</c>.</param>
+            <remarks>
+            <para>This method can be used to read data from Data Ref supporting <see cref="F:XP.SDK.XPLM.DataTypeID.Data"/> type.</para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.DataRef.CheckIsGood">
+            <summary>
+            <para>
+            This function returns <see langword="true"/> if the passed in handle is a valid dataref that
+            is not orphaned.
+            </para>
+            <para>
+            Note: there is normally no need to call this function; datarefs returned by
+            <see cref="M:XP.SDK.XPLM.DataRef.Find(XP.SDK.Utf8String@)"/> remain valid (but possibly orphaned) unless there is a
+            complete plugin reload (in which case your plugin is reloaded anyway).
+            Orphaned datarefs can be safely read and return 0. Therefore you never need
+            to call this function to 'check' the safety of a dataref.
+            (it performs some slow checking of the handle validity, so
+            it has a performance cost.)
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.DataRef.Find(XP.SDK.Utf8String@)">
+            <summary>
+            <para>
+            This routine looks up the actual <see cref="T:XP.SDK.XPLM.DataRef"/> that you use to read and write the data by the name.
+            The string names for Data Refs are published on the X-Plane SDK web site.
+            </para>
+            </summary>
+            <remarks>
+            <para>
+            NOTE: this function is relatively expensive; save the <see cref="T:XP.SDK.XPLM.DataRef"/> this
+            function returns for future use. Do not look up your data ref by string
+            every time you need to read or write it.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.DataRef.Find(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            <para>
+            This routine looks up the actual <see cref="T:XP.SDK.XPLM.DataRef"/> that you use to read and write the data by the name.
+            The string names for Data Refs are published on the X-Plane SDK web site.
+            </para>
+            </summary>
+            <remarks>
+            <para>
+            NOTE: this function is relatively expensive; save the <see cref="T:XP.SDK.XPLM.DataRef"/> this
+            function returns for future use. Do not look up your data ref by string
+            every time you need to read or write it.
+            </para>
+            </remarks>
         </member>
         <member name="T:XP.SDK.XPLM.DataTypeID">
             <summary>
@@ -3866,7 +4206,12 @@
             </para>
             </summary>
         </member>
-        <member name="F:XP.SDK.XPLM.Features.WantsReflections">
+        <member name="T:XP.SDK.XPLM.Features">
+            <summary>
+            This class provides capabilities to enumerate and enable/disable X-Plane features.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.Features.WantsReflections">
             <summary>
             Available in the SDK 2.0 and later for X-Plane 9, enabling this capability causes your plugin
             to receive drawing hook callbacks when X-Plane builds its off-screen reflection and shadow rendering passes.
@@ -3874,13 +4219,19 @@
             to determine whether the drawing callback is for a reflection, shadow calculation, or the main screen.
             Rendering can be simplified or omitted for reflections, and non-solid drawing should be skipped for shadow calculations.
             </summary>
+            <returns>
+            The UTF-8 literal <c>XPLM_WANTS_REFLECTIONS</c>.
+            </returns>
         </member>
-        <member name="F:XP.SDK.XPLM.Features.UseNativePaths">
+        <member name="P:XP.SDK.XPLM.Features.UseNativePaths">
             <summary>
             Modifies the plugin system to use Unix-style paths on all operating systems. Enabled by default.
             </summary>
+            <returns>
+            The UTF-8 literal <c>XPLM_USE_NATIVE_PATHS</c>.
+            </returns>
         </member>
-        <member name="F:XP.SDK.XPLM.Features.UseNativeWidgetWindows">
+        <member name="P:XP.SDK.XPLM.Features.UseNativeWidgetWindows">
             <summary>
             <para>
             This capability tells the widgets library to use new, modern X-Plane windows to anchor all widget trees. Without it, widgets will always use legacy windows.
@@ -3892,6 +4243,211 @@
             Before enabling this, make sure any custom widget code in your plugin is prepared to cope with the UI coordinate system not being th same as the OpenGL window coordinate system.
             </para>
             </summary>
+            <returns>
+            The UTF-8 literal <c>XPLM_USE_NATIVE_WIDGET_WINDOWS</c>.
+            </returns>
+            <remarks>
+            This feature is enabled by the managed plugin host by default.
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.Features.HasFeature(XP.SDK.Utf8String@)">
+            <summary>
+            Returns the value indicating whether the given installation of X-Plane supports the feature.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Features.HasFeature(System.String)">
+            <summary>
+            Returns the value indicating whether the given installation of X-Plane supports the feature.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Features.IsFeatureEnabled(XP.SDK.Utf8String@)">
+            <summary>
+            Gets the value indicating whether the feature is currently enabled for your plugin.
+            It is an error to call this routine with an unsupported  feature.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Features.IsFeatureEnabled(System.String)">
+            <summary>
+            Gets the value indicating whether the feature is currently enabled for your plugin.
+            It is an error to call this routine with an unsupported  feature.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Features.EnableFeature(XP.SDK.Utf8String@,System.Boolean)">
+            <summary>
+            This routine enables or disables a feature for your plugin.
+            This will change the running behavior of X-Plane and your plugin in some way, depending on the feature.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Features.EnableFeature(System.String,System.Boolean)">
+            <summary>
+            This routine enables or disables a feature for your plugin.
+            This will change the running behavior of X-Plane and your plugin in some way, depending on the feature.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Features.GetFeatures">
+            <summary>
+            Gets all features that this running version of X-Plane supports.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:XP.SDK.XPLM.FlightLoop">
+            <summary>
+            <para>
+            This class provides an abstraction over X-Plane's flight loop.
+            </para>
+            <para>
+            It allows you to get regular callbacks during the flight loop, the part of X-Plane where the plane’s position calculates the physics of flight, etc.
+            Use these APIs to accomplish periodic tasks like logging data and performing I/O.
+            </para>
+            <para>
+            You can receive a callback either just before or just after the per-frame physics calculations happen -
+            you can use post-FM callbacks to &quot;patch&quot; the flight model after it has run.
+            </para>
+            <para>
+            If the user has set the number of flight model iterations per frame greater than one your plugin will not see this;
+            these integrations run on the sub-section of the flight model where iterations improve responsiveness
+            (e.g. physical integration, not simple systems tracking) and are thus opaque to plugins.
+            </para>
+            <para>
+            Flight loop scheduling, when scheduled by time, is scheduled by a “first callback after the deadline” schedule,
+            e.g. your callbacks will always be slightly late to ensure that we don’t run faster than your deadline.
+            </para>
+            <para>
+            WARNING: Do NOT use these callbacks to draw! You cannot draw during flight loop callbacks.
+            Use the drawing callbacks for graphics.
+            (One exception: you can use a post-flight loop callback to update your own off-screen FBOs.)
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.FlightLoop.#ctor(XP.SDK.XPLM.FlightLoopPhaseType)">
+            <summary>
+            Initializes a new instance of <see cref="T:XP.SDK.XPLM.FlightLoop"/>.
+            </summary>
+            <param name="phase">The flight loop phase.</param>
+        </member>
+        <member name="M:XP.SDK.XPLM.FlightLoop.Create(XP.SDK.XPLM.FlightLoopPhaseType,XP.SDK.XPLM.FlightLoop.Callback)">
+            <summary>
+            Creates a new instance of <see cref="T:XP.SDK.XPLM.FlightLoop"/> that will invoke the specified <paramref name="callback"/>.
+            </summary>
+            <param name="phase">The flight loop phase.</param>
+            <param name="callback">The callback.</param>
+        </member>
+        <member name="M:XP.SDK.XPLM.FlightLoop.Create(XP.SDK.XPLM.FlightLoopPhaseType,)">
+            <summary>
+            Creates a new instance of <see cref="T:XP.SDK.XPLM.FlightLoop"/> that will invoke the specified <paramref name="callback"/>.
+            </summary>
+            <param name="phase">The flight loop phase.</param>
+            <param name="callback">The callback.</param>
+        </member>
+        <member name="P:XP.SDK.XPLM.FlightLoop.CycleNumber">
+            <summary>
+            Returns a counter starting at zero for each sim cycle computed/video frame rendered.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.FlightLoop.ElapsedTime">
+            <summary>
+            <para>
+            This routine returns the elapsed time since the sim started up in decimal
+            seconds. This is a wall timer; it keeps counting upward even if the sim is
+            paused.
+            </para>
+            <para>
+            WARNING: It is not a very good timer!  It lacks
+            precision in both its data type and its source.  Do not attempt to use it
+            for timing critical applications like network multiplayer.
+            </para>
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.FlightLoop.Id">
+            <summary>
+            Gets the ID of the flight loop.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.FlightLoop.Schedule(System.Single,System.Boolean)">
+            <summary>
+            <para>
+            This routine schedules a flight loop callback for future execution. If
+            inInterval is negative, it is run in a certain number of frames based on
+            the absolute value of the input. If the interval is positive, it is a
+            duration in seconds.
+            </para>
+            <para>
+            If inRelativeToNow is true, ties are interpretted relative to the time this
+            routine is called; otherwise they are relative to the last call time or the
+            time the flight loop was registered (if never called).
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.FlightLoop.OnFlightLoopCallback(System.Single,System.Single,System.Int32)">
+            <summary>
+            This method is called each time flight loop callback occurs.
+            </summary>
+            <param name="elapsedSinceLastCall">The wall time since your last callback</param>
+            <param name="elapsedTimeSinceLastFlightLoop">The wall time since any flight loop was dispatched.</param>
+            <param name="counter">A monotonically increasing counter, bumped once per flight loop dispatch from the sim.</param>
+            <returns>
+            <para>
+            0 to stop receiving callbacks.
+            </para>
+            <para>
+            A positive number to specify how many seconds until the next callback. (You will be called at or after this time, not before.)
+            </para>
+            <para>
+            A negative number to specify how many loops must go by until you are called. For example, -1.0 means call me the very next loop.
+            </para>
+            </returns>
+            <remarks>
+            <para>
+            Each time the flight loop is iterated through, you receive this call at the end.
+            </para>
+            <para>
+            Try to run your flight loop as infrequently as is practical, and suspend it (using return value 0) when you do not need it;
+            lots of flight loop callbacks that do nothing lowers X-Plane’s frame rate.
+            </para>
+            <para>
+            Your callback will NOT be unregistered if you return 0; it will merely be inactive.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.FlightLoop.Dispose(System.Boolean)">
+            <summary>
+            Releases the unmanaged resources used by the <see cref="T:XP.SDK.XPLM.FlightLoop"/>, and optionally releases the managed resources.
+            </summary>
+            <param name="disposing"><see langword="true"/> to release both managed and unmanaged resources; <see langword="false"/> to release only unmanaged resources.</param>
+        </member>
+        <member name="M:XP.SDK.XPLM.FlightLoop.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="T:XP.SDK.XPLM.FlightLoop.Callback">
+            <summary>
+            This callback is called each time flight loop callback occurs.
+            </summary>
+            <param name="elapsedSinceLastCall">The wall time since your last callback</param>
+            <param name="elapsedTimeSinceLastFlightLoop">The wall time since any flight loop was dispatched.</param>
+            <param name="counter">A monotonically increasing counter, bumped once per flight loop dispatch from the sim.</param>
+            <returns>
+            <para>
+            0 to stop receiving callbacks.
+            </para>
+            <para>
+            A positive number to specify how many seconds until the next callback. (You will be called at or after this time, not before.)
+            </para>
+            <para>
+            A negative number to specify how many loops must go by until you are called. For example, -1.0 means call me the very next loop.
+            </para>
+            </returns>
+            <remarks>
+            <para>
+            Each time the flight loop is iterated through, you receive this call at the end.
+            </para>
+            <para>
+            Try to run your flight loop as infrequently as is practical, and suspend it (using return value 0) when you do not need it;
+            lots of flight loop callbacks that do nothing lowers X-Plane’s frame rate.
+            </para>
+            <para>
+            Your callback will NOT be unregistered if you return 0; it will merely be inactive.
+            </para>
+            </remarks>
         </member>
         <member name="T:XP.SDK.XPLM.FlightLoopID">
             <summary>
@@ -3909,6 +4465,96 @@
             flight model is integrated by X-Plane.
             </para>
             </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.FMS">
+            <summary>
+            Provides access to X-Plane's Flight Management System (Flight Management Computer).
+            </summary>
+            <remarks>
+            <para>
+            The FMS works based on an array of entries. Indices into the array are zero-based.
+            Each entry is a nav-aid plus an altitude. The FMS tracks the currently displayed entry and the entry that it is flying to.
+            </para>
+            <para>
+            The FMS must be programmed with contiguous entries, so clearing an entry at the end shortens the effective flight plan.
+            There is a max of 100 waypoints in the flight plan.
+            </para>
+            </remarks>
+        </member>
+        <member name="F:XP.SDK.XPLM.FMS.MaxEntryCount">
+            <summary>
+            The maximal number of entries.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.FMS.EntryCount">
+            <summary>
+            Get the number of entries in the FMS.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.FMS.DisplayedEntry">
+            <summary>
+            Gets or sets the index of the entry the pilot is viewing.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.FMS.DestinationEntry">
+            <summary>
+            Gets or sets the index of the entry the FMS is flying to.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.FMS.ClearEntry(System.Int32)">
+            <summary>
+            Clears the given entry, potentially shortening the flight plan.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.FMS.SetEntry(System.Int32,XP.SDK.XPLM.NavRef,System.Int32)">
+            <summary>
+            Changes an entry in the FMS to have the destination navaid
+            passed in and the altitude specified.  Use this only for airports, fixes,
+            and radio-beacon navaids.  Currently of radio beacons, the FMS can only
+            support VORs and NDBs.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.FMS.SetEntry(System.Int32,XP.SDK.XPLM.NavAid,System.Int32)">
+            <summary>
+            Changes an entry in the FMS to have the destination navaid
+            passed in and the altitude specified.  Use this only for airports, fixes,
+            and radio-beacon navaids.  Currently of radio beacons, the FMS can only
+            support VORs and NDBs.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.FMS.SetEntry(System.Int32,System.Single,System.Single,System.Int32)">
+            <summary>
+            Changes the entry in the FMS to a lat/lon entry with the given coordinates.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.FMS.GetEntry(System.Int32,System.String@,XP.SDK.XPLM.NavType@,XP.SDK.XPLM.NavRef@,System.Single@,System.Single@,System.Int32@)">
+            <summary>
+            This routine returns information about a given FMS entry. If the entry is
+            an airport or navaid, a reference to a nav entry can be returned allowing
+            you to find additional information (such as a frequency, ILS heading, name,
+            etc.). Note that this reference can be <see cref="F:XP.SDK.XPLM.NavRef.NotFound"/> until the
+            information has been looked up asynchronously, so after flightplan changes,
+            it might take up to a second for this field to become populated. The other
+            information is available immediately. For a lat/lon entry, the lat/lon is
+            returned by this routine but the navaid cannot be looked up (and the
+            reference will be <see cref="F:XP.SDK.XPLM.NavRef.NotFound"/>). FMS name entry buffers should be at
+            least 256 chars in length.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.FMS.GetEntry(System.Int32,System.Span{System.Byte}@,XP.SDK.XPLM.NavType@,XP.SDK.XPLM.NavRef@,System.Single@,System.Single@,System.Int32@)">
+            <summary>
+            This routine returns information about a given FMS entry. If the entry is
+            an airport or navaid, a reference to a nav entry can be returned allowing
+            you to find additional information (such as a frequency, ILS heading, name,
+            etc.). Note that this reference can be <see cref="F:XP.SDK.XPLM.NavRef.NotFound"/> until the
+            information has been looked up asynchronously, so after flightplan changes,
+            it might take up to a second for this field to become populated. The other
+            information is available immediately. For a lat/lon entry, the lat/lon is
+            returned by this routine but the navaid cannot be looked up (and the
+            reference will be <see cref="F:XP.SDK.XPLM.NavRef.NotFound"/>). FMS name entry buffers should be at
+            least 256 chars in length.
+            </summary>
+            <exception cref="T:System.ArgumentException">The length of the <paramref name="id"/> is less than 256.</exception>
         </member>
         <member name="T:XP.SDK.XPLM.FontID">
             <summary>
@@ -4056,6 +4702,21 @@
             This is the same graphics primitive used by X-Plane to show text files and ATC info.
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Graphics.DrawString(XP.SDK.RGBColor@,System.Int32,System.Int32,XP.SDK.Utf8String@,System.Int32@,XP.SDK.XPLM.FontID)">
+            <summary>
+            This routine draws a NULL terminated string in a given font.
+            Pass in the lower left pixel that the character is to be drawn onto.
+            Also pass the character and font ID.
+            This function returns the x offset plus the width of all drawn characters.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Graphics.DrawString(XP.SDK.RGBColor@,System.Int32,System.Int32,XP.SDK.Utf8String@,XP.SDK.XPLM.FontID)">
+            <summary>
+            This routine draws a NULL terminated string in a given font.
+            Pass in the lower left pixel that the character is to be drawn onto.
+            Also pass the character and font ID.
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Graphics.DrawString(XP.SDK.RGBColor@,System.Int32,System.Int32,System.ReadOnlySpan{System.Char}@,System.Int32@,XP.SDK.XPLM.FontID)">
             <summary>
             This routine draws a NULL terminated string in a given font.
@@ -4091,6 +4752,11 @@
             Returns the width in pixels of a string using a given font.
             </summary>
         </member>
+        <member name="M:XP.SDK.XPLM.Graphics.MeasureString(XP.SDK.XPLM.FontID,XP.SDK.Utf8String@)">
+            <summary>
+            Returns the width in pixels of a UTF8 string using a given font.
+            </summary>
+        </member>
         <member name="M:XP.SDK.XPLM.Graphics.MeasureString(XP.SDK.XPLM.FontID,System.ReadOnlySpan{System.Byte}@)">
             <summary>
             Returns the width in pixels of a UTF8 string using a given font.
@@ -4107,9 +4773,136 @@
             </para>
             </summary>
         </member>
+        <member name="T:XP.SDK.XPLM.HotKey">
+            <summary>
+            Provides a way to register hot keys.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.HotKey.Register(System.Byte,XP.SDK.XPLM.KeyFlags,System.String,System.Action{XP.SDK.XPLM.HotKey})">
+            <summary>
+            Registers a new hotkey.
+            </summary>
+            <param name="virtualKey">The virtual key.</param>
+            <param name="keyFlags">The flags combination.</param>
+            <param name="description">The hot key description.</param>
+            <param name="action">The action to invoke when the hot key is activated.</param>
+            <returns>The new <see cref="T:XP.SDK.XPLM.HotKey"/> instance.</returns>
+            <remarks>
+            During execution, the actual key associated with your hot key may change, but you are insulated from this.
+            </remarks>
+            <exception cref="T:System.ArgumentException"><paramref name="description"/> or <paramref name="action"/> is <see langword="null"/>.</exception>
+        </member>
+        <member name="P:XP.SDK.XPLM.HotKey.Id">
+            <summary>
+            The hot key ID.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.HotKey.Dispose">
+            <inheritdoc />
+        </member>
         <member name="M:XP.SDK.XPLM.HotKey.SetHotKeyCombination(XP.SDK.XPLM.HotKeyID,System.Byte,XP.SDK.XPLM.KeyFlags)">
             <summary>
             Remaps a hot keys keystrokes. You may remap another plugin's keystrokes.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.HotKey.Count">
+            <summary>
+            Gets the number of current hot keys.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.HotKey.GetIdByIndex(System.Int32)">
+            <summary>
+            Gets the hot key ID by index.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.HotKey.GetDescriptionByIndex(System.Int32)">
+            <summary>
+            Gets the hot key description by index as UTF-8 string.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.HotKey.GetDescriptionById(XP.SDK.XPLM.HotKeyID)">
+            <summary>
+            Gets the hot key description by ID as UTF-8 string.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.HotKey.TryGetDescriptionByIndex(System.Int32,System.Span{System.Byte}@)">
+            <summary>
+            Gets the hot key description by index as UTF-8 string.
+            </summary>
+            <param name="index">The hot key index.</param>
+            <param name="buffer">The buffer to fill with the description in UTF-8 encoding.</param>
+            <returns><see langword="true"/> if the <paramref name="buffer"/> is at least 512 bytes long; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.HotKey.TryGetDescriptionByIndex(System.Int32,System.Span{System.Byte}@,XP.SDK.Utf8String@)">
+            <summary>
+            Gets the hot key description by index as UTF-8 string.
+            </summary>
+            <param name="index">The hot key index.</param>
+            <param name="buffer">The buffer to fill with the description in UTF-8 encoding.</param>
+            <param name="utf8String">The resulting <see cref="T:XP.SDK.Utf8String"/>.</param>
+            <returns><see langword="true"/> if the <paramref name="buffer"/> is at least 512 bytes long; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.HotKey.TryGetDescriptionById(XP.SDK.XPLM.HotKeyID,System.Span{System.Byte}@)">
+            <summary>
+            Gets the hot key description by ID as UTF-8 string.
+            </summary>
+            <param name="id">The hot key ID.</param>
+            <param name="buffer">The buffer to fill with the description in UTF-8 encoding.</param>
+            <returns><see langword="true"/> if the <paramref name="buffer"/> is at least 512 bytes long; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.HotKey.TryGetDescriptionById(XP.SDK.XPLM.HotKeyID,System.Span{System.Byte}@,XP.SDK.Utf8String@)">
+            <summary>
+            Gets the hot key description by ID as UTF-8 string.
+            </summary>
+            <param name="id">The hot key ID.</param>
+            <param name="buffer">The buffer to fill with the description in UTF-8 encoding.</param>
+            <param name="utf8String">The resulting <see cref="T:XP.SDK.Utf8String"/>.</param>
+            <returns><see langword="true"/> if the <paramref name="buffer"/> is at least 512 bytes long; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.HotKey.GetInfoByIndex(System.Int32,System.Boolean)">
+            <summary>
+            Gets the information about the hot key with the specified <paramref name="index"/>.
+            </summary>
+            <param name="index">The hot key index.</param>
+            <param name="withDescription"><see langword="true"/> to include the description.</param>
+            <returns>The instance of <see cref="T:XP.SDK.XPLM.HotKey.HotKeyInfo"/> providing the information about the hot key.</returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.HotKey.GetInfoById(XP.SDK.XPLM.HotKeyID,System.Boolean)">
+            <summary>
+            Gets the information about the hot key with the specified <paramref name="id"/>.
+            </summary>
+            <param name="id">The hot key ID.</param>
+            <param name="withDescription"><see langword="true"/> to include the description.</param>
+            <returns>The instance of <see cref="T:XP.SDK.XPLM.HotKey.HotKeyInfo"/> providing the information about the hot key.</returns>
+        </member>
+        <member name="T:XP.SDK.XPLM.HotKey.HotKeyInfo">
+            <summary>
+            Contains the information about a hot key.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.HotKey.HotKeyInfo.Id">
+            <summary>
+            Gets the hot key ID.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.HotKey.HotKeyInfo.Description">
+            <summary>
+            Gets the hot key description.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.HotKey.HotKeyInfo.PluginId">
+            <summary>
+            Gets the ID of the plugin which has registered this hot key.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.HotKey.HotKeyInfo.KeyFlags">
+            <summary>
+            Gets the key flags.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.HotKey.HotKeyInfo.VirtualKey">
+            <summary>
+            Gets the virtual key.
             </summary>
         </member>
         <member name="T:XP.SDK.XPLM.HotKeyID">
@@ -4118,6 +4911,102 @@
             An opaque ID used to identify a hot key.
             </para>
             </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.Instance">
+            <summary>
+            <para>
+            Provides instanced drawing of X-Plane objects (.obj files).
+            In contrast to old drawing APIs, which required you to draw your own objects per-frame,
+            the instancing API allows you to simply register an OBJ for drawing, then move or manipulate it later (as needed).
+            </para>
+            <para>
+            This provides one tremendous benefit: it keeps all dataref operations for your object in one place.
+            Because datarefs are main thread only, allowing dataref access anywhere is a serious performance bottleneck
+            for the simulator—the whole simulator has to pause and wait for each dataref access.
+            This performance penalty will only grow worse as X-Plane moves toward an ever more heavily multithreaded engine.
+            </para>
+            <para>
+            The instancing API allows X-Plane to isolate all dataref manipulations for all plugin object drawing to one place, potentially providing huge performance gains.
+            </para>
+            <para>
+            Here’s how it works:
+            </para>
+            <para>
+            When an instance is created, it provides a list of all datarefs you want to manipulate in for the OBJ in the future.
+            This list of datarefs replaces the ad-hoc collections of dataref objects previously used by art assets. Then, per-frame,
+            you can manipulate the instance by passing in a “block” of packed floats representing the current values of the datarefs for your instance.
+            (Note that the ordering of this set of packed floats must exactly match the ordering of the datarefs when you created your instance.)
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Instance.#ctor(XP.SDK.XPLM.SceneryObject,System.String[])">
+            <summary>
+            Creates a new instance, managed by your plug-in.
+            </summary>
+            <param name="obj"> The scenery object.</param>
+            <param name="dataRefs">The array of custom datarefs.</param>
+            <remarks>
+            <para>The object passed in must be fully loaded and returned from the XPLM before you can create your instance; you cannot pass a null obj ref, nor can you change the ref later.</para>
+            <para>If you use any custom datarefs in your object, they must be registered before the object is loaded. This is true even if their data will be provided via the instance dataref list.</para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.Instance.#ctor(XP.SDK.XPLM.ObjectRef,System.String[])">
+            <summary>
+            Creates a new instance, managed by your plug-in.
+            </summary>
+            <param name="objectRef">The object reference.</param>
+            <param name="dataRefs"></param>
+            <remarks>
+            <para>The object passed in must be fully loaded and returned from the XPLM before you can create your instance; you cannot pass a null obj ref, nor can you change the ref later.</para>
+            <para>If you use any custom datarefs in your object, they must be registered before the object is loaded. This is true even if their data will be provided via the instance dataref list.</para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.Instance.SetPosition(XP.SDK.XPLM.Interop.DrawInfo@,System.ReadOnlySpan{System.Single}@)">
+            <summary>
+            <para>
+            Updates both the position of the instance and all datarefs you registered
+            for it.  Call this from a flight loop callback or UI callback.
+            </para>
+            <para>
+            DO NOT call this method from a drawing callback; the whole
+            point of instancing is that you do not need any drawing callbacks. Setting
+            instance data from a drawing callback may have undefined consequences, and
+            the drawing callback hurts FPS unnecessarily.
+            </para>
+            </summary>
+            <remarks>
+            <para>
+            The memory pointed to by the data pointer must be large enough to hold one
+            float for every data ref you have registered, and must contain valid
+            floating point data.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentException">The length of <paramref name="data"/> is not equal to the number of datarefs used to initialize this instance.</exception>
+        </member>
+        <member name="M:XP.SDK.XPLM.Instance.SetPosition(System.Single,System.Single,System.Single,System.Single,System.Single,System.Single,System.ReadOnlySpan{System.Single}@)">
+            <summary>
+            <para>
+            Updates both the position of the instance and all datarefs you registered
+            for it.  Call this from a flight loop callback or UI callback.
+            </para>
+            <para>
+            DO NOT call this method from a drawing callback; the whole
+            point of instancing is that you do not need any drawing callbacks. Setting
+            instance data from a drawing callback may have undefined consequences, and
+            the drawing callback hurts FPS unnecessarily.
+            </para>
+            </summary>
+            <remarks>
+            <para>
+            The memory pointed to by the data pointer must be large enough to hold one
+            float for every data ref you have registered, and must contain valid
+            floating point data.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentException">The length of <paramref name="data"/> is not equal to the number of datarefs used to initialize this instance.</exception>
+        </member>
+        <member name="M:XP.SDK.XPLM.Instance.Dispose">
+            <inheritdoc />
         </member>
         <member name="T:XP.SDK.XPLM.InstanceRef">
             <summary>
@@ -8233,6 +9122,40 @@
             </para>
             </summary>
         </member>
+        <member name="T:XP.SDK.XPLM.KeyEventArgs">
+            <summary>
+            Encapsulates the arguments for the <see cref="E:XP.SDK.XPLM.Window.KeyEvent"/> event.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.KeyEventArgs.#ctor(XP.SDK.XPLM.KeyFlags,System.Byte,System.Byte,System.Boolean)">
+            <summary>
+            Initializes a new instance of <see cref="T:XP.SDK.XPLM.KeyEventArgs"/>.
+            </summary>
+            <param name="flags">The key flags.</param>
+            <param name="key">The key.</param>
+            <param name="virtualKey">The virtual key.</param>
+            <param name="losingFocus">If <see langword="true"/>, you are losing the keyboard focus; otherwise a key was pressed and <paramref name="key"/> contains its character.</param>
+        </member>
+        <member name="F:XP.SDK.XPLM.KeyEventArgs.Flags">
+            <summary>
+            Get the key flags.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.XPLM.KeyEventArgs.Key">
+            <summary>
+            Gets the key.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.XPLM.KeyEventArgs.VirtualKey">
+            <summary>
+            Get the virtual key.
+            </summary>
+        </member>
+        <member name="F:XP.SDK.XPLM.KeyEventArgs.LosingFocus">
+            <summary>
+            If <see langword="true"/>, you are losing the keyboard focus; otherwise a key was pressed and <see cref="F:XP.SDK.XPLM.KeyEventArgs.Key"/> contains its character.
+            </summary>
+        </member>
         <member name="T:XP.SDK.XPLM.KeyFlags">
             <summary>
             <para>
@@ -8328,6 +9251,54 @@
             Converts a heading in degrees relative to magnetic north at the user's
             current location into a value relative to true north.
             </para>
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.Map.UserInterface">
+            <summary>
+            Globally unique identifier for X-Plane’s Map window.
+            </summary>
+            <returns>
+            The UTF-8 literal <c>XPLM_MAP_USER_INTERFACE</c>.
+            </returns>
+        </member>
+        <member name="P:XP.SDK.XPLM.Map.InstructorOperatorStation">
+            <summary>
+            Globally unique identifier for X-Plane’s Instructor Operator Station window.
+            </summary>
+            <returns>
+            The UTF-8 literal <c>XPLM_MAP_IOS</c>.
+            </returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.Map.RegisterMapCreationHook(XP.SDK.XPLM.Map.CreationHook)">
+            <summary>
+            <para>
+            Registers your callback to receive a notification each time a new map is
+            constructed in X-Plane. This callback is the best time to add your custom
+            <see cref="T:XP.SDK.XPLM.MapLayer"/>.
+            </para>
+            <para>
+            Note that you will not be notified about any maps that already exist.
+            You  can use <see cref="M:XP.SDK.XPLM.Map.Exists(XP.SDK.Utf8String@)"/> to check for maps that were created previously.
+            </para>
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Map.Exists(XP.SDK.Utf8String@)">
+            <summary>
+            Returns <see langword="true"/> if the map with the specified identifier already exists in
+            X-Plane. In that case, you can safely create <see cref="T:XP.SDK.XPLM.MapLayer"/> specifying
+            that your layer should be added to that map.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.Map.Exists(System.ReadOnlySpan{System.Char}@)">
+            <summary>
+            Returns <see langword="true"/> if the map with the specified identifier already exists in
+            X-Plane. In that case, you can safely create <see cref="T:XP.SDK.XPLM.MapLayer"/> specifying
+            that your layer should be added to that map.
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.Map.CreationHook">
+            <summary>
+            Map creation hook.
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.MapLayer.Dispose">

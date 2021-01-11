@@ -47,9 +47,29 @@ namespace XP.SDK.XPLM
         /// <summary>
         /// Looks up a command by name.
         /// </summary>
+        public static Command? Find(in Utf8String name)
+        {
+            var commandRef = UtilitiesAPI.FindCommand(name);
+            return FromRef(commandRef);
+        }
+
+        /// <summary>
+        /// Looks up a command by name.
+        /// </summary>
         public static Command? Find(in ReadOnlySpan<char> name)
         {
             var commandRef = UtilitiesAPI.FindCommand(name);
+            return FromRef(commandRef);
+        }
+
+        /// <summary>
+        /// Creates a new command for a given string.
+        /// If the command already exists, the existing command reference is returned.
+        /// The description may appear in user interface contexts, such as the joystick configuration screen.
+        /// </summary>
+        public static Command? Create(in Utf8String name, in Utf8String description)
+        {
+            var commandRef = UtilitiesAPI.CreateCommand(name, description);
             return FromRef(commandRef);
         }
 

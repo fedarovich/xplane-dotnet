@@ -14,39 +14,35 @@ namespace XP.SDK.XPLM
 
         #region Constructors and Disposal
 
-        protected unsafe MapLayer(string map, MapLayerType layerType, string layerName, bool showToggle)
+        protected unsafe MapLayer(in Utf8String map, MapLayerType layerType, in Utf8String layerName, bool showToggle)
         {
-            if (map == null) 
+            if (map.IsNull) 
                 throw new ArgumentNullException(nameof(map));
-            if (layerName == null) 
+            if (layerName.IsNull) 
                 throw new ArgumentNullException(nameof(layerName));
-
-            // TODO: Replace with Utf8String
-            
-            Span<byte> mapSpan = stackalloc byte[(map.Length << 1) | 1];
-            byte* pMap = Utils.ToUtf8Unsafe(map, mapSpan);
-
-            Span<byte> layerNameSpan = stackalloc byte[(layerName.Length << 1) | 1];
-            byte* pLayerName = Utils.ToUtf8Unsafe(layerName, layerNameSpan);
 
             var handle = GCHandle.Alloc(this);
 
-            var createStruct = new CreateMapLayer
+            fixed (byte* pMap = map, pLayerName = layerName)
             {
-                structSize = Unsafe.SizeOf<CreateMapLayer>(),
-                mapToCreateLayerIn = pMap,
-                layerType = layerType,
-                willBeDeletedCallback = &HandleWillBeDeletedCallback,
-                prepCacheCallback = &HandlePrepareCacheCallback,
-                drawCallback = &HandleMapDrawingCallback,
-                iconCallback = &HandleMapIconDrawingCallback,
-                labelCallback = &HandleMapLabelDrawingCallback,
-                layerName = pLayerName,
-                showUiToggle = showToggle.ToInt(),
-                refcon = GCHandle.ToIntPtr(handle).ToPointer()
-            };
+                var createStruct = new CreateMapLayer
+                {
+                    structSize = Unsafe.SizeOf<CreateMapLayer>(),
+                    mapToCreateLayerIn = pMap,
+                    layerType = layerType,
+                    willBeDeletedCallback = &HandleWillBeDeletedCallback,
+                    prepCacheCallback = &HandlePrepareCacheCallback,
+                    drawCallback = &HandleMapDrawingCallback,
+                    iconCallback = &HandleMapIconDrawingCallback,
+                    labelCallback = &HandleMapLabelDrawingCallback,
+                    layerName = pLayerName,
+                    showUiToggle = showToggle.ToInt(),
+                    refcon = GCHandle.ToIntPtr(handle).ToPointer()
+                };
 
-            _id = MapAPI.CreateMapLayer(&createStruct);
+                _id = MapAPI.CreateMapLayer(&createStruct);
+            }
+
             if (_id == default)
             {
                 handle.Free();
@@ -180,8 +176,8 @@ namespace XP.SDK.XPLM
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public unsafe void DrawMapIconFromSheet(
-                in ReadOnlySpan<byte> pngPathUtf8,
+            public void DrawMapIconFromSheet(
+                in Utf8String pngPath,
                 int s,
                 int t,
                 int ds,
@@ -192,10 +188,7 @@ namespace XP.SDK.XPLM
                 float rotationDegrees,
                 float mapWidth)
             {
-                fixed (byte* path = pngPathUtf8)
-                {
-                    MapAPI.DrawMapIconFromSheet(_layerId, path, s, t, ds, dt, mapX, mapY, orientation, rotationDegrees, mapWidth);
-                }
+                MapAPI.DrawMapIconFromSheet(_layerId, pngPath, s, t, ds, dt, mapX, mapY, orientation, rotationDegrees, mapWidth);
             }
         }
 
@@ -216,12 +209,9 @@ namespace XP.SDK.XPLM
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public unsafe void DrawMapLabel(in ReadOnlySpan<byte> textUtf8, float mapX, float mapY, MapOrientation orientation, float rotationDegrees)
+            public void DrawMapLabel(in Utf8String text, float mapX, float mapY, MapOrientation orientation, float rotationDegrees)
             {
-                fixed (byte* text = textUtf8)
-                {
-                    MapAPI.DrawMapLabel(_layerId, text, mapX, mapY, orientation, rotationDegrees);
-                }
+                MapAPI.DrawMapLabel(_layerId, text, mapX, mapY, orientation, rotationDegrees);
             }
         }
 

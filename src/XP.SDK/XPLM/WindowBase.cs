@@ -12,52 +12,12 @@ namespace XP.SDK.XPLM
     /// </summary>
     public abstract class WindowBase : IDisposable
     {
-        #region Callbacks
-
-        private static readonly DrawWindowCallback _drawWindowCallback;
-        private static readonly HandleMouseClickCallback _handleLeftClickCallback;
-        private static readonly HandleMouseClickCallback _handleRightClickCallback;
-        private static readonly HandleMouseWheelCallback _handleMouseWheelCallback;
-        private static readonly HandleKeyCallback _handleKeyCallback;
-        private static readonly HandleCursorCallback _handleCursorCallback;
-
-        #endregion
-
         private int _disposed;
         private GCHandle _handle;
         private WindowID _id;
         private string _title;
 
         #region Constructors
-
-        static unsafe WindowBase()
-        {
-            _drawWindowCallback = DrawWindow;
-            _handleLeftClickCallback = HandleMouseLeftClick;
-            _handleRightClickCallback = HandleMouseRightClick;
-            _handleMouseWheelCallback = HandleMouseWheel;
-            _handleKeyCallback = HandleKey;
-            _handleCursorCallback = HandleCursor;
-
-            static void DrawWindow(WindowID inwindowid, void* inrefcon) => 
-                Utils.TryGetObject<WindowBase>(inrefcon)?.OnDrawWindow();
-
-            static int HandleMouseLeftClick(WindowID inwindowid, int x, int y, MouseStatus inmouse, void* inrefcon) =>
-                (Utils.TryGetObject<WindowBase>(inrefcon)?.OnMouseLeftButtonEvent(x, y, inmouse) == true).ToInt();
-
-            static int HandleMouseRightClick(WindowID inwindowid, int x, int y, MouseStatus inmouse, void* inrefcon) =>
-                (Utils.TryGetObject<WindowBase>(inrefcon)?.OnMouseRightButtonEvent(x, y, inmouse) == true).ToInt();
-
-            static int HandleMouseWheel(WindowID inwindowid, int x, int y, int wheel, int clicks, void* inrefcon) =>
-                (Utils.TryGetObject<WindowBase>(inrefcon)?.OnMouseWheelEvent(x, y, (MouseWheel)wheel, clicks) == true).ToInt();
-
-            static void HandleKey(WindowID inwindowid, byte inkey, KeyFlags inflags, byte invirtualkey, void* inrefcon, int losingfocus) =>
-                Utils.TryGetObject<WindowBase>(inrefcon)?.OnKeyEvent(inkey, inflags, invirtualkey, losingfocus == 1);
-
-            static CursorStatus HandleCursor(WindowID inwindowid, int x, int y, void* inrefcon) =>
-                Utils.TryGetObject<WindowBase>(inrefcon)?.OnCursorRequested(x, y) ?? CursorStatus.Default;
-            
-        }
 
         /// <summary>
         /// Creates a new instance of WindowBase.

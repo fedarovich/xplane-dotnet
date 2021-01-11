@@ -1,33 +1,39 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text.Unicode;
 using XP.SDK.XPLM.Interop;
 
 namespace XP.SDK.XPLM
 {
     public static class Map
     {
-        public static readonly string UserInterface = "XPLM_MAP_USER_INTERFACE";
+        /// <summary>
+        /// Globally unique identifier for X-Plane’s Map window.
+        /// </summary>
+        /// <returns>
+        /// The UTF-8 literal <c>XPLM_MAP_USER_INTERFACE</c>.
+        /// </returns>
+        public static Utf8String UserInterface => new (new byte[] { 88, 80, 76, 77, 95, 77, 65, 80, 95, 85, 83, 69, 82, 95, 73, 78, 84, 69, 82, 70, 65, 67, 69, 0 }, 23);
 
-        public static readonly string InstructorOperatorStation = "XPLM_MAP_IOS";
+        /// <summary>
+        /// Globally unique identifier for X-Plane’s Instructor Operator Station window.
+        /// </summary>
+        /// <returns>
+        /// The UTF-8 literal <c>XPLM_MAP_IOS</c>.
+        /// </returns>
+        public static Utf8String InstructorOperatorStation => new (new byte[] { 88, 80, 76, 77, 95, 77, 65, 80, 95, 73, 79, 83, 0 }, 12);
 
-        internal static readonly ReadOnlyMemory<byte> UserInterfaceUtf8;
-
-        internal static readonly ReadOnlyMemory<byte> InstructorOperatorStationUtf8;
-
-        static unsafe Map()
-        {
-            var userInterfaceUtf8 = new byte[UserInterface.Length + 1];
-            Utf8.FromUtf16(UserInterface, userInterfaceUtf8, out _, out _);
-            UserInterfaceUtf8 = userInterfaceUtf8;
-
-            var instructorOperatorStationUtf8 = new byte[InstructorOperatorStationUtf8.Length + 1];
-            Utf8.FromUtf16(InstructorOperatorStation, instructorOperatorStationUtf8, out _, out _);
-            InstructorOperatorStationUtf8 = instructorOperatorStationUtf8;
-        }
-
-        public static unsafe void RegisterMapCreationHook(Action<string> callback)
+        /// <summary>
+        /// <para>
+        /// Registers your callback to receive a notification each time a new map is
+        /// constructed in X-Plane. This callback is the best time to add your custom
+        /// <see cref="MapLayer"/>.
+        /// </para>
+        /// <para>
+        /// Note that you will not be notified about any maps that already exist.
+        /// You  can use <see cref="Exists"/> to check for maps that were created previously.
+        /// </para>
+        /// </summary>
+        public static unsafe void RegisterMapCreationHook(CreationHook callback)
         {
             var hook = new MapCreationHook(callback);
             PluginBase.RegisterObject(hook);
@@ -40,33 +46,40 @@ namespace XP.SDK.XPLM
                 Utils.TryGetObject<MapCreationHook>(refcon)?.Invoke(mapidentifier);
         }
 
-        public static bool Exists(string mapIdentifier)
+        /// <summary>
+        /// Returns <see langword="true"/> if the map with the specified identifier already exists in
+        /// X-Plane. In that case, you can safely create <see cref="MapLayer"/> specifying
+        /// that your layer should be added to that map.
+        /// </summary>
+        public static bool Exists(in Utf8String mapIdentifier)
         {
             return MapAPI.MapExists(mapIdentifier) != 0;
         }
 
-        private sealed class MapCreationHook : DelegateWrapper<Action<string>>
+        /// <summary>
+        /// Returns <see langword="true"/> if the map with the specified identifier already exists in
+        /// X-Plane. In that case, you can safely create <see cref="MapLayer"/> specifying
+        /// that your layer should be added to that map.
+        /// </summary>
+        public static bool Exists(in ReadOnlySpan<char> mapIdentifier)
         {
-            public MapCreationHook(Action<string> @delegate) : base(@delegate)
+            return MapAPI.MapExists(mapIdentifier) != 0;
+        }
+
+        /// <summary>
+        /// Map creation hook.
+        /// </summary>
+        public delegate void CreationHook(in Utf8String mapIdentifier);
+
+        private sealed class MapCreationHook : DelegateWrapper<CreationHook>
+        {
+            public MapCreationHook(CreationHook @delegate) : base(@delegate)
             {
             }
 
             public unsafe void Invoke(byte* mapIdentifier)
             {
-                var len = Utils.CStringLength(mapIdentifier);
-                var span = new Span<byte>(mapIdentifier, (int)(len + 1));
-                if (span.SequenceEqual(UserInterfaceUtf8.Span))
-                {
-                    Delegate.Invoke(UserInterface);
-                }
-                else if (span.SequenceEqual(InstructorOperatorStationUtf8.Span))
-                {
-                    Delegate.Invoke(InstructorOperatorStation);
-                }
-                else
-                {
-                    Delegate.Invoke(Marshal.PtrToStringUTF8(new IntPtr(mapIdentifier)));
-                }
+                Delegate.Invoke(new Utf8String(mapIdentifier));
             }
         }
     }

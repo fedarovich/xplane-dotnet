@@ -2,7 +2,6 @@
 using System.Runtime.CompilerServices;
 using System.Text.Unicode;
 using XP.SDK.XPLM.Interop;
-using XP.SDK.XPLM.Interop;
 
 namespace XP.SDK.XPLM
 {
@@ -204,6 +203,39 @@ namespace XP.SDK.XPLM
         /// This function returns the x offset plus the width of all drawn characters.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static unsafe void DrawString(in RGBColor color,
+            int xOffset, int yOffset,
+            in Utf8String text,
+            ref int wordWrapWidth,
+            FontID fontId)
+        {
+            fixed (int* inWordWrapWidth = &wordWrapWidth)
+            {
+                GraphicsAPI.DrawString(color, xOffset, yOffset, text, inWordWrapWidth, fontId);
+            }
+        }
+
+        /// <summary>
+        /// This routine draws a NULL terminated string in a given font.
+        /// Pass in the lower left pixel that the character is to be drawn onto.
+        /// Also pass the character and font ID.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static unsafe void DrawString(in RGBColor color,
+            int xOffset, int yOffset,
+            in Utf8String text,
+            FontID fontId)
+        {
+            GraphicsAPI.DrawString(color, xOffset, yOffset, text, null, fontId);
+        }
+
+        /// <summary>
+        /// This routine draws a NULL terminated string in a given font.
+        /// Pass in the lower left pixel that the character is to be drawn onto.
+        /// Also pass the character and font ID.
+        /// This function returns the x offset plus the width of all drawn characters.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
         public static unsafe void DrawString(in RGBColor color, 
             int xOffset, int yOffset, 
             in ReadOnlySpan<char> text,
@@ -266,22 +298,36 @@ namespace XP.SDK.XPLM
         /// Returns the width in pixels of a string using a given font.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        [SkipLocalsInit]
         public static unsafe float MeasureString(FontID fontId, in ReadOnlySpan<char> @string)
         {
-            Span<byte> bytes = stackalloc byte[@string.Length << 1];
+            int bufferLength = @string.Length * 3 + 3;
+            Span<byte> bytes = bufferLength <= 4096 ? stackalloc byte[bufferLength] : GC.AllocateUninitializedArray<byte>(bufferLength);
             Utf8.FromUtf16(@string, bytes, out _, out var length);
-            return GraphicsAPI.MeasureString(fontId, (byte*) Unsafe.AsPointer(ref bytes.GetPinnableReference()), length);
+            fixed (byte* ptr = bytes)
+            {
+                return GraphicsAPI.MeasureString(fontId, ptr, length);
+            }
         }
 
         /// <summary>
         /// Returns the width in pixels of a UTF8 string using a given font.
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
-        public static unsafe float MeasureString(FontID fontId, in ReadOnlySpan<byte> utf8string)
+        public static float MeasureString(FontID fontId, in Utf8String @string)
         {
-            fixed (byte* ptr = utf8string)
+            return GraphicsAPI.MeasureString(fontId, @string, @string.Length);
+        }
+
+        /// <summary>
+        /// Returns the width in pixels of a UTF8 string using a given font.
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
+        public static unsafe float MeasureString(FontID fontId, in ReadOnlySpan<byte> utf8String)
+        {
+            fixed (byte* ptr = utf8String)
             {
-                return GraphicsAPI.MeasureString(fontId, ptr, utf8string.Length);
+                return GraphicsAPI.MeasureString(fontId, ptr, utf8String.Length);
             }
         }
     }
