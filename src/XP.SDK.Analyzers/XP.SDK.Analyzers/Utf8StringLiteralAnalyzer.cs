@@ -116,14 +116,13 @@ namespace XP.SDK.Analyzers
         private static Optional<string> GetUtf8StringLiteral(SyntaxNodeAnalysisContext context, InvocationExpressionSyntax invocationExpr)
         {
             if (invocationExpr.Expression is not MemberAccessExpressionSyntax memberAccessExpr ||
-                invocationExpr.ArgumentList.Arguments.Count != 1 ||
                 memberAccessExpr.Name.ToString() != "FromString")
                 return default;
 
             if (context.SemanticModel.GetSymbolInfo(memberAccessExpr).Symbol is not IMethodSymbol memberSymbol)
                 return default;
 
-            if (memberSymbol.Parameters.Length != 1)
+            if (memberSymbol.Parameters.Length != 2)
                 return default;
 
             if (context.Compilation.GetTypeByMetadataName("XP.SDK.Utf8String") is not { } utf8StringSymbol)
