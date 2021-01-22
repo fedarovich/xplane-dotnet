@@ -101,8 +101,8 @@ namespace XP.SDK
             }
             else
             {
-                var length = data.IndexOf((byte) 0);
-                if (length < 0)
+                var length = (int) Utils.CStringLength(data);
+                if (length == data.Length)
                     throw new ArgumentException("The data must be a null-terminated string.");
 
                 Span = data.Slice(0, length + 1);
@@ -311,16 +311,13 @@ namespace XP.SDK
         /// (without including the terminating null character itself).
         /// </remarks>
         /// <seealso cref="Length"/>
-        public unsafe int GetStringLength()
+        public int GetStringLength()
         {
             if (Span.IsEmpty)
                 return 0;
 
-            fixed (byte* str = Span)
-            {
-                var length = (int) Utils.CStringLength(str, (nuint) Span.Length);
-                return length < Span.Length ? length : -1;
-            }
+            var length = (int) Utils.CStringLength(Span);
+            return length < Span.Length ? length : -1;
         }
     }
 }

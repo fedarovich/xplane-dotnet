@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Runtime.Intrinsics;
 using System.Runtime.Intrinsics.X86;
@@ -9,7 +10,7 @@ namespace XP.SDK
     static partial class Utils
     {
         /// <summary>
-        /// Gets the length on null-terminated string. This function is equivalent to <c>strnlen_s</c> C function.
+        /// Gets the length of null-terminated string. This function is equivalent to <c>strnlen_s</c> C function.
         /// </summary>
         /// <param name="str">The pointer to the string start.</param>
         /// <param name="maxLength">The maximal length to check.</param>
@@ -187,6 +188,24 @@ namespace XP.SDK
                     charPtr = endPtr;
                 
                 return (nuint)(charPtr - str);
+            }
+        }
+
+        /// <summary>
+        /// Gets the length of null-terminated string. This function is equivalent to <c>strnlen_s</c> C function.
+        /// </summary>
+        /// <param name="str">The span containing the (sub-) string.</param>
+        /// <returns>
+        /// <para>The length of the null-terminated byte string <paramref name="str"/>.</para>
+        /// <para><c>0</c> if <paramref name="str"/> is <see langword="null"/>.</para>
+        /// <para><c>str.Length</c> if the span does not contain null character.</para>
+        /// </returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static unsafe nuint CStringLength(in ReadOnlySpan<byte> str)
+        {
+            fixed (byte* pStr = str)
+            {
+                return CStringLength(pStr, (nuint) str.Length);
             }
         }
     }

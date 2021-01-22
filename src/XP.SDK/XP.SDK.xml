@@ -986,7 +986,7 @@
         </member>
         <member name="M:XP.SDK.Utils.CStringLength(System.Byte*,System.UIntPtr)">
             <summary>
-            Gets the length on null-terminated string. This function is equivalent to <c>strnlen_s</c> C function.
+            Gets the length of null-terminated string. This function is equivalent to <c>strnlen_s</c> C function.
             </summary>
             <param name="str">The pointer to the string start.</param>
             <param name="maxLength">The maximal length to check.</param>
@@ -994,6 +994,17 @@
             <para>The length of the null-terminated byte string <paramref name="str"/>.</para>
             <para><c>0</c> if <paramref name="str"/> is <see langword="null"/>.</para>
             <para><c>maxLength</c> if the string does not contain null character in the first <paramref name="maxLength"/> bytes.</para>
+            </returns>
+        </member>
+        <member name="M:XP.SDK.Utils.CStringLength(System.ReadOnlySpan{System.Byte}@)">
+            <summary>
+            Gets the length of null-terminated string. This function is equivalent to <c>strnlen_s</c> C function.
+            </summary>
+            <param name="str">The span containing the (sub-) string.</param>
+            <returns>
+            <para>The length of the null-terminated byte string <paramref name="str"/>.</para>
+            <para><c>0</c> if <paramref name="str"/> is <see langword="null"/>.</para>
+            <para><c>str.Length</c> if the span does not contain null character.</para>
             </returns>
         </member>
         <member name="T:XP.SDK.Widgets.Behavior">
@@ -9570,6 +9581,191 @@
             </para>
             </summary>
         </member>
+        <member name="T:XP.SDK.XPLM.NavAid">
+            <summary>
+            Provides information about a navigational aid.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.NavAid.#ctor(XP.SDK.XPLM.NavRef)">
+            <summary>
+            Initialized a new instance of the <see cref="T:XP.SDK.XPLM.NavAid"/>.
+            </summary>
+            <param name="navRef"></param>
+        </member>
+        <member name="P:XP.SDK.XPLM.NavAid.NavRef">
+            <summary>
+            Gets the <see cref="P:XP.SDK.XPLM.NavAid.NavRef"/> for this navaid.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.NavAid.Type">
+            <summary>
+            Gets the type of the navaid.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.NavAid.Coordinates">
+            <summary>
+            Gets the coordinates of the navaid.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.NavAid.Height">
+            <summary>
+            Gets the height of the navaid.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.NavAid.Frequency">
+            <summary>
+            Gets the frequency of the navaid.
+            </summary>
+            <remarks>
+            Frequencies are in the nav.dat convention as described in the X-Plane nav
+            database FAQ: NDB frequencies are exact, all others are multiplied by 100.
+            </remarks>
+        </member>
+        <member name="P:XP.SDK.XPLM.NavAid.Heading">
+            <summary>
+            Gets the heading of the navaid.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.NavAid.Id">
+            <summary>
+            Gets the ID of the navaid.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.NavAid.Name">
+            <summary>
+            Gets the name of the navaid.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.NavAid.IsInLocalRegion">
+            <summary>
+            Get the value indicating whether the navaid
+            is within the local "region" of  loaded DSFs.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.NavAid.GetId">
+            <summary>
+            Gets the Id of the navaid.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.NavAid.GetName">
+            <summary>
+            Gets the name of the navaid.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.NavAid.Enumerate">
+            <summary>
+            Enumerates the navaid database.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.NavAid.Enumerate(XP.SDK.XPLM.NavType)">
+            <summary>
+            Enumerates the navigational aids of the specified
+            <paramref name="type"/> in the navaid database.
+            </summary>
+            <param name="type">The navigational aid type. Exactly one type must be specified.</param>
+            <exception cref="T:System.ArgumentException">No type or more than one type is passed.</exception>
+        </member>
+        <member name="M:XP.SDK.XPLM.NavAid.Find(XP.SDK.XPLM.NavType,System.ReadOnlySpan{System.Char}@,System.ReadOnlySpan{System.Char}@,System.Nullable{System.ValueTuple{System.Single,System.Single}},System.Nullable{System.Int32})">
+            <summary>
+            <para>
+            This routine provides a number of searching capabilities for the nav
+            database. It will search through every nav aid whose type is
+            within <paramref name="type"/> (multiple types may be added together) and return any
+            nav-aids found based on the following rules:
+            </para>
+            <list type="bullet">
+            <item>
+            <description>
+            If <paramref name="coordinates"/> are not <see langword="null"/>,
+            the navaid nearest to that lat/lon will be returned,
+            otherwise the last navaid found will be returned.
+            </description>
+            </item>
+            <item>
+            <description>
+            If <paramref name="frequency"/> is not <see langword="null"/>,
+            then any navaids considered must match this frequency.
+            Note that this will screen out radio beacons that do not have
+            frequency data published (like inner markers) but not fixes and airports.
+            </description>
+            </item>
+            <item>
+            <description>
+            If <paramref name="nameFragment"/> is not empty,
+            only navaids that contain the fragment in their name will be returned.
+            </description>
+            </item>
+            <item>
+            <description>
+            If <paramref name="idFragment"/> is not empty, only navaids that contain the fragment in
+            their IDs will be returned.
+            </description>
+            </item>
+            </list>
+            </summary>
+            <remarks>
+            <para>This routine provides a simple way to do a number of useful searches:</para>
+            <list type="bullet">
+            <item><description>Find the nearest navaid on this frequency.</description></item>
+            <item><description>Find the nearest airport.</description></item>
+            <item><description>Find the VOR whose ID is "KBOS".</description></item>
+            <item><description>Find the nearest airport whose name contains "Chicago".</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.NavAid.Find(XP.SDK.XPLM.NavType,XP.SDK.Utf8String@,XP.SDK.Utf8String@,System.Nullable{System.ValueTuple{System.Single,System.Single}},System.Nullable{System.Int32})">
+            <summary>
+            <para>
+            This routine provides a number of searching capabilities for the nav
+            database. It will search through every nav aid whose type is
+            within <paramref name="type"/> (multiple types may be added together) and return any
+            nav-aids found based on the following rules:
+            </para>
+            <list type="bullet">
+            <item>
+            <description>
+            If <paramref name="coordinates"/> are not <see langword="null"/>,
+            the navaid nearest to that lat/lon will be returned,
+            otherwise the last navaid found will be returned.
+            </description>
+            </item>
+            <item>
+            <description>
+            If <paramref name="frequency"/> is not <see langword="null"/>,
+            then any navaids considered must match this frequency.
+            Note that this will screen out radio beacons that do not have
+            frequency data published (like inner markers) but not fixes and airports.
+            </description>
+            </item>
+            <item>
+            <description>
+            If <paramref name="nameFragment"/> is not empty,
+            only navaids that contain the fragment in their name will be returned.
+            </description>
+            </item>
+            <item>
+            <description>
+            If <paramref name="idFragment"/> is not empty, only navaids that contain the fragment in
+            their IDs will be returned.
+            </description>
+            </item>
+            </list>
+            </summary>
+            <remarks>
+            <para>This routine provides a simple way to do a number of useful searches:</para>
+            <list type="bullet">
+            <item><description>Find the nearest navaid on this frequency.</description></item>
+            <item><description>Find the nearest airport.</description></item>
+            <item><description>Find the VOR whose ID is "KBOS".</description></item>
+            <item><description>Find the nearest airport whose name contains "Chicago".</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.NavAid.GetGPSDestination">
+            <summary>
+            Returns the current GPS destination.
+            </summary>
+        </member>
         <member name="T:XP.SDK.XPLM.NavRef">
             <summary>
             <para>
@@ -9627,6 +9823,199 @@
             <para>
             -1 indicates no plug-in.
             </para>
+            </summary>
+        </member>
+        <member name="T:XP.SDK.XPLM.PluginInfo">
+            <summary>
+            Provides information about a plugin.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.PluginInfo.#ctor(XP.SDK.XPLM.PluginID)">
+            <summary>
+            Initializes a new instance of <see cref="T:XP.SDK.XPLM.PluginInfo"/>.
+            </summary>
+            <param name="id">Plugin ID.</param>
+        </member>
+        <member name="P:XP.SDK.XPLM.PluginInfo.ThisPlugin">
+            <summary>
+            Gets the information about this plugin.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.PluginInfo.AllPlugins">
+            <summary>
+            Gets the list of plugins.
+            </summary>
+        </member>
+        <member name="P:XP.SDK.XPLM.PluginInfo.Name">
+            <summary>
+            Gets the human-readable name of the plug-in.
+            </summary>
+            <seealso cref="M:XP.SDK.XPLM.PluginInfo.GetName"/>
+        </member>
+        <member name="P:XP.SDK.XPLM.PluginInfo.FilePath">
+            <summary>
+            Gets the absolute file path to the file that contains the plug-in.
+            </summary>
+            <seealso cref="M:XP.SDK.XPLM.PluginInfo.GetFilePath"/>
+        </member>
+        <member name="P:XP.SDK.XPLM.PluginInfo.Signature">
+            <summary>
+            Gets the unique string that identifies the plug-in.
+            </summary>
+            <seealso cref="M:XP.SDK.XPLM.PluginInfo.GetSignature"/>
+        </member>
+        <member name="P:XP.SDK.XPLM.PluginInfo.Description">
+            <summary>
+            Get the human-readable description of the plug-in.
+            </summary>
+            <seealso cref="M:XP.SDK.XPLM.PluginInfo.GetDescription"/>
+        </member>
+        <member name="M:XP.SDK.XPLM.PluginInfo.GetName">
+            <summary>
+            Gets the human-readable name of the plug-in.
+            </summary>
+            <seealso cref="P:XP.SDK.XPLM.PluginInfo.Name"/>
+        </member>
+        <member name="M:XP.SDK.XPLM.PluginInfo.GetFilePath">
+            <summary>
+            Gets the absolute file path to the file that contains the plug-in.
+            </summary>
+            <seealso cref="P:XP.SDK.XPLM.PluginInfo.FilePath"/>
+        </member>
+        <member name="M:XP.SDK.XPLM.PluginInfo.GetSignature">
+            <summary>
+            Gets the unique string that identifies the plug-in.
+            </summary>
+            <seealso cref="P:XP.SDK.XPLM.PluginInfo.Signature"/>
+        </member>
+        <member name="M:XP.SDK.XPLM.PluginInfo.GetDescription">
+            <summary>
+            Get the human-readable description of the plug-in.
+            </summary>
+            <seealso cref="P:XP.SDK.XPLM.PluginInfo.Description"/>
+        </member>
+        <member name="P:XP.SDK.XPLM.PluginInfo.IsEnabled">
+            <summary>
+            Gets the value indicating whether the plugin is enabled.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.PluginInfo.Enable">
+            <summary>
+            Enables the plugin if it not already enabled.
+            </summary>
+            <returns><see langword="true"/> if the plugin was successfully enabled; <see langword="false"/> otherwise.</returns>
+        </member>
+        <member name="M:XP.SDK.XPLM.PluginInfo.Disable">
+            <summary>
+            Disables the plugin.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.PluginInfo.SendMessage(System.Int32,System.IntPtr)">
+            <summary>
+            Sends the message to the plugin. Only enabled plug-ins with
+            a message receive function receive the message.
+            </summary>
+            <param name="message">Message to send.</param>
+            <param name="param">Message parameter.</param>
+        </member>
+        <member name="M:XP.SDK.XPLM.PluginInfo.BroadcastMessage(System.Int32,System.IntPtr)">
+            <summary>
+            Broadcasts the message to all plugins. Only enabled plug-ins with
+            a message receive function receive the message.
+            </summary>
+            <param name="message">Message to send.</param>
+            <param name="param">Message parameter.</param>
+        </member>
+        <member name="M:XP.SDK.XPLM.PluginInfo.FindByPath(XP.SDK.Utf8String@)">
+            <summary>
+            Get the information about the plug-in whose file exists at the
+            passed in absolute file system path.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.PluginInfo.FindByPath(System.String)">
+            <summary>
+            Get the plug-in information of the plug-in whose file exists at the
+            passed in absolute file system path.
+            </summary>
+        </member>
+        <member name="M:XP.SDK.XPLM.PluginInfo.FindBySignature(XP.SDK.Utf8String@)">
+            <summary>
+            Gets the information about the plug-in whose signature matches
+            what is passed in or <see langword="default"/> if no running plug-in has this
+            signature.
+            </summary>
+            <remarks>
+            Signatures are the best way to identify another plug-in as they
+            are independent of the file system path of a plug-in or the human-readable
+            plug-in name, and should be unique for all plug-ins.  Use this routine to
+            locate another plugin that your plugin interoperates with.
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.PluginInfo.FindBySignature(System.String)">
+            <summary>
+            Gets the information about the plug-in whose signature matches
+            what is passed in or <see langword="default"/> if no running plug-in has this
+            signature.
+            </summary>
+            <remarks>
+            Signatures are the best way to identify another plug-in as they
+            are independent of the file system path of a plug-in or the human-readable
+            plug-in name, and should be unique for all plug-ins.  Use this routine to
+            locate another plugin that your plugin interoperates with.
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.PluginInfo.ReloadPlugins">
+            <summary>
+            Reloads all plug-ins.  
+            </summary>
+            <remarks>
+            Once this routine is called and you return from the callback you were within
+            (e.g. a menu select callback) you will receive your XPluginDisable and
+            XPluginStop callbacks and your DLL will be unloaded,
+            then the start process happens as if the sim was starting up.
+            </remarks>
+        </member>
+        <member name="T:XP.SDK.XPLM.Probe">
+            <summary>
+            <para>
+            Allows you to locate the physical scenery mesh.
+            This would be used to place dynamic graphics on top of the ground
+            in a plausible way or do physics interactions.
+            </para>
+            <para>
+             Probe objects exist both to capture which algorithm you have requested
+            (see <see cref="T:XP.SDK.XPLM.ProbeType"/>) and also to cache query information.
+            </para>
+            </summary>
+            <remarks>
+            <para>
+            It is generally faster to use the same probe for nearby points  and different probes for different points.
+            Try not to allocate more than “hundreds” of probes at most. Share probes if you need more.
+            Generally, probing operations are expensive, and should be avoided via caching when possible.
+            </para>
+            <para>
+            Y testing returns a location on the terrain, a normal vector, and a velocity vector.
+            The normal vector tells you the slope of the terrain at that point.
+            The velocity vector tells you if that terrain is moving (and is in meters/second).
+            For example, if your Y test hits the aircraft carrier deck,
+            this tells you the velocity of that point on the deck.
+            </para>
+            <para>
+            Note: the Y-testing API is limited to probing the loaded scenery area,
+            which is approximately 300x300 km in X-Plane 9.
+            Probes outside this area will return the height of a 0 MSL sphere.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:XP.SDK.XPLM.Probe.#ctor(XP.SDK.XPLM.ProbeType)">
+            <summary>
+            Initializes a new instance of <see cref="T:XP.SDK.XPLM.Probe" />.
+            </summary>
+            <param name="probeType"></param>
+        </member>
+        <member name="M:XP.SDK.XPLM.Probe.ProbeTerrain(System.Single,System.Single,System.Single,XP.SDK.XPLM.Interop.ProbeInfo@)">
+            <summary>
+            Probes the terrain.
             </summary>
         </member>
         <member name="M:XP.SDK.XPLM.Probe.Dispose">
